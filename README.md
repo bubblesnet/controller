@@ -7,4 +7,4 @@ Client - a React application for controlling one or more edge devices
 and viewing the data from those devices.
 
 Server - an API server that serves both the controller React application AND 
-the edge devices queueing data for storage.
+the edge devices manipulating the physical environment and queueing data for storage.
