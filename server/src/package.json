@@ -1,0 +1,47 @@
+{
+  "name": "bubblesweb",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node_modules/.bin/supervisor app",
+    "test": "node_modules/.bin/nyc node_modules/.bin/mocha --timeout 10000 --reporter mochawesome --reporter-options reportDir=reports,reportName=ReportName --exit tests/*.js"
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.0",
+    "diskspace": "*",
+    "express": "~4.14.1",
+    "js-htmlencode": "0.3.0",
+    "moment": "2.8.4",
+    "moment-timezone": "*",
+    "morgan": "~1.7.0",
+    "mysql": "*",
+    "pug": "*",
+    "q": "*",
+    "sendgrid": "~5.0.0",
+    "serve-favicon": "~2.3.2",
+    "socket.io": "^2.1.0",
+    "sprintf-js": "~1.0.3",
+    "supervisor": "0.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "mocha": "*",
+    "mochawesome": "*",
+    "nyc": "*",
+    "should": "~11.2.1"
+  },
+  "nyc": {
+    "all": true,
+    "instrument": true,
+    "include": [
+      "**/routes/*.js"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "report-dir": "coverage"
+  }
+}
