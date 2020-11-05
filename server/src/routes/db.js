@@ -1,4 +1,4 @@
-var locals = require("../conf/locals");
+const locals = require("../conf/locals");
 var connection;
 
 var handleDisconnect;
@@ -94,7 +94,7 @@ exports.getLastOutletAction = function (userid, deviceid, outletname, cb) {
 
 exports.getMostRecentEvents = function (userid, deviceid, maxevents, cb) {
     console.log('db.getMostRecentEvents ' + userid + '/' + deviceid + ' maxevents ' + maxevents);
-    var TWOHOURSINMILLIS = 12 * 60 * 60 * 1000;
+    const TWOHOURSINMILLIS = 12 * 60 * 60 * 1000;
     var leastmillis = new Date().getTime() - TWOHOURSINMILLIS;
     console.log('leastmillis = ' + leastmillis);
     return connection.query("select * from event where userid_User=? and deviceid_Device=? and datetimemillis > ? order by datetimemillis desc LIMIT ?", [userid, deviceid, leastmillis, maxevents], function (err, eventresult) {
@@ -108,7 +108,7 @@ exports.getMostRecentEvents = function (userid, deviceid, maxevents, cb) {
 
 exports.getNewAlertConditions = function (cb) {
     console.log('db.getNewAlertConditions ');
-    return connection.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join user us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification)', [], function (err, result) {
+    return connection.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join "user" us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification)', [], function (err, result) {
         console.log('select new alert conditions returned err ' + err + ' result ' + result);
         console.log('select new alert conditions results = ' + JSON.stringify(result));
 //        if (err == null) {
