@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 
-import RenderTestQueueListFunctional from "./TestQueueListFunctional";
-import RenderTestRunListFunctional from "./TestRunListFunctional";
-import RenderMetrics from "./MetricsPanelFunctional";
-import RenderSBCEditor from "./SBCEditor";
-import {Tabs, Tab, Img} from "rendition";
-import RenderDeviceStatusListFunctional from "./DeviceStatusListFunctional";
-import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
-import Iceberg from './iceberg.png'
+import RenderTestQueueListFunctional from "./components/TestQueueListFunctional";
+import RenderTestRunListFunctional from "./components/TestRunListFunctional";
+import RenderMetrics from "./components/MetricsPanelFunctional";
+import RenderSBCEditor from "./components/SBCEditor";
+import {Tabs, Tab} from "rendition";
+import RenderDeviceStatusListFunctional from "./components/DeviceStatusListFunctional";
+import Header from "./components/Header"
 
 function App (props) {
     console.log("IceBreakerApp render props = " + JSON.stringify(props))
@@ -16,12 +15,12 @@ function App (props) {
     let [language, setLanguage] = useState("all")
 
     let setLang = (value) => {
-        console.log("App setting lantuage to " + value)
+        console.log("App setting language to " + value)
         setLanguage(value)
     }
 
     let setEnvironment = (value) => {
-//        console.log("setEnvironment(" + value + ")")
+        console.log("App.setEnvironment(" + value + ")")
         var thedatabase = value
         var theport
         if (thedatabase === "production") {
@@ -31,26 +30,15 @@ function App (props) {
         } else if (thedatabase === "development") {
             theport = 3003;
         }
-//        console.log("setting state db to " + thedatabase + " port to " + theport)
-//        console.log("IceBreakerApp render port = " + port)
+        console.log("setting state db to " + thedatabase + " port to " + theport)
+        console.log("IceBreakerApp render port = " + port)
         setDatabase(thedatabase);
         setPort(theport);
     }
 
     return (
         <div className="App">
-            <header className="IcebergApp-header">
-                <span style={{
-                    'width': '25%',
-                    'alignItems': 'flex-start',
-                    'marginLeft': '25px'
-                }}>Icebreaker ({database})</span>
-                <span style={{'width': '50%'}}/>
-                <span style={{'width': '25%'}}><Img style={{'marginRight': '25px', 'float': 'right'}}
-                                                    src={Iceberg}/></span>
-            </header>
-            <RenderEnvironmentPickerFunctional database={database} port={port}
-                                               handleClick={setEnvironment}/>
+            <Header setEnvironment={setEnvironment}/>
             <Tabs margin="medium" flex="shrink">
                 <Tab title="Metrics">
                     <RenderMetrics database={database} port={port}/>

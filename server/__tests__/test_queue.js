@@ -1,6 +1,6 @@
 process.env.ICEBREAKER_DB = "icebreaker_dev"
 
-const testqueue_model = require("../src/testqueue_model")
+const testqueue_model = require("../src/api/models/icebreaker/testqueue_model")
 
 
 describe("Testing testqueue_model", () => {

@@ -1,6 +1,6 @@
 process.env.ICEBREAKER_DB = "icebreaker_dev"
 
-const devicestatus_model = require("../src/devicestatus_model")
+const devicestatus_model = require("../src/api/models/icebreaker/devicestatus_model")
 
 
 describe("Testing devicestatus_model", () => {

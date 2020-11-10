@@ -1,6 +1,6 @@
 process.env.ICEBREAKER_DB = "icebreaker_dev"
 
-const sbc_model = require("../src/sbc_model")
+const sbc_model = require("../src/api/models/icebreaker/sbc_model")
 
 
 describe("Testing sbc_model", () => {

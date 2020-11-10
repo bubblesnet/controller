@@ -1,19 +1,50 @@
 var express = require('express');
-var path = require('path');
+var app = express()
+
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const path = require('path');
+var locals = require('./config/locals');
+var fs = require('fs');
+var db = require('./api/models/db');
+const disk = require('diskspace');
+var sprintf = require('sprintf-js').sprintf;
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var api = require('./api/api');
+var htmlDecode = require("js-htmlencode").htmlDecode;
 
-//var devicecontrol = require("./routes/devicecontrol");
-var statusbyuserdevice = require('./routes/statusbyuserdevice');
-var asyncstatusbyuserdevice = require('./routes/asyncstatusbyuserdevice');
-var servepicture = require('./routes/servepicture');
-var command = require('./routes/command');
+global.__root   = __dirname + '/';
+
+var video_routes = require('./api/routes/video_routes');
+var edgecontrol_routes = require('./api/routes/edgecontrol_routes');
+var icebreaker_routes = require('./api/routes/icebreaker_routes');
+var user_routes = require('./api/routes/user_routes');
+var auth_routes = require('./api/routes/authcontroller_routes');
+
+var router = express.Router();
+app.locals = {};
+app.locals.config = require('./config/locals.js');
+app.locals.units = require('./api/services/formatted_units.js');
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+    next();
+});
+
+const port  = normalizePort(process.env.PORT || '3000')
+
+const testrun_model = require('./api/models/icebreaker/testrun_model')
+const devicestatus_model = require('./api/models/icebreaker/devicestatus_model')
+const metrics_model = require('./api/models/icebreaker/metrics_model')
+const sbc_model = require('./api/models/icebreaker/sbc_model')
+const testqueue_model = require('./api/models/icebreaker/testqueue_model')
 
 var http = require('http'),
     fs = require('fs'),
@@ -21,15 +52,14 @@ var http = require('http'),
     bodyParser = require('body-parser'),
     mysql = require('mysql');
 
-var app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
 app.locals.moment = require('moment');
 app.locals.sprintf = require("sprintf-js").sprintf;
-app.locals.config = require('./conf/locals.js');
-app.locals.units = require('./routes/units.js');
+app.locals.config = require('./config/locals.js');
+app.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,14 +73,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get("/status/:userid/:deviceid", statusbyuserdevice);
-app.get("/asyncstatus/:userid/:deviceid", asyncstatusbyuserdevice);
-app.get('/api/status/:userid/:deviceid', api);
-app.get('/picture/:userid/:deviceid/:filename', servepicture);
-app.get("/command/:userid/:deviceid/:outletname/:onoff", command);
-app.get("/api/power/:userid/:deviceid/:outletname/:onoff", api);
-app.use('/', index);
-app.use('/users', users);
+app.use('/api/users', user_routes);
+app.use('/api/auth', auth_routes);
+app.use('/api/video', video_routes);
+app.use("/api/edgecontrol", edgecontrol_routes);
+app.use("/api/icebreaker", icebreaker_routes);
+//app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -70,5 +98,31 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
+/**
+ * Normalize a port into a number, string, or false.
+ */
 
-module.exports = app;
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+
+    return false;
+}
+
+app.listen(port, () => {
+    console.log(`App running on port ${port}.`)
+});
+
+module.exports = {
+    app: app
+};
+

@@ -1,6 +1,6 @@
 process.env.ICEBREAKER_DB = "icebreaker_dev"
 
-const testrun_model = require("../src/testrun_model")
+const testrun_model = require("../src/api/models/icebreaker/testrun_model")
 
 
 describe("Testing metrics", () => {
