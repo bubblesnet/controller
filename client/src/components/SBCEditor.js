@@ -5,25 +5,25 @@ import Loader from "./Loader";
     function RenderSBCEditor (props) {
         console.log("renderSBCEditor with props = " + JSON.stringify(props))
         let [sbcs, setSbcs] = useState([]); // The array of SingleBoardComputers
-        let [port, setPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
+        let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
         let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
 
 
         useEffect(() => {
-            if (port !== props.port) {
+            if (apiPort !== props.apiPort) {
                 setSbcs([])
             }
             if (loading) {
-                getBoardList(props, port, setSbcs, setLoading, setPort)
+                getBoardList(props, apiPort, setSbcs, setLoading, setApiPort)
             } else {
             }
         },[loading]);
 
-        function getBoardList (props, port, setSbcs, setLoading, setPort)  {
+        function getBoardList (props, apiPort, setSbcs, setLoading, setApiPort)  {
 //            console.log("SBCEditor getBoardList props = "+JSON.stringify(props))
-            if ((props && (props.port !== port)) || loading ) {
-                setPort(props.port)
-                fetch('http://localhost:' + props.port + '/sbc/all')
+            if ((props && (props.apiPort !== apiPort)) || loading ) {
+                setApiPort(props.apiPort)
+                fetch('http://localhost:' + props.apiPort + '/api/icebreaker/sbc/all')
                     .then(response => {
                         if (!response.ok) {
                             throw Error(response.statusText);
@@ -56,7 +56,7 @@ import Loader from "./Loader";
                 headers: {
                     'Content-Type': 'application/json'
                 }}
-            fetch('http://localhost:' + props.port + '/sbc', fetchm)
+            fetch('http://localhost:' + apiPort + '/sbc', fetchm)
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -89,7 +89,7 @@ import Loader from "./Loader";
 
         let onRowDelete = (id) =>{
             let body = { }
-//            console.log('loading http://localhost:' + props.port + '/sbc')
+//            console.log('loading http://localhost:' + props.apiPort + '/sbc')
 //            let id = Math.round((evt.id/100))
             let fetchm = {
                 method:'DELETE',
@@ -97,8 +97,8 @@ import Loader from "./Loader";
                 headers: {
                     'Content-Type': 'application/json'
                 }}
-//            console.log('hitting http://localhost:' + props.port + '/sbc/'+id)
-            fetch('http://localhost:' + props.port + '/sbc/'+id, fetchm)
+//            console.log('hitting http://localhost:' + apiPort + '/sbc/'+id)
+            fetch('http://localhost:' + apiPort + '/sbc/'+id, fetchm)
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -118,9 +118,9 @@ import Loader from "./Loader";
             setLoading(true)
         };
 
-        if( props.port !== port ) {
+        if( props.apiPort !== apiPort ) {
             setSbcs([])         // Clear out sbcs so that this render doesn't rerender invalid data
-            setPort(props.port)       // Set the port
+            setApiPort(props.apiPort)       // Set the port
 //            console.log("setLoading 10")
             setLoading(true)    // Trigger another fetch and render
             return (
@@ -139,7 +139,7 @@ import Loader from "./Loader";
                 <div>
                     <RenderProductTable
                                         onRowAdd={e => handleAddEvent(e)} onRowDelete={e => onRowDelete(e)}
-                                        sbcs={sbcs} port={props.port} database={props.database}
+                                        sbcs={sbcs} apiPort={props.apiPort} nodeEnv={props.nodeEnv}
                     />
                 </div>
         }

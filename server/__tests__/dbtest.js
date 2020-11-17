@@ -2,7 +2,7 @@
  * Created by rodley on 4/12/2017.
  */
 
-var db = require("../src/api/models/db");
+var db = require("../src/api/models/icebreaker_db");
 
 
 describe('Get last door action', function () {

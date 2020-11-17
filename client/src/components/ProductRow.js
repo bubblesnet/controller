@@ -74,7 +74,7 @@ function RenderEditableCell(props) {
                 'Content-Type': 'application/json'
             }}
 
-            fetch('http://localhost:' + props.port + '/sbc/'+sbcid, fetchm)
+            fetch('http://localhost:' + props.apiPort + '/sbc/'+sbcid, fetchm)
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -97,7 +97,7 @@ function RenderEditableCell(props) {
     }
 
     let ret =  <td>
-        <Checkbox name={props.cellData.type} port={props.port} id={""+(props.cellData.id)}
+        <Checkbox name={props.cellData.type} apiPort={props.apiPort} id={""+(props.cellData.id)}
                   checked={checked} onChange={(event) => updateSBC(event)}/>
     </td>
     if (typeof (props.cellData.value) !== 'boolean') {
@@ -107,7 +107,7 @@ function RenderEditableCell(props) {
         }
         ret =
             <td>
-                <TextInput name={props.cellData.type} id={""+props.cellData.id} port={props.port}
+                <TextInput name={props.cellData.type} id={""+props.cellData.id} apiPort={props.apiPort}
                            value={value} placeholder={props.placeholder} onChange={onChangeTextCell}/>
             </td>
     }

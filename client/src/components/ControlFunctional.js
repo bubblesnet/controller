@@ -3,7 +3,7 @@ import '../App.css';
 import { Table} from "rendition";
 import Loader from "./Loader";
 
-function RenderMetrics (props) {
+function RenderOverview (props) {
 
     let [metrics, setMetrics] = useState([]); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
@@ -26,7 +26,7 @@ function RenderMetrics (props) {
         if ((props && (props.apiPort !== apiPort)) || loading) {
             loading = true
             setApiPort(props.apiPort)
-            fetch('http://localhost:' + props.apiPort + '/api/icebreaker/metrics/all')
+            fetch('http://localhost:' + props.apiPort + '/metrics/all')
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -65,39 +65,18 @@ function RenderMetrics (props) {
          ret =
             <div>
                 <Loader/>
-             <Table columns={[
-                {field: "language", label: "Language", sortable: true},
-                {field: "successpercent", label: "% success", sortable: true},
-                {field: "successcount", label: "# success", sortable: true},
-                {field: "testedcount", label: "# completed test", sortable: true},
-                {field: "untestedcount", label: "# untested", sortable: true},
-                {field: "crashcount", label: "# crashed runs", sortable: true},
-                {field: "runcount", label: "# runs", sortable: true},
-                {field: "total", label: "# total", sortable: true}
-            ]}
-                   data={metrics}>
-            </Table>
+             <div >
+                 <p>unimplemented</p>
+            </div>
         </div>
 
     } else {
-//        console.log("MetricsPanel render port = " + props.apiPort)
         ret =
-            <div>
-                <Table columns={[
-                    {field: "language", label: "Language", sortable: true},
-                    {field: "successpercent", label: "% success", sortable: true},
-                    {field: "successcount", label: "# success", sortable: true},
-                    {field: "testedcount", label: "# completed test", sortable: true},
-                    {field: "untestedcount", label: "# untested", sortable: true},
-                    {field: "crashcount", label: "# crashed runs", sortable: true},
-                    {field: "runcount", label: "# runs", sortable: true},
-                    {field: "total", label: "# total", sortable: true}
-                ]}
-                       data={metrics}>
-                </Table>
+            <div >
+                <p>unimplemented</p>
             </div>
     }
     return (ret)
 }
 
-export default RenderMetrics;
+export default RenderOverview;

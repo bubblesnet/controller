@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var status = require('../services/status');
 var htmlDecode = require("js-htmlencode").htmlDecode;
-var db = require("../models/db");
+var db = require("../models/icebreaker_db");
 const dgram = require("dgram");
 
 /**

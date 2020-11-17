@@ -6,39 +6,39 @@ import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 import Iceberg from '../images/bubbles.png'
 
 function Header (props) {
-    console.log("IceBreakerApp render props = " + JSON.stringify(props))
-    let [database, setDatabase] = useState("production"); // The array of SingleBoardComputers
-    let [port, setPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
+    console.log("BubblesApp render props = " + JSON.stringify(props))
+    let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
+    let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
 
     let setEnvironment = (value) => {
         console.log("Header.setEnvironment(" + value + ")")
-        var thedatabase = value
-        var theport
-        if (thedatabase === "production") {
-            theport = 3001;
-        } else if (thedatabase === "test") {
-            theport = 3002;
-        } else if (thedatabase === "development") {
-            theport = 3003;
+        var theNodeEnv = value
+        var theApiPort
+        if (theNodeEnv === "production") {
+            theApiPort = 3001;
+        } else if (theNodeEnv === "test") {
+            theApiPort = 3002;
+        } else if (theNodeEnv === "development") {
+            theApiPort = 3003;
         }
-        setDatabase(thedatabase);
-        setPort(theport);
-        props.setEnvironment(value)
+        setNodeEnv(theNodeEnv);
+        setApiPort(theApiPort);
+        props.setNodeEnv(value)
     }
 
     return (
         <div>
-             <header className="BubblesApp-header">
+            <header className="BubblesApp-header" style={{'width': '100%'}} >
                 <span style={{
                     'width': '25%',
                     'alignItems': 'flex-start',
                     'marginLeft': '25px'
-                }}>Bubbles ({database})</span>
-                <span style={{'width': '50%'}}/>
-                <span style={{'width': '25%'}}><Img style={{'marginRight': '25px', 'float': 'right'}}
-                                                    src={Iceberg}/></span>
+                }}>Bubbles ({nodeEnv})</span>
+                <span style={{'width': '75%'}} >
+                    <div id="animated-gif-container" />
+                </span>
             </header>
-            <RenderEnvironmentPickerFunctional database={database} port={port}
+            <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>
         </div>
    );

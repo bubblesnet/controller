@@ -1,4 +1,4 @@
-server_db = require('../server_db')
+server_db = require('../icebreaker_db')
 const pool = server_db.getPool()
 const endPool = () => {
     pool.end()

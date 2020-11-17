@@ -7,7 +7,7 @@ import Loader from "./Loader";
 
 function RenderTestQueueListFunctional (props) {
     let [testruns, setTestruns] = useState([]); // The array of SingleBoardComputers
-    let [port, setPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
+    let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
     let [language, setLanguage] = useState("xyz"); // Trigger in useEffect that tells us to refetch data
 
@@ -15,7 +15,7 @@ function RenderTestQueueListFunctional (props) {
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(true), 30000);
-        if (port !== props.port || language !== props.language) {
+        if (apiPort !== props.apiPort || language !== props.language) {
             setTestruns([]  )
         }
         if (loading) {
@@ -42,7 +42,7 @@ function RenderTestQueueListFunctional (props) {
             headers: {
                 'Content-Type': 'application/json'
             }}
-        fetch('http://localhost:' + props.port + '/project/retest/'+id, fetchm)
+        fetch('http://localhost:' + props.apiPort + '/api/icebreaker/project/retest/'+id, fetchm)
             .then(response => {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -91,11 +91,11 @@ function RenderTestQueueListFunctional (props) {
 
     function getTestQueue(language) {
         console.log("getTestQueue loading "+loading)
-        if ((props && ((props.port !== port) || (props.language !== language))) || loading ) {
+        if ((props && ((props.apiPort !== apiPort) || (props.language !== language))) || loading ) {
             loading = true
-            setPort(props.port)
+            setApiPort(props.apiPort)
             setLanguage(props.language)
-            fetch('http://localhost:' + props.port + '/testqueue/'+language)
+            fetch('http://localhost:' + props.apiPort + '/api/icebreaker/testqueue/'+language)
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -115,9 +115,9 @@ function RenderTestQueueListFunctional (props) {
         }
     }
 
-    if (props.port !== port || props.language !== language) {
+    if (props.apiPort !== apiPort || props.language !== language) {
         setTestruns([])         // Clear out sbcs so that this render doesn't rerender invalid data
-        setPort(props.port)       // Set the port
+        setApiPort(props.apiPort)       // Set the port
         setLanguage(props.language)
 //        console.log("setLoading 10")
         setLoading(true)    // Trigger another fetch and render

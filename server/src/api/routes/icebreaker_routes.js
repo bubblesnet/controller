@@ -27,7 +27,7 @@ router.get('/metrics/all', (req, res) => {
 })
 
 /// TODO - this seems incompatible with above - should be deprecated
-router.get('/:id', (req, res) => {
+router.get('/devicestatus/:id', (req, res) => {
     console.log("getDeviceStatus")
     devicestatus_model.getDeviceStatus(req.params.id)
         .then(response => {

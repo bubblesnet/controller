@@ -19,11 +19,19 @@
             sendgridFullAccessAPIKey: "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",
             sendgridSenderEmailAddress: "rodley@rodley.com",
             deviceForDiskCheck: "C",
-            db_config: {
-                host: "192.168.21.196",
-                user: "testgdc",
-                password: "testgdc",
-                database: "TestGlassDashCam"
+            bubbles_db_config: {
+                host: '192.168.21.237',
+                user: 'gdc',
+                password: 'gdc',
+                database: 'bubbles_dev',
+                port: 5432
+            },
+            icebreaker_db_config: {
+                host: '192.168.21.237',
+                user: 'postgres',
+                password: 'postgres',
+                database: 'icebreaker_dev',
+                port: 5432
             },
             /// TODO move this to env var
             secret: 'supersecret'

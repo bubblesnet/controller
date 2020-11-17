@@ -11,6 +11,7 @@
     "moment": "^2.27.0",
     "pg": "^8.3.0",
     "react": "^16.13.1",
+    "react-d3-speedometer": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-editable-table": "^1.12.32",
     "react-interval-rerender": "^1.0.1",

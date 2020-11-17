@@ -5,7 +5,7 @@ import React from "react";
 import RenderProductRow from "./ProductRow";
 
 function RenderProductTable(props) {
-    console.log("RenderProductTable render port = " + props.port + " sbcs length " + props.sbcs.length )
+    console.log("RenderProductTable render port = " + props.apiPort + " sbcs length " + props.sbcs.length )
     let empty = {manufacturer: "", productname: "", retail_price: "0"}
     let ret = <RenderProductRow onProductTableUpdate={props.onProductTableUpdate} sbc={[empty]} key={-1}/>
 
@@ -50,7 +50,7 @@ function RenderProductTable(props) {
             </div>
 
           let tableBody = props.sbcs.map(function (sbc) {
-              let tableRow = <RenderProductRow onProductTableUpdate={props.onProductTableUpdate} port={props.port} sbc={sbc}
+              let tableRow = <RenderProductRow onProductTableUpdate={props.onProductTableUpdate} apiPort={props.apiPort} sbc={sbc}
                                                onRowDelete={id => onRowDelete(id)}
                                             key={sbc.sbcid}/>
                       return (tableRow)

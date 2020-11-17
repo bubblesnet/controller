@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 const path = require('path');
 var locals = require('./config/locals');
 var fs = require('fs');
-var db = require('./api/models/db');
+var db = require('./api/models/icebreaker_db');
 const disk = require('diskspace');
 var sprintf = require('sprintf-js').sprintf;
 

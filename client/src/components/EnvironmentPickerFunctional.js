@@ -3,8 +3,8 @@ import {RadioButtonGroup} from "rendition";
 
 function RenderEnvironmentPickerFunctional(props) {
 
-    let setDatabase = (value) => {
-        console.log("EnvironmentPicker set database to " + value)
+    let setNodeEnv = (value) => {
+        console.log("EnvironmentPicker set nodeEnv to " + value)
         props.handleClick( value )
     }
 
@@ -16,7 +16,7 @@ function RenderEnvironmentPickerFunctional(props) {
                 name="environment"
                 direction="row-responsive"
                 options={['development', 'test', 'production']}
-                value={props.database} onChange={(event) => setDatabase(event.target.value)}
+                value={props.nodeEnv} onChange={(event) => setNodeEnv(event.target.value)}
             />
         </div>)
 

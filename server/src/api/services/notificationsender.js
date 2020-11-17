@@ -1,7 +1,7 @@
 /**
  * Created by rodley on 4/21/2017.
  */
-var db = require('../models/db');
+var db = require('../models/icebreaker_db');
 var email = require('./email');
 
 var notificationsserviced = 0;

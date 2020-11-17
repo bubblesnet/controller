@@ -25,7 +25,8 @@
 }
 
 .BubblesApp-header {
-background: #22445e;
+  background: rgb(34,68,94);
+  background: linear-gradient(90deg, rgba(34,68,94,1) 0%, rgba(34,68,94,1) 49%, rgba(255,255,255,1) 100%);
 flexDirection: row;
 flexWrap: nowrap;
   min-height: 5vh;
@@ -52,4 +53,12 @@ flexWrap: nowrap;
 .RenderEnvironmentPickerFunctional {
   justify-content: center;
   background: #aaaaaa;
+}
+
+#animated-gif-container {
+  background-image:url(images/bubbles-gif.gif);
+  background-repeat:no-repeat;
+  width:200px;
+  height:48px;
+  float: right;
 }

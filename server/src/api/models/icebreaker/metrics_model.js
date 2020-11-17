@@ -1,4 +1,4 @@
-server_db = require('../server_db')
+server_db = require('../icebreaker_db')
 const pool = server_db.getPool()
 
 const endPool = () => {
@@ -95,8 +95,10 @@ const getAllMetrics = (id) => {
     return new Promise(function (resolve, reject) {
         all = []
         var ssql = "select language, count(*) as testedcount from buildableproject where language is not null AND language not like 'STUCK%' AND subprojectname = '' AND buildableprojectid in (select buildableprojectid from testrun where result = 'success' or result = 'fails') group by language"
+        console.log(ssql)
         pool.query(ssql, (error, results) => {
                 if (error) {
+                    console.log("0error = " + JSON.stringify(error))
                     reject(error)
                 }
 //                all = results.rows
@@ -105,6 +107,7 @@ const getAllMetrics = (id) => {
                     var ssql = "select language, count(*) as runcount from testrun t join buildableproject b on b.buildableprojectid = t.buildableprojectid group by language"
                     pool.query(ssql, (error, results) => {
                         if (error) {
+                            console.log("1error = " + JSON.stringify(error))
                             reject(error)
                         }
                         if (results) {
@@ -112,6 +115,7 @@ const getAllMetrics = (id) => {
                             var ssql = "select language, count(*) as crashcount from buildableproject where language is not null AND language not like 'STUCK%' AND subprojectname = '' AND buildableprojectid in (select buildableprojectid from testrun where result = 'in-progress' ) group by language"
                             pool.query(ssql, (error, results) => {
                                 if (error) {
+                                    console.log("2error = " + JSON.stringify(error))
                                     reject(error)
                                 }
                                 if( results ) {
@@ -119,6 +123,7 @@ const getAllMetrics = (id) => {
                                     var ssql = "select language, count(*) as untestedcount from buildableproject where language is not null AND subprojectname = '' AND language not like 'STUCK%' AND buildableprojectid not in (select buildableprojectid from testrun where result = 'success' or result = 'fails') group by language"
                                     pool.query(ssql, (error, results) => {
                                             if (error) {
+                                                console.log("3error = " + JSON.stringify(error))
                                                 reject(error)
                                             }
                                             if (results) {
@@ -131,6 +136,7 @@ const getAllMetrics = (id) => {
                                                     " where result='success' and b.subprojectname='') group by language"
                                                 pool.query(ssql, (error, results) => {
                                                         if (error) {
+                                                            console.log("4error = " + JSON.stringify(error))
                                                             reject(error)
                                                         }
                                                         if (results) {

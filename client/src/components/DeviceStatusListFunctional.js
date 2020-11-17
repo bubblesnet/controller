@@ -9,7 +9,7 @@ function RenderDeviceStatusListFunctional(props) {
     console.log("render RenderDeviceStatusListFunctional")
     return (
         <div>
-            <RenderDeviceStatusRecord port={props.port}/>
+            <RenderDeviceStatusRecord apiPort={props.apiPort}/>
         </div>
     );
 }
@@ -18,13 +18,13 @@ function RenderDeviceStatusRecord(props) {
     console.log("render devicestatusrecord")
 
     let [devicerecord, setDevicerecord] = useState([]); // The array of SingleBoardComputers
-    let [port, setPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
+    let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
 
     useEffect(() => {
         console.log("RenderDeviceStatusRecord useEffect")
         const timer = setTimeout(() => setLoading(true), 5000);
-        if (port !== props.port) {
+        if (apiPort !== props.apiPort) {
             setDevicerecord([])
         }
         if (loading) {
@@ -35,11 +35,11 @@ function RenderDeviceStatusRecord(props) {
 
     function getDeviceStatusRecord() {
 //        console.log("RenderDeviceStatusRecord loading " + loading)
-        if ((props && (props.port !== port)) || loading) {
+        if ((props && (props.apiPort !== apiPort)) || loading) {
             loading = true
-            setPort(props.port)
+            setApiPort(props.apiPort)
             //           console.log("********************************************* props = " + props)
-            fetch('http://localhost:' + props.port + '/devicestatus/all')
+            fetch('http://localhost:' + props.apiPort + '/api/icebreaker/devicestatus/all')
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);

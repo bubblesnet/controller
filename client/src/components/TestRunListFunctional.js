@@ -10,13 +10,13 @@ function RenderTestRunListFunctional (props) {
     let [selectedprojects, setSelectedprojects] = useState([]);
     let [selectedcheckboxes, setSelectedcheckboxes]  = useState([]);
     let [testruns, setTestruns] = useState([]); // The array of SingleBoardComputers
-    let [port, setPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
+    let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
 
     useEffect(() => {
         console.log("renderTestRunListFunctional useEffect")
         const timer = setTimeout(() => setLoading(true), 30000);
-        if (port !== props.port) {
+        if (apiPort !== props.apiPort) {
             setTestruns([])
         }
         if (loading) {
@@ -43,7 +43,7 @@ function RenderTestRunListFunctional (props) {
 
     function retestSelected() {
 //        console.log(selectedprojects[0])
-        fetch('http://localhost:' + props.port + '/testruns/retest', {
+        fetch('http://localhost:' + props.apiPort + '/testruns/retest', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ function RenderTestRunListFunctional (props) {
         let testrunid = prompt('Retest TestRun by ID');
         let selectedprojects = []
         selectedprojects.push({testrunid: Number(testrunid)})
-        fetch('http://localhost:' + props.port + '/testruns/retest', {
+        fetch('http://localhost:' + props.apiPort + '/testruns/retest', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -242,10 +242,10 @@ function RenderTestRunListFunctional (props) {
     }
 
     function getTestRun() {
-        if ((props && (props.port !== port)) || loading) {
+        if ((props && (props.apiPort !== apiPort)) || loading) {
             loading = true
-            setPort(props.port)
-            fetch('http://localhost:' + props.port + '/testruns')
+            setApiPort(props.apiPort)
+            fetch('http://localhost:' + props.apiPort + '/api/icebreaker/testruns')
                 .then(response => {
                     if (!response.ok) {
                         throw Error(response.statusText);
