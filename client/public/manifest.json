@@ -1,6 +1,6 @@
 {
-  "short_name": "Icebreaker",
-  "name": "Icebreaker Admin UI",
+  "short_name": "Bubbles",
+  "name": "Bubbles Controller",
   "icons": [
     {
       "src": "favicon.ico",

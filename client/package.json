@@ -17,6 +17,7 @@
     "react-d3-speedometer": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-editable-table": "^1.12.32",
+    "react-input-switch": "^2.2.2",
     "react-interval-rerender": "^1.0.1",
     "react-scripts": "3.4.1",
     "rendition": "^16.1.2",

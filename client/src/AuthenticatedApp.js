@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 
 import RenderTestQueueListFunctional from "./components/TestQueueListFunctional";
 import RenderTestRunListFunctional from "./components/TestRunListFunctional";
-import RenderMetrics from "./components/MetricsPanelFunctional";
+import RenderMetrics from "./components/ControlTab/MetricsPanelFunctional";
 import RenderSBCEditor from "./components/SBCEditor";
 import {Tabs, Tab} from "rendition";
 import RenderDeviceStatusListFunctional from "./components/DeviceStatusListFunctional";
 import Header from "./components/Header"
 
-import RenderOverview from "./components/OverviewFunctional";
-import RenderControl from "./components/ControlFunctional";
+import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
+import RenderOverviewTab from "./components/OverviewTab/OverviewTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
 
 
@@ -43,12 +43,12 @@ function AuthenticatedApp (props) {
     return (
         <div className="App">
             <Header setNodeEnv={setEnvironment}/>
-            <Tabs margin="medium" flex="shrink">
-                <Tab title="Overview">
-                    <RenderOverview nodeEnv={nodeEnv} apiPort={apiPort}/>
+            <Tabs margin="medium" flex="shrink" >
+                <Tab title="Control" >
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Control">
-                    <RenderControl nodeEnv={nodeEnv} apiPort={apiPort}/>
+                <Tab title="Status">
+                    <RenderOverviewTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
                 <Tab title="Events">
                     <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort}/>

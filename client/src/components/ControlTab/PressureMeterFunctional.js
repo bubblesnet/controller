@@ -1,9 +1,21 @@
-import React from 'react';
-import '../App.css';
+import React, {useEffect, useState} from 'react';
+import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 function RenderPressureMeter (props) {
-    let value = 5
+    let [value, setValue] = useState(-10 ); //
+
+    useEffect(() => {
+        let rand = -10 + getRandomInt(20)
+        console.log("RenderPressureMeter useEffect value = " + value)
+        const timer = setTimeout(() => setValue(rand ), 1300);
+        return () => clearTimeout(timer);
+    }, [value]);
+
     let valueText = value +""
     let ret =
         <div className={props.className}>
@@ -16,8 +28,8 @@ function RenderPressureMeter (props) {
                     segmentColors={['red','green']}
                     customSegmentStops={[-50, 0, 50]}
                     customSegmentLabels={[
-                        {text: 'NOT FILTERED', position: 'INSIDE', color: 'white'},
-                        {text: 'FILTERED', position: 'INSIDE', color: 'white'},
+                        {text: 'ODOR ESCAPE', position: 'INSIDE', color: 'white'},
+                        {text: 'NO ODOR', position: 'INSIDE', color: 'white'},
                     ]}
                     className={props.className}
                     />

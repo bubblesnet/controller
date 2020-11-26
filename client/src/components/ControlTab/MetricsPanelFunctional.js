@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import '../App.css';
+import '../../App.css';
 import { Table} from "rendition";
-import Loader from "./Loader";
+import Loader from "../Loader";
 
 function RenderMetrics (props) {
 

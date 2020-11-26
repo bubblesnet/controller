@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+@import '../../Palette.css';
+
+.automatic-track-backgroundcolor {
+    backgroundColor: red;
+}
+.automatic-track-checkedcolor {
+    backgroundColor: green;
+}
+.automatic-button-backgroundcolor {
+    backgroundColor: yellow;
+}
+.automatic-button-checkedcolor {
+    backgroundColor: yellow;
+}
+
+.automatic-track {
+    track: automatic-track-backgroundcolor;
+}
+
+#automatic-button {
+    track: automatic-track-backgroundcolor;
+    trackChecked: automatic-track-checkedcolor;
+    button: automatic-button-backgroundcolor;
+    buttonChecked: automatic-button-checkedcolor;
+}
+

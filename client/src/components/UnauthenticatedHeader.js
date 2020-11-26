@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
 
-import {Img} from "rendition";
-
-import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
-import Iceberg from '../images/bubbles.png'
-
 function UnauthenticatedHeader (props) {
     console.log("BubblesApp render props = " + JSON.stringify(props))
 
