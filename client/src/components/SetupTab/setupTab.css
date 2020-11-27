@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+@import '../../Palette.css';
+
+.centered-thead-text {
+    font-weight: bolder;
+    font-size: large;
+    text-align: center
+}
+
+#settings-tab {
+    width: 800px;
+}
+
+#localization-table {
+}
+#odor-table {
+}
+#enclosure-table {
+}
+#security-table {
+}
+#humidity-table {
+}
+#temperature-table {
+}
+#nutrition-table {
+}
+#advanced-table {
+}
+

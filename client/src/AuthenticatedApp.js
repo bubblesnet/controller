@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 
-import RenderTestQueueListFunctional from "./components/TestQueueListFunctional";
-import RenderTestRunListFunctional from "./components/TestRunListFunctional";
-import RenderMetrics from "./components/ControlTab/MetricsPanelFunctional";
-import RenderSBCEditor from "./components/SBCEditor";
 import {Tabs, Tab} from "rendition";
-import RenderDeviceStatusListFunctional from "./components/DeviceStatusListFunctional";
 import Header from "./components/Header"
 
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
 import RenderOverviewTab from "./components/OverviewTab/OverviewTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
-
+import RenderSettings from "./components/SettingsTab/SettingsTabFunctional"
+import RenderSetup from "./components/SetupTab/SetupTabFunctional"
+import RenderGerminateStage from "./components/StageTabs/GerminateTabFunctional"
+import RenderVegetativeStage from "./components/StageTabs/VegetativeTabFunctional"
+import RenderBloomStage from "./components/StageTabs/BloomTabFunctional"
+import RenderHarvestStage from "./components/StageTabs/HarvestTabFunctional"
 
 function AuthenticatedApp (props) {
     console.log("BubblesApp render props = " + JSON.stringify(props))
@@ -50,24 +50,26 @@ function AuthenticatedApp (props) {
                 <Tab title="Status">
                     <RenderOverviewTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
+                <Tab title="Cabinet Setup">
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort}/>
+                </Tab>
+                <Tab title="App Setup">
+                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort}/>
+                </Tab>
                 <Tab title="Events">
                     <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Metrics">
-                    <RenderMetrics nodeEnv={nodeEnv} apiPort={apiPort}/>
+                <Tab title="Germinate">
+                    <RenderGerminateStage nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Work Queue">
-                    <RenderTestQueueListFunctional nodeEnv={nodeEnv} apiPort={apiPort} language={language}
-                                                   onChangeLanguage={setLang}/>
+                <Tab title="Vegetative">
+                    <RenderVegetativeStage nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Workers">
-                    <RenderDeviceStatusListFunctional nodeEnv={nodeEnv} apiPort={apiPort}/>
+                <Tab title="Bloom">
+                    <RenderBloomStage nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Runs">
-                    <RenderTestRunListFunctional nodeEnv={nodeEnv} apiPort={apiPort}/>
-                </Tab>
-                <Tab title="SBC Targets">
-                    <RenderSBCEditor nodeEnv={nodeEnv} apiPort={apiPort} blah={"blahblah"}/>
+                <Tab title="Harvest">
+                    <RenderHarvestStage nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
             </Tabs>
         </div>

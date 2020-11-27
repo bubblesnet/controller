@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+@import '../../Palette.css';
+
+.centered-thead-text {
+    font-weight: bolder;
+    font-size: large;
+    text-align: center
+}
+
+#temp-text-input {
+    width: 250px;
+}
+
+#stages-tab {
+    width: 800px;
+    background-color: white;
+}
+
+.stage-table {
+}
