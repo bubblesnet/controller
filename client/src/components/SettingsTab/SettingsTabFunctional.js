@@ -5,6 +5,7 @@ import '../../overview_style.css'
 import {Checkbox,RadioButtonGroup} from 'rendition'
 import {TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
 import './settingsTab.css'
+import RenderFormActions from "../FormActions";
 
 function RenderSettingsTab (props) {
 
@@ -127,6 +128,11 @@ function RenderSettingsTab (props) {
                                         <TableRow><TableCell><Checkbox label="Pressure Sensors" checked={values.pressureSensorsAvailable}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow height={'50px'}>
+                            <TableCell justify={'center'} colSpan={'3'}>
+                                <RenderFormActions />
                             </TableCell>
                         </TableRow>
                         </tbody>

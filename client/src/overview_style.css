@@ -247,7 +247,7 @@ body {
   background-repeat:no-repeat;
 }
 
-#metergroup {
+.meter-group {
   height: 700px;
   left: 0;
   top: 0;
@@ -265,6 +265,7 @@ body {
   left: 0;
   background-color: var(--color-primary-2);
 }
+
 .temp-middle {
   left: 0;
   background-color: var(--color-primary-1);
@@ -905,11 +906,11 @@ body {
   color: #ffffff;
   font-weight: bold;
 }
-.detailgroup {
+.detail-group {
   height: 654px;
-  left: 500px;
+  left: 250px;
   position: absolute;
-  top: 16px;
+  top: 0;
   width: 351px;
 }
 
@@ -923,10 +924,6 @@ body {
 }
 
 #current-status-holder {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 322px;
   font-family: "Arial";
   font-weight: bold;
   font-size: large;

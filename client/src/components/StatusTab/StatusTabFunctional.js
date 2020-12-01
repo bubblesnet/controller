@@ -4,13 +4,13 @@ import '../../Palette.css';
 import '../../overview_style.css'
 
 import Loader from "../Loader";
-import RenderTemperatureMeter from "../ControlTab/TemperatureMeterFunctional";
-import RenderHumidityMeter from "../ControlTab/HumidityMeterFunctional";
-import RenderPressureMeter from "../ControlTab/PressureMeterFunctional";
-import RenderPhMeter from "../ControlTab/PhMeterFunctional";
-import RenderStatus from "../ControlTab/StatusFunctional";
+import RenderTemperatureMeter from "./TemperatureMeterFunctional";
+import RenderHumidityMeter from "./HumidityMeterFunctional";
+import RenderPressureMeter from "./PressureMeterFunctional";
+import RenderPhMeter from "./PhMeterFunctional";
+import RenderTextStatus from "./TextStatusFunctional";
 
-function RenderOverviewTab (props) {
+function RenderStatusTab (props) {
 
     let [values, setValues] = useState({exhaustFanOn: false, intakeFanOn: false}); //
     let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
@@ -68,6 +68,9 @@ function RenderOverviewTab (props) {
             </div>
         )
     }
+    /*
+
+    */
     let ret = ""
 
     if (loading) {
@@ -83,16 +86,14 @@ function RenderOverviewTab (props) {
         ret =
             <>
                 <div className="global_container_">
-                    <div id="metergroup">
+                    <div className="meter-group">
                         <RenderTemperatureMeter className="temp-top" label="Air Temperature"/>
                         <RenderHumidityMeter  className="temp-middle" label="Humidity"/>
                         <RenderPressureMeter  className="temp-bottom" label="Odor Control (pressure)"/>
                         <RenderPhMeter  className="temp-middle" label="Root pH"/>
-                   </div>
-                    <div className="detailgroup">
-                        <div className="current-status-holder">
-                            <RenderStatus />
-                        </div>
+                    </div>
+                    <div className="detail-group" >
+                        <RenderTextStatus />
                     </div>
                 </div>
 
@@ -101,4 +102,4 @@ function RenderOverviewTab (props) {
     return (ret)
 }
 
-export default RenderOverviewTab;
+export default RenderStatusTab;

@@ -7,8 +7,11 @@ import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderTemperatureSelector from './TemperatureSelectorFunctional'
 import RenderHumiditySelector from './HumiditySelectorFunctional'
+import RenderStageSelector from './StageSelector'
+import RenderFormActions from '../FormActions'
 
-function RenderGerminateTab (props) {
+
+function RenderStageTab (props) {
 
     console.log("RenderGerminateTab")
     const initialRange = [77, 81]
@@ -20,21 +23,6 @@ function RenderGerminateTab (props) {
     useEffect(() => {
         console.log("RenderGerminateTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [range]);
-/*
-                    <Table id="stages-tab" >
-                        <tbody>
-                        <TableRow>
-                            <RenderLightSelector />
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>
-                                <RenderTemperatureSelector label={"Target Temperature"}/>
-                            </TableCell>
-                        </TableRow>
-                        </tbody>
-                    </Table>
-
- */
     let ret =
             <>
                 <div className="global_container_" >
@@ -44,22 +32,30 @@ function RenderGerminateTab (props) {
                         direction={'vertical'}
                         fill
                         areas={[
-                            { name: 'light', start: [0, 0], end: [0, 0] },
-                            { name: 'temp', start: [0, 1], end: [0, 1] },
-                            { name: 'humidity', start: [0, 2], end: [0, 2] },
+                            { name: 'stage', start: [0, 0], end: [0, 0] },
+                            { name: 'light', start: [0, 1], end: [0, 1] },
+                            { name: 'temp', start: [0, 2], end: [0, 2] },
+                            { name: 'humidity', start: [0, 3], end: [0, 3] },
+                            { name: 'actions', start: [0, 4], end: [0, 4] },
                         ]}
                         columns={['large']}
-                        rows={['xsmall','130px','130px']}
+                        rows={['50px','xsmall','130px','130px','130px']}
                         gap={"xxsmall"}
                     >
-                        <Box gridArea={'light'}  border={{size:'medium'}} background={'white'}>
+                        <Box gridArea={'stage'}  justify={'center'} border={{size:'medium'}} background={'white'}>
+                            <RenderStageSelector />
+                        </Box>
+                        <Box gridArea={'light'}  border={{size:'medium'}} >
                             <RenderLightSelector />
                         </Box>
-                        <Box gridArea={'temp'}  border={{size:'medium'}} background={'white'}>
+                        <Box gridArea={'temp'}  border={{size:'medium'}} >
                             <RenderTemperatureSelector label={"Target Temperature"}/>
                         </Box>
-                        <Box gridArea={'humidity'}  border={{size:'medium'}} background={'white'}>
+                        <Box gridArea={'humidity'}  border={{size:'medium'}} >
                             <RenderHumiditySelector label={"Target Humidity"}/>
+                        </Box>
+                        <Box gridArea={'actions'}   >
+                            <RenderFormActions />
                         </Box>
                     </Grid>
                 </div>
@@ -68,4 +64,4 @@ function RenderGerminateTab (props) {
     return (ret)
 }
 
-export default RenderGerminateTab;
+export default RenderStageTab;

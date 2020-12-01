@@ -4,6 +4,7 @@ import '../../Palette.css';
 import '../../overview_style.css'
 import {TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
 import './setupTab.css'
+import RenderFormActions from "../FormActions";
 
 function RenderSetupTab (props) {
 
@@ -39,6 +40,7 @@ function RenderSetupTab (props) {
                                     <TableRow><TableCell>sendgridRestrictedAPIKey</TableCell><TableCell>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</TableCell></TableRow>
                                     <TableRow><TableCell>sendgridFullAccessAPIKey</TableCell><TableCell>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</TableCell></TableRow>
                                     <TableRow><TableCell>sendgridSenderEmailAddress</TableCell><TableCell>rodley@rodley.com</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={'2'}><RenderFormActions /></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

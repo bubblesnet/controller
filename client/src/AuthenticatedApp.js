@@ -4,14 +4,11 @@ import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
 
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
-import RenderOverviewTab from "./components/OverviewTab/OverviewTabFunctional";
+import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
 import RenderSettings from "./components/SettingsTab/SettingsTabFunctional"
 import RenderSetup from "./components/SetupTab/SetupTabFunctional"
-import RenderGerminateStage from "./components/StageTabs/GerminateTabFunctional"
-import RenderVegetativeStage from "./components/StageTabs/VegetativeTabFunctional"
-import RenderBloomStage from "./components/StageTabs/BloomTabFunctional"
-import RenderHarvestStage from "./components/StageTabs/HarvestTabFunctional"
+import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 
 function AuthenticatedApp (props) {
     console.log("BubblesApp render props = " + JSON.stringify(props))
@@ -48,28 +45,19 @@ function AuthenticatedApp (props) {
                     <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
                 <Tab title="Status">
-                    <RenderOverviewTab nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Cabinet Setup">
+                <Tab title="Cabinet Settings">
                     <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="App Setup">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort}/>
+                <Tab title="Stage Settings">
+                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
                 <Tab title="Events">
                     <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Germinate">
-                    <RenderGerminateStage nodeEnv={nodeEnv} apiPort={apiPort}/>
-                </Tab>
-                <Tab title="Vegetative">
-                    <RenderVegetativeStage nodeEnv={nodeEnv} apiPort={apiPort}/>
-                </Tab>
-                <Tab title="Bloom">
-                    <RenderBloomStage nodeEnv={nodeEnv} apiPort={apiPort}/>
-                </Tab>
-                <Tab title="Harvest">
-                    <RenderHarvestStage nodeEnv={nodeEnv} apiPort={apiPort}/>
+                <Tab title="App Settings">
+                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
             </Tabs>
         </div>

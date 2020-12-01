@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
-import { Table} from "rendition";
-import Loader from "../Loader";
+
 import ReactSpeedometer from "react-d3-speedometer";
 
 function getRandomInt(max) {
