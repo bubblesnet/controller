@@ -5,6 +5,8 @@ import { Grid,Image, Grommet, Box, RangeInput, Stack, Text } from 'grommet';
 import {grommet} from 'grommet/themes'
 import { ThemeType } from 'grommet/themes';
 import thermometer from '../../images/thermometer-icon.png'
+import './stagesTab.css';
+import '../../Palette.css';
 
 
 const RANGE_MIN = 60;
@@ -84,19 +86,18 @@ function RenderTemperatureSelector({ initialValue = 75, label }) {
                     { name: 'value', start: [0, 2], end: [3, 2] },
                 ]}
                 columns={['16px', '30px', '400px', '30px']}
-                rows={['30px','64px', '30px']}
-                gap="xsmall"
+                rows={['28px','60px', '28px']}
+                gap="xxsmall"
             >
-                <Box gridArea="label" background="brand" align="center">
+                <Box gridArea="label" background={"var(--color-primary-0)"} align="center">
                     {label}
                 </Box>
 
-                <Box gridArea="icon" background="brand" >
+                <Box gridArea="icon" background={"var(--color-primary-0)"} justify={"center"}>
                     <Image src={thermometer} />
                 </Box>
-                <Box gridArea="min" background="brand" >{min}{units}</Box>
-                <Box gridArea="slider" background="brand" alignContent="center">
-                    <Stack>
+                <Box gridArea="min" background={"var(--color-primary-0)"} justify={"center"}>{min}{units}</Box>
+                <Box gridArea="slider" background={"var(--color-primary-0)"} justify={"center"} align-content={'center'}>
                         <RangeInput
                             direction="horizontal"
                             min={RANGE_MIN}
@@ -105,10 +106,9 @@ function RenderTemperatureSelector({ initialValue = 75, label }) {
                             value={value}
                             onChange={onChange}
                         />
-                    </Stack>
                 </Box>
-                <Box gridArea="max" background="brand" >{max}{units}</Box>
-                <Box gridArea="value" background="brand" align="center">
+                <Box gridArea="max" background={"var(--color-primary-0)"} justify={"center"}>{max}{units}</Box>
+                <Box gridArea="value" background={"var(--color-primary-0)"} justify={"center"} align="center">
                     {value}{units}
                 </Box>
             </Grid>

@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "iceberg192x192.png",
+      "src": "bubbles192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "iceberg512x512.png",
+      "src": "bubbles512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

@@ -23,6 +23,8 @@
     --gradient-light-as-day: linear-gradient( var(--color-dark-as-night) 2%, var(--color-light-as-day) 49%, var(--color-lighter-as-day)  100%);
     --gradient-dark-as-night: linear-gradient( var(--color-dark-as-night) 0%, var(--color-dark-as-night) 49%, var(--color-darker-as-night) 100%);
 
+    --color-bubbles-brand: #477CBC;	/* Main Primary color */
+
 
 
     --color-secondary-2-0: #3DBC99;	/* Main Secondary color (2) */
