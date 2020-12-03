@@ -14,7 +14,7 @@ function RenderStageSelector (props) {
                     { name: 'setcurrent', start: [2, 0], end: [2, 0] },
                 ]}
                 columns={['100px','150px','226px']}
-                rows={['40px']}
+                rows={['60px']}
                 gap="xxsmall"
             >
 

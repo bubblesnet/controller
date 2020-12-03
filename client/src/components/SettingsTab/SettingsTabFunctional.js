@@ -51,26 +51,27 @@ function RenderSettingsTab (props) {
                 <div className="global_container_">
                     <Table id="settings-tab" >
                         <tbody>
-                        <TableRow>
-                            <TableCell border="all">
+                        <TableRow >
+                            <TableCell colSpan={"2"}>
                                 <Table id="localization-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2" >Localization</td></tr></thead>
                                     <tbody>
                                     <TableRow>
-                                        <TableCell>Measurement Units</TableCell>
-                                        <TableCell><RadioButtonGroup options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell></TableRow>
+                                        <TableCell className={"table-cell"}>Measurement Units</TableCell>
+                                        <TableCell><RadioButtonGroup options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
+                                    </TableRow>
                                     <TableRow>
-                                        <TableCell>Language</TableCell><Select options={values.languageOptions} value={values.language}/>
+                                        <TableCell className={"table-cell"}>Language</TableCell><Select options={values.languageOptions} value={values.language}/>
                                     </TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
-                            <TableCell colSpan="2" border="all">
+                            <TableCell colSpan="2">
                                 <Table id="enclosure-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Enclosure Characteristics</td></tr></thead>
                                     <tbody>
                                         <TableRow>
-                                            <TableCell>Enclosure type</TableCell>
+                                            <TableCell className={"table-cell"}>Enclosure type</TableCell>
                                             <TableCell>
                                                 <RadioButtonGroup options={values.enclosureOptions} value={values.enclosureType} />
                                             </TableCell>
@@ -81,8 +82,8 @@ function RenderSettingsTab (props) {
                                 </Table>
                             </TableCell>
                         </TableRow>
-                        <TableRow>
-                                <TableCell border="all">
+                        <TableRow >
+                                <TableCell  border="top">
                                     <Table  id="humidity-table">
                                         <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                         <tbody>
@@ -92,7 +93,7 @@ function RenderSettingsTab (props) {
                                         </tbody>
                                     </Table>
                                 </TableCell>
-                                <TableCell border="all">
+                                <TableCell  border="top">
                                     <Table  id="temperature-table">
                                         <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                         <tbody>
@@ -105,7 +106,7 @@ function RenderSettingsTab (props) {
                                         </tbody>
                                     </Table>
                                 </TableCell>
-                            <TableCell border="all">
+                            <TableCell  border="top">
                                 <Table  id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
@@ -116,9 +117,7 @@ function RenderSettingsTab (props) {
                                     </tbody>
                                 </Table>
                             </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell colSpan="3" border="all">
+                            <TableCell  border="top" >
                                 <Table  id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
                                     <tbody>
@@ -131,7 +130,7 @@ function RenderSettingsTab (props) {
                             </TableCell>
                         </TableRow>
                         <TableRow height={'50px'}>
-                            <TableCell justify={'center'} colSpan={'3'}>
+                            <TableCell align={'center'} justify={'center'} colSpan={'3'}>
                                 <RenderFormActions />
                             </TableCell>
                         </TableRow>

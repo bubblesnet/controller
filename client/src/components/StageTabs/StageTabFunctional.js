@@ -26,7 +26,7 @@ function RenderStageTab (props) {
     let ret =
             <>
                 <div className="global_container_" >
-                    <Grid id={'stages-tab'}
+                    <Grid className={'centered-thead-text'} id={'stages-tab'}
                           justify={'center'}
                         round={'small'}
                         direction={'vertical'}
@@ -39,19 +39,19 @@ function RenderStageTab (props) {
                             { name: 'actions', start: [0, 4], end: [0, 4] },
                         ]}
                         columns={['large']}
-                        rows={['50px','xsmall','130px','130px','130px']}
+                        rows={['60px','xsmall','130px','130px','130px']}
                         gap={"xxsmall"}
                     >
-                        <Box gridArea={'stage'}  justify={'center'} border={{size:'medium'}} background={'white'}>
+                        <Box gridArea={'stage'} >
                             <RenderStageSelector />
                         </Box>
-                        <Box gridArea={'light'}  border={{size:'medium'}} >
+                        <Box gridArea={'light'}  >
                             <RenderLightSelector />
                         </Box>
-                        <Box gridArea={'temp'}  border={{size:'medium'}} >
+                        <Box gridArea={'temp'} >
                             <RenderTemperatureSelector label={"Target Temperature"}/>
                         </Box>
-                        <Box gridArea={'humidity'}  border={{size:'medium'}} >
+                        <Box gridArea={'humidity'} >
                             <RenderHumiditySelector label={"Target Humidity"}/>
                         </Box>
                         <Box gridArea={'actions'}   >

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Grid, Table, TableRow} from 'grommet';
 import '../../App.css';
+import './statusTab.css'
 import {Box} from "grommet";
 
 function RenderStateTextStatus (props) {
@@ -31,26 +32,22 @@ function RenderStateTextStatus (props) {
     }, [values]);
 
     let ret =
-        <Grid id={"current-status-holder"}
-              justify={'center'}
+        <Grid className={"status-table-holder"}
               round={'small'}
               direction={'vertical'}
-              fill
               areas={[
-                  { name: 'plant', start: [0, 0], end: [0, 0] },
-                  { name: 'light', start: [0, 1], end: [0, 1] },
-                  { name: 'stage', start: [0, 1], end: [0, 1] },
+                  { name: 'table-label', start: [0, 0], end: [1, 0] },
+                  { name: 'training-label', start: [0, 1], end: [0, 1] },{ name: 'training-value', start: [1, 1], end: [1, 1] },
+                  { name: 'water-change-label', start: [0, 2], end: [0, 2] },{ name: 'water-change-value', start: [1, 2], end: [1, 2] },
+                  { name: 'filter-change-label', start: [0, 3], end: [0, 3] },{ name: 'filter-change-value', start: [1, 3], end: [1, 3] },
               ]}
-              columns={['large']}
-              rows={['small','small','small','small']}
+              columns={['small','medium']}
+              rows={['40px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
-                        <Box gridArea={'plant'}>Plant Height</Box><Box>{values.plantHeight}</Box>
-                        <Box gridArea={'light'}>Light Schedule</Box><Box>{values.lightSchedule}</Box>
-                        <Box gridArea={'stage'}>
-                            <Box>Stage</Box><Box>{values.stage}</Box>
-                            <Box gridArea={'plant-status'}>Current Stage Started</Box><Box>{values.currentStageStarted}</Box>
-                            <Box gridArea={'plant-status'}>Next Stage Starts</Box><Box>{values.nextStageStarts}</Box>
-                        </Box>
+                    <Box gridArea={'table-label'}>Interventions</Box>
+                    <Box gridArea={'training-label'}>Last Training</Box><Box gridArea={'training-value'}>{values.lastTraining}</Box>
+                    <Box gridArea={'water-change-label'}>Last Water Change</Box><Box gridArea={'water-change-value'}>{values.lastWaterChange}</Box>
+                    <Box gridArea={'filter-change-label'}>Last Filter Change</Box><Box gridArea={'filter-change-value'}>{values.lastFilterChange}</Box>
         </Grid>
     return (ret)
 }

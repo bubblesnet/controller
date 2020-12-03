@@ -26,3 +26,8 @@
     buttonChecked: automatic-button-checkedcolor;
 }
 
+.centered-thead-text {
+    font-weight: bolder;
+    font-size: large;
+    text-align: center
+}

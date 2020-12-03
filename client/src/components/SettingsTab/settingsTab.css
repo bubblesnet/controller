@@ -7,9 +7,15 @@
     font-size: large;
     text-align: center
 }
-
+.table-cell {
+    vertical-align: middle;
+}
 #settings-tab {
-    width: 800px;
+    width: 1200px;
+
+    font-weight: bolder;
+    font-size: medium;
+    text-align: center
 }
 #localization-table {
 }
