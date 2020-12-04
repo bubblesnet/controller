@@ -141,13 +141,13 @@ html {
 }
 body {
   color: #363636;
-  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 9.33333px;
   font-style: normal;
   font-weight: normal;
   letter-spacing: 0;
   text-decoration: none;
 }
+
 .global_container_ {
   float: none;
   height: 700px;
@@ -155,8 +155,8 @@ body {
   min-height: 700px;
   position: relative;
   width: 1280px;
+  font-weight: bold;
 }
-
 
 .airpump {
   height: 144px;
@@ -258,7 +258,6 @@ body {
 .meter-text {
   left: 3px;
   font-weight: bold;
-  font-family: "Comic Sans MS";
   font-size: small;
 }
 .temp-top {
@@ -274,7 +273,6 @@ body {
   left: 0;
   background-color: var(--color-primary-2);
 }
-
 
 #heater-holder-on {
   left: 113px;
@@ -924,7 +922,6 @@ body {
 }
 
 #current-status-holder {
-  font-family: "Arial";
   font-weight: bold;
   font-size: large;
 }

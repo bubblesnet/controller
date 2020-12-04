@@ -25,7 +25,7 @@ function RenderDeviceSwitch (props) {
     }
 //    console.log("rendering humidity with value " + props.onOff )
     let ret =
-        <TableRow ><TableCell >{props.label}</TableCell><TableCell>
+        <TableRow ><TableCell>{props.label}</TableCell><TableCell>
             <Switch on={props.on} off={props.off} value={props.onOff}
                     styles={{
                         track: {

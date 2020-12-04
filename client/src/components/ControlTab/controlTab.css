@@ -2,6 +2,9 @@
 
 @import '../../Palette.css';
 
+.font-change {
+}
+
 .automatic-track-backgroundcolor {
     backgroundColor: red;
 }

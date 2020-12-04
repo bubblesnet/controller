@@ -28,8 +28,8 @@
 
 .BubblesApp-header {
   background: linear-gradient(90deg, var(--color-primary-0) 0%, rgba(34,68,94,1) 49%, rgba(255,255,255,1) 100%);
-flexDirection: row;
-flexWrap: nowrap;
+  flexDirection: row;
+  flexWrap: nowrap;
   min-height: 5vh;
   display: flex;
   align-items: flex-start;

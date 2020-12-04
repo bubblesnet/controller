@@ -9,23 +9,33 @@ import RenderFormActions from "../FormActions";
 function RenderSetupTab (props) {
 
     console.log("RenderSetupTab")
-    let [values, setValues] = useState({
+    let [text, setText] = useState({
     }); //
 
     useEffect(() => {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [values]);
+    }, [text]);
+
+    function changeFont(e)
+    {
+        setText(e.target.value)
+        props.onFontChange(e.target.value)
+    }
 
     let ret =
-            <>
                 <div className="global_container_">
                     <Table id="settings-tab" >
                         <tbody>
                         <TableRow>
-                            <TableCell colSpan="3" border="all">
+                            <TableCell colSpan="3">
                                 <Table id="advanced-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Advanced Settings</td></tr></thead>
                                     <tbody>
+                                    <TableRow>
+                                        <TableCell>Theme Font</TableCell>
+                                        <TableCell><TextInput placeholder={'exact font name'} onBlur={event => changeFont(event)}/>
+                                        </TableCell>
+                                    </TableRow>
                                     <TableRow><TableCell>datadirectory</TableCell><TableCell>E:/shared/glassdashcamdata</TableCell></TableRow>
                                     <TableRow><TableCell>usersdirectory</TableCell><TableCell>E:/shared/glassdashcamdata/users</TableCell></TableRow>
                                     <TableRow><TableCell>statusfilesdirectory</TableCell><TableCell>E:/shared/bubblesstatus</TableCell></TableRow>
@@ -48,8 +58,6 @@ function RenderSetupTab (props) {
                         </tbody>
                     </Table>
                 </div>
-
-            </>
     return (ret)
 }
 

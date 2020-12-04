@@ -3,7 +3,6 @@
 @import '../../Palette.css';
 
 .status-table-holder {
-    font-family: "Arial";
     font-weight: bold;
     font-size: large;
 }

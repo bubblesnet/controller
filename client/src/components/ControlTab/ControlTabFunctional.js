@@ -12,6 +12,7 @@ import RenderHeater from "./HeaterFunctional";
 import RenderHumidifier from "./HumidifierFunctional";
 import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
+import {Table} from "grommet";
 
 function RenderControlTab (props) {
 
@@ -90,7 +91,6 @@ function RenderControlTab (props) {
 
 
         let ret =
-            <>
                 <div className="global_container_">
                     <div id="growboxgroup">
                         <div id="tub">
@@ -141,12 +141,10 @@ function RenderControlTab (props) {
                         <div id="water-level-ruler-holder" />
 
                     </div>
-                    <div id="controltab-buttongroup">
+                    <div id="controltab-buttongroup" >
                         <RenderSwitchPanel switchControl={values.switchControl}/>
                     </div>
                 </div>
-
-            </>
     return (ret)
 }
 
