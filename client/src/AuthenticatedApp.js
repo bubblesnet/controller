@@ -116,7 +116,7 @@ function AuthenticatedApp (props) {
         if( value !== x.global.font.family ) {
             return;
         }
-        alert("font changed from " + themex.global.font.family + " to " + value)
+        console.log("App font changed from " + themex.global.font.family + " to " + value)
         x.global.font.family = value;
         setThemex(x)
     }

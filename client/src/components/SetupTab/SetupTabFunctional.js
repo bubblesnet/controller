@@ -13,11 +13,11 @@ function RenderSetupTab (props) {
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr']}); //
     let [themex, setThemex] = useState(props.theme ); //
 
-    const changeFont = (e) => {
+    const changeFont = (value) => {
         let x = themex
-        x.global.font.family = e.target.value
+        x.global.font.family = value
         setThemex(x)
-        props.onFontChange(e.target.value)
+        props.onFontChange(value)
     }
 /*
                                     <TableRow>
@@ -31,6 +31,7 @@ function RenderSetupTab (props) {
 
  */
     console.log("rendering with font set to " + themex.global.font.family)
+    let fonts=['Arial','Comic Sans MS', 'Times New Roman']
     let ret =
         <Grommet theme={themex}>
                 <div className="global_container_">
@@ -53,7 +54,7 @@ function RenderSetupTab (props) {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell >Theme Font</TableCell>
-                                            <TableCell ><TextInput placeholder={'exact font name'} onBlur={event => changeFont(event)}/>
+                                            <TableCell ><Select options={fonts} value={themex.global.font.family} onChange={({ option }) => changeFont(option)}/>
                                             </TableCell>
                                         </TableRow>
                                         </tbody>
