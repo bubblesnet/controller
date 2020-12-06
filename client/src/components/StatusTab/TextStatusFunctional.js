@@ -6,7 +6,6 @@ import RenderStateTextStatus from "./StateTextStatusFunctional";
 import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
-import {useTheme} from 'rendition'
 
 function RenderTextStatus (props) {
     let initValues = {

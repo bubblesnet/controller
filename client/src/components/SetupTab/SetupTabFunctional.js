@@ -2,26 +2,36 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
+import {TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
 import './setupTab.css'
 import RenderFormActions from "../FormActions";
 
 function RenderSetupTab (props) {
 
     console.log("RenderSetupTab")
-    let [text, setText] = useState({
-    }); //
+    let [text, setText] = useState({}); //
+    let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr']}); //
 
     useEffect(() => {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [text]);
+    }, [text,values]);
 
     function changeFont(e)
     {
         setText(e.target.value)
         props.onFontChange(e.target.value)
     }
+/*
+                                    <TableRow>
+                                        <TableCell className={"table-cell"}>Measurement Units</TableCell>
+                                        <TableCell><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell className={"table-cell"}>Language</TableCell>
+                                        <TableCell><Select options={values.languageOptions} value={values.language}/></TableCell>
+                                    </TableRow>
 
+ */
     let ret =
                 <div className="global_container_">
                     <Table id="settings-tab" >
@@ -31,15 +41,28 @@ function RenderSetupTab (props) {
                                 <Table id="advanced-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Advanced Settings</td></tr></thead>
                                     <tbody>
-                                    <TableRow>
-                                        <TableCell>Theme Font</TableCell>
-                                        <TableCell><TextInput placeholder={'exact font name'} onBlur={event => changeFont(event)}/>
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow><TableCell>datadirectory</TableCell><TableCell>E:/shared/glassdashcamdata</TableCell></TableRow>
+                                    <Table id="localization-table">
+                                        <thead><tr><td className="centered-thead-text" colSpan="2" >Localization</td></tr></thead>
+                                        <tbody>
+                                        <TableRow>
+                                            <TableCell className={"table-cell"}>Measurement Units</TableCell>
+                                            <TableCell><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell className={"table-cell"}>Language</TableCell><Select options={values.languageOptions} value={values.language}/>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell >Theme Font</TableCell>
+                                            <TableCell ><TextInput placeholder={'exact font name'} onBlur={event => changeFont(event)}/>
+                                            </TableCell>
+                                        </TableRow>
+                                        </tbody>
+                                    </Table>
+
+                                    <TableRow><TableCell border={'top'}>datadirectory</TableCell><TableCell border={'top'}>E:/shared/glassdashcamdata</TableCell></TableRow>
                                     <TableRow><TableCell>usersdirectory</TableCell><TableCell>E:/shared/glassdashcamdata/users</TableCell></TableRow>
                                     <TableRow><TableCell>statusfilesdirectory</TableCell><TableCell>E:/shared/bubblesstatus</TableCell></TableRow>
-                                    <TableRow><TableCell>sitename</TableCell><TableCell>Bubbles</TableCell></TableRow>
+                                    <TableRow><TableCell border={'top'}>sitename</TableCell><TableCell border={'top'}>Bubbles</TableCell></TableRow>
                                     <TableRow><TableCell>sessionTimeoutInMinutes</TableCell><TableCell>30</TableCell></TableRow>
                                     <TableRow><TableCell>sitename</TableCell><TableCell>Bubbles Development</TableCell></TableRow>
                                     <TableRow><TableCell>baseurl</TableCell><TableCell>http://localhost:3000</TableCell></TableRow>

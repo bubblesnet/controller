@@ -51,61 +51,30 @@ function RenderSettingsTab (props) {
         <Table id="settings-tab" >
                         <tbody>
                         <TableRow >
-                            <TableCell colSpan={"2"}>
-                                <Table id="localization-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2" >Localization</td></tr></thead>
+                            <TableCell  border={'bottom'}>
+                                <Table  id="humidity-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
-                                    <TableRow>
-                                        <TableCell className={"table-cell"}>Measurement Units</TableCell>
-                                        <TableCell><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={"table-cell"}>Language</TableCell><Select options={values.languageOptions} value={values.language}/>
-                                    </TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidifier" checked={values.humidifierAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" checked={values.humiditySensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" checked={values.externalHumiditySensorAvailable}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
-                            <TableCell colSpan="2">
-                                <Table id="enclosure-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Enclosure Characteristics</td></tr></thead>
+                            <TableCell  border={'bottom'}>
+                                <Table  id="temperature-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                     <tbody>
-                                        <TableRow>
-                                            <TableCell className={"table-cell"}>Enclosure type</TableCell>
-                                            <TableCell>
-                                                <RadioButtonGroup name="enclosure-type" options={values.enclosureOptions} value={values.enclosureType} />
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow><TableCell>Tub depth</TableCell><TableCell><TextInput value={values.tubDepth} />{values.heightUnits}</TableCell></TableRow>
-                                        <TableRow><TableCell>Tub volume</TableCell><TableCell><TextInput value={values.tubVolume} />{values.liquidVolumeUnits}</TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Heater" checked={values.heaterAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor" checked={values.topTempSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor" checked={values.middleTempSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" checked={values.bottomTempSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" checked={values.externalTempSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" checked={values.waterTempSensorAvailable}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
-                        </TableRow>
-                        <TableRow >
-                                <TableCell  border="top">
-                                    <Table  id="humidity-table">
-                                        <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
-                                        <tbody>
-                                        <TableRow><TableCell><CheckBox label="Humidifier" checked={values.humidifierAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Humidity Sensor" checked={values.humiditySensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="External Humidity Sensor" checked={values.externalHumiditySensorAvailable}/></TableCell></TableRow>
-                                        </tbody>
-                                    </Table>
-                                </TableCell>
-                                <TableCell  border="top">
-                                    <Table  id="temperature-table">
-                                        <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
-                                        <tbody>
-                                        <TableRow><TableCell><CheckBox label="Heater" checked={values.heaterAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Top Temp Sensor" checked={values.topTempSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Middle Temp Sensor" checked={values.middleTempSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Bottom Temp Sensor" checked={values.bottomTempSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="External Temp Sensor" checked={values.externalTempSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Water Temp Sensor" checked={values.waterTempSensorAvailable}/></TableCell></TableRow>
-                                        </tbody>
-                                    </Table>
-                                </TableCell>
-                            <TableCell  border="top">
+                            <TableCell  border={'bottom'}>
                                 <Table  id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
@@ -116,19 +85,40 @@ function RenderSettingsTab (props) {
                                     </tbody>
                                 </Table>
                             </TableCell>
-                            <TableCell  border="top" >
+                            <TableCell border={'bottom'} >
                                 <Table  id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
                                     <tbody>
-                                        <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinetDoorSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Outer Door Sensor" checked={values.outerDoorSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Movement Sensor" checked={values.movementSensorAvailable}/></TableCell></TableRow>
-                                        <TableRow><TableCell><CheckBox label="Pressure Sensors" checked={values.pressureSensorsAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinetDoorSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" checked={values.outerDoorSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Movement Sensor" checked={values.movementSensorAvailable}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" checked={values.pressureSensorsAvailable}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
                         </TableRow>
-                        </tbody>
+                        <tr><td className="centered-thead-text" colSpan="4">Enclosure Characteristics</td></tr>
+                        <TableRow>
+                        <TableCell className={"table-cell"}>Enclosure type</TableCell>
+                            <TableCell colSpan={3}>
+                                <RadioButtonGroup name="enclosure-type" options={values.enclosureOptions} value={values.enclosureType} />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Tub depth</TableCell>
+                            <TableCell colSpan={2}>
+                                <TextInput value={values.tubDepth} />
+                            </TableCell>
+                            <TableCell>{values.heightUnits}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Tub volume</TableCell>
+                            <TableCell colSpan={2}>
+                                <TextInput value={values.tubVolume} />
+                            </TableCell>
+                            <TableCell >{values.liquidVolumeUnits}</TableCell>
+                        </TableRow>
+                         </tbody>
                     </Table>
             <RenderFormActions />
         </div>

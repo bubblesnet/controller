@@ -152,10 +152,10 @@ function AuthenticatedApp (props) {
                 <Tab title="Status">
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Cabinet Settings">
+                <Tab title="Cabinet Setup">
                     <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
-                <Tab title="Environment Control">
+                <Tab title="Automation">
                     <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort}/>
                 </Tab>
                 <Tab title="Events">
