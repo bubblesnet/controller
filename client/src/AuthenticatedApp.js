@@ -74,7 +74,7 @@ function AuthenticatedApp (props) {
                 "graph-1": "status-warning"
             },
             "font": {
-                "family": "Helvetica"
+                "family": "Comic Sans MS"
             },
             "active": {
                 "background": "active-background",
@@ -105,15 +105,18 @@ function AuthenticatedApp (props) {
     console.log("BubblesApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
-    let [language, setLanguage] = useState("all")
-    let [themex,setThemex] = useState(initialthemex)
-    useEffect(() => {
-        console.log("authenticedapp useEffect")
-     }, [themex]);
+    let [language, setLanguage] = useState("all");
+    let [themex,setThemex] = useState(initialthemex);
 
     let fontChange = (value) => {
-        alert("font changed to " + value)
+        if( value === '' ) {
+            return;
+        }
         let x = themex;
+        if( value !== x.global.font.family ) {
+            return;
+        }
+        alert("font changed from " + themex.global.font.family + " to " + value)
         x.global.font.family = value;
         setThemex(x)
     }
@@ -144,28 +147,26 @@ function AuthenticatedApp (props) {
 
         <div className="App">
             <Header setNodeEnv={setEnvironment}/>
-            <Grommet theme={themex}>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
                 </Tab>
                 <Tab title="Status">
-                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
                 </Tab>
                 <Tab title="Automation">
-                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
                 </Tab>
                 <Tab title="Events">
-                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort}/>
+                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
                 </Tab>
                 <Tab title="App Settings">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={fontChange}/>
+                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={fontChange} theme={themex}/>
                 </Tab>
             </Tabs>
-            </Grommet>
         </div>
     );
 }

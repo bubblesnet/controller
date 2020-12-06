@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-
+import {Grommet} from 'grommet'
 import Loader from "../Loader";
 import RenderTemperatureMeter from "./TemperatureMeterFunctional";
 import RenderHumidityMeter from "./HumidityMeterFunctional";
@@ -15,6 +15,7 @@ function RenderStatusTab (props) {
     let [values, setValues] = useState({exhaustFanOn: false, intakeFanOn: false}); //
     let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
+    let [themex, setThemex] = useState(props.theme ); //
 
     useEffect(() => {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
@@ -84,7 +85,7 @@ function RenderStatusTab (props) {
 
     } else {
         ret =
-            <>
+            <Grommet theme={themex}>
                 <div className="global_container_">
                     <div className="meter-group">
                         <RenderTemperatureMeter className="temp-top" label="Air Temperature"/>
@@ -96,8 +97,7 @@ function RenderStatusTab (props) {
                         <RenderTextStatus />
                     </div>
                 </div>
-
-            </>
+            </Grommet>
     }
     return (ret)
 }

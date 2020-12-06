@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Stack, Text, Box, RangeSelector, Table, TableRow, TableCell, Select, RadioButton, Grid} from 'grommet'
+import {Grommet, Stack, Text, Box, RangeSelector, Table, TableRow, TableCell, Select, RadioButton, Grid} from 'grommet'
 import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderTemperatureSelector from './TemperatureSelectorFunctional'
@@ -23,8 +23,10 @@ function RenderStageTab (props) {
     useEffect(() => {
         console.log("RenderGerminateTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [range]);
+    let [themex, setThemex] = useState(props.theme ); //
+
     let ret =
-            <>
+            <Grommet theme={themex}>
                 <div className="global_container_" >
                     <Grid className={'centered-thead-text'} id={'stages-tab'}
                           justify={'center'}
@@ -60,7 +62,7 @@ function RenderStageTab (props) {
                     </Grid>
                 </div>
 
-            </>
+            </Grommet>
     return (ret)
 }
 

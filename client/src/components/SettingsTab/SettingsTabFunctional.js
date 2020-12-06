@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-//import {Checkbox,RadioButtonGroup} from 'rendition'
-import {RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
+import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
 import './settingsTab.css'
 import RenderFormActions from "../FormActions";
 
@@ -41,12 +40,14 @@ function RenderSettingsTab (props) {
         pressureSensorsAvailable: true,
 
     }); //
+    let [themex, setThemex] = useState(props.theme ); //
 
     useEffect(() => {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [values]);
 
     let ret =
+        <Grommet theme={themex} >
         <div className="global_container_">
         <Table id="settings-tab" >
                         <tbody>
@@ -122,6 +123,7 @@ function RenderSettingsTab (props) {
                     </Table>
             <RenderFormActions />
         </div>
+        </Grommet>
     return (ret)
 }
 

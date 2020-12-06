@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
+import {Grommet, TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
 import './setupTab.css'
 import RenderFormActions from "../FormActions";
 
@@ -11,14 +11,12 @@ function RenderSetupTab (props) {
     console.log("RenderSetupTab")
     let [text, setText] = useState({}); //
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr']}); //
+    let [themex, setThemex] = useState(props.theme ); //
 
-    useEffect(() => {
-        console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [text,values]);
-
-    function changeFont(e)
-    {
-        setText(e.target.value)
+    const changeFont = (e) => {
+        let x = themex
+        x.global.font.family = e.target.value
+        setThemex(x)
         props.onFontChange(e.target.value)
     }
 /*
@@ -32,7 +30,9 @@ function RenderSetupTab (props) {
                                     </TableRow>
 
  */
+    console.log("rendering with font set to " + themex.global.font.family)
     let ret =
+        <Grommet theme={themex}>
                 <div className="global_container_">
                     <Table id="settings-tab" >
                         <tbody>
@@ -81,6 +81,7 @@ function RenderSetupTab (props) {
                         </tbody>
                     </Table>
                 </div>
+        </Grommet>
     return (ret)
 }
 

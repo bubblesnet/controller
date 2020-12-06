@@ -12,7 +12,7 @@ import RenderHeater from "./HeaterFunctional";
 import RenderHumidifier from "./HumidifierFunctional";
 import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
-import {Table} from "grommet";
+import {Grommet, Table} from "grommet";
 
 function RenderControlTab (props) {
 
@@ -26,6 +26,7 @@ function RenderControlTab (props) {
             exhaustFan: { on:  false, toggle: toggleExhaustFan},
             growLight: { on:  false, toggle: toggleGrowLight}
         }}); //
+    let [themex, setThemex] = useState(props.theme ); //
 
     function toggleAutomatic(e) {
         console.log("toggleAutomatic")
@@ -91,7 +92,8 @@ function RenderControlTab (props) {
 
 
         let ret =
-                <div className="global_container_">
+            <Grommet theme={themex}>
+            <div className="global_container_">
                     <div id="growboxgroup">
                         <div id="tub">
                             <div id="tubedge-holder">
@@ -145,6 +147,7 @@ function RenderControlTab (props) {
                         <RenderSwitchPanel switchControl={values.switchControl}/>
                     </div>
                 </div>
+            </Grommet>
     return (ret)
 }
 
