@@ -9,6 +9,7 @@ import RenderTemperatureSelector from './TemperatureSelectorFunctional'
 import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
+import GoogleFontLoader from "react-google-font-loader";
 
 
 function RenderStageTab (props) {
@@ -27,6 +28,13 @@ function RenderStageTab (props) {
 
     let ret =
             <Grommet theme={themex}>
+                <GoogleFontLoader
+                    fonts={[
+                        {
+                            font: props.theme.global.font.family
+                        },
+                    ]}
+                />
                 <div className="global_container_" >
                     <Grid className={'centered-thead-text'} id={'stages-tab'}
                           justify={'center'}

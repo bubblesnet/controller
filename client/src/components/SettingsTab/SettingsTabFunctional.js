@@ -5,6 +5,7 @@ import '../../overview_style.css'
 import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
 import './settingsTab.css'
 import RenderFormActions from "../FormActions";
+import GoogleFontLoader from "react-google-font-loader";
 
 function RenderSettingsTab (props) {
 
@@ -48,6 +49,13 @@ function RenderSettingsTab (props) {
 
     let ret =
         <Grommet theme={themex} >
+            <GoogleFontLoader
+                fonts={[
+                    {
+                        font: props.theme.global.font.family
+                    },
+                ]}
+            />
         <div className="global_container_">
         <Table id="settings-tab" >
                         <tbody>

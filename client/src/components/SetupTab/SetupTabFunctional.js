@@ -5,6 +5,8 @@ import '../../overview_style.css'
 import {Grommet, TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
 import './setupTab.css'
 import RenderFormActions from "../FormActions";
+import fontlist from './fontlist.json'
+import GoogleFontLoader from "react-google-font-loader";
 
 function RenderSetupTab (props) {
 
@@ -12,6 +14,16 @@ function RenderSetupTab (props) {
     let [text, setText] = useState({}); //
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr']}); //
     let [themex, setThemex] = useState(props.theme ); //
+    let [fonts, setFonts] = useState([])
+
+    let x = [];
+    if(fonts.length == 0 ) {
+        fontlist.forEach(function (item) {
+            x.push(item.family)
+            console.log(x);
+        });
+        setFonts(x)
+    }
 
     const changeFont = (value) => {
         let x = themex
@@ -19,46 +31,35 @@ function RenderSetupTab (props) {
         setThemex(x)
         props.onFontChange(value)
     }
-/*
-                                    <TableRow>
-                                        <TableCell className={"table-cell"}>Measurement Units</TableCell>
-                                        <TableCell><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell className={"table-cell"}>Language</TableCell>
-                                        <TableCell><Select options={values.languageOptions} value={values.language}/></TableCell>
-                                    </TableRow>
-
- */
     console.log("rendering with font set to " + themex.global.font.family)
-    let fonts=['Arial','Comic Sans MS', 'Times New Roman']
     let ret =
         <Grommet theme={themex}>
-                <div className="global_container_">
+            <GoogleFontLoader
+                fonts={[
+                    {
+                        font: themex.global.font.family
+                    },
+                ]}
+            />
+            <div className="global_container_">
                     <Table id="settings-tab" >
                         <tbody>
                         <TableRow>
                             <TableCell colSpan="3">
                                 <Table id="advanced-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Advanced Settings</td></tr></thead>
-                                    <tbody>
-                                    <Table id="localization-table">
                                         <thead><tr><td className="centered-thead-text" colSpan="2" >Localization</td></tr></thead>
                                         <tbody>
                                         <TableRow>
-                                            <TableCell className={"table-cell"}>Measurement Units</TableCell>
-                                            <TableCell><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
+                                            <TableCell className={"table-cell"}>Measurement Units </TableCell><TableCell className={"table-cell"}><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell className={"table-cell"}>Language</TableCell><Select options={values.languageOptions} value={values.language}/>
+                                            <TableCell className={"table-cell"}>Language </TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language}/></TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell >Theme Font</TableCell>
-                                            <TableCell ><Select options={fonts} value={themex.global.font.family} onChange={({ option }) => changeFont(option)}/>
+                                            <TableCell >Theme Font </TableCell><TableCell className={"table-cell"}><Select options={fonts} value={themex.global.font.family} onChange={({ option }) => changeFont(option)}/>
                                             </TableCell>
                                         </TableRow>
-                                        </tbody>
-                                    </Table>
 
                                     <TableRow><TableCell border={'top'}>datadirectory</TableCell><TableCell border={'top'}>E:/shared/glassdashcamdata</TableCell></TableRow>
                                     <TableRow><TableCell>usersdirectory</TableCell><TableCell>E:/shared/glassdashcamdata/users</TableCell></TableRow>

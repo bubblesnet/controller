@@ -9,6 +9,7 @@ import RenderHumidityMeter from "./HumidityMeterFunctional";
 import RenderPressureMeter from "./PressureMeterFunctional";
 import RenderPhMeter from "./PhMeterFunctional";
 import RenderTextStatus from "./TextStatusFunctional";
+import GoogleFontLoader from "react-google-font-loader";
 
 function RenderStatusTab (props) {
 
@@ -86,6 +87,13 @@ function RenderStatusTab (props) {
     } else {
         ret =
             <Grommet theme={themex}>
+                <GoogleFontLoader
+                    fonts={[
+                        {
+                            font: props.theme.global.font.family
+                        },
+                    ]}
+                />
                 <div className="global_container_">
                     <div className="meter-group">
                         <RenderTemperatureMeter className="temp-top" label="Air Temperature"/>

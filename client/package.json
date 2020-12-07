@@ -9,6 +9,7 @@
     "create-react-class": "^15.6.3",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",
+    "react-google-font-loader": "^1.1.0",
     "grommet": "^2.15.0",
     "grommet-icons": "^4.5.0",
     "jest-enzyme": "^7.1.2",

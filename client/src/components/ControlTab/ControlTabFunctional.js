@@ -13,6 +13,7 @@ import RenderHumidifier from "./HumidifierFunctional";
 import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
 import {Grommet, Table} from "grommet";
+import GoogleFontLoader from "react-google-font-loader";
 
 function RenderControlTab (props) {
 
@@ -93,7 +94,15 @@ function RenderControlTab (props) {
 
         let ret =
             <Grommet theme={themex}>
-            <div className="global_container_">
+                <GoogleFontLoader
+                    fonts={[
+                        {
+                            font: props.theme.global.font.family
+                        },
+                    ]}
+                />
+
+                <div className="global_container_">
                     <div id="growboxgroup">
                         <div id="tub">
                             <div id="tubedge-holder">

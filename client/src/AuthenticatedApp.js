@@ -10,6 +10,7 @@ import RenderSettings from "./components/SettingsTab/SettingsTabFunctional"
 import RenderSetup from "./components/SetupTab/SetupTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import {Grommet} from "grommet";
+import GoogleFontLoader from "react-google-font-loader";
 
 
 function AuthenticatedApp (props) {
@@ -142,7 +143,7 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("Rendering App")
+    console.log("Rendering App with font "+themex.global.font.family)
     return (
 
         <div className="App">
