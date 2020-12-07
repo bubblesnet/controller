@@ -6,120 +6,46 @@ import Header from "./components/Header"
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
 import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
+import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
 import RenderSettings from "./components/SettingsTab/SettingsTabFunctional"
 import RenderSetup from "./components/SetupTab/SetupTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
-import {Grommet} from "grommet";
-import GoogleFontLoader from "react-google-font-loader";
+import initial_theme from './InitialTheme.json'
 
 
 function AuthenticatedApp (props) {
-    let initialthemex = {
-        "name": "bubblesnet",
-        "rounding": 4,
-        "spacing": 24,
-        "defaultMode": "light",
-        "global": {
-            "colors": {
-                "brand": {
-                    "dark": "477CBC",
-                    "light": "#477CBC"
-                },
-                "background": {
-                    "dark": "#111111",
-                    "light": "#FFFFFF"
-                },
-                "background-back": {
-                    "dark": "#111111",
-                    "light": "#EEEEEE"
-                },
-                "background-front": {
-                    "dark": "#222222",
-                    "light": "#FFFFFF"
-                },
-                "background-contrast": {
-                    "dark": "#FFFFFF11",
-                    "light": "#11111111"
-                },
-                "text": {
-                    "dark": "#EEEEEE",
-                    "light": "#333333"
-                },
-                "text-strong": {
-                    "dark": "#FFFFFF",
-                    "light": "#000000"
-                },
-                "text-weak": {
-                    "dark": "#CCCCCC",
-                    "light": "#444444"
-                },
-                "text-xweak": {
-                    "dark": "#999999",
-                    "light": "#666666"
-                },
-                "border": {
-                    "dark": "#444444",
-                    "light": "#CCCCCC"
-                },
-                "control": "brand",
-                "active-background": "background-contrast",
-                "active-text": "text-strong",
-                "selected-background": "brand",
-                "selected-text": "text-strong",
-                "status-critical": "#FF4040",
-                "status-warning": "#FFAA15",
-                "status-ok": "#00C781",
-                "status-unknown": "#CCCCCC",
-                "status-disabled": "#CCCCCC",
-                "graph-0": "brand",
-                "graph-1": "status-warning"
-            },
-            "font": {
-                "family": "Comic Sans MS"
-            },
-            "active": {
-                "background": "active-background",
-                "color": "active-text"
-            },
-            "hover": {
-                "background": "active-background",
-                "color": "active-text"
-            },
-            "selected": {
-                "background": "selected-background",
-                "color": "selected-text"
-            }
-        },
-        "chart": {},
-        "diagram": {
-            "line": {}
-        },
-        "meter": {},
-        "layer": {
-            "background": {
-                "dark": "#111111",
-                "light": "#FFFFFF"
-            }
-        }
-    }
 
     console.log("BubblesApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
     let [language, setLanguage] = useState("all");
-    let [themex,setThemex] = useState(initialthemex);
+    let [bubbles_theme,setBubblesTheme] = useState(initial_theme);
+    let [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
 
-    let fontChange = (value) => {
-        if( value === '' ) {
-            return;
-        }
-        let x = themex;
-        if( value !== x.global.font.family ) {
-            return;
-        }
-        console.log("App font changed from " + themex.global.font.family + " to " + value)
-        x.global.font.family = value;
-        setThemex(x)
+
+    const applyFontChange = (value) => {
+        let x = bubbles_theme;
+
+        console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
+//        if( value === '' ) {
+//            return;
+//        }
+//        if( value !== x.global.font.family ) {
+//            return;
+//        }
+        x.global.font.family = current_font;
+        console.log("should rerender to font " + x.global.font.family)
+        setBubblesTheme(x)
+//        setCurrentFont(value)
+    }
+
+    const localFontChange = (value) => {
+//        let x = bubbles_theme;
+        console.log("AuthenticatedApp localFontChange from " + current_font + " to " + value)
+//        x.current_font = value;
+        console.log("should rerender to font " + value)
+//        setBubblesTheme(value)
+        setCurrentFont(value)
     }
 
     let setLang = (value) => {
@@ -143,29 +69,32 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("Rendering App with font "+themex.global.font.family)
+    useEffect(() => {}, [bubbles_theme]);
+    console.log("Rendering App with font "+bubbles_theme.global.font.family)
     return (
-
-        <div className="App">
+         <div className="App">
             <Header setNodeEnv={setEnvironment}/>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Status">
-                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
+                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Automation">
-                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
+                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Events">
-                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={themex}/>
+                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
+                </Tab>
+                <Tab title="Display Settings">
+                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} theme={bubbles_theme} current_font={current_font}/>
                 </Tab>
                 <Tab title="App Settings">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={fontChange} theme={themex}/>
+                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={applyFontChange} theme={bubbles_theme}/>
                 </Tab>
             </Tabs>
         </div>

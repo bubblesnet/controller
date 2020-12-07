@@ -72,8 +72,8 @@ function toggleAutomatic(e) {
     let buttonBackgroundColor = 'yellow'
     let buttonCheckedColor = 'yellow'
     let valuename = 'ON'
-    console.log("props = " + JSON.stringify(props))
-    console.log("values = " + JSON.stringify(values))
+    console.log("RenderSwitchPanel props = " + JSON.stringify(props))
+    console.log("RenderSwitchPanel values = " + JSON.stringify(values))
     if(!props.switchControl.automaticControl.on)
         valuename = 'OFF'
 

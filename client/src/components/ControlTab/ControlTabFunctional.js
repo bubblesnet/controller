@@ -73,24 +73,8 @@ function RenderControlTab (props) {
         setValues( x );
     }
 
-    useEffect(() => {
-        console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-/*        const timer = setTimeout(() =>
-                setValues({ automaticControl: true, switchControl: {
-                        heater{ on: !values.heater.on, toggle:
-                        humidifier: { on: !values.humidifierOn,
-                        airPumpOn: !values.airPumpOn,
-                        waterPumpOn: !values.waterPumpOn,
-                        intakeFanOn: !values.intakeFanOn,
-                        exhaustFanOn: !values.exhaustFanOn,
-                        growLightOn: !values.growLightOn
-                    }})
-            , 10000);
-         return () => clearTimeout(timer);
-
- */
-    }, [values]);
-
+    useEffect(() => {}, [values]);
+    console.log("rendering with font "+ props.theme.global.font.family)
 
         let ret =
             <Grommet theme={themex}>
@@ -134,7 +118,6 @@ function RenderControlTab (props) {
                             </div>
                         </div>
                         <RenderGrowLight on={values.switchControl.growLight.on} />
-
                         <RenderHeater on={values.switchControl.heater.on} />
                         <RenderHumidifier on={values.switchControl.humidifier.on}/>
                         <div className="exhaust">

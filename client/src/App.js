@@ -3,7 +3,7 @@ import {useUser,login} from './context/UserContext'
 import AuthenticatedApp from './AuthenticatedApp'
 import UnauthenticatedApp from './UnauthenticatedApp'
 import {useState} from "react";
-import { useTheme } from 'rendition';
+
 
 /** Fake login function
  *
@@ -16,7 +16,6 @@ function setSuccessfulLogin(e) {
 
 function App() {
     console.log("Starting App")
-    const theme = useTheme()
 
     let [successfulLogin, setSuccessfulLogin] = useState(false);
     const user = useUser()

@@ -19,7 +19,7 @@ function RenderFormActions (props) {
 
             >
 
-                <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={false} label={'Apply'} primary >
+                <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={false} label={'Apply'} primary onClick={props.applyAction}>
                 </Button>
                 <Button gridArea={'reset'} color={'control'} width={'medium'} round={'large'} active={false} label={'Reset'}>
                 </Button>
