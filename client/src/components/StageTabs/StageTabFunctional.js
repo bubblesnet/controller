@@ -53,16 +53,16 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector />
+                            <RenderStageSelector automation_settings={props.automation_settings}/>
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector />
+                            <RenderLightSelector automation_settings={props.automation_settings}/>
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector label={"Target Temperature"}/>
+                            <RenderTemperatureSelector automation_settings={props.automation_settings} label={"Target Temperature"}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector label={"Target Humidity"}/>
+                            <RenderHumiditySelector automation_settings={props.automation_settings} label={"Target Humidity"}/>
                         </Box>
                         <Box gridArea={'actions'}   >
                             <RenderFormActions />

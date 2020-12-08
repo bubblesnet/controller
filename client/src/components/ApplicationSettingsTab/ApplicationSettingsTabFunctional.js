@@ -3,13 +3,13 @@ import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 import {Grommet, TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
-import './setupTab.css'
+import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-function RenderSetupTab (props) {
+function RenderApplicationSettingsTab (props) {
 
-    console.log("RenderSetupTab")
+    console.log("RenderApplicationSettingsTab")
     let [text, setText] = useState({}); //
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
@@ -57,4 +57,4 @@ function RenderSetupTab (props) {
     return (ret)
 }
 
-export default RenderSetupTab;
+export default RenderApplicationSettingsTab;

@@ -18,14 +18,14 @@ import GoogleFontLoader from "react-google-font-loader";
 function RenderControlTab (props) {
 
     let [values, setValues] = useState( {switchControl: {
-            automaticControl: {on: true, toggle: toggleAutomatic},
-            humidifier: {on: false, toggle: toggleHumidifier},
-            heater: { on: false, toggle: toggleHeater},
-            airPump: { on: false, toggle: toggleAirPump},
-            waterPump: { on:  false, toggle: toggleWaterPump},
-            intakeFan: { on:  false, toggle: toggleIntakeFan},
-            exhaustFan: { on:  false, toggle: toggleExhaustFan},
-            growLight: { on:  false, toggle: toggleGrowLight}
+            automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
+            humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
+            heater: { on: props.switch_state.heater.on,  toggle: toggleHeater},
+            airPump: { on: props.switch_state.airPump.on, toggle: toggleAirPump},
+            waterPump: { on: props.switch_state.waterPump.on, toggle: toggleWaterPump},
+            intakeFan: { on: props.switch_state.intakeFan.on,  toggle: toggleIntakeFan},
+            exhaustFan: { on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
+            growLight: { on: props.switch_state.growLight.on,  toggle: toggleGrowLight}
         }}); //
     let [themex, setThemex] = useState(props.theme ); //
 

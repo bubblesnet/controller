@@ -22,7 +22,7 @@ function RenderStageSelector (props) {
                     Select Stage
                 </Box>
                 <Box justify={'center'} gridArea={'stage'} width={'small'} round={'xsmall'} >
-                    <Select options={["Germinate", "Vegetative", "Bloom", "Harvest", "Dry", "Idle"]} value={"Germinate"}/>
+                    <Select options={props.automation_settings.stage_options} value={props.automation_settings.current_stage}/>
                 </Box>
                 <Box justify={'center'} gridArea={'setcurrent'} width={'small'} >
                     <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={'false'} label={'Set Current'} primary />

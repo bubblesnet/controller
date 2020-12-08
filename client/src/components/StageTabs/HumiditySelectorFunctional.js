@@ -36,13 +36,13 @@ const customThemeRangeInput = {
     },
 };
 
-function RenderHumiditySelector({ initialValue = 75, label }) {
-    const [value, setValue] = useState(initialValue);
+function RenderHumiditySelector(props) {
+    const [value, setValue] = useState(props.automation_settings.target_humidity);
 
     const onChange = event => setValue(event.target.value);
-    const min = 50;
-    const max = 80;
-    const units = '%';
+    const min = props.automation_settings.humidity_min;
+    const max = props.automation_settings.humidity_max;
+    const units = props.automation_settings.target_humidity_units;
 
     return (
             <Grid
@@ -61,7 +61,7 @@ function RenderHumiditySelector({ initialValue = 75, label }) {
                 gap="xxsmall"
             >
                 <Box gridArea="label" color={'yellow'}  align="center">
-                    {label}
+                    {props.label}
                 </Box>
 
                 <Box gridArea="icon"  justify={"center"}>

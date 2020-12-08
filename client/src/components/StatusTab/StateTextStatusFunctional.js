@@ -5,31 +5,11 @@ import './statusTab.css'
 import {Box} from "grommet";
 
 function RenderStateTextStatus (props) {
-    let initValues = {
-        stage: "Vegetative",
-        lightSchedule: "12/12",
-        lastWaterChange: "10 days ago",
-        powerConsumption: "40W",
-        cabinetDoor: "Closed",
-        outerDoor: "Closed",
-        lastTraining: "17 days ago",
-        lastFilterChange: "never",
-        currentStageStarted: "25 days ago",
-        nextStageStarts: "10 days",
-        airTempTop: "84F",
-        airTempMiddle: "81F",
-        airTempBottom: "79F",
-        waterTemp: "70F",
-        plantHeight: "37in"
-    };
 
-    let [values, setValues] = useState(initValues); //
+    let [state, setState] = useState(props.state); //
 
     useEffect(() => {
-        console.log("RenderStatus useEffect growLightOn = " + values.growLightOn)
-        const timer = setTimeout(() => setValues(initValues, 4000));
-        return () => clearTimeout(timer);
-    }, [values]);
+    }, [state]);
 
     /*
     let ret =
@@ -71,6 +51,7 @@ function RenderStateTextStatus (props) {
 
      */
 
+    console.log("RenderStateTextStatus state = "+JSON.stringify(state))
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[
@@ -86,11 +67,11 @@ function RenderStateTextStatus (props) {
         gap={"xxsmall"} >
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
-        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{values.plantHeight}</Box>
-        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{values.lightSchedule}</Box>
-        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{values.stage}</Box>
-        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{values.currentStageStarted}</Box>
-        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{values.nextStageStarts}</Box>
+        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{state.status.plant_height}</Box>
+        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{state.automation_settings.current_lighting_schedule}</Box>
+        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{state.automation_settings.current_stage}</Box>
+        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{state.status.start_date_current_stage}</Box>
+        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{state.status.start_date_next_stage}</Box>
      </Grid>
     return( ret );
 }

@@ -36,42 +36,13 @@ const customThemeRangeInput = {
     },
 };
 
-function RenderTemperatureSelector({ initialValue = 75, label }) {
-    const [value, setValue] = useState(initialValue);
+function RenderTemperatureSelector(props) {
+    const [value, setValue] = useState(props.automation_settings.target_temperature);
 
     const onChange = event => setValue(event.target.value);
-    const min = 60;
-    const max = 90;
-    const units = 'F';
-
-    /*
-            <Grommet theme={customThemeRangeInput}>
-            <Grid rows={['small']} columns={['xsmall','large']} gap={'xsmall'}
-                  areas={[{name: 'icon', start: [0,0], end: [0,1]},{name: 'slider', start:[1,0], end:[1,0]}]}>
-            <Image style={{float: "left"}} height="16px" width="16px" src={thermometer} />
-            <Box gridArea={'icon'} gap="small" pad="xlarge">
-            {label ? <Text>{label}</Text> : null}
-            <Box  gridArea={'slider'}>
-            <Stack>
-                <Box height="16px" direction="row" />
-                <RangeInput
-                    direction="horizontal"
-                    min={RANGE_MIN}
-                    max={RANGE_MAX}
-                    step={1}
-                    value={value}
-                    onChange={onChange}
-                />
-            </Stack>
-           <Box align="center">
-                <Text size="small">{`${value}F%`}</Text>
-            </Box>
-            </Box>
-            </Box>
-             </Grid>
-        </Grommet>
-
-     */
+    const min = props.automation_settings.temperature_min;
+    const max = props.automation_settings.temperature_max;
+    const units = props.automation_settings.target_temperature_units;
 
     return (
             <Grid
@@ -90,7 +61,7 @@ function RenderTemperatureSelector({ initialValue = 75, label }) {
                 gap="xxsmall"
             >
                 <Box gridArea="label" color={'yellow'}  align="center">
-                    {label}
+                    {props.label}
                 </Box>
 
                 <Box gridArea="icon"  justify={"center"}>
@@ -100,8 +71,8 @@ function RenderTemperatureSelector({ initialValue = 75, label }) {
                 <Box gridArea="slider"  justify={"center"} align-content={'center'}>
                         <RangeInput
                             direction="horizontal"
-                            min={RANGE_MIN}
-                            max={RANGE_MAX}
+                            min={props.automation_settings.temperature_min}
+                            max={props.automation_settings.temperature_max}
                             step={1}
                             value={value}
                             onChange={onChange}

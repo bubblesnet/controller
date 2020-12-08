@@ -8,16 +8,13 @@ import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 
 function RenderTextStatus (props) {
-    let initValues = {
-    };
-
-    let [values, setValues] = useState(initValues); //
+    let [state, setState] = useState(props.state); //
 
     useEffect(() => {
-        console.log("RenderStatus useEffect growLightOn = " + values.growLightOn)
-        const timer = setTimeout(() => setValues(initValues, 4000));
+        const timer = setTimeout(() => setState(props.state));
         return () => clearTimeout(timer);
-    }, [values]);
+    }, [state]);
+    console.log("RenderTextStatus state = "+JSON.stringify(state))
 
     let ret =
         <Grid round={'small'} direction={'vertical'}
@@ -32,16 +29,16 @@ function RenderTextStatus (props) {
               gap={"xxsmall"}
         >
             <Box gridArea={'state'} >
-                <RenderStateTextStatus />
+                <RenderStateTextStatus state={props.state}/>
             </Box>
             <Box gridArea={'environment'} >
-                <RenderEnvironmentTextStatus />
+                <RenderEnvironmentTextStatus  state={props.state}/>
             </Box>
             <Box gridArea={'security'} >
-                <RenderSecurityTextStatus />
+                <RenderSecurityTextStatus  state={props.state}/>
             </Box>
             <Box gridArea={'interventions'} >
-                <RenderInterventionsTextStatus />
+                <RenderInterventionsTextStatus  state={props.state}/>
             </Box>
         </Grid>
     return (ret)
