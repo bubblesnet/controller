@@ -4,6 +4,9 @@ import RenderThermometer from "./ThermometerFunctional";
 import RenderHygrometer from "./HygrometerFunctional";
 
 function RenderGrowLight (props) {
+    let [state,setState] = useState(props.state)
+
+    console.log("RenderGrowLight humidity = " + state.status.humidity_internal)
     let ret
         if( props.on === false ) {
             ret =
@@ -12,38 +15,40 @@ function RenderGrowLight (props) {
                     <div className="plant-holder" />
                     <div id="airtemp-holder-night" >
                         <div id="airtemptop-text-holder">
-                            <RenderThermometer currentTemperature="82F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_top} units={state.display_settings.temperature_units}/>
                         </div>
                         <div id="airtempmiddle-text-holder">
-                            <RenderThermometer currentTemperature="80F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_middle} units={state.display_settings.temperature_units}/>
                         </div>
                         <div id="airtempbottom-text-holder">
-                            <RenderThermometer currentTemperature="78F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_bottom} units={state.display_settings.temperature_units}/>
                         </div>
                     </div>
                     <div id="humidity-holder" >
-                        <RenderHygrometer currentHumidity="48"/>
+                        <RenderHygrometer currentHumidity={state.status.humidity_internal} units={state.display_settings.humidity_units}/>
                     </div>
 
                 </div>
         } else {
             ret =
                 <div className="growlight-container-on">
+                    <div className="col" />
+
                     <div className="growlight-on" />
                     <div className="plant-holder" />
                     <div id="airtemp-holder-day" >
                         <div id="airtemptop-text-holder">
-                            <RenderThermometer currentTemperature="86F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_top} units={state.display_settings.temperature_units} direction={state.status.temp_air_top_direction}/>
                         </div>
                         <div id="airtempmiddle-text-holder">
-                            <RenderThermometer currentTemperature="84F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_middle} units={state.display_settings.temperature_units} direction={state.status.temp_air_middle_direction} />
                         </div>
                         <div id="airtempbottom-text-holder">
-                            <RenderThermometer currentTemperature="82F" />
+                            <RenderThermometer currentTemperature={state.status.temp_air_bottom} units={state.display_settings.temperature_units} direction={state.status.temp_air_bottom_direction} />
                         </div>
                     </div>
                     <div id="humidity-holder" >
-                            <RenderHygrometer currentHumidity="43"/>
+                        <RenderHygrometer currentHumidity={state.status.humidity_internal} units={state.display_settings.humidity_units} direction={state.status.humidity_internal_direction}/>
                     </div>
 
                 </div>

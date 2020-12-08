@@ -9,40 +9,20 @@ import './stagesTab.css';
 import '../../Palette.css';
 
 
-const RANGE_MIN = 60;
-const RANGE_MAX = 90;
-
-const customThemeRangeInput = {
-    global: {
-        spacing: '12px',
-    },
-    rangeInput: {
-        track: {
-            color: 'accent-2',
-            height: '12px',
-            extend: () => `border-radius: 10px`,
-            lower: {
-                color: 'brand',
-                opacity: 0.7,
-            },
-            upper: {
-                color: 'dark-4',
-                opacity: 0.3,
-            },
-        },
-        thumb: {
-            color: 'neutral-2',
-        },
-    },
-};
 
 function RenderHumiditySelector(props) {
-    const [value, setValue] = useState(props.automation_settings.target_humidity);
+    function setValue(value) {
+        let x = state;
+        x.automation_settings.target_humidity = value
+        setState(x)
+    }
+
+    const [state, setState] = useState(props.state);
 
     const onChange = event => setValue(event.target.value);
-    const min = props.automation_settings.humidity_min;
-    const max = props.automation_settings.humidity_max;
-    const units = props.automation_settings.target_humidity_units;
+    const min = state.automation_settings.humidity_min;
+    const max = state.automation_settings.humidity_max;
+    const units = state.display_settings.humidity_units;
 
     return (
             <Grid
@@ -71,16 +51,16 @@ function RenderHumiditySelector(props) {
                 <Box gridArea="slider"  justify={"center"} align-content={'center'}>
                         <RangeInput
                             direction="horizontal"
-                            min={RANGE_MIN}
-                            max={RANGE_MAX}
+                            min={state.automation_settings.humidity_min}
+                            max={state.automation_settings.humidity_max}
                             step={1}
-                            value={value}
+                            value={state.automation_settings.target_humidity}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {value}{units}
+                    {state.automation_settings.target_humidity}{state.display_settings.humidity_units}
                 </Box>
             </Grid>
    );

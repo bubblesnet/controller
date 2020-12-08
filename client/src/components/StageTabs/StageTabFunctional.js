@@ -24,10 +24,12 @@ function RenderStageTab (props) {
     useEffect(() => {
         console.log("RenderGerminateTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [range]);
-    let [themex, setThemex] = useState(props.theme ); //
+
+    let [state, setState] = useState(props.state ); //
+    let [bubbles_theme, setTheme] = useState(props.theme ); //
 
     let ret =
-            <Grommet theme={themex}>
+            <Grommet theme={bubbles_theme}>
                 <GoogleFontLoader
                     fonts={[
                         {
@@ -53,16 +55,16 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector automation_settings={props.automation_settings}/>
+                            <RenderStageSelector state={state} />
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector automation_settings={props.automation_settings}/>
+                            <RenderLightSelector state={state} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector automation_settings={props.automation_settings} label={"Target Temperature"}/>
+                            <RenderTemperatureSelector state={state} label={"Target Temperature"}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector automation_settings={props.automation_settings} label={"Target Humidity"}/>
+                            <RenderHumiditySelector state={state} label={"Target Humidity"}/>
                         </Box>
                         <Box gridArea={'actions'}   >
                             <RenderFormActions />

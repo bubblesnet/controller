@@ -2,21 +2,11 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
 function RenderPressureMeter (props) {
-    let [value, setValue] = useState(-10 ); //
+    let [state, setState] = useState(props.state); //
 
-    useEffect(() => {
-        let rand = -10 + getRandomInt(20)
-        console.log("RenderPressureMeter useEffect value = " + value)
-        const timer = setTimeout(() => setValue(rand ), 1300);
-        return () => clearTimeout(timer);
-    }, [value]);
-
-    let valueText = value +""
+    let value =  ""+state.status.pressure_external - state.status.pressure_internal
+    let valueText =  value+state.display_settings.pressure_units
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>

@@ -1,32 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
-import { Table} from "rendition";
-import Loader from "../Loader";
 import ReactSpeedometer from "react-d3-speedometer";
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
 
 function RenderPhMeter (props) {
 
-    let [value, setValue] = useState(70 ); //
+    let [state, setState] = useState(props.state); //
 
-    useEffect(() => {
-        let rand = (60 + getRandomInt(20))/10.0
-        console.log("RenderHumidityMeter useEffect value = " + value)
-        const timer = setTimeout(() => setValue(rand ), 2050);
-        return () => clearTimeout(timer);
-    }, [value]);
-
-
-    let valueText = value +""
+    let valueText = state.status.root_ph +""
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={value} minValue={4} maxValue={8}
+                    value={state.status.root_ph} minValue={4} maxValue={8}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['red','green','yellow']}

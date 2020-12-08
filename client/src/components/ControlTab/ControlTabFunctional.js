@@ -28,6 +28,7 @@ function RenderControlTab (props) {
             growLight: { on: props.switch_state.growLight.on,  toggle: toggleGrowLight}
         }}); //
     let [themex, setThemex] = useState(props.theme ); //
+    let [state, setState] = useState(props.state ); //
 
     function toggleAutomatic(e) {
         console.log("toggleAutomatic")
@@ -93,21 +94,20 @@ function RenderControlTab (props) {
                             </div>
                             <div id="water-level-holder">
                                 <div id="water-level-text-holder">
-                                    15.70 gallons
+                                    {state.status.tub_water_level} {state.display_settings.tub_volume_units}
                                 </div>
                                 <div id="watertemp-holder" >
-                                    <RenderThermometer className="airtemptop-text-holder" currentTemperature="80F" />
+                                    <RenderThermometer className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
                                 </div>
                             </div>
                         </div>
                         <div id="cabinet">
                         </div>
                         <div className="plant">
-                            <div className="col">
                                 <div className="plant-holder">
                                     <p className="plant-2">Plant</p>
                                 </div>
-                            </div>
+
                             <div className="col-2">
                                 <div className="pot-holder-top">
                                 </div>
@@ -117,7 +117,7 @@ function RenderControlTab (props) {
                                 </div>
                             </div>
                         </div>
-                        <RenderGrowLight on={values.switchControl.growLight.on} />
+                        <RenderGrowLight on={values.switchControl.growLight.on} state={state} />
                         <RenderHeater on={values.switchControl.heater.on} />
                         <RenderHumidifier on={values.switchControl.humidifier.on}/>
                         <div className="exhaust">

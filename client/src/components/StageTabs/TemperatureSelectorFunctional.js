@@ -9,40 +9,19 @@ import './stagesTab.css';
 import '../../Palette.css';
 
 
-const RANGE_MIN = 60;
-const RANGE_MAX = 90;
-
-const customThemeRangeInput = {
-    global: {
-        spacing: '12px',
-    },
-    rangeInput: {
-        track: {
-            color: 'accent-2',
-            height: '12px',
-            extend: () => `border-radius: 10px`,
-            lower: {
-                color: 'brand',
-                opacity: 0.7,
-            },
-            upper: {
-                color: 'dark-4',
-                opacity: 0.3,
-            },
-        },
-        thumb: {
-            color: 'neutral-2',
-        },
-    },
-};
-
 function RenderTemperatureSelector(props) {
-    const [value, setValue] = useState(props.automation_settings.target_temperature);
+    function setValue(value) {
+        let x = state;
+        x.automation_settings.target_temperature=value;
+        setState(x)
+    }
+
+    const [state, setState] = useState(props.state);
 
     const onChange = event => setValue(event.target.value);
-    const min = props.automation_settings.temperature_min;
-    const max = props.automation_settings.temperature_max;
-    const units = props.automation_settings.target_temperature_units;
+    const min = state.automation_settings.temperature_min;
+    const max = state.automation_settings.temperature_max;
+    const units = state.display_settings.temperature_units;
 
     return (
             <Grid
@@ -71,16 +50,16 @@ function RenderTemperatureSelector(props) {
                 <Box gridArea="slider"  justify={"center"} align-content={'center'}>
                         <RangeInput
                             direction="horizontal"
-                            min={props.automation_settings.temperature_min}
-                            max={props.automation_settings.temperature_max}
+                            min={state.automation_settings.temperature_min}
+                            max={state.automation_settings.temperature_max}
                             step={1}
-                            value={value}
+                            value={state.automation_settings.target_temperature}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {value}{units}
+                    {state.automation_settings.target_temperature}{state.display_settings.temperature_units}
                 </Box>
             </Grid>
    );

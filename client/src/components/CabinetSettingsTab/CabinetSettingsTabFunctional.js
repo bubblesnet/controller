@@ -10,7 +10,7 @@ import GoogleFontLoader from "react-google-font-loader";
 function RenderCabinetSettingsTab (props) {
 
     console.log("RenderCabinetSettingsTab")
-    let [values, setValues] = useState(props.cabinet_settings);
+    let [values, setValues] = useState(props.state);
     let [bubbles_theme, setTheme] = useState(props.theme ); //
 
     useEffect(() => {
@@ -34,9 +34,9 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="humidity-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Humidifier" checked={values.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" checked={values.humidity_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" checked={values.external_humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidifier" checked={values.cabinet_settings.humidifier}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" checked={values.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" checked={values.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -44,12 +44,12 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="temperature-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Heater" checked={values.heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Top Sensor" checked={values.thermometer_top}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Middle Sensor" checked={values.thermometer_middle}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" checked={values.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" checked={values.external_thermometer}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" checked={values.thermometer_water}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Heater" checked={values.cabinet_settings.heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor" checked={values.cabinet_settings.thermometer_top}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor" checked={values.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" checked={values.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" checked={values.cabinet_settings.external_thermometer}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" checked={values.cabinet_settings.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -57,10 +57,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Grow Light" checked={values.grow_light}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Pump" checked={values.water_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Air Pump" checked={values.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" checked={values.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Grow Light" checked={values.cabinet_settings.grow_light}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Pump" checked={values.cabinet_settings.water_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Air Pump" checked={values.cabinet_settings.air_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Light Sensor" checked={values.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -68,10 +68,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinet_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" checked={values.outer_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Movement Sensor" checked={values.movement_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" checked={values.pressure_sensors}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" checked={values.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Movement Sensor" checked={values.cabinet_settings.movement_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" checked={values.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -80,22 +80,22 @@ function RenderCabinetSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options={values.enclosure_options} value={values.enclosure_type} />
+                                <RadioButtonGroup name="enclosure-type" options={values.cabinet_settings.enclosure_options} value={values.cabinet_settings.enclosure_type} />
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={values.tub_depth} />
+                                <TextInput value={values.cabinet_settings.tub_depth} />
                             </TableCell>
-                            <TableCell>{values.tub_depth_units}</TableCell>
+                            <TableCell>{values.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={values.tub_volume} />
+                                <TextInput value={values.cabinet_settings.tub_volume} />
                             </TableCell>
-                            <TableCell >{values.tub_volume_units}</TableCell>
+                            <TableCell >{values.display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                          </tbody>
                     </Table>

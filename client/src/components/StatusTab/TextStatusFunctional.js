@@ -28,11 +28,11 @@ function RenderTextStatus (props) {
               rows={['240px','small','small','small']}
               gap={"xxsmall"}
         >
-            <Box gridArea={'state'} >
-                <RenderStateTextStatus state={props.state}/>
-            </Box>
             <Box gridArea={'environment'} >
                 <RenderEnvironmentTextStatus  state={props.state}/>
+            </Box>
+            <Box gridArea={'state'} >
+                <RenderStateTextStatus state={props.state}/>
             </Box>
             <Box gridArea={'security'} >
                 <RenderSecurityTextStatus  state={props.state}/>

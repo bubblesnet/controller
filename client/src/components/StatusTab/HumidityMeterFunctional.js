@@ -3,32 +3,21 @@ import '../../App.css';
 
 import ReactSpeedometer from "react-d3-speedometer";
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
 function RenderHumidityMeter (props) {
 
-    let [value, setValue] = useState(70 ); //
+    let [state, setState] = useState(props.state); //
 
-    useEffect(() => {
-        let rand = 70 + getRandomInt(20)
-        console.log("RenderHumidityMeter useEffect value = " + value)
-        const timer = setTimeout(() => setValue(rand ), 2050);
-        return () => clearTimeout(timer);
-    }, [value]);
-
-    let valueText = value +"%"
+    let valueText = state.status.humidity_internal +""+ state.display_settings.humidity_units
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={value} maxValue={100}
+                    value={state.status.humidity_internal} maxValue={state.automation_settings.humidity_max}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['blue','green','red']}
-                    customSegmentStops={[0, 75, 85, 100]}
+                    customSegmentStops={[state.automation_settings.humidity_min, state.automation_settings.humidity_target_range_low, state.automation_settings.humidity_target_range_high, state.automation_settings.humidity_max]}
                     customSegmentLabels={[
                         {text: 'TOO DRY', position: 'INSIDE', color: 'white'},
                         {text: 'OK', position: 'INSIDE', color: 'white'},

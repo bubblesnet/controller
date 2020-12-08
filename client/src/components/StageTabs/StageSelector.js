@@ -22,10 +22,10 @@ function RenderStageSelector (props) {
                     Select Stage
                 </Box>
                 <Box justify={'center'} gridArea={'stage'} width={'small'} round={'xsmall'} >
-                    <Select options={props.automation_settings.stage_options} value={props.automation_settings.current_stage}/>
+                    <Select options={props.state.automation_settings.stage_options} value={props.state.automation_settings.current_stage}/>
                 </Box>
                 <Box justify={'center'} gridArea={'setcurrent'} width={'small'} >
-                    <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={'false'} label={'Set Current'} primary />
+                    <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={false} label={'Set Current'} primary />
                 </Box>
          </Grid>
    </>

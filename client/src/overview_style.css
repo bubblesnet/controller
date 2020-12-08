@@ -159,34 +159,34 @@ body {
 }
 
 .airpump {
-  height: 144px;
+  height: 244px;
   left: 0;
   position: absolute;
-  top: 525px;
+  top: 445px;
   width: 260px;
 }
 .air-pump-holder-on {
   height: 32px;
-  left: 55px;
+  left: 120px;
   position: absolute;
-  top: 102px;
+  top: 0;
   width: 57px;
   background: url(images/airpump-on.gif) no-repeat;
 }
 .air-pump-holder-off {
   height: 32px;
-  left: 55px;
+  left: 120px;
   position: absolute;
-  top: 102px;
+  top: 0;
   width: 57px;
   background: url(images/airpump-off.png) no-repeat;
 }
 
 .bubble-holder-on {
   height: 57px;
-  left: 98px;
+  left: 104px;
   position: absolute;
-  top: 30px;
+  top: 103px;
   width: 162px;
   background: url(images/bubbles-animated.gif) no-repeat;
 }
@@ -195,7 +195,7 @@ body {
   height: 57px;
   left: 118px;
   position: absolute;
-  top: 87px;
+  top: 170px;
   width: 162px;
   background: url(images/bubble_rock-on.png) no-repeat;
 }
@@ -203,7 +203,7 @@ body {
   height: 57px;
   left: 118px;
   position: absolute;
-  top: 87px;
+  top: 170px;
   width: 162px;
   background: url(images/bubble_rock-off.png) no-repeat;
 }
@@ -275,20 +275,20 @@ body {
 }
 
 #heater-holder-on {
-  left: 113px;
+  right: 38px;
   width: 76px;
   height: 76px;
   position: absolute;
-  top: 400px;
+  top: 220px;
   background: url("images/heater-on.gif")
 }
 
 #heater-holder-off {
-  left: 113px;
+  right: 38px;
   width: 76px;
   height: 76px;
   position: absolute;
-  top: 400px;
+  top: 220px;
   background: url("images/heater-off.gif")
 }
 
@@ -542,16 +542,16 @@ body {
   color: white;
 }
 #humidityicon-holder {
-  top: 0;
-  right: 0;
+  top: 100px;
+  left: 270px;
   width: 42px;
   height: 60px;
   position: absolute;
   background: url(images/humidityicon.png) no-repeat;
 }
 #humiditytext-holder {
-  top: 20px;
-  left: 0;
+  top: 120px;
+  left: 230px;
   width: 40px;
   height: 60px;
   position: absolute;
@@ -607,6 +607,36 @@ body {
   width: 12px;
   position: absolute;
   background: url(images/thermometer-icon.png) no-repeat;
+}
+.zero-arrowup-icon {
+  left: 0;
+  height: 20px;
+  width: 13px;
+  background: url(images/arrow-up-small.png) no-repeat;
+}
+
+.zero-arrowdown-icon {
+  left: 0;
+  height: 20px;
+  width: 13px;
+  background: url(images/arrow-down-small.png) no-repeat;
+}
+
+.arrowup-icon {
+  top:0;
+  right: 82px;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+.arrowdown-icon {
+  top:0;
+  right: 82px;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
 }
 
 #water-level-text-holder {
@@ -683,7 +713,7 @@ body {
 }
 .col {
   height: 370px;
-  left: 0;
+  left: 82px;
   position: absolute;
   top: 0;
   width: 51px;

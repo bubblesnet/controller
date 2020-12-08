@@ -10,9 +10,10 @@ import GoogleFontLoader from "react-google-font-loader";
 
 function RenderDisplaySettingsTab (props) {
 
-    console.log("RenderApplicationSettingsTab with font set to " + props.display_settings.theme.global.font.family);
+    console.log("RenderApplicationSettingsTab with font set to " + props.state.display_settings.theme.global.font.family);
     let [text, setText] = useState({}); //
-    let [values, setValues] = useState({units: props.display_settings.units, language: props.display_settings.language, languageOptions: props.display_settings.languageOptions, theme: props.display_settings.theme, current_font: props.display_settings.current_font}); //
+    let [state, setState] = useState(props.state)
+    let [values, setValues] = useState({units: props.state.display_settings.units, language: props.state.display_settings.language, languageOptions: props.state.display_settings.languageOptions, theme: props.state.display_settings.theme, current_font: props.state.display_settings.theme.global.font.family}); //
     let [fonts, setFonts] = useState([])
 
     let x = [];
@@ -25,18 +26,19 @@ function RenderDisplaySettingsTab (props) {
 
     function applyFontChangeLocally(value) {
         let x = values
-        console.log("applyFontChangeLocally from "+values.current_font+" to " + value + " props " + props.display_settings.theme.global.font.family)
+        console.log("applyFontChangeLocally from "+values.current_font+" to " + value + " props " + props.state.display_settings.theme.global.font.family)
         x.current_font = value
-        console.log("applyFontChangeLocally afterwards props " + props.display_settings.theme.global.font.family)
+        console.log("applyFontChangeLocally afterwards props " + props.state.display_settings.theme.global.font.family)
         props.onLocalFontChange(values.current_font)
         console.log("applyFontChangeLocally final "+values.current_font)
     }
 
     function applyFontChangeGlobally() {
         let x = values
-        console.log("applyFontChangeGlobally from "+x.theme.global.font.family+" to " + values.current_font + " props " + props.display_settings.theme.global.font.family)
+        console.log("applyFontChangeGlobally from "+x.theme.global.font.family+" to " + values.current_font + " props " + props.state.display_settings.theme.global.font.family)
         props.onApplyFontChange(values.current_font)
-        console.log("applyFontChangeGlobally afterwards props " + props.display_settings.theme.global.font.family)
+        console.log("applyFontChangeGlobally afterwards props " + props.state.display_settings.theme.global.font.family)
+        setValues(values)
     }
 
     useEffect(() => {

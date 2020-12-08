@@ -15,6 +15,9 @@ import initial_theme from './InitialTheme.json'
 
 function AuthenticatedApp (props) {
 
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
 
     console.log("BubblesApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
@@ -30,7 +33,15 @@ function AuthenticatedApp (props) {
             language: 'en-us',
             languageOptions:['en-us','fr'],
             theme: bubbles_theme,
-            current_font: bubbles_theme.global.font.family
+            current_font: bubbles_theme.global.font.family,
+            units_options: ["IMPERIAL","METRIC"],
+            tub_volume_units: 'gallons',
+            tub_depth_units: 'inches',
+            plant_height_units: 'inches',
+            humidity_units: '%',
+            temperature_units: 'F',
+            pressure_units: 'hPa',
+            pressure_units_options: ['hPa', 'mbar', 'mm Hg', 'psi']
         },
         cabinet_settings: {
             humidifier: true,
@@ -52,11 +63,8 @@ function AuthenticatedApp (props) {
             pressure_sensors: true,
             enclosure_type: 'Cabinet',
             tub_depth: 18.0,
-            tub_depth_units: 'inches',
             tub_volume: 20.0,
-            tub_volume_units: 'gallons',
-            enclosure_options: ["Cabinet","Tent"],
-            units_options: ["IMPERIAL","METRIC"]
+            enclosure_options: ["Cabinet","Tent"]
         },
         automation_settings: {
             current_stage: 'Germinate',
@@ -64,31 +72,35 @@ function AuthenticatedApp (props) {
             current_lighting_schedule: '12 on/12 off',
             lighting_schedule_options: ['24 on','18 on/6 off','14 on/10 off','12 on/12 off','10 on/14 off', '6 on/18 off'],
             target_temperature: 75,
-            target_temperature_units: 'F',
             temperature_min: 60,
             temperature_max: 90,
             humidity_min: 0,
             humidity_max: 90,
             target_humidity: 70,
-            target_humidity_units: '%',
-
+            humidity_target_range_low: 75,
+            humidity_target_range_high: 85,
             current_light_type: 'Grow Light Veg',
             light_type_options: ['Germinate', 'Grow Light Veg','Grow Light Bloom']
         },
         status: {
-            temperature_units: 'F',
-            humidity_units: '%',
             units: 'IMPERIAL',
             temp_air_external: 65,
+            temp_air_external_direction: 'up',
             temp_air_top: 85,
+            temp_air_top_direction: 'up',
             temp_air_middle: 80,
+            temp_air_middle_direction: 'up',
             temp_air_bottom: 77,
+            temp_air_bottom_direction: 'down',
             temp_water: 70,
+            temp_water_direction: 'down',
             root_ph: 6.3,
+            root_ph_direction: 'down',
             humidity_internal: 67,
+            humidity_internal_direction: 'up',
             humidity_external: 43,
+            humidity_external_direction: 'down',
             plant_height: 37,
-            plant_height_units: 'inches',
             start_date_current_stage: '25 days ago',
             start_date_next_stage: '10 days from now',
             outer_door_open: false,
@@ -96,7 +108,8 @@ function AuthenticatedApp (props) {
             pressure_external: 1021,
             pressure_internal: 1018,
             date_last_training: 'never',
-            date_last_filter_change: 'never'
+            date_last_filter_change: 'never',
+            tub_water_level: 14.9
         },
         application_settings: {
 
@@ -114,46 +127,26 @@ function AuthenticatedApp (props) {
         }
     });
 
-    useEffect(() => {}, [bubbles_theme]);
-
     useEffect(() => {
-        console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-        const timer = setTimeout(() => setLoading(true), 120000);
-        if (apiPort !== props.apiPort) {
+        console.log("AuthenticatedApp useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
             let x = state;
             setState(x)
             setLoading(false)
-        }
-        if (loading) {
-            //           setValues({exhaustFanOn: !values.exhaustFanOn, intakeFanOn: !values.intakeFanOn})
-            setLoading(false)
-        }
-        return () => clearTimeout(timer);
-    }, [loading]);
+    }, [loading,bubbles_theme]);
 
 
     const applyFontChange = (value) => {
         let x = bubbles_theme;
 
         console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
-//        if( value === '' ) {
-//            return;
-//        }
-//        if( value !== x.global.font.family ) {
-//            return;
-//        }
         x.global.font.family = current_font;
         console.log("should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
-//        setCurrentFont(value)
+        setLoading(true)
     }
 
     const localFontChange = (value) => {
-//        let x = bubbles_theme;
         console.log("AuthenticatedApp localFontChange from " + current_font + " to " + value)
-//        x.current_font = value;
-        console.log("should rerender to font " + value)
-//        setBubblesTheme(value)
         setCurrentFont(value)
     }
 
@@ -184,22 +177,22 @@ function AuthenticatedApp (props) {
             <Header setNodeEnv={setEnvironment}/>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} switch_state={state.switch_state}/>
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} switch_state={state.switch_state}/>
                 </Tab>
                 <Tab title="Status">
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} cabinet_settings={state.cabinet_settings}/>
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
                 </Tab>
                 <Tab title="Automation">
-                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} automation_settings={state.automation_settings}/>
+                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} />
                 </Tab>
                 <Tab title="Events">
                     <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Display Settings">
-                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} display_settings={state.display_settings}/>
+                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} state={state} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} />
                 </Tab>
                 <Tab title="App Settings">
                     <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={applyFontChange} theme={bubbles_theme} applicationSettings={state.application_settings}/>

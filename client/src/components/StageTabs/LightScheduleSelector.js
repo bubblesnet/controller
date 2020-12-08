@@ -18,11 +18,11 @@ function RenderLightSelector (props) {
 
             <Box width={'small'} round={'xsmall'} >
             Light Schedule
-            <Select options={props.automation_settings.lighting_schedule_options} value={props.automation_settings.current_lighting_schedule}/>
+            <Select options={props.state.automation_settings.lighting_schedule_options} value={props.state.automation_settings.current_lighting_schedule}/>
             </Box>
             <Box width={'small'} round={'small'} >
             Light Type
-            <Select options={props.automation_settings.light_type_options} value={props.automation_settings.current_light_type} />
+            <Select options={props.state.automation_settings.light_type_options} value={props.state.automation_settings.current_light_type} />
             </Box>
             </Grid>
    </>
