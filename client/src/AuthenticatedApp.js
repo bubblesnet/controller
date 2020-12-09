@@ -123,7 +123,7 @@ function AuthenticatedApp (props) {
             waterPump: { on:  true},
             intakeFan: { on:  true},
             exhaustFan: { on:  true},
-            growLight: { on:  true}
+            growLight: { on:  false}
 
         }
     });

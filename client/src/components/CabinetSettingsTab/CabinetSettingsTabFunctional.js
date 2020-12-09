@@ -6,9 +6,11 @@ import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCe
 import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import { normalizeColor, deepMerge } from 'grommet/utils';
+import { FormCheckmark } from 'grommet-icons';
+import { grommet } from 'grommet/themes';
 
 function RenderCabinetSettingsTab (props) {
-
     console.log("RenderCabinetSettingsTab")
     let [values, setValues] = useState(props.state);
     let [bubbles_theme, setTheme] = useState(props.theme ); //
@@ -17,8 +19,102 @@ function RenderCabinetSettingsTab (props) {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [values]);
 
+
+    const customCheckBoxTheme = {
+        button: {
+            border: {
+                radius: '20px',
+                color: '#2196f3',
+            },
+            disabled: {
+                color: 'orange',
+                border: {
+                    color: 'orange',
+                },
+                extend: `border: 10px dashed red;`,
+            },
+            padding: {
+                vertical: '12px',
+                horizontal: '24px',
+            },
+            primary: {
+                color: '#2196f3',
+                active: {
+                    border: {
+                        color: 'red',
+                    },
+                    extend: `background: cadetblue;`,
+                },
+                extend: `background: skyblue; border: 5px dotted green;`,
+            },
+            extend: props => {
+                let extraStyles = '';
+                if (props.primary) {
+                    extraStyles = `
+            text-transform: uppercase;
+          `;
+                }
+                return `
+          font-size: 14px;
+          font-weight: bold;
+          ${extraStyles}
+        `;
+            },
+        },
+
+        radioButton: {
+            border: {
+                color: {
+                    light: 'neutral-3',
+                }
+            },
+            check: {
+                color: {
+                    light: 'blue',
+                    dark: 'black',
+                }
+            }
+        },
+        checkBox: {
+            border: {
+                color: {
+                    light: 'accent-2',
+                },
+                // width: 'xsmall',
+                radius: '2px',
+            },
+            check: {
+                extend: ({theme, checked}) => `
+        ${checked && `background-color: ${normalizeColor('neutral-3', theme)};`}
+        `,
+            },
+            color: {
+                light: 'blue',
+                dark: 'black',
+            },
+            gap: 'xsmall',
+            hover: {
+                border: {
+                    color: undefined,
+                },
+            },
+            icon: {
+                size: '18px',
+                extend: 'stroke: white;',
+            },
+            icons: {
+                checked: FormCheckmark,
+            },
+            size: '18px',
+            extend: `color: 'black';`,
+        },
+    };
+
+let btheme = deepMerge(grommet, bubbles_theme)
+    console.log("bubbles_theme = " + JSON.stringify(grommet))
+
     let ret =
-        <Grommet theme={bubbles_theme} >
+        <Grommet theme={deepMerge(btheme, customCheckBoxTheme)} >
             <GoogleFontLoader
                 fonts={[
                     {
@@ -53,8 +149,8 @@ function RenderCabinetSettingsTab (props) {
                                     </tbody>
                                 </Table>
                             </TableCell>
-                            <TableCell  border={'bottom'}>
-                                <Table  id="nutrition-table">
+                            <TableCell border={'bottom'}>
+                                <Table id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
                                     <TableRow><TableCell><CheckBox label="Grow Light" checked={values.cabinet_settings.grow_light}/></TableCell></TableRow>
@@ -65,7 +161,7 @@ function RenderCabinetSettingsTab (props) {
                                 </Table>
                             </TableCell>
                             <TableCell border={'bottom'} >
-                                <Table  id="security-table">
+                                <Table id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
                                     <tbody>
                                     <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>

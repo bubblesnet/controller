@@ -150,9 +150,9 @@ body {
 
 .global_container_ {
   float: none;
-  height: 700px;
+  height: 1000px;
   margin: 0 auto;
-  min-height: 700px;
+  min-height: 1000px;
   position: relative;
   width: 1280px;
   font-weight: bold;
@@ -641,7 +641,7 @@ body {
 
 #water-level-text-holder {
   height: 40px;
-  right: 125px;
+  right: 165px;
   position: absolute;
   top: 0;
   width: 100px;
@@ -711,7 +711,7 @@ body {
   top: 109px;
   width: 294px;
 }
-.col {
+.plant-height-holder {
   height: 370px;
   left: 82px;
   position: absolute;

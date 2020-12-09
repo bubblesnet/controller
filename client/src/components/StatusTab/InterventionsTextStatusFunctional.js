@@ -36,12 +36,12 @@ function RenderStateTextStatus (props) {
               round={'small'}
               direction={'vertical'}
               areas={[
-                  { name: 'table-label', start: [0, 0], end: [1, 0] },
+                  { name: 'table-label', start: [0, 0], end: [2, 0] },
                   { name: 'training-label', start: [0, 1], end: [0, 1] },{ name: 'training-value', start: [1, 1], end: [1, 1] },
                   { name: 'water-change-label', start: [0, 2], end: [0, 2] },{ name: 'water-change-value', start: [1, 2], end: [1, 2] },
                   { name: 'filter-change-label', start: [0, 3], end: [0, 3] },{ name: 'filter-change-value', start: [1, 3], end: [1, 3] },
               ]}
-              columns={['small','medium']}
+              columns={['medium','small','xxsmall']}
               rows={['40px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
                     <Box gridArea={'table-label'}>Interventions</Box>

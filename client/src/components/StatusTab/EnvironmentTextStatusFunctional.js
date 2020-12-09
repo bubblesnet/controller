@@ -23,7 +23,7 @@ function RenderStateTextStatus (props) {
                   { name: 'humidity-label', start: [0, 7], end: [0, 7] }, { name: 'humidity-value', start: [1, 7], end: [1, 7] },{ name: 'humidity-direction', start: [2, 7], end: [2, 7] },
                   { name: 'external-humidity-label', start: [0, 8], end: [0, 8] }, { name: 'external-humidity-value', start: [1, 8], end: [1, 8] },{ name: 'external-humidity-direction', start: [2, 8], end: [2, 8] },
               ]}
-              columns={['small', 'xxsmall','small']}
+              columns={['medium', 'small','xxsmall']}
               rows={['40px','20px','20px','20px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>Environment</Box>

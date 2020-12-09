@@ -16,14 +16,13 @@ function RenderFormActions (props) {
                 columns={['small','small','small']}
                 rows={['60px']}
                 gap="xxsmall"
-
             >
 
-                <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={false} label={'Apply'} primary onClick={props.applyAction}>
+                <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={true} label={'Apply'} primary onClick={props.applyAction}>
                 </Button>
-                <Button gridArea={'reset'} color={'control'} width={'medium'} round={'large'} active={false} label={'Reset'}>
+                <Button gridArea={'reset'} color={'control'} width={'medium'} round={'large'} active={true} label={'Reset'}>
                 </Button>
-                <Button gridArea={'defaults'} color={'control'} width={'medium'} round={'large'} active={false} label={'Defaults'}>
+                <Button gridArea={'defaults'} color={'control'} width={'medium'} round={'large'} active={true} label={'Defaults'}>
                 </Button>
          </Grid>
    </>
