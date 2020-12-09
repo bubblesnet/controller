@@ -75,7 +75,8 @@ function RenderControlTab (props) {
     }
 
     useEffect(() => {}, [values]);
-    console.log("rendering with font "+ props.theme.global.font.family)
+    console.log("rendering controltab setting with exhaustfan "+ values.switchControl.exhaustFan.on)
+    console.log("1 rendering controltab setting with exhaustfan "+ state.switch_state.exhaustFan.on)
 
         let ret =
             <Grommet theme={themex}>
@@ -117,26 +118,26 @@ function RenderControlTab (props) {
                                 </div>
                             </div>
                         </div>
-                        <RenderGrowLight on={values.switchControl.growLight.on} state={state} />
-                        <RenderHeater on={values.switchControl.heater.on} />
-                        <RenderHumidifier on={values.switchControl.humidifier.on}/>
+                        <RenderGrowLight on={state.switch_state.growLight.on} state={state} />
+                        <RenderHeater on={state.switch_state.heater.on} />
+                        <RenderHumidifier on={state.switch_state.humidifier.on}/>
                         <div className="exhaust">
                             <div className="filter-and-exhaust-fan-holder">
-                                <RenderExhaustFan on={values.switchControl.exhaustFan.on} />
+                                <RenderExhaustFan on={state.switch_state.exhaustFan.on} />
                            </div>
                         </div>
                         <div className="fans" >
                             <div className="input-fan-holder">
-                                <RenderIntakeFan on={values.switchControl.intakeFan.on} />
+                                <RenderIntakeFan on={state.switch_state.intakeFan.on} />
                             </div>
                         </div>
-                        <RenderWaterPump on={values.switchControl.waterPump.on}/>
-                        <RenderAirPump on={values.switchControl.airPump.on}/>
+                        <RenderWaterPump on={state.switch_state.waterPump.on}/>
+                        <RenderAirPump on={state.switch_state.airPump.on}/>
                         <div id="water-level-ruler-holder" />
 
                     </div>
                     <div id="controltab-buttongroup" >
-                        <RenderSwitchPanel switchControl={values.switchControl}/>
+                        <RenderSwitchPanel state={state} switchControl={values.switchControl}/>
                     </div>
                 </div>
             </Grommet>

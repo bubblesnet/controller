@@ -8,13 +8,7 @@ import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 
 function RenderTextStatus (props) {
-    let [state, setState] = useState(props.state); //
-
-    useEffect(() => {
-        const timer = setTimeout(() => setState(props.state));
-        return () => clearTimeout(timer);
-    }, [state]);
-    console.log("RenderTextStatus state = "+JSON.stringify(state))
+    console.log("RenderTextStatus state = "+JSON.stringify(props.state))
 
     let ret =
         <Grid round={'small'} direction={'vertical'}

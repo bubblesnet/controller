@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -26,6 +26,7 @@ function AuthenticatedApp (props) {
     let [bubbles_theme,setBubblesTheme] = useState(initial_theme);
     let [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
+
 
     let[state, setState] = useState({
         display_settings: {
@@ -128,11 +129,52 @@ function AuthenticatedApp (props) {
     });
 
     useEffect(() => {
-        console.log("AuthenticatedApp useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-            let x = state;
+        console.log("AuthenticatedApp useEffect")
+        const timer = setTimeout(() => {
+            console.log('timeout exhaustFan '+ state.switch_state.exhaustFan.on)
+            let x = state
+            x.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on
+            x.switch_state.intakeFan.on = !state.switch_state.intakeFan.on
+            x.switch_state.heater.on = !state.switch_state.heater.on
+            x.switch_state.humidifier.on = !state.switch_state.humidifier.on
+            x.switch_state.airPump.on = !state.switch_state.airPump.on
+            x.switch_state.waterPump.on = !state.switch_state.waterPump.on
+            x.switch_state.growLight.on = !state.switch_state.growLight.on
+            let direction = 'up'
+            let increment = 1
+            if( x.status.humidity_internal%2 ===0) {
+                direction = 'up'
+                increment = 1
+            } else {
+                direction = 'down'
+                increment = -1;
+            }
+                x.status.humidity_internal = x.status.humidity_internal + increment
+            x.status.temp_air_external = x.status.temp_air_external + increment
+            x.status.temp_water = x.status.temp_water + increment
+                x.status.temp_air_bottom = x.status.temp_air_bottom + increment
+                x.status.temp_air_middle = x.status.temp_air_middle + increment
+                x.status.temp_air_top = x.status.temp_air_top + increment
+            x.status.humidity_external = x.status.humidity_external + increment
+            x.status.root_ph = x.status.root_ph + (.1*increment)
+            x.status.pressure_external = x.status.pressure_external + increment
+
+            x.status.humidity_internal_direction = direction
+            x.status.temp_air_external_direction = direction
+                x.status.temp_water_direction = direction
+                x.status.temp_air_bottom_direction = direction
+                x.status.temp_air_middle_direction = direction
+                x.status.temp_air_top_direction = direction
+                x.status.humidity_external_direction = direction
+            x.status.root_ph_direction = direction
+            x.status.pressure_external_direction = direction
+
             setState(x)
-            setLoading(false)
-    }, [loading,bubbles_theme]);
+            setLoading(!loading)
+            console.log("setting exhaustFan " + x.switch_state.exhaustFan.on)
+            return () => clearTimeout(timer);
+        }, 5000);
+    }, [loading]);
 
 
     const applyFontChange = (value) => {
@@ -172,6 +214,7 @@ function AuthenticatedApp (props) {
     }
 
     console.log("Rendering App with font "+bubbles_theme.global.font.family)
+
     return (
          <div className="App">
             <Header setNodeEnv={setEnvironment}/>

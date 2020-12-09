@@ -7,8 +7,7 @@ import RenderEnvValueWithDirection from './EnvValueWithDirection'
 
 function RenderStateTextStatus (props) {
 
-    let [state, setState] = useState(props.state); //
-
+    console.log('RenderStateTextStatus temp='+props.state.status.temp_air_middle)
     let ret =
         <Grid className={'status-table-holder'}
               round={'small'}
@@ -28,14 +27,14 @@ function RenderStateTextStatus (props) {
               rows={['40px','20px','20px','20px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>Environment</Box>
-            <RenderEnvValueWithDirection gridArea={'external-air-temp'} label='External Air Temp' value={state.status.temp_air_external} direction={state.status.temp_air_external_direction} />
-            <RenderEnvValueWithDirection gridArea={'air-temp-top'} label='Air Temp Top' value={state.status.temp_air_top} units={state.display_settings.temperature_units} direction={state.status.temp_air_top_direction} />
-            <RenderEnvValueWithDirection gridArea={'air-temp-middle'} label='Air Temp Middle' value={state.status.temp_air_middle} units={state.display_settings.temperature_units} direction={state.status.temp_air_middle_direction} />
-            <RenderEnvValueWithDirection gridArea={'air-temp-bottom'} label='Air Temp Bottom' value={state.status.temp_air_bottom} units={state.display_settings.temperature_units} direction={state.status.temp_air_bottom_direction} />
-            <RenderEnvValueWithDirection gridArea={'water-temp'} label='Water Temp' value={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction} />
-            <RenderEnvValueWithDirection gridArea={'root-ph'} label='Root pH' value={state.status.root_ph} units={''} direction={state.status.root_ph_direction} />
-            <RenderEnvValueWithDirection gridArea={'humidity'} label='Humidity' value={state.status.humidity_internal} units={state.display_settings.humidity_units} direction={state.status.humidity_internal_direction} />
-            <RenderEnvValueWithDirection gridArea={'external-humidity'} label='External Humidity' value={state.status.humidity_external} units={state.display_settings.humidity_units} direction={state.status.humidity_external_direction} />
+            <RenderEnvValueWithDirection gridArea={'external-air-temp'} label='External Air Temp' value={props.state.status.temp_air_external} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_external_direction} />
+            <RenderEnvValueWithDirection gridArea={'air-temp-top'} label='Air Temp Top' value={props.state.status.temp_air_top} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction} />
+            <RenderEnvValueWithDirection gridArea={'air-temp-middle'} label='Air Temp Middle' value={props.state.status.temp_air_middle} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction} />
+            <RenderEnvValueWithDirection gridArea={'air-temp-bottom'} label='Air Temp Bottom' value={props.state.status.temp_air_bottom} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
+            <RenderEnvValueWithDirection gridArea={'water-temp'} label='Water Temp' value={props.state.status.temp_water} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_water_direction} />
+            <RenderEnvValueWithDirection gridArea={'root-ph'} label='Root pH' value={props.state.status.root_ph} units={''} direction={props.state.status.root_ph_direction} />
+            <RenderEnvValueWithDirection gridArea={'humidity'} label='Humidity' value={props.state.status.humidity_internal} units={props.state.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction} />
+            <RenderEnvValueWithDirection gridArea={'external-humidity'} label='External Humidity' value={props.state.status.humidity_external} units={props.state.display_settings.humidity_units} direction={props.state.status.humidity_external_direction} />
         </Grid>
     return (ret)
 }

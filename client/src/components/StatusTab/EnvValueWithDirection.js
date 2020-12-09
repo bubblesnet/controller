@@ -5,28 +5,21 @@ import './statusTab.css'
 import {Box} from "grommet";
 
 function RenderEnvValueWithDirection (props) {
-
-    let [direction, setDirection] = useState(props.direction); //
-    let [label, setLabel] = useState(props.label); //
-    let [value, setValue] = useState(props.value);
-    let [units, setUnits] = useState(props.units);
-    let [gridArea, setGridArea] = useState(props.gridArea); //
-
-    let label_area=gridArea+""+"-label"
-    let value_area=gridArea+""+"-value"
-    let direction_area=gridArea+""+"-direction"
+    let label_area=props.gridArea+""+"-label"
+    let value_area=props.gridArea+""+"-value"
+    let direction_area=props.gridArea+""+"-direction"
 
     let className = ''
-    if(direction === 'up') {
+    if(props.direction === 'up') {
         className='zero-arrowup-icon'
     }
-    if(direction === 'down') {
+    if(props.direction === 'down') {
         className='zero-arrowdown-icon'
     }
-
+    let valuestr = props.value + props.units
     let ret = <>
-        <Box gridArea={label_area}>{label}</Box>
-        <Box gridArea={value_area}>{value}{units}</Box>
+        <Box gridArea={label_area}>{props.label}</Box>
+        <Box gridArea={value_area}>{valuestr}</Box>
         <Box gridArea={direction_area}><div className={className} /></Box>
         </>
     return( ret )

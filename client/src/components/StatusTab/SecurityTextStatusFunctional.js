@@ -3,35 +3,9 @@ import {Grid, Table, TableRow} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
+import RenderEnvValueWithDirection from "./EnvValueWithDirection";
 
 function RenderSecurityTextStatus (props) {
-    let initValues = {
-        stage: "Vegetative",
-        lightSchedule: "12/12",
-        lastWaterChange: "10 days ago",
-        powerConsumption: "40W",
-        cabinetDoor: "Closed",
-        outerDoor: "Closed",
-        lastTraining: "17 days ago",
-        lastFilterChange: "never",
-        currentStageStarted: "25 days ago",
-        nextStageStarts: "10 days",
-        airTempTop: "84F",
-        airTempMiddle: "81F",
-        airTempBottom: "79F",
-        waterTemp: "70F",
-        plantHeight: "37in",
-        internalPressure: '1018h',
-        externalPressure: '1021h',
-    };
-
-    let [values, setValues] = useState(initValues); //
-
-    useEffect(() => {
-        console.log("RenderStatus useEffect growLightOn = " + values.growLightOn)
-        const timer = setTimeout(() => setValues(initValues, 4000));
-        return () => clearTimeout(timer);
-    }, [values]);
 
     let ret =
         <Grid className={"status-table-holder"} round={'small'} direction={'vertical'}
@@ -41,15 +15,17 @@ function RenderSecurityTextStatus (props) {
                   { name: 'cabinet-door-label', start: [0, 2], end: [0, 2] },{ name: 'cabinet-door-value', start: [1, 2], end: [1, 2] },
                   { name: 'external-pressure-label', start: [0, 3], end: [0, 3] },{ name: 'external-pressure-value', start: [1, 3], end: [1, 3] },
                   { name: 'internal-pressure-label', start: [0, 4], end: [0, 4] },{ name: 'internal-pressure-value', start: [1, 4], end: [1, 4] },
+                  { name: 'pressure-differential-label', start: [0, 5], end: [0, 5] },{ name: 'pressure-differential-value', start: [1, 5], end: [1, 5] },{ name: 'pressure-differential-direction', start: [2, 5], end: [2, 5] }
               ]}
-              columns={['small','medium']}
-              rows={['40px','20px','20px','20px','20px']}
+              columns={['medium','xxsmall','xxsmall']}
+              rows={['40px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>Security</Box>
-            <Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{values.outerDoor}</Box>
-            <Box gridArea={'cabinet-door-label'}>Cabinet Door</Box><Box gridArea={'cabinet-door-value'}>{values.cabinetDoor}</Box>
-            <Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{values.externalPressure}</Box>
-            <Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{values.internalPressure}</Box>
+            <Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{props.state.status.outer_door_open?'OPEN':'CLOSED'}</Box>
+            <Box gridArea={'cabinet-door-label'}>Cabinet Door</Box><Box gridArea={'cabinet-door-value'}>{props.state.status.cabinet_door_open?'OPEN':'CLOSED'}</Box>
+            <Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box>
+            <Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{props.state.status.pressure_internal}</Box>
+            <RenderEnvValueWithDirection gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.state.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
         </Grid>
     return (ret)
 }
