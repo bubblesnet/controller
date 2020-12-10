@@ -4,85 +4,52 @@
   "spacing": 24,
   "defaultMode": "light",
   "global": {
+    "active": {
+      "background": {
+        "color": "#477CBC"
+      }
+    },
     "colors": {
+      "focus": {
+        "light": "#ffffff"
+      },
       "brand": {
         "dark": "477CBC",
         "light": "linear-gradient(90deg, var(--color-primary-0) 0%, rgba(34,68,94,1) 49%, rgba(255,255,255,1) 100%)"
       },
       "background": {
         "dark": "#111111",
-        "light": "rgba(71, 124, 188, 0.1)"
-      },
-      "background-back": {
-        "dark": "#111111",
-        "light": "#EEEEEE"
-      },
-      "background-front": {
-        "dark": "#222222",
-        "light": "#FFFFFF"
-      },
-      "background-contrast": {
-        "dark": "#FFFFFF11",
-        "light": "#11111111"
-      },
-      "text": {
-        "dark": "#EEEEEE",
-        "light": "#333333"
-      },
-      "text-strong": {
-        "dark": "#FFFFFF",
-        "light": "#000000"
-      },
-      "text-weak": {
-        "dark": "#CCCCCC",
-        "light": "#444444"
-      },
-      "text-xweak": {
-        "dark": "#999999",
-        "light": "#666666"
-      },
-      "border": {
-        "dark": "#444444",
-        "light": "#CCCCCC"
-      },
-      "control": "brand",
-      "active-background": "background-contrast",
-      "active-text": "text-strong",
-      "selected-background": "brand",
-      "selected-text": "text-strong",
-      "status-critical": "#FF4040",
-      "status-warning": "#FFAA15",
-      "status-ok": "#00C781",
-      "status-unknown": "#CCCCCC",
-      "status-disabled": "#CCCCCC",
-      "graph-0": "brand",
-      "graph-1": "status-warning"
+        "light": "rgba(71, 124, 188, 0.0)"
+      }
     },
     "font": {
       "family": "Abel"
-    },
-    "active": {
-      "background": "active-background",
-      "color": "active-text"
-    },
-    "hover": {
-      "background": "active-background",
-      "color": "active-text"
-    },
-    "selected": {
-      "background": "selected-background",
-      "color": "selected-text"
     }
   },
-  "chart": {},
-  "diagram": {
-    "line": {}
+  "checkBox": {
+    "color": "#477CBC",
+    "border": {
+      "color": {
+        "dark": "red",
+        "light": "blue"
+      }
+    }
   },
-  "meter": {},
-  "layer": {
-    "background": {
-      "dark": "#111111",
-      "light": "#FFFFFF"
+  "button": {
+    "active": {
+      "border": {
+        "color": {
+          "dark": "green",
+          "light": "blue"
+        }
+      }
+    },
+
+    "disabled": {
+      "border": {
+        "color": "#000000"
+      }
     }
   }
 }
+

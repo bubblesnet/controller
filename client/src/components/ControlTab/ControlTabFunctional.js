@@ -14,6 +14,7 @@ import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
 import {Grommet, Table} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
+import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
 
@@ -77,9 +78,9 @@ function RenderControlTab (props) {
     useEffect(() => {}, [values]);
     console.log("rendering controltab setting with exhaustfan "+ values.switchControl.exhaustFan.on)
     console.log("1 rendering controltab setting with exhaustfan "+ state.switch_state.exhaustFan.on)
-
+    console.log("theme = " + JSON.stringify(props.theme))
         let ret =
-            <Grommet theme={themex}>
+            <Grommet theme={props.theme}>
                 <GoogleFontLoader
                     fonts={[
                         {

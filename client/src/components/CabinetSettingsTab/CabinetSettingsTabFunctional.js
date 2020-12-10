@@ -19,102 +19,10 @@ function RenderCabinetSettingsTab (props) {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [values]);
 
-
-    const customCheckBoxTheme = {
-        button: {
-            border: {
-                radius: '20px',
-                color: '#2196f3',
-            },
-            disabled: {
-                color: 'orange',
-                border: {
-                    color: 'orange',
-                },
-                extend: `border: 10px dashed red;`,
-            },
-            padding: {
-                vertical: '12px',
-                horizontal: '24px',
-            },
-            primary: {
-                color: '#2196f3',
-                active: {
-                    border: {
-                        color: 'red',
-                    },
-                    extend: `background: cadetblue;`,
-                },
-                extend: `background: skyblue; border: 5px dotted green;`,
-            },
-            extend: props => {
-                let extraStyles = '';
-                if (props.primary) {
-                    extraStyles = `
-            text-transform: uppercase;
-          `;
-                }
-                return `
-          font-size: 14px;
-          font-weight: bold;
-          ${extraStyles}
-        `;
-            },
-        },
-
-        radioButton: {
-            border: {
-                color: {
-                    light: 'neutral-3',
-                }
-            },
-            check: {
-                color: {
-                    light: 'blue',
-                    dark: 'black',
-                }
-            }
-        },
-        checkBox: {
-            border: {
-                color: {
-                    light: 'accent-2',
-                },
-                // width: 'xsmall',
-                radius: '2px',
-            },
-            check: {
-                extend: ({theme, checked}) => `
-        ${checked && `background-color: ${normalizeColor('neutral-3', theme)};`}
-        `,
-            },
-            color: {
-                light: 'blue',
-                dark: 'black',
-            },
-            gap: 'xsmall',
-            hover: {
-                border: {
-                    color: undefined,
-                },
-            },
-            icon: {
-                size: '18px',
-                extend: 'stroke: white;',
-            },
-            icons: {
-                checked: FormCheckmark,
-            },
-            size: '18px',
-            extend: `color: 'black';`,
-        },
-    };
-
-let btheme = deepMerge(grommet, bubbles_theme)
     console.log("bubbles_theme = " + JSON.stringify(grommet))
 
     let ret =
-        <Grommet theme={deepMerge(btheme, customCheckBoxTheme)} >
+        <Grommet theme={props.theme} >
             <GoogleFontLoader
                 fonts={[
                     {
@@ -123,7 +31,7 @@ let btheme = deepMerge(grommet, bubbles_theme)
                 ]}
             />
         <div className="global_container_">
-        <Table id="settings-tab" >
+        <Table id={'settings-tab'} >
                         <tbody>
                         <TableRow >
                             <TableCell  border={'bottom'}>

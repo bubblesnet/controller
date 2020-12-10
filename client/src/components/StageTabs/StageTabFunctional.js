@@ -10,6 +10,7 @@ import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
+import {grommet} from "grommet/themes"
 
 
 function RenderStageTab (props) {
@@ -29,7 +30,7 @@ function RenderStageTab (props) {
     let [bubbles_theme, setTheme] = useState(props.theme ); //
 
     let ret =
-            <Grommet theme={bubbles_theme}>
+            <Grommet theme={props.theme}>
                 <GoogleFontLoader
                     fonts={[
                         {
@@ -38,6 +39,7 @@ function RenderStageTab (props) {
                     ]}
                 />
                 <div className="global_container_" >
+                    <div className={'settings-tab'} >
                     <Grid className={'centered-thead-text'} id={'stages-tab'}
                           justify={'center'}
                         round={'small'}
@@ -70,6 +72,7 @@ function RenderStageTab (props) {
                             <RenderFormActions />
                         </Box>
                     </Grid>
+                    </div>
                 </div>
 
             </Grommet>

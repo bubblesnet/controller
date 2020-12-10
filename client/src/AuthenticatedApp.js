@@ -11,6 +11,10 @@ import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFu
 import RenderSetup from "./components/ApplicationSettingsTab/ApplicationSettingsTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import initial_theme from './InitialTheme.json'
+import {deepMerge} from "grommet/utils"
+import {grommet} from 'grommet/themes'
+import {useIntl} from 'react-intl'
+
 
 
 function AuthenticatedApp (props) {
@@ -19,6 +23,7 @@ function AuthenticatedApp (props) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
+    console.log("initial theme " + JSON.stringify(initial_theme))
     console.log("BubblesApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
@@ -213,8 +218,8 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("Rendering App with font "+bubbles_theme.global.font.family)
-
+    console.log("Rendering App with bubbles_theme= "+JSON.stringify(bubbles_theme))
+    let merged_theme = deepMerge(grommet,bubbles_theme)
     return (
          <div className="App">
             <Header setNodeEnv={setEnvironment}/>
@@ -226,7 +231,7 @@ function AuthenticatedApp (props) {
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={merged_theme} state={state} />
                 </Tab>
                 <Tab title="Automation">
                     <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} />
@@ -235,10 +240,10 @@ function AuthenticatedApp (props) {
                     <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
                 </Tab>
                 <Tab title="Display Settings">
-                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} state={state} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} />
+                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} />
                 </Tab>
                 <Tab title="App Settings">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} onFontChange={applyFontChange} theme={bubbles_theme} applicationSettings={state.application_settings}/>
+                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} onFontChange={applyFontChange} applicationSettings={state.application_settings}/>
                 </Tab>
             </Tabs>
         </div>

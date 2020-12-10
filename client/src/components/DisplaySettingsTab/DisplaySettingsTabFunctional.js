@@ -7,6 +7,13 @@ import './displaySettingsTab.css'
 import RenderFormActions from "../FormActions";
 import fontlist from './fontlist.json'
 import GoogleFontLoader from "react-google-font-loader";
+import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
+
+import {defineMessages,useIntl} from 'react-intl'
+import locale_en from "../../translations/en.json";
+import locale_nl from "../../translations/nl.json";
+
+import {grommet} from "grommet/themes"
 
 function RenderDisplaySettingsTab (props) {
 
@@ -47,7 +54,7 @@ function RenderDisplaySettingsTab (props) {
 
     console.log("RenderApplicationSettingsTab with local font set to " + values.current_font);
     let ret =
-        <Grommet theme={values.theme}>
+        <Grommet theme={props.theme}>
             <GoogleFontLoader
                 fonts={[
                     {
@@ -59,7 +66,9 @@ function RenderDisplaySettingsTab (props) {
                     <Table id="settings-tab" >
                         <tbody>
                         <TableRow>
-                            <TableCell className={"table-cell"}>Measurement Units </TableCell><TableCell className={"table-cell"}><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
+                            <TableCell className={"table-cell"}>
+                                <FormattedMessage id={"measurement_units"}
+                                                  defaultMessage={"Measurement Units"} /> </TableCell><TableCell className={"table-cell"}><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}/></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell className={"table-cell"}>Language </TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language}/></TableCell>

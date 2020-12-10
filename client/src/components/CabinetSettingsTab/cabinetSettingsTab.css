@@ -11,12 +11,13 @@
     vertical-align: middle;
 }
 #settings-tab {
+    margin-top: 30px;
     width: 1200px;
-
     font-weight: bolder;
     font-size: medium;
     text-align: center
 }
+
 #localization-table {
 }
 #odor-table {

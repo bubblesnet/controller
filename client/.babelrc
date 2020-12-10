@@ -1,0 +1,9 @@
+{
+  "presets": ["react-app"],
+  "plugins": [
+    [ "react-intl", {
+      "messagesDir": "./build/messages",
+      "extractSourceLocation": true
+    }]
+  ]
+}

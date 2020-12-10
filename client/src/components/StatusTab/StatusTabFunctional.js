@@ -10,6 +10,7 @@ import RenderPressureMeter from "./PressureMeterFunctional";
 import RenderPhMeter from "./PhMeterFunctional";
 import RenderTextStatus from "./TextStatusFunctional";
 import GoogleFontLoader from "react-google-font-loader";
+import {grommet} from "grommet/themes"
 
 function RenderStatusTab (props) {
 
@@ -41,7 +42,7 @@ function RenderStatusTab (props) {
     let ret = ""
 
         ret =
-            <Grommet theme={themex}>
+            <Grommet theme={props.theme}>
                 <GoogleFontLoader
                     fonts={[
                         {

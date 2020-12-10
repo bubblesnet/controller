@@ -35,6 +35,11 @@ footer, header, menu, nav, section, time {
 body {
   line-height: 1;
   color: black;
+}
+
+body_old {
+  line-height: 1;
+  color: black;
   background-image: linear-gradient(90deg, var(--color-primary-0) 0%, var(--color-primary-1) 49%, rgba(255,255,255,1) 100%);
 }
 
@@ -158,6 +163,10 @@ body {
   font-weight: bold;
 }
 
+.transparent_background_ {
+  background: rgba(128, 0, 0, 0.1);
+}
+
 .airpump {
   height: 244px;
   left: 0;
@@ -248,6 +257,7 @@ body {
 }
 
 .meter-group {
+  margin-top: 30px;
   height: 700px;
   left: 0;
   top: 0;
@@ -944,7 +954,7 @@ body {
 
 #controltab-buttongroup {
   height: 600px;
-  left: 760px;
+  left: 700px;
   position: absolute;
   top: 107px;
   width: 175px;

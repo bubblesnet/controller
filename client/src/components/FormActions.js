@@ -2,8 +2,10 @@ import {Box, Button, Grid, Select, TableCell, TableRow} from "grommet";
 import React from "react";
 
 function RenderFormActions (props) {
+    // The color supplied to the button is the only way to make a border appear.
     let ret = <>
             <Grid
+                margin={"medium"}
                 justify={'center'}
                 round={'xxsmall'}
                 direction={'horizontal'}
@@ -14,16 +16,13 @@ function RenderFormActions (props) {
                     { name: 'defaults', start: [2, 0], end: [2, 0] },
                 ]}
                 columns={['small','small','small']}
-                rows={['60px']}
-                gap="xxsmall"
+                rows={['40px']}
+                gap={"small"}
             >
 
-                <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={true} label={'Apply'} primary onClick={props.applyAction}>
-                </Button>
-                <Button gridArea={'reset'} color={'control'} width={'medium'} round={'large'} active={true} label={'Reset'}>
-                </Button>
-                <Button gridArea={'defaults'} color={'control'} width={'medium'} round={'large'} active={true} label={'Defaults'}>
-                </Button>
+                <Button gridArea={'apply'} color={'var(--color-button-border)'} width={'medium'} round={'large'} active={true} label={'Apply'} primary onClick={props.applyAction} />
+                <Button gridArea={'reset'} color={'var(--color-button-border)'} width={'medium'} round={'large'} type={'reset'} active={true} label={'Reset'} />
+                <Button gridArea={'defaults'} color={'var(--color-button-border)'} width={'medium'} round={'large'} active={true} label={'Defaults'} />
          </Grid>
    </>
     return(ret);

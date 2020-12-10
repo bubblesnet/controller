@@ -6,6 +6,7 @@ import {Grommet, TextInput, Table, TableRow, TableCell, Select, RadioButton, Rad
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import {grommet} from "grommet/themes"
 
 function RenderApplicationSettingsTab (props) {
 
@@ -16,7 +17,7 @@ function RenderApplicationSettingsTab (props) {
     let x = [];
     console.log("rendering with font set to " + values.theme.global.font.family)
     let ret =
-        <Grommet theme={values.theme}>
+        <Grommet theme={props.theme}>
             <GoogleFontLoader
                 fonts={[
                     {
