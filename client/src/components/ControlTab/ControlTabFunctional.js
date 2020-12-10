@@ -17,7 +17,6 @@ import GoogleFontLoader from "react-google-font-loader";
 import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
-
     let [values, setValues] = useState( {switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
             humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
@@ -28,51 +27,62 @@ function RenderControlTab (props) {
             exhaustFan: { on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
             growLight: { on: props.switch_state.growLight.on,  toggle: toggleGrowLight}
         }}); //
-    let [themex, setThemex] = useState(props.theme ); //
-    let [state, setState] = useState(props.state ); //
+    let [themex, setThemex] = useState(props.theme); //
+    let [state, setState] = useState({
+        switch_state: {...(props.state.switch_state)},
+        display_settings: {...(props.state.display_settings)},
+        status: {...(props.state.status)}
+    }); //
 
     function toggleAutomatic(e) {
         console.log("toggleAutomatic")
-        let x = { switchControl: values.switchControl }
-        x.switchControl.automaticControl.on = !x.switchControl.automaticControl.on;
-        setValues( x )
+        values.switchControl.automaticControl.on = !values.switchControl.automaticControl.on;
+        state.switch_state.automaticControl.on = !state.switch_state.automaticControl.on;
+        props.setStateFromChild(state)
+        setValues( values )
     }
     function toggleHumidifier(e) {
         console.log("toggleHumidifier")
-        let x = { switchControl: values.switchControl }
-        x.switchControl.humidifier.on = !x.switchControl.humidifier.on;
-        setValues( x );
+        values.switchControl.humidifier.on = !values.switchControl.humidifier.on;
+        state.switch_state.humidifier.on = !state.switch_state.humidifier.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
-     function toggleHeater(e) {
-         let x = { switchControl: values.switchControl }
-         x.switchControl.heater.on = !x.switchControl.heater.on;
-         setValues( x );
+    function toggleHeater(e) {
+         values.switchControl.heater.on = !values.switchControl.heater.on;
+        state.switch_state.heater.on = !state.switch_state.heater.on;
+        props.setStateFromChild(state)
+         setValues( values );
     }
     function toggleIntakeFan(e) {
-        let x = { switchControl: values.switchControl }
-        console.log("toggleIntakeFan from "+ x.switchControl.intakeFan.on + " to " + !x.switchControl.intakeFan.on)
-        x.switchControl.intakeFan.on = !x.switchControl.intakeFan.on;
-        setValues( x );
+        values.switchControl.intakeFan.on = !values.switchControl.intakeFan.on;
+        state.switch_state.intakeFan.on = !state.switch_state.intakeFan.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
     function toggleExhaustFan(e) {
-        let x = { switchControl: values.switchControl }
-        x.switchControl.exhaustFan.on = !x.switchControl.exhaustFan.on;
-        setValues( x );
+        values.switchControl.exhaustFan.on = !values.switchControl.exhaustFan.on;
+        state.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
     function toggleGrowLight(e) {
-        let x = { switchControl: values.switchControl }
-        x.switchControl.growLight.on = !x.switchControl.growLight.on;
-        setValues( x );
+        values.switchControl.growLight.on = !values.switchControl.growLight.on;
+        state.switch_state.growLight.on = !state.switch_state.growLight.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
     function toggleAirPump(e) {
-        let x = { switchControl: values.switchControl }
-        x.switchControl.airPump.on = !x.switchControl.airPump.on;
-        setValues( x );
+        values.switchControl.airPump.on = !values.switchControl.airPump.on;
+        state.switch_state.airPump.on = !state.switch_state.airPump.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
     function toggleWaterPump(e) {
-        let x = { switchControl: values.switchControl }
-        x.switchControl.waterPump.on = !x.switchControl.waterPump.on;
-        setValues( x );
+        values.switchControl.waterPump.on = !values.switchControl.waterPump.on;
+        state.switch_state.waterPump.on = !state.switch_state.waterPump.on;
+        props.setStateFromChild(state)
+        setValues( values );
     }
 
     useEffect(() => {}, [values]);

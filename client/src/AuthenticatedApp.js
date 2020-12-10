@@ -24,8 +24,12 @@ function AuthenticatedApp (props) {
     }
 
     function setCabinetSettingsStateFromChild(x) {
-        console.log("AuthenticatedApp toggled humidifier from " + state.cabinet_settings.humidifier + " to " + x.cabinet_settings.humidifier)
         state.cabinet_settings = {...(x.cabinet_settings)}
+        setState(state)
+        setLoading(!loading)
+    }
+    function setSwitchStateFromChild(x) {
+        state.switch_state = {...(x.switch_state)}
         setState(state)
         setLoading(!loading)
     }
@@ -238,7 +242,8 @@ function AuthenticatedApp (props) {
             <Header setNodeEnv={setEnvironment}/>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} switch_state={state.switch_state}/>
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                      state={state} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
                 </Tab>
                 <Tab title="Status">
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
