@@ -23,20 +23,21 @@ function AuthenticatedApp (props) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    function setStateFromChild(x) {
+    function setCabinetSettingsStateFromChild(x) {
         console.log("AuthenticatedApp toggled humidifier from " + state.cabinet_settings.humidifier + " to " + x.cabinet_settings.humidifier)
-        setState(x)
-        setLoading(!loading)
-    }
-
-    function resetChanges() {
-        console.log("app resetchanges humidifier is "+state.cabinet_settings.humidifier)
+        state.cabinet_settings = {...(x.cabinet_settings)}
         setState(state)
         setLoading(!loading)
     }
 
-    console.log("initial theme " + JSON.stringify(initial_theme))
-    console.log("BubblesApp render props = " + JSON.stringify(props))
+    function resetChanges() {
+        console.log("AuthenticatedApp resetchanges humidifier is "+state.cabinet_settings.humidifier)
+        setState(state)
+        setLoading(!loading)
+    }
+
+    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
+    console.log("AuthenticatedApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
     let [language, setLanguage] = useState("all");
@@ -149,7 +150,7 @@ function AuthenticatedApp (props) {
         console.log("AuthenticatedApp useEffect")
         const timer = setTimeout(() => {
             console.log('timeout exhaustFan ' + state.switch_state.exhaustFan.on)
-            let x = state
+            let x = {...(state)}
             x.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on
             x.switch_state.intakeFan.on = !state.switch_state.intakeFan.on
             x.switch_state.heater.on = !state.switch_state.heater.on
@@ -187,7 +188,7 @@ function AuthenticatedApp (props) {
             x.status.pressure_external_direction = direction
 
             setState(x)
-            setLoading(!loading)
+//            setLoading(!loading)
             console.log("setting exhaustFan " + x.switch_state.exhaustFan.on)
             return () => clearTimeout(timer);
         }, 50000);
@@ -199,7 +200,7 @@ function AuthenticatedApp (props) {
 
         console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
         x.global.font.family = current_font;
-        console.log("should rerender to font " + x.global.font.family)
+        console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
         setLoading(true)
     }
@@ -230,7 +231,7 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("Rendering App with humidifier = "+state.cabinet_settings.humidifier)
+    console.log("AuthenticatedApp Rendering App with humidifier = "+state.cabinet_settings.humidifier)
     let merged_theme = deepMerge(grommet,bubbles_theme)
     return (
          <div className="App">
@@ -244,7 +245,7 @@ function AuthenticatedApp (props) {
                 </Tab>
                 <Tab title="Cabinet Setup">
                     <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={merged_theme} state={state}
-                    setStateFromChild={setStateFromChild} resetChanges={() => resetChanges()}
+                    setStateFromChild={setCabinetSettingsStateFromChild}
                     />
                 </Tab>
                 <Tab title="Automation">

@@ -11,8 +11,9 @@ import { FormCheckmark } from 'grommet-icons';
 import { grommet } from 'grommet/themes';
 
 function RenderCabinetSettingsTab (props) {
-    console.log("RenderCabinetSettingsTab")
-    let [state, setState] = useState(props.state);
+    console.log("RenderCabinetSettingsTab props hum = "+props.state.cabinet_settings.humidifier)
+    let [state, setState] = useState({ cabinet_settings: {...(props.state.cabinet_settings)}});
+    let [display_settings, setDisplaySettings] = useState({...(props.state.display_settings)});
     let [loading,setLoading] = useState(false)
     let [bubbles_theme, setTheme] = useState(props.theme ); //
     let [reset_button_state,setResetButtonState] = useState(false)
@@ -27,18 +28,45 @@ function RenderCabinetSettingsTab (props) {
     }
 
     function resetChanges(e) {
-        console.log("resetChanges");
+        console.log("RenderCabinetSettingsTab resetChanges props hum = " + props.state.cabinet_settings.humidifier);
         setApplyButtonState(false);
         setResetButtonState(false);
-        props.resetChanges();
+        let x = {...(props.state.cabinet_settings)}
+        setState({cabinet_settings: x});
         setLoading(!loading);
     }
 
     function changeState(s) {
-        setState(s);
+        setState({cabinet_settings: {...(s.cabinet_settings)}});
         setApplyButtonState(true);
         setResetButtonState(true);
         setLoading(!loading);
+    }
+
+    function setEnclosureType(s) {
+        console.log("setEnclosureType to "+JSON.stringify(s))
+        state.cabinet_settings.enclosure_type = s
+        changeState(state)
+    }
+
+    function setTubDepth(s) {
+        console.log("setTubDepth to "+JSON.stringify(s))
+        if( s === '' ) {
+            state.cabinet_settings.tub_depth = ''
+        } else {
+            state.cabinet_settings.tub_depth = Number(s)
+        }
+        changeState(state)
+    }
+
+    function setTubVolume(s) {
+        console.log("setTubVolume to "+JSON.stringify(s))
+        if( s === '' ) {
+            state.cabinet_settings.tub_volume = ''
+        } else {
+            state.cabinet_settings.tub_volume = Number(s)
+        }
+        changeState(state)
     }
 
     function toggleHumidifier(e) {
@@ -115,7 +143,7 @@ function RenderCabinetSettingsTab (props) {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
     }, [loading]);
 
-    console.log("cabinetsettings rendering with humidifier set to "+ props.state.cabinet_settings.humidifier)
+    console.log("RenderCabinetSettingsTab cabinetsettings rendering with state.humidifier set to "+ state.cabinet_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -179,22 +207,22 @@ function RenderCabinetSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options={state.cabinet_settings.enclosure_options} value={state.cabinet_settings.enclosure_type} />
+                                <RadioButtonGroup name="enclosure-type" options={state.cabinet_settings.enclosure_options} value={state.cabinet_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={state.cabinet_settings.tub_depth} />
+                                <TextInput value={state.cabinet_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                             </TableCell>
-                            <TableCell>{state.display_settings.tub_depth_units}</TableCell>
+                            <TableCell>{display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={state.cabinet_settings.tub_volume} />
+                                <TextInput value={state.cabinet_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                             </TableCell>
-                            <TableCell >{state.display_settings.tub_volume_units}</TableCell>
+                            <TableCell >{display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                          </tbody>
                     </Table>
