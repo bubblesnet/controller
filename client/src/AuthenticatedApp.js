@@ -23,6 +23,18 @@ function AuthenticatedApp (props) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
+    function setStateFromChild(x) {
+        console.log("AuthenticatedApp toggled humidifier from " + state.cabinet_settings.humidifier + " to " + x.cabinet_settings.humidifier)
+        setState(x)
+        setLoading(!loading)
+    }
+
+    function resetChanges() {
+        console.log("app resetchanges humidifier is "+state.cabinet_settings.humidifier)
+        setState(state)
+        setLoading(!loading)
+    }
+
     console.log("initial theme " + JSON.stringify(initial_theme))
     console.log("BubblesApp render props = " + JSON.stringify(props))
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
@@ -136,7 +148,7 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         console.log("AuthenticatedApp useEffect")
         const timer = setTimeout(() => {
-            console.log('timeout exhaustFan '+ state.switch_state.exhaustFan.on)
+            console.log('timeout exhaustFan ' + state.switch_state.exhaustFan.on)
             let x = state
             x.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on
             x.switch_state.intakeFan.on = !state.switch_state.intakeFan.on
@@ -147,30 +159,30 @@ function AuthenticatedApp (props) {
             x.switch_state.growLight.on = !state.switch_state.growLight.on
             let direction = 'up'
             let increment = 1
-            if( x.status.humidity_internal%2 ===0) {
+            if (x.status.humidity_internal % 2 === 0) {
                 direction = 'up'
                 increment = 1
             } else {
                 direction = 'down'
                 increment = -1;
             }
-                x.status.humidity_internal = x.status.humidity_internal + increment
+            x.status.humidity_internal = x.status.humidity_internal + increment
             x.status.temp_air_external = x.status.temp_air_external + increment
             x.status.temp_water = x.status.temp_water + increment
-                x.status.temp_air_bottom = x.status.temp_air_bottom + increment
-                x.status.temp_air_middle = x.status.temp_air_middle + increment
-                x.status.temp_air_top = x.status.temp_air_top + increment
+            x.status.temp_air_bottom = x.status.temp_air_bottom + increment
+            x.status.temp_air_middle = x.status.temp_air_middle + increment
+            x.status.temp_air_top = x.status.temp_air_top + increment
             x.status.humidity_external = x.status.humidity_external + increment
-            x.status.root_ph = x.status.root_ph + (.1*increment)
+            x.status.root_ph = x.status.root_ph + (.1 * increment)
             x.status.pressure_external = x.status.pressure_external + increment
 
             x.status.humidity_internal_direction = direction
             x.status.temp_air_external_direction = direction
-                x.status.temp_water_direction = direction
-                x.status.temp_air_bottom_direction = direction
-                x.status.temp_air_middle_direction = direction
-                x.status.temp_air_top_direction = direction
-                x.status.humidity_external_direction = direction
+            x.status.temp_water_direction = direction
+            x.status.temp_air_bottom_direction = direction
+            x.status.temp_air_middle_direction = direction
+            x.status.temp_air_top_direction = direction
+            x.status.humidity_external_direction = direction
             x.status.root_ph_direction = direction
             x.status.pressure_external_direction = direction
 
@@ -178,7 +190,7 @@ function AuthenticatedApp (props) {
             setLoading(!loading)
             console.log("setting exhaustFan " + x.switch_state.exhaustFan.on)
             return () => clearTimeout(timer);
-        }, 5000);
+        }, 50000);
     }, [loading]);
 
 
@@ -218,7 +230,7 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("Rendering App with bubbles_theme= "+JSON.stringify(bubbles_theme))
+    console.log("Rendering App with humidifier = "+state.cabinet_settings.humidifier)
     let merged_theme = deepMerge(grommet,bubbles_theme)
     return (
          <div className="App">
@@ -231,7 +243,9 @@ function AuthenticatedApp (props) {
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={merged_theme} state={state} />
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={merged_theme} state={state}
+                    setStateFromChild={setStateFromChild} resetChanges={() => resetChanges()}
+                    />
                 </Tab>
                 <Tab title="Automation">
                     <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} />

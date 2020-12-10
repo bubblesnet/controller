@@ -1,7 +1,31 @@
 import {Box, Button, Grid, Select, TableCell, TableRow} from "grommet";
-import React from "react";
+import React, {useState} from "react";
 
 function RenderFormActions (props) {
+    let [state, setState] = useState(props.state);
+
+    function defaultsAction() {
+        props.defaultsAction()
+    }
+    function resetAction() {
+        props.resetAction();
+    }
+    function applyAction(e) {
+        props.applyAction(state);
+    }
+    let applyDisabled = false
+    if( props.applyButtonState === false ) {
+        applyDisabled=true
+    }
+    let resetDisabled = false
+    if( props.resetButtonState === false ) {
+        resetDisabled=true
+    }
+    let defaultsDisabled = false
+    if( props.defaultsButtonState === false ) {
+        defaultsDisabled=true
+    }
+    let d = 'disabled'
     // The color supplied to the button is the only way to make a border appear.
     let ret = <>
             <Grid
@@ -20,9 +44,9 @@ function RenderFormActions (props) {
                 gap={"small"}
             >
 
-                <Button gridArea={'apply'} color={'var(--color-button-border)'} width={'medium'} round={'large'} active={true} label={'Apply'} primary onClick={props.applyAction} />
-                <Button gridArea={'reset'} color={'var(--color-button-border)'} width={'medium'} round={'large'} type={'reset'} active={true} label={'Reset'} />
-                <Button gridArea={'defaults'} color={'var(--color-button-border)'} width={'medium'} round={'large'} active={true} label={'Defaults'} />
+                <Button gridArea={'apply'} color={'var(--color-button-border)'} disabled={applyDisabled} width={'medium'} round={'large'} active={props.applyButtonState} label={'Apply'} onClick={applyAction} />
+                <Button gridArea={'reset'} color={'var(--color-button-border)'} disabled={resetDisabled} width={'medium'} round={'large'} type={'reset'} active={props.resetButtonState} label={'Reset'} onClick={resetAction}/>
+                <Button gridArea={'defaults'} color={'var(--color-button-border)'} disabled={defaultsDisabled} width={'medium'} round={'large'} active={props.defaultsButtonState} label={'Defaults'} onClick={defaultsAction}/>
          </Grid>
    </>
     return(ret);

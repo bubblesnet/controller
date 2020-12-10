@@ -12,15 +12,110 @@ import { grommet } from 'grommet/themes';
 
 function RenderCabinetSettingsTab (props) {
     console.log("RenderCabinetSettingsTab")
-    let [values, setValues] = useState(props.state);
+    let [state, setState] = useState(props.state);
+    let [loading,setLoading] = useState(false)
     let [bubbles_theme, setTheme] = useState(props.theme ); //
+    let [reset_button_state,setResetButtonState] = useState(false)
+    let [defaults_button_state,setDefaultsButtonState] = useState(true)
+    let [apply_button_state,setApplyButtonState] = useState(false)
+
+    function applyChanges(e) {
+        setApplyButtonState(false);
+        setResetButtonState(false);
+        props.setStateFromChild(state)
+        setLoading(!loading)
+    }
+
+    function resetChanges(e) {
+        console.log("resetChanges");
+        setApplyButtonState(false);
+        setResetButtonState(false);
+        props.resetChanges();
+        setLoading(!loading);
+    }
+
+    function changeState(s) {
+        setState(s);
+        setApplyButtonState(true);
+        setResetButtonState(true);
+        setLoading(!loading);
+    }
+
+    function toggleHumidifier(e) {
+        state.cabinet_settings.humidifier = !state.cabinet_settings.humidifier
+        changeState(state)
+    }
+
+    function toggleHumiditySensor(e) {
+        state.cabinet_settings.humidity_sensor = !state.cabinet_settings.humidity_sensor
+        changeState(state)
+    }
+    function toggleExternalHumiditySensor(e) {
+        state.cabinet_settings.external_humidity_sensor = !state.cabinet_settings.external_humidity_sensor
+        changeState(state)
+    }
+    function toggleExternalThermometer(e) {
+        state.cabinet_settings.external_thermometer = !state.cabinet_settings.external_thermometer
+        changeState(state)
+    }
+    function toggleThermometerTop(e) {
+        state.cabinet_settings.thermometer_top = !state.cabinet_settings.thermometer_top
+        changeState(state)
+    }
+    function toggleThermometerMiddle(e) {
+        state.cabinet_settings.thermometer_middle = !state.cabinet_settings.thermometer_middle
+        changeState(state)
+    }
+    function toggleThermometerBottom(e) {
+        state.cabinet_settings.thermometer_bottom = !state.cabinet_settings.thermometer_bottom
+        changeState(state)
+    }
+    function toggleWaterThermometer(e) {
+        state.cabinet_settings.thermometer_water = !state.cabinet_settings.thermometer_water
+        changeState(state)
+    }
+    function toggleHeater(e) {
+        state.cabinet_settings.heater = !state.cabinet_settings.heater
+        changeState(state)
+    }
+    function toggleGrowLight(e) {
+        state.cabinet_settings.grow_light = !state.cabinet_settings.grow_light
+        changeState(state)
+    }
+    function toggleWaterPump(e) {
+        state.cabinet_settings.water_pump = !state.cabinet_settings.water_pump
+        changeState(state)
+    }
+    function toggleAirPump(e) {
+        state.cabinet_settings.air_pump = !state.cabinet_settings.air_pump
+        changeState(state)
+    }
+    function toggleLightSensor(e) {
+        state.cabinet_settings.light_sensor = !state.cabinet_settings.light_sensor
+        changeState(state)
+    }
+    function toggleMovementSensor(e) {
+        state.cabinet_settings.movement_sensor = !state.cabinet_settings.movement_sensor
+        changeState(state)
+    }
+    function toggleOuterDoorSensor(e) {
+        state.cabinet_settings.outer_door_sensor = !state.cabinet_settings.outer_door_sensor
+        changeState(state)
+    }
+    function toggleCabinetDoorSensor(e) {
+        state.cabinet_settings.cabinet_door_sensor = !state.cabinet_settings.cabinet_door_sensor
+        changeState(state)
+    }
+    function togglePressureSensors(e) {
+        state.cabinet_settings.pressure_sensors = !state.cabinet_settings.pressure_sensors
+        changeState(state)
+    }
 
     useEffect(() => {
         console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [values]);
+    }, [loading]);
 
-    console.log("bubbles_theme = " + JSON.stringify(grommet))
-
+    console.log("cabinetsettings rendering with humidifier set to "+ props.state.cabinet_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -38,9 +133,9 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="humidity-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Humidifier" checked={values.cabinet_settings.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" checked={values.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" checked={values.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={state.cabinet_settings.humidifier}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensor} checked={state.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked={state.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -48,12 +143,12 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="temperature-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Heater" checked={values.cabinet_settings.heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Top Sensor" checked={values.cabinet_settings.thermometer_top}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Middle Sensor" checked={values.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" checked={values.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" checked={values.cabinet_settings.external_thermometer}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" checked={values.cabinet_settings.thermometer_water}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked={state.cabinet_settings.heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked={state.cabinet_settings.thermometer_top}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked={state.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked={state.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked={state.cabinet_settings.external_thermometer}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked={state.cabinet_settings.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -61,10 +156,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Grow Light" checked={values.cabinet_settings.grow_light}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Pump" checked={values.cabinet_settings.water_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Air Pump" checked={values.cabinet_settings.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" checked={values.cabinet_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Grow Light" onChange={toggleGrowLight} checked={state.cabinet_settings.grow_light}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={state.cabinet_settings.water_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked={state.cabinet_settings.air_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -72,10 +167,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" checked={values.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" checked={values.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Movement Sensor" checked={values.cabinet_settings.movement_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" checked={values.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" onChange={toggleCabinetDoorSensor} checked={state.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked={state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked={state.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -84,26 +179,30 @@ function RenderCabinetSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options={values.cabinet_settings.enclosure_options} value={values.cabinet_settings.enclosure_type} />
+                                <RadioButtonGroup name="enclosure-type" options={state.cabinet_settings.enclosure_options} value={state.cabinet_settings.enclosure_type} />
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={values.cabinet_settings.tub_depth} />
+                                <TextInput value={state.cabinet_settings.tub_depth} />
                             </TableCell>
-                            <TableCell>{values.display_settings.tub_depth_units}</TableCell>
+                            <TableCell>{state.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={values.cabinet_settings.tub_volume} />
+                                <TextInput value={state.cabinet_settings.tub_volume} />
                             </TableCell>
-                            <TableCell >{values.display_settings.tub_volume_units}</TableCell>
+                            <TableCell >{state.display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                          </tbody>
                     </Table>
-            <RenderFormActions />
+            <RenderFormActions state={state} applyAction={applyChanges} resetAction={resetChanges}
+                               resetButtonState={reset_button_state}
+                               defaultsButtonState={defaults_button_state}
+                               applyButtonState={apply_button_state}
+            />
         </div>
         </Grommet>
     return (ret)
