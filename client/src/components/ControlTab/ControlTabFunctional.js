@@ -17,7 +17,8 @@ import GoogleFontLoader from "react-google-font-loader";
 import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
-    let [values, setValues] = useState( {switchControl: {
+    const [loading,setLoading] = useState(props.loading);
+    const [values, setValues] = useState( {switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
             humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
             heater: { on: props.switch_state.heater.on,  toggle: toggleHeater},
@@ -27,8 +28,8 @@ function RenderControlTab (props) {
             exhaustFan: { on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
             growLight: { on: props.switch_state.growLight.on,  toggle: toggleGrowLight}
         }}); //
-    let [themex, setThemex] = useState(props.theme); //
-    let [state, setState] = useState({
+    const [themex, setThemex] = useState(props.theme); //
+    const [state, setState] = useState({
         switch_state: {...(props.state.switch_state)},
         display_settings: {...(props.state.display_settings)},
         status: {...(props.state.status)}
@@ -46,6 +47,7 @@ function RenderControlTab (props) {
         values.switchControl.humidifier.on = !values.switchControl.humidifier.on;
         state.switch_state.humidifier.on = !state.switch_state.humidifier.on;
         props.setStateFromChild(state)
+        setLoading(!loading)
         setValues( values );
     }
     function toggleHeater(e) {
@@ -85,10 +87,9 @@ function RenderControlTab (props) {
         setValues( values );
     }
 
-    useEffect(() => {}, [values]);
-    console.log("rendering controltab setting with exhaustfan "+ values.switchControl.exhaustFan.on)
-    console.log("1 rendering controltab setting with exhaustfan "+ state.switch_state.exhaustFan.on)
-    console.log("theme = " + JSON.stringify(props.theme))
+    useEffect(() => {}, [loading]);
+    console.log("AuthenticatedApp is rendering controltab with loading "+ loading+"/"+props.loading)
+//    console.log("theme = " + JSON.stringify(props.theme))
         let ret =
             <Grommet theme={props.theme}>
                 <GoogleFontLoader
@@ -109,7 +110,7 @@ function RenderControlTab (props) {
                                     {state.status.tub_water_level} {state.display_settings.tub_volume_units}
                                 </div>
                                 <div id="watertemp-holder" >
-                                    <RenderThermometer className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
+                                    <RenderThermometer loading={loading} className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +131,7 @@ function RenderControlTab (props) {
                             </div>
                         </div>
                         <RenderGrowLight on={state.switch_state.growLight.on} state={state} />
-                        <RenderHeater on={state.switch_state.heater.on} />
+                        <RenderHeater loading={loading} on={state.switch_state.heater.on} />
                         <RenderHumidifier on={state.switch_state.humidifier.on}/>
                         <div className="exhaust">
                             <div className="filter-and-exhaust-fan-holder">

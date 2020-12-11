@@ -68,7 +68,7 @@ function RenderSwitchPanel (props) {
     let buttonBackgroundColor = 'yellow'
     let buttonCheckedColor = 'yellow'
     let valuename = 'ON'
-    console.log("RenderSwitchPanel props = " + JSON.stringify(props))
+//    console.log("RenderSwitchPanel props = " + JSON.stringify(props))
     if(!props.switchControl.automaticControl.on)
         valuename = 'OFF'
 

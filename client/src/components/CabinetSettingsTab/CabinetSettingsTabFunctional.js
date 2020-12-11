@@ -20,11 +20,15 @@ function RenderCabinetSettingsTab (props) {
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
 
+
+    function stl(value) {
+        setLoading(value)
+    }
     function applyChanges(e) {
         setApplyButtonState(false);
         setResetButtonState(false);
         props.setStateFromChild(state)
-        setLoading(!loading)
+        stl(!loading)
     }
 
     function resetChanges(e) {
@@ -33,14 +37,14 @@ function RenderCabinetSettingsTab (props) {
         setResetButtonState(false);
         let x = {...(props.state.cabinet_settings)}
         setState({cabinet_settings: x});
-        setLoading(!loading);
+        stl(!loading);
     }
 
     function changeState(s) {
         setState({cabinet_settings: {...(s.cabinet_settings)}});
         setApplyButtonState(true);
         setResetButtonState(true);
-        setLoading(!loading);
+        stl(!loading);
     }
 
     function setEnclosureType(s) {

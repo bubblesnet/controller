@@ -26,31 +26,31 @@ function AuthenticatedApp (props) {
     function setCabinetSettingsStateFromChild(x) {
         state.cabinet_settings = {...(x.cabinet_settings)}
         setState(state)
-        setLoading(!loading)
+        stl(!loading)
     }
     function setSwitchStateFromChild(x) {
         state.switch_state = {...(x.switch_state)}
         setState(state)
-        setLoading(!loading)
+        stl(!loading)
     }
 
     function resetChanges() {
         console.log("AuthenticatedApp resetchanges humidifier is "+state.cabinet_settings.humidifier)
         setState(state)
-        setLoading(!loading)
+        stl(!loading)
     }
 
-    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
-    console.log("AuthenticatedApp render props = " + JSON.stringify(props))
-    let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
-    let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
-    let [language, setLanguage] = useState("all");
-    let [bubbles_theme,setBubblesTheme] = useState(initial_theme);
-    let [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
-    let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
+//    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
+    console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
+    const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
+    const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
+    const [language, setLanguage] = useState("all");
+    const [bubbles_theme,setBubblesTheme] = useState(initial_theme);
+    const [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
+    const [loading, setLoading] = useState(false); // Trigger in useEffect that tells us to refetch data
 
 
-    let[state, setState] = useState({
+    const[state, setState] = useState({
         display_settings: {
             units: 'METRIC',
             language: 'en-us',
@@ -152,6 +152,7 @@ function AuthenticatedApp (props) {
 
     useEffect(() => {
         console.log("AuthenticatedApp useEffect")
+        /*
         const timer = setTimeout(() => {
             console.log('timeout exhaustFan ' + state.switch_state.exhaustFan.on)
             let x = {...(state)}
@@ -196,8 +197,15 @@ function AuthenticatedApp (props) {
             console.log("setting exhaustFan " + x.switch_state.exhaustFan.on)
             return () => clearTimeout(timer);
         }, 50000);
+        */
+        console.log("AuthenticatedApp useEffect call has loading " + loading)
     }, [loading]);
 
+    const stl = (value) => {
+        console.log("AuthenticatedApp set loading from "+loading+" to " + value)
+        setLoading(value)
+        console.log("AuthenticatedApp loading is now " + loading)
+    }
 
     const applyFontChange = (value) => {
         let x = bubbles_theme;
@@ -206,7 +214,7 @@ function AuthenticatedApp (props) {
         x.global.font.family = current_font;
         console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
-        setLoading(true)
+        stl(!loading)
     }
 
     const localFontChange = (value) => {
@@ -242,7 +250,7 @@ function AuthenticatedApp (props) {
             <Header setNodeEnv={setEnvironment}/>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                    <RenderControlTab loading={loading} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                       state={state} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
                 </Tab>
                 <Tab title="Status">
