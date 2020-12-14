@@ -18,6 +18,8 @@ import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
     const [loading,setLoading] = useState(props.loading);
+    const [changed,setChanged] = useState(false);
+    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
     const [values, setValues] = useState( {switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
             humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
@@ -40,6 +42,7 @@ function RenderControlTab (props) {
         values.switchControl.automaticControl.on = !values.switchControl.automaticControl.on;
         state.switch_state.automaticControl.on = !state.switch_state.automaticControl.on;
         props.setStateFromChild(state)
+        setAutomaticControlOn(!automaticControlOn)
         setValues( values )
     }
     function toggleHumidifier(e) {
@@ -48,6 +51,7 @@ function RenderControlTab (props) {
         state.switch_state.humidifier.on = !state.switch_state.humidifier.on;
         props.setStateFromChild(state)
         setLoading(!loading)
+        setChanged(!changed)
         setValues( values );
     }
     function toggleHeater(e) {

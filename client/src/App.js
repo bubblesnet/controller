@@ -3,6 +3,7 @@ import {useUser,login} from './context/UserContext'
 import AuthenticatedApp from './AuthenticatedApp'
 import UnauthenticatedApp from './UnauthenticatedApp'
 import {useState} from "react";
+import TestApp from "./TestApp";
 
 
 /** Fake login function
@@ -19,7 +20,7 @@ function App() {
 
     let [successfulLogin, setSuccessfulLogin] = useState(false);
     const user = useUser()
-//    return user ? <AuthenticatedApp /> : <UnauthenticatedApp successfulLogin={setSuccessfulLogin}/>
+//    return user ? <TestApp /> : <UnauthenticatedApp successfulLogin={setSuccessfulLogin}/>
 
     return successfulLogin ? <AuthenticatedApp /> : <UnauthenticatedApp successfulLogin={setSuccessfulLogin}/>
 }

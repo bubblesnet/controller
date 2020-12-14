@@ -58,9 +58,14 @@ const customTheme = deepMerge(grommet, {
 
 function RenderSwitchPanel (props) {
     let [state, setState] = useState(props.state); //
+    let [switchControl, setSwitchControl] = useState(props.switchControl)
+    let [automaticControlOn, setAutomaticControlOn] = useState(props.switchControl.automaticControl.on)
 
     function toggleAutomatic(e) {
-        props.switchControl.automaticControl.toggle(e)
+        switchControl.automaticControl.on = !switchControl.automaticControl.on;
+        setSwitchControl(switchControl)
+        switchControl.automaticControl.toggle(e)
+        setAutomaticControlOn(!automaticControlOn)
     }
 
     let trackBackgroundColor = 'red'
@@ -69,7 +74,7 @@ function RenderSwitchPanel (props) {
     let buttonCheckedColor = 'yellow'
     let valuename = 'ON'
 //    console.log("RenderSwitchPanel props = " + JSON.stringify(props))
-    if(!props.switchControl.automaticControl.on)
+    if(!automaticControlOn)
         valuename = 'OFF'
 
     let ret =
