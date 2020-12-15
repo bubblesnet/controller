@@ -32,13 +32,13 @@ function RenderControlTab (props) {
         }}); //
     const [themex, setThemex] = useState(props.theme); //
     const [state, setState] = useState({
-        switch_state: {...(props.state.switch_state)},
-        display_settings: {...(props.state.display_settings)},
-        status: {...(props.state.status)}
+        switch_state: JSON.parse(JSON.stringify(props.state.switch_state)),
+        display_settings: JSON.parse(JSON.stringify(props.state.display_settings)),
+        status: JSON.parse(JSON.stringify(props.state.status))
     }); //
 
     function toggleAutomatic(e) {
-        console.log("toggleAutomatic")
+        console.log("toggleAutomatic should rerender Heater")
         values.switchControl.automaticControl.on = !values.switchControl.automaticControl.on;
         state.switch_state.automaticControl.on = !state.switch_state.automaticControl.on;
         props.setStateFromChild(state)
@@ -92,7 +92,7 @@ function RenderControlTab (props) {
     }
 
     useEffect(() => {}, [loading]);
-    console.log("AuthenticatedApp is rendering controltab with loading "+ loading+"/"+props.loading)
+    console.log("RenderControlTab should call RenderHeater")
 //    console.log("theme = " + JSON.stringify(props.theme))
         let ret =
             <Grommet theme={props.theme}>

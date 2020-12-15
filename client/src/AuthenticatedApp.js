@@ -24,13 +24,13 @@ function AuthenticatedApp (props) {
     }
 
     function setCabinetSettingsStateFromChild(x) {
-        state.cabinet_settings = {...(x.cabinet_settings)}
-        setState(state)
+        setState({cabinet_settings: JSON.parse(JSON.stringify(x.cabinet_settings))})
         stl(!loading)
     }
     function setSwitchStateFromChild(x) {
-        state.switch_state = {...(x.switch_state)}
-        setState(state)
+        console.log("setSwitchStateFromChild should rerender Heater")
+        state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
+        setState(JSON.parse(JSON.stringify(state)))
         stl(!loading)
     }
 

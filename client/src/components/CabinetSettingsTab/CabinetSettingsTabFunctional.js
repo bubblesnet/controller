@@ -12,8 +12,8 @@ import { grommet } from 'grommet/themes';
 
 function RenderCabinetSettingsTab (props) {
     console.log("RenderCabinetSettingsTab props hum = "+props.state.cabinet_settings.humidifier)
-    let [state, setState] = useState({ cabinet_settings: {...(props.state.cabinet_settings)}});
-    let [display_settings, setDisplaySettings] = useState({...(props.state.display_settings)});
+    let [state, setState] = useState({ cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings))});
+    let [display_settings, setDisplaySettings] = useState(JSON.parse(JSON.stringify(props.state.display_settings)));
     let [loading,setLoading] = useState(false)
     let [bubbles_theme, setTheme] = useState(props.theme ); //
     let [reset_button_state,setResetButtonState] = useState(false)
@@ -35,13 +35,13 @@ function RenderCabinetSettingsTab (props) {
         console.log("RenderCabinetSettingsTab resetChanges props hum = " + props.state.cabinet_settings.humidifier);
         setApplyButtonState(false);
         setResetButtonState(false);
-        let x = {...(props.state.cabinet_settings)}
+        let x = JSON.parse(JSON.stringify(props.state.cabinet_settings))
         setState({cabinet_settings: x});
         stl(!loading);
     }
 
     function changeState(s) {
-        setState({cabinet_settings: {...(s.cabinet_settings)}});
+        setState({cabinet_settings: JSON.parse(JSON.stringify(s.cabinet_settings))});
         setApplyButtonState(true);
         setResetButtonState(true);
         stl(!loading);
