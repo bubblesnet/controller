@@ -10,6 +10,10 @@ function RenderHygrometer (props) {
         <div id="humidityicon-holder" />
         </>
 
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret);
 }
 

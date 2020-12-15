@@ -14,22 +14,17 @@ import {grommet} from "grommet/themes"
 
 function RenderStatusTab (props) {
 
-    let [values, setValues] = useState({exhaustFanOn: false, intakeFanOn: false}); //
     let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
-    let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data
-    let [themex, setThemex] = useState(props.theme ); //
-    let [state, setState] = useState(props.state)
+    let [state, setState] = useState(props.state);  // State is simply passed through from above
     console.log("RenderStatusTab state = "+JSON.stringify(state))
 
     useEffect(() => {
         console.log("RenderStatusTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [loading,state]);
+    }, [state,apiPort]);
 
     if (props.apiPort !== apiPort) {
         setState(props.state)
         setApiPort(props.apiPort)       // Set the port
-//        console.log("setLoading 10")
-        setLoading(true)    // Trigger another fetch and render
         return (
             <div>
                 <Loader/>

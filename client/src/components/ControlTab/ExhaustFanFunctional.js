@@ -18,6 +18,10 @@ function RenderExhaustFan (props) {
             <div id="exhaust-animated-wind-container" />
         </div>
     }
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret)
 }
 

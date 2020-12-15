@@ -9,6 +9,10 @@ function RenderHumidifier (props) {
     } else {
         ret = <div id="humidifier-holder-on" />
     }
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret)
 }
 

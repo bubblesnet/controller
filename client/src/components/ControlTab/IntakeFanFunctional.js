@@ -16,6 +16,10 @@ function RenderIntakeFan (props) {
                 <div id="intake-animated-fan-container" />
             </div>
         }
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret)
 }
 

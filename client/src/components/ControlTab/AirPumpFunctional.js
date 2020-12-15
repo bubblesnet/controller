@@ -22,6 +22,10 @@ function RenderAirPump (props) {
                 </div>
                 </div>
         }
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret)
 }
 

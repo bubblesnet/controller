@@ -15,6 +15,10 @@ function RenderThermometer (props) {
         <div className={className} />
     </>
 
+    if(props.exists === false ) {
+        ret = <></>
+    }
+
     return (ret);
 }
 

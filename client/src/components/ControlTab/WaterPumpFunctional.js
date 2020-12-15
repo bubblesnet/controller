@@ -15,6 +15,10 @@ function RenderWaterPump (props) {
             </div>
 
     }
+    if(props.exists === false) (
+        ret = <></>
+    )
+
     return (ret)
 }
 

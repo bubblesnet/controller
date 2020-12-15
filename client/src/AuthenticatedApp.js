@@ -24,20 +24,19 @@ function AuthenticatedApp (props) {
     }
 
     function setCabinetSettingsStateFromChild(x) {
-        setState({cabinet_settings: JSON.parse(JSON.stringify(x.cabinet_settings))})
-        stl(!loading)
+        let newstate = JSON.parse(JSON.stringify(state))
+        newstate.cabinet_settings = JSON.parse(JSON.stringify(x.cabinet_settings))
+        setState(newstate)
     }
     function setSwitchStateFromChild(x) {
         console.log("setSwitchStateFromChild should rerender Heater")
         state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
         setState(JSON.parse(JSON.stringify(state)))
-        stl(!loading)
     }
 
     function resetChanges() {
         console.log("AuthenticatedApp resetchanges humidifier is "+state.cabinet_settings.humidifier)
         setState(state)
-        stl(!loading)
     }
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
@@ -47,7 +46,6 @@ function AuthenticatedApp (props) {
     const [language, setLanguage] = useState("all");
     const [bubbles_theme,setBubblesTheme] = useState(initial_theme);
     const [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
-    const [loading, setLoading] = useState(false); // Trigger in useEffect that tells us to refetch data
 
 
     const[state, setState] = useState({
@@ -85,8 +83,11 @@ function AuthenticatedApp (props) {
             movement_sensor: true,
             pressure_sensors: true,
             enclosure_type: 'Cabinet',
+            water_level_sensor: true,
             tub_depth: 18.0,
             tub_volume: 20.0,
+            intake_fan: true,
+            exhaust_fan: true,
             enclosure_options: ["Cabinet","Tent"]
         },
         automation_settings: {
@@ -198,14 +199,9 @@ function AuthenticatedApp (props) {
             return () => clearTimeout(timer);
         }, 50000);
         */
-        console.log("AuthenticatedApp useEffect call has loading " + loading)
-    }, [loading]);
+        console.log("AuthenticatedApp useEffect call has")
+    }, [state]);
 
-    const stl = (value) => {
-        console.log("AuthenticatedApp set loading from "+loading+" to " + value)
-        setLoading(value)
-        console.log("AuthenticatedApp loading is now " + loading)
-    }
 
     const applyFontChange = (value) => {
         let x = bubbles_theme;
@@ -214,7 +210,6 @@ function AuthenticatedApp (props) {
         x.global.font.family = current_font;
         console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
-        stl(!loading)
     }
 
     const localFontChange = (value) => {
@@ -250,7 +245,7 @@ function AuthenticatedApp (props) {
             <Header setNodeEnv={setEnvironment}/>
             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
-                    <RenderControlTab loading={loading} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                       state={state} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
                 </Tab>
                 <Tab title="Status">

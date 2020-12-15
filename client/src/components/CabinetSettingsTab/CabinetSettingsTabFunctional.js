@@ -6,29 +6,20 @@ import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCe
 import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
-import { normalizeColor, deepMerge } from 'grommet/utils';
-import { FormCheckmark } from 'grommet-icons';
-import { grommet } from 'grommet/themes';
 
 function RenderCabinetSettingsTab (props) {
     console.log("RenderCabinetSettingsTab props hum = "+props.state.cabinet_settings.humidifier)
     let [state, setState] = useState({ cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings))});
     let [display_settings, setDisplaySettings] = useState(JSON.parse(JSON.stringify(props.state.display_settings)));
-    let [loading,setLoading] = useState(false)
-    let [bubbles_theme, setTheme] = useState(props.theme ); //
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
 
 
-    function stl(value) {
-        setLoading(value)
-    }
     function applyChanges(e) {
         setApplyButtonState(false);
         setResetButtonState(false);
         props.setStateFromChild(state)
-        stl(!loading)
     }
 
     function resetChanges(e) {
@@ -37,14 +28,12 @@ function RenderCabinetSettingsTab (props) {
         setResetButtonState(false);
         let x = JSON.parse(JSON.stringify(props.state.cabinet_settings))
         setState({cabinet_settings: x});
-        stl(!loading);
     }
 
     function changeState(s) {
         setState({cabinet_settings: JSON.parse(JSON.stringify(s.cabinet_settings))});
         setApplyButtonState(true);
         setResetButtonState(true);
-        stl(!loading);
     }
 
     function setEnclosureType(s) {
@@ -75,6 +64,20 @@ function RenderCabinetSettingsTab (props) {
 
     function toggleHumidifier(e) {
         state.cabinet_settings.humidifier = !state.cabinet_settings.humidifier
+        changeState(state)
+    }
+
+    function toggleExhaustFan(e) {
+        state.cabinet_settings.exhaust_fan = !state.cabinet_settings.exhaust_fan
+        changeState(state)
+    }
+
+    function toggleIntakeFan(e) {
+        state.cabinet_settings.intake_fan = !state.cabinet_settings.intake_fan
+        changeState(state)
+    }
+    function toggleWaterLevelSensor(e) {
+        state.cabinet_settings.water_level_sensor = !state.cabinet_settings.water_level_sensor
         changeState(state)
     }
 
@@ -143,10 +146,6 @@ function RenderCabinetSettingsTab (props) {
         changeState(state)
     }
 
-    useEffect(() => {
-        console.log("RenderOverview useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [loading]);
-
     console.log("RenderCabinetSettingsTab cabinetsettings rendering with state.humidifier set to "+ state.cabinet_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
@@ -192,6 +191,7 @@ function RenderCabinetSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={state.cabinet_settings.water_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked={state.cabinet_settings.air_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked={state.cabinet_settings.water_level_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -203,6 +203,8 @@ function RenderCabinetSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked={state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked={state.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked={state.cabinet_settings.intake_fan}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked={state.cabinet_settings.exhaust_fan}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

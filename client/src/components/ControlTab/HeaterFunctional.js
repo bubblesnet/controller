@@ -10,6 +10,9 @@ function RenderHeater (props) {
     } else {
         ret = <div id="heater-holder-on" />
     }
+    if(props.exists === false) (
+        ret = <></>
+    )
     return (ret)
 }
 

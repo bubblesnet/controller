@@ -17,7 +17,6 @@ import GoogleFontLoader from "react-google-font-loader";
 import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
-    const [loading,setLoading] = useState(props.loading);
     const [changed,setChanged] = useState(false);
     const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
     const [values, setValues] = useState( {switchControl: {
@@ -33,6 +32,7 @@ function RenderControlTab (props) {
     const [themex, setThemex] = useState(props.theme); //
     const [state, setState] = useState({
         switch_state: JSON.parse(JSON.stringify(props.state.switch_state)),
+        cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings)),
         display_settings: JSON.parse(JSON.stringify(props.state.display_settings)),
         status: JSON.parse(JSON.stringify(props.state.status))
     }); //
@@ -50,7 +50,6 @@ function RenderControlTab (props) {
         values.switchControl.humidifier.on = !values.switchControl.humidifier.on;
         state.switch_state.humidifier.on = !state.switch_state.humidifier.on;
         props.setStateFromChild(state)
-        setLoading(!loading)
         setChanged(!changed)
         setValues( values );
     }
@@ -66,12 +65,14 @@ function RenderControlTab (props) {
         props.setStateFromChild(state)
         setValues( values );
     }
+
     function toggleExhaustFan(e) {
         values.switchControl.exhaustFan.on = !values.switchControl.exhaustFan.on;
         state.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on;
         props.setStateFromChild(state)
         setValues( values );
     }
+
     function toggleGrowLight(e) {
         values.switchControl.growLight.on = !values.switchControl.growLight.on;
         state.switch_state.growLight.on = !state.switch_state.growLight.on;
@@ -91,9 +92,25 @@ function RenderControlTab (props) {
         setValues( values );
     }
 
-    useEffect(() => {}, [loading]);
+    useEffect(() => {}, [values,state]);
     console.log("RenderControlTab should call RenderHeater")
 //    console.log("theme = " + JSON.stringify(props.theme))
+    let wt = ""
+
+    let wl = ""
+    let wlruler = ""
+    if(state.cabinet_settings.water_level_sensor === false ) {
+        wl = <></>
+        wlruler=<></>
+    } else {
+        wlruler = <div id="watertemp-holder" >
+            <RenderThermometer exists={state.cabinet_settings.thermometer_water} className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
+        </div>
+
+        wl = <div id="water-level-text-holder">
+            {state.status.tub_water_level} {state.display_settings.tub_volume_units}
+        </div>
+    }
         let ret =
             <Grommet theme={props.theme}>
                 <GoogleFontLoader
@@ -109,14 +126,8 @@ function RenderControlTab (props) {
                         <div id="tub">
                             <div id="tubedge-holder">
                             </div>
-                            <div id="water-level-holder">
-                                <div id="water-level-text-holder">
-                                    {state.status.tub_water_level} {state.display_settings.tub_volume_units}
-                                </div>
-                                <div id="watertemp-holder" >
-                                    <RenderThermometer loading={loading} className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
-                                </div>
-                            </div>
+                            <div id="water-level-holder"> {wl} {wlruler}
+                             </div>
                         </div>
                         <div id="cabinet">
                         </div>
@@ -134,21 +145,21 @@ function RenderControlTab (props) {
                                 </div>
                             </div>
                         </div>
-                        <RenderGrowLight on={state.switch_state.growLight.on} state={state} />
-                        <RenderHeater loading={loading} on={state.switch_state.heater.on} />
-                        <RenderHumidifier on={state.switch_state.humidifier.on}/>
+                        <RenderGrowLight exists={state.cabinet_settings.grow_light} on={state.switch_state.growLight.on} state={state} />
+                        <RenderHeater exists={state.cabinet_settings.heater} on={state.switch_state.heater.on} />
+                        <RenderHumidifier exists={state.cabinet_settings.humidifier} on={state.switch_state.humidifier.on}/>
                         <div className="exhaust">
                             <div className="filter-and-exhaust-fan-holder">
-                                <RenderExhaustFan on={state.switch_state.exhaustFan.on} />
+                                <RenderExhaustFan exists={state.cabinet_settings.exhaust_fan} on={state.switch_state.exhaustFan.on} />
                            </div>
                         </div>
                         <div className="fans" >
                             <div className="input-fan-holder">
-                                <RenderIntakeFan on={state.switch_state.intakeFan.on} />
+                                <RenderIntakeFan exists={state.cabinet_settings.intake_fan} on={state.switch_state.intakeFan.on} />
                             </div>
                         </div>
-                        <RenderWaterPump on={state.switch_state.waterPump.on}/>
-                        <RenderAirPump on={state.switch_state.airPump.on}/>
+                        <RenderWaterPump exists={state.cabinet_settings.water_pump} on={state.switch_state.waterPump.on}/>
+                        <RenderAirPump exists={state.cabinet_settings.air_pump} on={state.switch_state.airPump.on}/>
                         <div id="water-level-ruler-holder" />
 
                     </div>
