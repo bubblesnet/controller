@@ -85,7 +85,9 @@ function RenderDisplaySettingsTab (props) {
                         <TableRow>
                             <TableCell className={"table-cell"}>
                                 <FormattedMessage id={"measurement_units"}
-                                                  defaultMessage={"Measurement Units"} /> </TableCell><TableCell className={"table-cell"}><RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units} onChange={applyUnitChangeLocally}/></TableCell>
+                                                  defaultMessage={"Measurement Units"} /> </TableCell><TableCell className={"table-cell"}>
+                            <RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}
+                                              onChange={event => applyUnitChangeLocally(event.target.value)}/></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell className={"table-cell"}>Language </TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
