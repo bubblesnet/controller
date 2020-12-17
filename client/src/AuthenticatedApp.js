@@ -82,19 +82,24 @@ function AuthenticatedApp (props) {
             outer_door_sensor: true,
             movement_sensor: true,
             pressure_sensors: true,
+            root_ph_sensor: true,
             enclosure_type: 'Cabinet',
             water_level_sensor: true,
             tub_depth: 18.0,
             tub_volume: 20.0,
             intake_fan: true,
             exhaust_fan: true,
-            enclosure_options: ["Cabinet","Tent"]
+            enclosure_options: ["Cabinet","Tent"],
+            light_bloom: true,
+            light_vegetative: true,
+            light_germinate: true
         },
         automation_settings: {
             current_stage: 'Germinate',
             stage_options: ['Germinate','Vegetative','Bloom', 'Harvest', 'Dry', 'Idle'],
             current_lighting_schedule: '12 on/12 off',
-            lighting_schedule_options: ['24 on','18 on/6 off','14 on/10 off','12 on/12 off','10 on/14 off', '6 on/18 off'],
+            lighting_schedule_options: ['24 on','18 on/6 off','14 on/10 off','12 on/12 off','10 on/14 off', '6 on/18 off', '24 off'],
+            light_on_start_hour: 10,
             target_temperature: 75,
             temperature_min: 60,
             temperature_max: 90,
@@ -252,7 +257,7 @@ function AuthenticatedApp (props) {
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
                 </Tab>
                 <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={merged_theme} state={state}
+                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}
                     setStateFromChild={setCabinetSettingsStateFromChild}
                     />
                 </Tab>

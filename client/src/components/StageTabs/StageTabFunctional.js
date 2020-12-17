@@ -15,7 +15,24 @@ import {grommet} from "grommet/themes"
 
 function RenderStageTab (props) {
 
-    console.log("RenderGerminateTab")
+    console.log("RenderStageTab")
+
+
+    function setStateFromChild(x) {
+        setapplyButtonState(true)
+        setresetButtonState(true)
+        setState(JSON.parse(JSON.stringify(x)))
+    }
+    function applyAction() {
+        props.setStateFromChild(JSON.parse(JSON.stringify(state)));
+    }
+    function resetAction() {
+        setState(JSON.parse(JSON.stringify(props.state)));
+     }
+    function defaultsAction() {
+        setState(JSON.parse(JSON.stringify(props.state)));
+    }
+
     const initialRange = [77, 81]
     const [range, setRange] = useState(initialRange);
     const RANGE_MIN = 60;
@@ -27,6 +44,9 @@ function RenderStageTab (props) {
     }, [range]);
 
     let [state, setState] = useState(props.state ); //
+    let [applyButtonState, setapplyButtonState] = useState(false); //
+    let [resetButtonState, setresetButtonState] = useState(false); //
+    let [defaultsButtonState, setdefaultsButtonState] = useState(true ); //
     let [bubbles_theme, setTheme] = useState(props.theme ); //
 
     let ret =
@@ -57,19 +77,19 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector state={state} />
+                            <RenderStageSelector state={state} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector state={state} />
+                            <RenderLightSelector state={state} setStateFromChild={setStateFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector state={state} label={"Target Temperature"}/>
+                            <RenderTemperatureSelector state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector state={state} label={"Target Humidity"}/>
+                            <RenderHumiditySelector state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
-                            <RenderFormActions />
+                            <RenderFormActions applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>
                         </Box>
                     </Grid>
                     </div>

@@ -47,10 +47,10 @@ function RenderStatusTab (props) {
                 />
                 <div className="global_container_">
                     <div className="meter-group">
-                        <RenderTemperatureMeter className="temp-top" label="Air Temperature" state={state}/>
-                        <RenderHumidityMeter  className="temp-middle" label="Humidity"  state={state}/>
-                        <RenderPressureMeter  className="temp-bottom" label="Odor Control (pressure)"  state={state}/>
-                        <RenderPhMeter  className="temp-middle" label="Root pH"  state={state}/>
+                        <RenderTemperatureMeter exists={state.cabinet_settings.temp_air_middle} className="temp-top" label="Air Temperature" state={state}/>
+                        <RenderHumidityMeter exists={state.cabinet_settings.humidity_sensor} className="temp-middle" label="Humidity"  state={state}/>
+                        <RenderPressureMeter exists={state.cabinet_settings.pressure_sensors} className="temp-bottom" label="Odor Control (pressure)"  state={state}/>
+                        <RenderPhMeter exists={state.cabinet_settings.root_ph_sensor} className="temp-middle" label="Root pH"  state={state}/>
                     </div>
                     <div className="detail-group" >
                         <RenderTextStatus  state={state}/>

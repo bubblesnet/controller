@@ -17,11 +17,19 @@ function RenderEnvValueWithDirection (props) {
         className='zero-arrowdown-icon'
     }
     let valuestr = props.value + props.units
-    let ret = <>
-        <Box gridArea={label_area}>{props.label}</Box>
-        <Box gridArea={value_area}>{valuestr}</Box>
-        <Box gridArea={direction_area}><div className={className} /></Box>
+    let ret = ""
+
+    if( props.exists === false ) {
+        ret = <></>
+    } else {
+        ret = <>
+            <Box gridArea={label_area}>{props.label}</Box>
+            <Box gridArea={value_area}>{valuestr}</Box>
+            <Box gridArea={direction_area}>
+                <div className={className}/>
+            </Box>
         </>
+    }
     return( ret )
 }
 export default RenderEnvValueWithDirection;

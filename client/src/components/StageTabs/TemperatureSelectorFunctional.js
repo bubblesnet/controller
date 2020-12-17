@@ -13,10 +13,11 @@ function RenderTemperatureSelector(props) {
     function setValue(value) {
         let x = state;
         x.automation_settings.target_temperature=value;
+        props.setStateFromChild(state)
         setState(x)
     }
 
-    const [state, setState] = useState(props.state);
+    const [state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
 
     const onChange = event => setValue(event.target.value);
     const min = state.automation_settings.temperature_min;

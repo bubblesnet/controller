@@ -26,7 +26,12 @@ function RenderHumidityMeter (props) {
                     className={props.className}
                 />
         </div>
-    return (ret)
+
+    if( state.cabinet_settings.humidity_sensor === false ) {
+        ret = <></>
+    }
+
+return (ret)
 }
 
 export default RenderHumidityMeter;

@@ -7,6 +7,23 @@ import RenderEnvValueWithDirection from "./EnvValueWithDirection";
 
 function RenderSecurityTextStatus (props) {
 
+    let outerdoor = <></>
+    if(props.state.cabinet_settings.outer_door_sensor) {
+        outerdoor = <><Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{props.state.status.outer_door_open?'OPEN':'CLOSED'}</Box></>
+    }
+    let cabinetdoor = <></>
+    if(props.state.cabinet_settings.cabinet_door_sensor) {
+        cabinetdoor = <><Box gridArea={'cabinet-door-label'}>Cabinet Door</Box><Box gridArea={'cabinet-door-value'}>{props.state.status.cabinet_door_open?'OPEN':'CLOSED'}</Box></>
+    }
+    let extpressure = <></>
+    if(props.state.cabinet_settings.pressure_sensors) {
+        extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box></>
+    }
+    let intpressure = <></>
+    if(props.state.cabinet_settings.pressure_sensors) {
+        intpressure = <><Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{props.state.status.pressure_internal}</Box></>
+    }
+
     let ret =
         <Grid className={"status-table-holder"} round={'small'} direction={'vertical'}
               areas={[
@@ -21,11 +38,11 @@ function RenderSecurityTextStatus (props) {
               rows={['40px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>Security</Box>
-            <Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{props.state.status.outer_door_open?'OPEN':'CLOSED'}</Box>
-            <Box gridArea={'cabinet-door-label'}>Cabinet Door</Box><Box gridArea={'cabinet-door-value'}>{props.state.status.cabinet_door_open?'OPEN':'CLOSED'}</Box>
-            <Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box>
-            <Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{props.state.status.pressure_internal}</Box>
-            <RenderEnvValueWithDirection gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.state.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
+            {outerdoor}
+            {cabinetdoor}
+            {extpressure}
+            {intpressure}
+            <RenderEnvValueWithDirection exists={props.state.cabinet_settings.pressure_sensors} gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.state.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
         </Grid>
     return (ret)
 }

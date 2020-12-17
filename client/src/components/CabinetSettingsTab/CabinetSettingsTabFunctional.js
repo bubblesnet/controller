@@ -66,12 +66,14 @@ function RenderCabinetSettingsTab (props) {
         state.cabinet_settings.humidifier = !state.cabinet_settings.humidifier
         changeState(state)
     }
-
+    function toggleRootPhSensor(e) {
+        state.cabinet_settings.root_ph_sensor = !state.cabinet_settings.root_ph_sensor
+        changeState(state)
+    }
     function toggleExhaustFan(e) {
         state.cabinet_settings.exhaust_fan = !state.cabinet_settings.exhaust_fan
         changeState(state)
     }
-
     function toggleIntakeFan(e) {
         state.cabinet_settings.intake_fan = !state.cabinet_settings.intake_fan
         changeState(state)
@@ -145,6 +147,18 @@ function RenderCabinetSettingsTab (props) {
         state.cabinet_settings.pressure_sensors = !state.cabinet_settings.pressure_sensors
         changeState(state)
     }
+    function toggleGerminateLight(e) {
+        state.cabinet_settings.light_germinate = !state.cabinet_settings.light_germinate
+        changeState(state)
+    }
+    function toggleVegetativeLight(e) {
+        state.cabinet_settings.light_vegetative = !state.cabinet_settings.light_vegetative
+        changeState(state)
+    }
+    function toggleBloomLight(e) {
+        state.cabinet_settings.light_bloom = !state.cabinet_settings.light_bloom
+        changeState(state)
+    }
 
     console.log("RenderCabinetSettingsTab cabinetsettings rendering with state.humidifier set to "+ state.cabinet_settings.humidifier)
     let ret =
@@ -160,6 +174,16 @@ function RenderCabinetSettingsTab (props) {
         <Table id={'settings-tab'} >
                         <tbody>
                         <TableRow >
+                            <TableCell border={'bottom'} >
+                                <Table id="light-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={state.cabinet_settings.light_germinate}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Vegetative" onChange={toggleVegetativeLight} checked={state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={state.cabinet_settings.light_bloom}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
                             <TableCell  border={'bottom'}>
                                 <Table  id="humidity-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
@@ -192,20 +216,30 @@ function RenderCabinetSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked={state.cabinet_settings.air_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked={state.cabinet_settings.water_level_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked={state.cabinet_settings.root_ph_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
+                        </TableRow>
+                        <TableRow >
                             <TableCell border={'bottom'} >
                                 <Table id="security-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Security and Odor Control</td></tr></thead>
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Airflow and Odor</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" onChange={toggleCabinetDoorSensor} checked={state.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked={state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked={state.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked={state.cabinet_settings.intake_fan}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked={state.cabinet_settings.exhaust_fan}/></TableCell></TableRow>
                                     </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell  border={'bottom'}>
+                                <Table  >
+                                <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
+                                <tbody>
+                                <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" onChange={toggleCabinetDoorSensor} checked={state.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked={state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
+                                </tbody>
                                 </Table>
                             </TableCell>
                         </TableRow>
@@ -230,7 +264,7 @@ function RenderCabinetSettingsTab (props) {
                             </TableCell>
                             <TableCell >{display_settings.tub_volume_units}</TableCell>
                         </TableRow>
-                         </tbody>
+                       </tbody>
                     </Table>
             <RenderFormActions state={state} applyAction={applyChanges} resetAction={resetChanges}
                                resetButtonState={reset_button_state}

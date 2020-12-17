@@ -14,10 +14,11 @@ function RenderHumiditySelector(props) {
     function setValue(value) {
         let x = state;
         x.automation_settings.target_humidity = value
-        setState(x)
+        props.setStateFromChild(x)
+        setState(JSON.parse(JSON.stringify(x)))
     }
 
-    const [state, setState] = useState(props.state);
+    const [state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
 
     const onChange = event => setValue(event.target.value);
     const min = state.automation_settings.humidity_min;

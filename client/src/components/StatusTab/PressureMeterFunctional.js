@@ -24,6 +24,10 @@ function RenderPressureMeter (props) {
                     className={props.className}
                     />
             </div>
+    if( state.cabinet_settings.pressure_sensors === false ) {
+        ret = <></>
+    }
+
     return (ret)
 }
 
