@@ -54,10 +54,10 @@ function RenderControlTab (props) {
         setValues( values );
     }
     function toggleHeater(e) {
-         values.switchControl.heater.on = !values.switchControl.heater.on;
+        values.switchControl.heater.on = !values.switchControl.heater.on;
         state.switch_state.heater.on = !state.switch_state.heater.on;
         props.setStateFromChild(state)
-         setValues( values );
+        setValues( values );
     }
     function toggleIntakeFan(e) {
         values.switchControl.intakeFan.on = !values.switchControl.intakeFan.on;
