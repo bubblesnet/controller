@@ -18,6 +18,7 @@ global.__root   = __dirname + '/';
 
 var video_routes = require('./api/routes/video_routes');
 var edgecontrol_routes = require('./api/routes/edgecontrol_routes');
+var edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
 var icebreaker_routes = require('./api/routes/icebreaker_routes');
 var user_routes = require('./api/routes/user_routes');
 var auth_routes = require('./api/routes/authcontroller_routes');
@@ -77,6 +78,7 @@ app.use('/api/users', user_routes);
 app.use('/api/auth', auth_routes);
 app.use('/api/video', video_routes);
 app.use("/api/edgecontrol", edgecontrol_routes);
+app.use("/api/measurement", edgemeasurement_routes);
 app.use("/api/icebreaker", icebreaker_routes);
 //app.use('/', index);
 
