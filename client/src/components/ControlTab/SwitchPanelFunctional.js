@@ -100,7 +100,8 @@ function RenderSwitchPanel (props) {
         <RenderDeviceSwitch exists={state.cabinet_settings.heater} toggle={props.switchControl.heater.toggle} on="ON" off="OFF" onOff={state.switch_state.heater.on?"ON":"OFF"} label='Heater' automaticControl={valuename} />
         <RenderDeviceSwitch exists={state.cabinet_settings.intake_fan} toggle={props.switchControl.intakeFan.toggle} on="ON" off="OFF" onOff={state.switch_state.intakeFan.on?"ON":"OFF"} label='Intake Fan'  automaticControl={valuename} />
         <RenderDeviceSwitch exists={state.cabinet_settings.exhaust_fan} toggle={props.switchControl.exhaustFan.toggle} on="ON" off="OFF" onOff={state.switch_state.exhaustFan.on?"ON":"OFF"} label='Exhaust Fan'  automaticControl={valuename} />
-        <RenderDeviceSwitch exists={state.cabinet_settings.grow_light} toggle={props.switchControl.growLight.toggle} on="ON" off="OFF" onOff={state.switch_state.growLight.on?"ON":"OFF"} label='Grow Light'  automaticControl={valuename} />
+        <RenderDeviceSwitch exists={state.cabinet_settings.light_vegetative||state.cabinet_settings.light_bloom||state.cabinet_settings.light_germinate}
+                            toggle={props.switchControl.currentGrowLight.toggle} on="ON" off="OFF" onOff={state.switch_state.currentGrowLight.on?"ON":"OFF"} label='Current Grow Light' automaticControl={valuename} />
         <RenderDeviceSwitch exists={state.cabinet_settings.air_pump} toggle={props.switchControl.airPump.toggle} on="ON" off="OFF" onOff={state.switch_state.airPump.on?"ON":"OFF"} label='Air Pump'  automaticControl={valuename} />
         <RenderDeviceSwitch exists={state.cabinet_settings.water_pump} toggle={props.switchControl.waterPump.toggle} on="ON" off="OFF" onOff={state.switch_state.waterPump.on?"ON":"OFF"} label='Water Pump'  automaticControl={valuename} />
 

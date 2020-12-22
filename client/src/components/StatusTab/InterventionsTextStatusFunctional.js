@@ -26,7 +26,7 @@ function RenderStateTextStatus (props) {
     let [values, setValues] = useState(initValues); //
 
     useEffect(() => {
-        console.log("RenderStatus useEffect growLightOn = " + values.growLightOn)
+        console.log("RenderStatus useEffect")
         const timer = setTimeout(() => setValues(initValues, 4000));
         return () => clearTimeout(timer);
     }, [values]);

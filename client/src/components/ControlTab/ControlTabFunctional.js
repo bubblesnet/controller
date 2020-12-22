@@ -27,7 +27,7 @@ function RenderControlTab (props) {
             waterPump: { on: props.switch_state.waterPump.on, toggle: toggleWaterPump},
             intakeFan: { on: props.switch_state.intakeFan.on,  toggle: toggleIntakeFan},
             exhaustFan: { on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
-            growLight: { on: props.switch_state.growLight.on,  toggle: toggleGrowLight}
+            currentGrowLight: { on: props.switch_state.currentGrowLight.on,  toggle: toggleCurrentGrowLight}
         }}); //
     const [themex, setThemex] = useState(props.theme); //
     const [state, setState] = useState({
@@ -73,9 +73,9 @@ function RenderControlTab (props) {
         setValues( values );
     }
 
-    function toggleGrowLight(e) {
-        values.switchControl.growLight.on = !values.switchControl.growLight.on;
-        state.switch_state.growLight.on = !state.switch_state.growLight.on;
+    function toggleCurrentGrowLight(e) {
+        values.switchControl.currentGrowLight.on = !values.switchControl.currentGrowLight.on;
+        state.switch_state.currentGrowLight.on = !state.switch_state.currentGrowLight.on;
         props.setStateFromChild(state)
         setValues( values );
     }
@@ -145,7 +145,9 @@ function RenderControlTab (props) {
                                 </div>
                             </div>
                         </div>
-                        <RenderGrowLight exists={state.cabinet_settings.grow_light} on={state.switch_state.growLight.on} state={state} />
+                        <RenderGrowLight
+                            exists={state.cabinet_settings.light_vegetative||state.cabinet_settings.light_bloom||state.cabinet_settings.light_germinate}
+                                         on={state.switch_state.currentGrowLight.on} state={state} />
                         <RenderHeater exists={state.cabinet_settings.heater} on={state.switch_state.heater.on} />
                         <RenderHumidifier exists={state.cabinet_settings.humidifier} on={state.switch_state.humidifier.on}/>
                         <div className="exhaust">

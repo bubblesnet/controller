@@ -74,7 +74,6 @@ function AuthenticatedApp (props) {
             thermometer_bottom: true,
             external_thermometer: true,
             thermometer_water: true,
-            grow_light: true,
             water_pump: true,
             air_pump: true,
             light_sensor: true,
@@ -151,7 +150,7 @@ function AuthenticatedApp (props) {
             waterPump: { on:  true},
             intakeFan: { on:  true},
             exhaustFan: { on:  true},
-            growLight: { on:  false}
+            currentGrowLight: { on:  false}
 
         }
     });

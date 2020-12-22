@@ -115,10 +115,6 @@ function RenderCabinetSettingsTab (props) {
         state.cabinet_settings.heater = !state.cabinet_settings.heater
         changeState(state)
     }
-    function toggleGrowLight(e) {
-        state.cabinet_settings.grow_light = !state.cabinet_settings.grow_light
-        changeState(state)
-    }
     function toggleWaterPump(e) {
         state.cabinet_settings.water_pump = !state.cabinet_settings.water_pump
         changeState(state)
@@ -179,8 +175,9 @@ function RenderCabinetSettingsTab (props) {
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
                                     <tbody>
                                     <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={state.cabinet_settings.light_germinate}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Vegetative" onChange={toggleVegetativeLight} checked={state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={state.cabinet_settings.light_bloom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -211,10 +208,8 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Grow Light" onChange={toggleGrowLight} checked={state.cabinet_settings.grow_light}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={state.cabinet_settings.water_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked={state.cabinet_settings.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked={state.cabinet_settings.water_level_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked={state.cabinet_settings.root_ph_sensor}/></TableCell></TableRow>
                                     </tbody>
