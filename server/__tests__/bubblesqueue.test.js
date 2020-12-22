@@ -14,7 +14,6 @@ describe("BubblesQueue", () => {
     describe('Send', () => {
             it( 'should return blah', async function() {
                 console.log("sending ....")
-                await bubbles_queue.init();
                 bubbles_queue.sendMessage("blah");
                 return "blah";
             });
@@ -23,7 +22,6 @@ describe("BubblesQueue", () => {
     describe('Subscribe', () => {
             it( 'should return blah', async function() {
                 console.log("sending ....")
-                await bubbles_queue.init();
                 bubbles_queue.subscribe();
                 bubbles_queue.sendMessage("bleh");
                 return "bleh";
