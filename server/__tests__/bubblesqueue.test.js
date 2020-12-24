@@ -11,19 +11,21 @@ describe("BubblesQueue", () => {
         });
         }
         );
+
     describe('Send', () => {
-            it( 'should return blah',  function() {
+            it( 'should return blah', function() {
                 console.log("sending ....")
-                bubbles_queue.sendMessage("blah");
+                for( var i = 0; i < 10; i++ ) {
+                    bubbles_queue.sendMessage("blah "+i);
+                }
                 return "blah";
             });
         }
     );
-    describe('Subscribe', () => {
-            it( 'should return blah',  function() {
-                console.log("sending ....")
-                bubbles_queue.subscribe();
-                bubbles_queue.sendMessage("bleh");
+    describe('Subscribe and read all', () => {
+            it( 'should return blah', function() {
+                console.log("subscribing ....")
+                bubbles_queue.subscribeToQueue();
                 return "bleh";
             });
         }

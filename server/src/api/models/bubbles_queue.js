@@ -1,45 +1,87 @@
 'use strict';
-const Stomp = require('stomp-client');
+const Stomp = require('stompit');
 
 //var __stompClient = null;
 var the_message_producer = null;
+var _stompClient = null;
 
-const MessageProducer = function MessageProducer() {
-    this._stompClient = null;
-    the_message_producer = this;
+
+const connectOptions = {
+    'host': 'localhost',
+    'port': 61613,
+    'connectHeaders':{
+        'host': '/',
+        'login': 'user',
+        'passcode': 'password',
+        'heart-beat': '5000,5000'
+    }
 };
 
-MessageProducer.prototype.init = async function init(){
+const MessageProducer = function MessageProducer() {
+    _stompClient = null;
+//    the_message_producer = this;
+};
+
+MessageProducer.prototype.init = function init(){
     return new Promise((resolve,reject) => {
         console.log("promise");
-        this._stompClient = new Stomp('127.0.0.1', 61613, 'user', 'password');
-//        __stompClient = this._stompClient;
-        console.log("connecting");
-        this._stompClient.connect(function (sessionId) {
-            console.log("STOMP client connected with sessionId "+sessionId);
-            resolve();
-        }, function (err) {
-            console.log("STOMP client connect failed " + JSON.stringify(err))
-            reject("connect failed");
+        Stomp.connect(connectOptions, function(error, client) {
+            console.log("STOMP client connected with sessionId ");
+            if( !error ) {
+                _stompClient = client
+                resolve();
+            } else {
+                console.log("STOMP client connect failed " + JSON.stringify(err))
+                reject();
+            }
         });
 });};
 
 MessageProducer.prototype.sendMessage = function sendMessage(messageToPublish){
     console.log("sendMessage");
-    this._stompClient.publish('/queue/bubbles', messageToPublish);
+    const sendHeaders = {
+        'destination': '/queue/bubbles',
+        'content-type': 'text/plain'
+    };
+
+    const frame = _stompClient.send(sendHeaders);
+    frame.write('hello');
+    frame.end();
+
     console.log("sendMessage returns ");
 };
 
-MessageProducer.prototype.subscribe = function subscribe(){
+MessageProducer.prototype.subscribeToQueue = function subscribe() {
     console.log("subscribe");
-    this._stompClient.subscribe('/queue/bubbles', MessageProducer.prototype.receiveMessage);
-    console.log("subscribe returns ");
-};
+    const subscribeHeaders = {
+        'destination': '/queue/bubbles',
+        'ack': 'auto'
+    };
 
-MessageProducer.prototype.receiveMessage = function receiveMessage(body,header){
-    console.log("receiveMessage body = "+JSON.stringify(body));
-    console.log( "header = " +  JSON.stringify(header));
-    the_message_producer._stompClient.ack(header['message-id'])
-};
+    _stompClient.subscribe(subscribeHeaders, function (error, message) {
+        console.log("subscribe read message callback")
+        if (error) {
+            console.log('subscribe error ' + error.message);
+            return;
+        }
+        console.log("reading")
+
+        message.readString('utf-8', function (error, body) {
+            console.log("reading callback")
+            if (error) {
+                console.log('read message error ' + error.message);
+                return;
+            }
+            console.log('received message: ' + body);
+            _stompClient.ack(message);
+        }
+    );
+    });
+}
+
+MessageProducer.prototype.deInit = function deInit(){
+    _stompClient.disconnect();
+    _stompClient = null;
+}
 
 module.exports = new MessageProducer();
