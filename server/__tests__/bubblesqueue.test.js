@@ -12,7 +12,7 @@ describe("BubblesQueue", () => {
         }
         );
     describe('Send', () => {
-            it( 'should return blah', async function() {
+            it( 'should return blah',  function() {
                 console.log("sending ....")
                 bubbles_queue.sendMessage("blah");
                 return "blah";
@@ -20,7 +20,7 @@ describe("BubblesQueue", () => {
         }
     );
     describe('Subscribe', () => {
-            it( 'should return blah', async function() {
+            it( 'should return blah',  function() {
                 console.log("sending ....")
                 bubbles_queue.subscribe();
                 bubbles_queue.sendMessage("bleh");
