@@ -46,9 +46,13 @@ function AuthenticatedApp (props) {
 
     const sendit = () => {
         let msg='Hello '+getRandomInt(100)
+        let x = JSON.parse(JSON.stringify(state))
+        if( lastJsonMessage ) {
+            x = JSON.parse(JSON.stringify(lastJsonMessage))
+        }
         console.log("sending "+msg);
-        initial_state.status.humidity_internal = 69+getRandomInt(10)
-        sendJsonMessage(initial_state);
+        x.status.humidity_internal = 69+getRandomInt(10)
+        sendJsonMessage(x);
     }
     const handleClickSendMessage = useCallback(() =>
         sendit(), []);
@@ -71,14 +75,9 @@ function AuthenticatedApp (props) {
         setState(newstate)
     }
     function setSwitchStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater")
+        console.log("setSwitchStateFromChild should rerender Heater to "+x.switch_state.heater.on)
         state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
-        setState(JSON.parse(JSON.stringify(state)))
-    }
-
-    function resetChanges() {
-        console.log("AuthenticatedApp resetchanges humidifier is "+state.cabinet_settings.humidifier)
-        setState(state)
+        sendJsonMessage(state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
@@ -142,6 +141,7 @@ function AuthenticatedApp (props) {
         thestate = JSON.parse(JSON.stringify(lastJsonMessage))
     }
     console.log("authenticatedapp humidity = " + thestate.status.humidity_internal)
+    console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
     return (
          <div className="App">
             <Header setNodeEnv={setEnvironment}/>
@@ -155,7 +155,7 @@ function AuthenticatedApp (props) {
              <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
                     <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                      state={thestate} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
+                                      state={thestate} switch_state={thestate.switch_state} setStateFromChild={setSwitchStateFromChild}/>
                 </Tab>
                 <Tab title="Status">
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>

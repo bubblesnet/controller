@@ -14,11 +14,9 @@ import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
 import {Grommet, Table} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
-import {grommet} from "grommet/themes";
 
 function RenderControlTab (props) {
-    const [changed,setChanged] = useState(false);
-    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
+//    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
     const [values, setValues] = useState( {switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
             humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
@@ -29,86 +27,64 @@ function RenderControlTab (props) {
             exhaustFan: { on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
             currentGrowLight: { on: props.switch_state.currentGrowLight.on,  toggle: toggleCurrentGrowLight}
         }}); //
-    const [themex, setThemex] = useState(props.theme); //
-    const [state, setState] = useState({
-        switch_state: JSON.parse(JSON.stringify(props.state.switch_state)),
-        cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings)),
-        display_settings: JSON.parse(JSON.stringify(props.state.display_settings)),
-        status: JSON.parse(JSON.stringify(props.state.status))
-    }); //
 
     function toggleAutomatic(e) {
         console.log("toggleAutomatic should rerender Heater")
-        values.switchControl.automaticControl.on = !values.switchControl.automaticControl.on;
-        state.switch_state.automaticControl.on = !state.switch_state.automaticControl.on;
-        props.setStateFromChild(state)
-        setAutomaticControlOn(!automaticControlOn)
-        setValues( values )
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.automaticControl.on = !x.switch_state.automaticControl.on;
+        props.setStateFromChild(x)
     }
     function toggleHumidifier(e) {
-        console.log("toggleHumidifier")
-        values.switchControl.humidifier.on = !values.switchControl.humidifier.on;
-        state.switch_state.humidifier.on = !state.switch_state.humidifier.on;
-        props.setStateFromChild(state)
-        setChanged(!changed)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.humidifier.on = !x.switch_state.humidifier.on;
+        props.setStateFromChild(x)
     }
     function toggleHeater(e) {
-        values.switchControl.heater.on = !values.switchControl.heater.on;
-        state.switch_state.heater.on = !state.switch_state.heater.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.heater.on = !x.switch_state.heater.on;
+        props.setStateFromChild(x)
     }
     function toggleIntakeFan(e) {
-        values.switchControl.intakeFan.on = !values.switchControl.intakeFan.on;
-        state.switch_state.intakeFan.on = !state.switch_state.intakeFan.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.intakeFan.on = !x.switch_state.intakeFan.on;
+        props.setStateFromChild(x)
     }
-
     function toggleExhaustFan(e) {
-        values.switchControl.exhaustFan.on = !values.switchControl.exhaustFan.on;
-        state.switch_state.exhaustFan.on = !state.switch_state.exhaustFan.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.exhaustFan.on = !x.switch_state.exhaustFan.on;
+        props.setStateFromChild(x)
     }
-
     function toggleCurrentGrowLight(e) {
-        values.switchControl.currentGrowLight.on = !values.switchControl.currentGrowLight.on;
-        state.switch_state.currentGrowLight.on = !state.switch_state.currentGrowLight.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.currentGrowLight.on = !x.switch_state.currentGrowLight.on;
+        props.setStateFromChild(x)
     }
     function toggleAirPump(e) {
-        values.switchControl.airPump.on = !values.switchControl.airPump.on;
-        state.switch_state.airPump.on = !state.switch_state.airPump.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.airPump.on = !x.switch_state.airPump.on;
+        props.setStateFromChild(x)
     }
     function toggleWaterPump(e) {
-        values.switchControl.waterPump.on = !values.switchControl.waterPump.on;
-        state.switch_state.waterPump.on = !state.switch_state.waterPump.on;
-        props.setStateFromChild(state)
-        setValues( values );
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.waterPump.on = !x.switch_state.waterPump.on;
+        props.setStateFromChild(x)
     }
 
-    useEffect(() => {}, [values,state]);
-    console.log("RenderControlTab state.humidity = " + state.status.humidity_internal + " props.hum="+props.state.status.humidity_internal)
-//    console.log("theme = " + JSON.stringify(props.theme))
+    console.log("RenderControlTab heater = " + props.state.switch_state.heater.on )
     let wt = ""
 
     let wl = ""
     let wlruler = ""
-    if(state.cabinet_settings.water_level_sensor === false ) {
+    if(props.state.cabinet_settings.water_level_sensor === false ) {
         wl = <></>
         wlruler=<></>
     } else {
         wlruler = <div id="watertemp-holder" >
-            <RenderThermometer exists={state.cabinet_settings.thermometer_water} className="airtemptop-text-holder" currentTemperature={state.status.temp_water} units={state.display_settings.temperature_units} direction={state.status.temp_water_direction}/>
+            <RenderThermometer exists={props.state.cabinet_settings.thermometer_water} className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_water_direction}/>
         </div>
 
         wl = <div id="water-level-text-holder">
-            {state.status.tub_water_level} {state.display_settings.tub_volume_units}
+            {props.state.status.tub_water_level} {props.state.display_settings.tub_volume_units}
         </div>
     }
         let ret =
@@ -146,27 +122,27 @@ function RenderControlTab (props) {
                             </div>
                         </div>
                         <RenderGrowLight
-                            exists={state.cabinet_settings.light_vegetative||state.cabinet_settings.light_bloom||state.cabinet_settings.light_germinate}
-                                         on={state.switch_state.currentGrowLight.on} state={props.state} />
-                        <RenderHeater exists={state.cabinet_settings.heater} on={state.switch_state.heater.on} />
-                        <RenderHumidifier exists={state.cabinet_settings.humidifier} on={state.switch_state.humidifier.on}/>
+                            exists={props.state.cabinet_settings.light_vegetative||props.state.cabinet_settings.light_bloom||props.state.cabinet_settings.light_germinate}
+                                         on={props.state.switch_state.currentGrowLight.on} state={props.state} />
+                        <RenderHeater exists={props.state.cabinet_settings.heater} on={props.state.switch_state.heater.on} />
+                        <RenderHumidifier exists={props.state.cabinet_settings.humidifier} on={props.state.switch_state.humidifier.on}/>
                         <div className="exhaust">
                             <div className="filter-and-exhaust-fan-holder">
-                                <RenderExhaustFan exists={state.cabinet_settings.exhaust_fan} on={state.switch_state.exhaustFan.on} />
+                                <RenderExhaustFan exists={props.state.cabinet_settings.exhaust_fan} on={props.state.switch_state.exhaustFan.on} />
                            </div>
                         </div>
                         <div className="fans" >
                             <div className="input-fan-holder">
-                                <RenderIntakeFan exists={state.cabinet_settings.intake_fan} on={state.switch_state.intakeFan.on} />
+                                <RenderIntakeFan exists={props.state.cabinet_settings.intake_fan} on={props.state.switch_state.intakeFan.on} />
                             </div>
                         </div>
-                        <RenderWaterPump exists={state.cabinet_settings.water_pump} on={state.switch_state.waterPump.on}/>
-                        <RenderAirPump exists={state.cabinet_settings.air_pump} on={state.switch_state.airPump.on}/>
+                        <RenderWaterPump exists={props.state.cabinet_settings.water_pump} on={props.state.switch_state.waterPump.on}/>
+                        <RenderAirPump exists={props.state.cabinet_settings.air_pump} on={props.state.switch_state.airPump.on}/>
                         <div id="water-level-ruler-holder" />
 
                     </div>
                     <div id="controltab-buttongroup" >
-                        <RenderSwitchPanel state={state} switchControl={values.switchControl}/>
+                        <RenderSwitchPanel state={props.state} switchControl={values.switchControl}/>
                     </div>
                 </div>
             </Grommet>

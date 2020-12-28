@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from "react";
 
-
-
 function RenderHeater (props) {
-    console.log("RenderHeater")
+    console.log("RenderHeater "+props.on)
     let ret
     if( props.on === false ) {
         ret = <div id="heater-holder-off" />
