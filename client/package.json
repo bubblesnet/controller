@@ -24,7 +24,7 @@
     "react-intl": "^5.10.6",
     "react-scripts": "3.4.1",
     "rendition": "^16.1.2",
-    "socket.io-client": "^3.0.4",
+    "react-use-websocket": "^2.2.0",
     "styled-components": "^5.2.1"
   },
   "devDependencies": {

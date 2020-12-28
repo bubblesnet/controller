@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 
 function Header (props) {
-    console.log("BubblesApp render props = " + JSON.stringify(props))
+    console.log("header render" )
     let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
 

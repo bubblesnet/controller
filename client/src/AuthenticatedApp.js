@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -16,10 +16,50 @@ import {grommet} from 'grommet/themes'
 import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
-const io = require('socket.io-client');
-const socket = io('http://localhost:3011');
+
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
 function AuthenticatedApp (props) {
+
+    //Public API that will echo messages sent to it back to the client
+    const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
+    const messageHistory = useRef([]);
+
+    const {
+//        sendMessage,
+//        lastMessage,
+        sendJsonMessage,
+        lastJsonMessage,
+        readyState,
+    } = useWebSocket(socketUrl, {
+        onOpen: () => console.log('websocket opened'),
+        //Will attempt to reconnect on all close events, such as server shutting down
+        shouldReconnect: (closeEvent) => true,
+        onMessage: (event) => setState(JSON.parse(event.data)),
+    });
+
+    messageHistory.current = useMemo(() =>
+        messageHistory.current.concat(lastJsonMessage),[lastJsonMessage]);
+
+    const handleClickChangeSocketUrl = useCallback(() =>
+        setSocketUrl('wss://demos.kaazing.com/echo'), []);
+
+    const sendit = () => {
+        let msg='Hello '+getRandomInt(100)
+        console.log("sending "+msg);
+        initial_state.status.humidity_internal = 69+getRandomInt(10)
+        sendJsonMessage(initial_state);
+    }
+    const handleClickSendMessage = useCallback(() =>
+        sendit(), []);
+
+    const connectionStatus = {
+        [ReadyState.CONNECTING]: 'Connecting',
+        [ReadyState.OPEN]: 'Open',
+        [ReadyState.CLOSING]: 'Closing',
+        [ReadyState.CLOSED]: 'Closed',
+        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+    }[readyState];
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
@@ -94,15 +134,28 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("AuthenticatedApp Rendering App with humidifier = "+state.cabinet_settings.humidifier)
+    console.log("AuthenticatedApp Rendering App with readyState = "+readyState)
     let merged_theme = deepMerge(grommet,bubbles_theme)
+    let thestate = state
+    if(lastJsonMessage) {
+        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
+        thestate = JSON.parse(JSON.stringify(lastJsonMessage))
+    }
+    console.log("authenticatedapp humidity = " + thestate.status.humidity_internal)
     return (
          <div className="App">
             <Header setNodeEnv={setEnvironment}/>
-            <Tabs margin="medium" flex="shrink" >
+             <button
+                 onClick={handleClickSendMessage}
+                 disabled={readyState !== ReadyState.OPEN}
+             >
+                 Click Me to send 'Hello'
+             </button>
+
+             <Tabs margin="medium" flex="shrink" >
                 <Tab title="Cabinet Control" >
                     <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                      state={state} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
+                                      state={thestate} switch_state={state.switch_state} setStateFromChild={setSwitchStateFromChild}/>
                 </Tab>
                 <Tab title="Status">
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>

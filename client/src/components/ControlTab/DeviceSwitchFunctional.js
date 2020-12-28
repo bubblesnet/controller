@@ -31,7 +31,7 @@ function RenderDeviceSwitch (props) {
         buttonBackgroundColor = 'red'
         buttonCheckedColor = 'green'
     }
-    console.log("rendering switch with value " + props.onOff )
+//    console.log("rendering switch with value " + props.onOff )
     let ret = ""
 
         if( props.exists === false ) {

@@ -93,7 +93,7 @@ function RenderControlTab (props) {
     }
 
     useEffect(() => {}, [values,state]);
-    console.log("RenderControlTab should call RenderHeater")
+    console.log("RenderControlTab state.humidity = " + state.status.humidity_internal + " props.hum="+props.state.status.humidity_internal)
 //    console.log("theme = " + JSON.stringify(props.theme))
     let wt = ""
 
@@ -147,7 +147,7 @@ function RenderControlTab (props) {
                         </div>
                         <RenderGrowLight
                             exists={state.cabinet_settings.light_vegetative||state.cabinet_settings.light_bloom||state.cabinet_settings.light_germinate}
-                                         on={state.switch_state.currentGrowLight.on} state={state} />
+                                         on={state.switch_state.currentGrowLight.on} state={props.state} />
                         <RenderHeater exists={state.cabinet_settings.heater} on={state.switch_state.heater.on} />
                         <RenderHumidifier exists={state.cabinet_settings.humidifier} on={state.switch_state.humidifier.on}/>
                         <div className="exhaust">

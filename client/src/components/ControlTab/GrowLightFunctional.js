@@ -26,7 +26,7 @@ function RenderGrowLight (props) {
                         </div>
                     </div>
                     <div id="humidity-holder" >
-                        <RenderHygrometer exists={state.cabinet_settings.humidity_sensor} currentHumidity={state.status.humidity_internal} units={state.display_settings.humidity_units} direction={state.status.humidity_internal_direction}/>
+                        <RenderHygrometer exists={state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={state.display_settings.humidity_units} direction={state.status.humidity_internal_direction}/>
                     </div>
                 </div>
         } else {
