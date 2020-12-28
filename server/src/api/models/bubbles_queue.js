@@ -1,10 +1,7 @@
 'use strict';
 const Stomp = require('stompit');
 
-//var __stompClient = null;
-var the_message_producer = null;
-var _stompClient = null;
-
+var __stompClient = null;
 
 const connectOptions = {
     'host': 'localhost',
@@ -18,8 +15,6 @@ const connectOptions = {
 };
 
 const MessageProducer = function MessageProducer() {
-    _stompClient = null;
-//    the_message_producer = this;
 };
 
 MessageProducer.prototype.init = function init(){
@@ -28,7 +23,7 @@ MessageProducer.prototype.init = function init(){
         Stomp.connect(connectOptions, function(error, client) {
             console.log("STOMP client connected with sessionId ");
             if( !error ) {
-                _stompClient = client
+                __stompClient = client
                 resolve();
             } else {
                 console.log("STOMP client connect failed " + JSON.stringify(err))
@@ -44,7 +39,7 @@ MessageProducer.prototype.sendMessage = function sendMessage(messageToPublish){
         'content-type': 'text/plain'
     };
 
-    const frame = _stompClient.send(sendHeaders);
+    const frame = __stompClient.send(sendHeaders);
     frame.write('hello');
     frame.end();
 
@@ -58,7 +53,7 @@ MessageProducer.prototype.subscribeToQueue = function subscribe() {
         'ack': 'auto'
     };
 
-    _stompClient.subscribe(subscribeHeaders, function (error, message) {
+    __stompClient.subscribe(subscribeHeaders, function (error, message) {
         console.log("subscribe read message callback")
         if (error) {
             console.log('subscribe error ' + error.message);
@@ -80,8 +75,8 @@ MessageProducer.prototype.subscribeToQueue = function subscribe() {
 }
 
 MessageProducer.prototype.deInit = function deInit(){
-    _stompClient.disconnect();
-    _stompClient = null;
+    this._stompClient.disconnect();
+    this._stompClient = null;
 }
 
 module.exports = new MessageProducer();
