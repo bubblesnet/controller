@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from "react";
-
-
+import React from "react";
 
 function RenderExhaustFan (props) {
     console.log("RenderExhaustFan " + props.on)

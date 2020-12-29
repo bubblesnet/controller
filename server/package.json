@@ -17,6 +17,8 @@
     "moment-timezone": "*",
     "morgan": "~1.7.0",
     "mysql": "*",
+    "nodejs-websocket": "^1.7.2",
+    "pg": "^8.5.1",
     "pug": "*",
     "q": "*",
     "sendgrid": "~5.0.0",

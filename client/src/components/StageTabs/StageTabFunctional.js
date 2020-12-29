@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, Stack, Text, Box, RangeSelector, Table, TableRow, TableCell, Select, RadioButton, Grid} from 'grommet'
+import {Grommet,Box, Grid} from 'grommet'
 import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderTemperatureSelector from './TemperatureSelectorFunctional'
@@ -10,13 +10,10 @@ import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
-import {grommet} from "grommet/themes"
-
 
 function RenderStageTab (props) {
 
     console.log("RenderStageTab")
-
 
     function setStateFromChild(x) {
         setapplyButtonState(true)
@@ -24,6 +21,8 @@ function RenderStageTab (props) {
         setState(JSON.parse(JSON.stringify(x)))
     }
     function applyAction() {
+        setapplyButtonState(false)
+        setresetButtonState(false)
         props.setStateFromChild(JSON.parse(JSON.stringify(state)));
     }
     function resetAction() {
@@ -47,7 +46,6 @@ function RenderStageTab (props) {
     let [applyButtonState, setapplyButtonState] = useState(false); //
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState, setdefaultsButtonState] = useState(true ); //
-    let [bubbles_theme, setTheme] = useState(props.theme ); //
 
     let ret =
             <Grommet theme={props.theme}>

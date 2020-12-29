@@ -9,11 +9,13 @@ import fontlist from './fontlist.json'
 import GoogleFontLoader from "react-google-font-loader";
 import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 
+
 function RenderDisplaySettingsTab (props) {
 
-    console.log("RenderApplicationSettingsTab with font set to " + props.state.display_settings.theme.global.font.family);
-    let [values, setValues] = useState({units: props.state.display_settings.units, language: props.state.display_settings.language, languageOptions: props.state.display_settings.languageOptions, theme: props.state.display_settings.theme, current_font: props.state.display_settings.theme.global.font.family}); //
+    console.log("RenderServerSettingsTab with font set to " + props.theme.global.font.family);
+    let [values, setValues] = useState({units: props.state.display_settings.units, language: props.state.display_settings.language, languageOptions: props.state.display_settings.languageOptions, theme: props.theme, current_font: props.theme.global.font.family}); //
     let [fonts, setFonts] = useState([])
+    let [local_theme, setLocalTheme] = useState(JSON.parse(JSON.stringify(props.theme)));
     let [applyButtonState, setApplyButtonState] = useState(false)
     let [resetButtonState, setResetButtonState] = useState(false)
     let [defaultsButtonState, setDefaultsButtonState] = useState(true)
@@ -53,29 +55,26 @@ function RenderDisplaySettingsTab (props) {
         let x = values
         x.current_font = value
         props.onLocalFontChange(values.current_font)
+        let z = local_theme
+        z.global.font.family = value
+        setLocalTheme(z)
         applyLocally(x,true)
     }
 
     function applyFontChangeGlobally() {
         let x = values
-        console.log("applyFontChangeGlobally from "+x.theme.global.font.family+" to " + values.current_font + " props " + props.state.display_settings.theme.global.font.family)
         props.onApplyFontChange(values.current_font)
-        console.log("applyFontChangeGlobally afterwards props " + props.state.display_settings.theme.global.font.family)
         setResetButtonState(false);
         setApplyButtonState(false);
     }
 
-    useEffect(() => {
-        console.log("RenderDisplaySettingsTab useEffect font="+values.theme.global.font.family)
-    }, [values]);
-
-    console.log("RenderApplicationSettingsTab with local font set to " + values.current_font);
+    console.log("RenderServerSettingsTab with theme font set to " + local_theme.global.font.family);
     let ret =
-        <Grommet theme={props.theme}>
+        <Grommet theme={local_theme}>
             <GoogleFontLoader
                 fonts={[
                     {
-                        font: values.theme.global.font.family
+                        font: local_theme.global.font.family
                     },
                 ]}
             />
@@ -101,7 +100,7 @@ function RenderDisplaySettingsTab (props) {
                         </tbody>
                     </Table>
                 </div>
-        </Grommet>
+            </Grommet>
     return (ret)
 }
 

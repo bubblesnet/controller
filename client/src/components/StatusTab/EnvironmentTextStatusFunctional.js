@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Grid, Table, TableRow,TableCell} from 'grommet';
 import '../../App.css';
 import './statusTab.css'

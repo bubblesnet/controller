@@ -1,20 +1,20 @@
-import {Box, Grid, Select, TableCell, TableRow} from "grommet";
+import {Box, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
 function RenderLightSelector (props) {
 
     function setLightTypeValue(value) {
-        let x = state;
+        let x = local_state;
         x.automation_settings.current_light_type = value;
         setState(JSON.parse(JSON.stringify(x)))
     }
     function setLightScheduleValue(value) {
-        let x = state;
+        let x = local_state;
         x.automation_settings.current_lighting_schedule = value;
         setState(JSON.parse(JSON.stringify(x)))
     }
 
-    const [state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
 
     const changeLightType = event => setLightTypeValue(event.target.value);
     const changeLightSchedule = event => setLightScheduleValue(event.target.value);
@@ -35,11 +35,11 @@ function RenderLightSelector (props) {
 
             <Box width={'small'} round={'xsmall'} >
             Light Schedule
-            <Select options={state.automation_settings.lighting_schedule_options} value={state.automation_settings.current_lighting_schedule} onChange={changeLightSchedule}/>
+            <Select options={local_state.automation_settings.lighting_schedule_options} value={local_state.automation_settings.current_lighting_schedule} onChange={changeLightSchedule}/>
             </Box>
             <Box width={'small'} round={'small'} >
             Light Type
-            <Select options={state.automation_settings.light_type_options} value={state.automation_settings.current_light_type} onChange={changeLightType}/>
+            <Select options={local_state.automation_settings.light_type_options} value={local_state.automation_settings.current_light_type} onChange={changeLightType}/>
             </Box>
             </Grid>
    </>

@@ -8,7 +8,7 @@ import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
 import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
 import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFunctional"
-import RenderSetup from "./components/ApplicationSettingsTab/ApplicationSettingsTabFunctional"
+import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
@@ -18,11 +18,12 @@ import {useIntl} from 'react-intl'
 import initial_state from './initial_state.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import {Grommet} from "grommet";
 
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
-    const [socketUrl, setSocketUrl] = useState('wss://echo.websocket.org');
+    const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
 
     const {
@@ -39,19 +40,19 @@ function AuthenticatedApp (props) {
     });
 
     messageHistory.current = useMemo(() =>
-        messageHistory.current.concat(lastJsonMessage),[lastJsonMessage]);
+        messageHistory.current.concat(lastJsonMessage), [lastJsonMessage]);
 
     const handleClickChangeSocketUrl = useCallback(() =>
         setSocketUrl('wss://demos.kaazing.com/echo'), []);
 
     const sendit = () => {
-        let msg='Hello '+getRandomInt(100)
-        let x = JSON.parse(JSON.stringify(state))
-        if( lastJsonMessage ) {
+        let msg = 'Hello ' + getRandomInt(100)
+        let x = JSON.parse(JSON.stringify(local_state))
+        if (lastJsonMessage) {
             x = JSON.parse(JSON.stringify(lastJsonMessage))
         }
-        console.log("sending "+msg);
-        x.status.humidity_internal = 69+getRandomInt(10)
+        console.log("sending " + msg);
+        x.status.humidity_internal = 69 + getRandomInt(10)
         sendJsonMessage(x);
     }
     const handleClickSendMessage = useCallback(() =>
@@ -70,14 +71,21 @@ function AuthenticatedApp (props) {
     }
 
     function setCabinetSettingsStateFromChild(x) {
-        let newstate = JSON.parse(JSON.stringify(state))
+        let newstate = JSON.parse(JSON.stringify(local_state))
         newstate.cabinet_settings = JSON.parse(JSON.stringify(x.cabinet_settings))
         setState(newstate)
     }
+
     function setSwitchStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater to "+x.switch_state.heater.on)
-        state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
-        sendJsonMessage(state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+        local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
+        sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+    }
+
+    function setAutomationStateFromChild(x) {
+        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+        local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
+        sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
@@ -85,21 +93,16 @@ function AuthenticatedApp (props) {
     const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
     const [language, setLanguage] = useState("all");
-    const [bubbles_theme,setBubblesTheme] = useState(initial_theme);
-    const [current_font,setCurrentFont] = useState(initial_theme.global.font.family)
+    const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
+    const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
 
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
 
-    const[state, setState] = useState(initial_state);
-
-    useEffect(() => {
-        console.log("AuthenticatedApp useEffect")
-    }, [state]);
-
+    const [local_state, setState] = useState(initial_state);
 
     const applyFontChange = (value) => {
-        let x = bubbles_theme;
+        let x = JSON.parse(JSON.stringify(bubbles_theme));
 
         console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
         x.global.font.family = current_font;
@@ -133,51 +136,59 @@ function AuthenticatedApp (props) {
         setApiPort(theApiPort);
     }
 
-    console.log("AuthenticatedApp Rendering App with readyState = "+readyState)
-    let merged_theme = deepMerge(grommet,bubbles_theme)
-    let thestate = state
-    if(lastJsonMessage) {
+    console.log("AuthenticatedApp Rendering App with readyState = " + readyState)
+//    let merged_theme = deepMerge(grommet, bubbles_theme)
+//    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
+    let thestate = local_state
+    if (lastJsonMessage) {
         console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
         thestate = JSON.parse(JSON.stringify(lastJsonMessage))
     }
     console.log("authenticatedapp humidity = " + thestate.status.humidity_internal)
     console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
-    return (
-         <div className="App">
-            <Header setNodeEnv={setEnvironment}/>
-             <button
-                 onClick={handleClickSendMessage}
-                 disabled={readyState !== ReadyState.OPEN}
-             >
-                 Click Me to send 'Hello'
-             </button>
 
-             <Tabs margin="medium" flex="shrink" >
-                <Tab title="Cabinet Control" >
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                      state={thestate} switch_state={thestate.switch_state} setStateFromChild={setSwitchStateFromChild}/>
-                </Tab>
-                <Tab title="Status">
-                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}/>
-                </Tab>
-                <Tab title="Cabinet Setup">
-                    <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state}
-                    setStateFromChild={setCabinetSettingsStateFromChild}
-                    />
-                </Tab>
-                <Tab title="Automation">
-                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} />
-                </Tab>
-                <Tab title="Events">
-                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
-                </Tab>
-                <Tab title="Display Settings">
-                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={state} onApplyFontChange={applyFontChange} onLocalFontChange={localFontChange} />
-                </Tab>
-                <Tab title="App Settings">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} onFontChange={applyFontChange} applicationSettings={state.application_settings}/>
-                </Tab>
-            </Tabs>
+    return (
+        <div className="App">
+                <Header setNodeEnv={setEnvironment}/>
+                <button
+                    onClick={handleClickSendMessage}
+                    disabled={readyState !== ReadyState.OPEN}
+                >
+                    Jiggle Internal Humidity
+                </button>
+
+                <Tabs margin="medium" flex="shrink">
+                    <Tab title="Cabinet Control">
+                        <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                          state={thestate} switch_state={thestate.switch_state}
+                                          setStateFromChild={setSwitchStateFromChild}/>
+                    </Tab>
+                    <Tab title="Status">
+                        <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}/>
+                    </Tab>
+                    <Tab title="Cabinet Setup">
+                        <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}
+                                        setStateFromChild={setCabinetSettingsStateFromChild}
+                        />
+                    </Tab>
+                    <Tab title="Automation">
+                        <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}
+                                        setStateFromChild={setAutomationStateFromChild}/>
+                    </Tab>
+                    <Tab title="Events">
+                        <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
+                    </Tab>
+                    <Tab title="Display Settings">
+                        <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                               state={local_state} onApplyFontChange={applyFontChange}
+                                               onLocalFontChange={localFontChange}/>
+                    </Tab>
+                    <Tab title="Server Settings">
+                        <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                     onFontChange={applyFontChange}
+                                     applicationSettings={local_state.application_settings}/>
+                    </Tab>
+                </Tabs>
         </div>
     );
 }

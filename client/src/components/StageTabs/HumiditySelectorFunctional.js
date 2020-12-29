@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { render } from 'react-dom';
-
 import { Grid,Image, Grommet, Box, RangeInput, Stack, Text } from 'grommet';
-import {grommet} from 'grommet/themes'
-import { ThemeType } from 'grommet/themes';
 import humidity from '../../images/humidityicon.png'
 import './stagesTab.css';
 import '../../Palette.css';
@@ -12,18 +8,18 @@ import '../../Palette.css';
 
 function RenderHumiditySelector(props) {
     function setValue(value) {
-        let x = state;
+        let x = JSON.parse(JSON.stringify(local_state));
         x.automation_settings.target_humidity = value
         props.setStateFromChild(x)
         setState(JSON.parse(JSON.stringify(x)))
     }
 
-    const [state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
 
     const onChange = event => setValue(event.target.value);
-    const min = state.automation_settings.humidity_min;
-    const max = state.automation_settings.humidity_max;
-    const units = state.display_settings.humidity_units;
+    const min = props.state.automation_settings.humidity_min;
+    const max = props.state.automation_settings.humidity_max;
+    const units = props.state.display_settings.humidity_units;
 
     return (
             <Grid
@@ -52,16 +48,16 @@ function RenderHumiditySelector(props) {
                 <Box gridArea="slider"  justify={"center"} align-content={'center'}>
                         <RangeInput
                             direction="horizontal"
-                            min={state.automation_settings.humidity_min}
-                            max={state.automation_settings.humidity_max}
+                            min={min}
+                            max={max}
                             step={1}
-                            value={state.automation_settings.target_humidity}
+                            value={local_state.automation_settings.target_humidity}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {state.automation_settings.target_humidity}{state.display_settings.humidity_units}
+                    {local_state.automation_settings.target_humidity}{units}
                 </Box>
             </Grid>
    );

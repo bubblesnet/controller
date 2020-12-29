@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Grommet, Table, TableCell, TableRow} from "grommet";
+import React, { useState} from "react";
+import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
 import { grommet } from 'grommet/themes';
@@ -57,7 +57,6 @@ const customTheme = deepMerge(grommet, {
 });
 
 function RenderSwitchPanel (props) {
-//    let [state, setState] = useState(props.state); //
     let [switchControl, setSwitchControl] = useState(props.switchControl)
     let [automaticControlOn, setAutomaticControlOn] = useState(props.switchControl.automaticControl.on)
 

@@ -1,39 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 import {Grommet} from 'grommet'
-import Loader from "../Loader";
 import RenderTemperatureMeter from "./TemperatureMeterFunctional";
 import RenderHumidityMeter from "./HumidityMeterFunctional";
 import RenderPressureMeter from "./PressureMeterFunctional";
 import RenderPhMeter from "./PhMeterFunctional";
 import RenderTextStatus from "./TextStatusFunctional";
 import GoogleFontLoader from "react-google-font-loader";
-import {grommet} from "grommet/themes"
 
 function RenderStatusTab (props) {
 
-    let [apiPort, setApiPort] = useState(0);  // The port we should send queries to - depends on dev/test/prod
-    let [state, setState] = useState(props.state);  // State is simply passed through from above
-    console.log("RenderStatusTab state = "+JSON.stringify(state))
-
-    useEffect(() => {
-        console.log("RenderStatusTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [state,apiPort]);
-
-    if (props.apiPort !== apiPort) {
-        setState(props.state)
-        setApiPort(props.apiPort)       // Set the port
-        return (
-            <div>
-                <Loader/>
-            </div>
-        )
-    }
-    /*
-
-    */
     let ret = ""
 
         ret =
@@ -47,13 +25,13 @@ function RenderStatusTab (props) {
                 />
                 <div className="global_container_">
                     <div className="meter-group">
-                        <RenderTemperatureMeter exists={state.cabinet_settings.temp_air_middle} className="temp-top" label="Air Temperature" state={state}/>
-                        <RenderHumidityMeter exists={state.cabinet_settings.humidity_sensor} className="temp-middle" label="Humidity"  state={state}/>
-                        <RenderPressureMeter exists={state.cabinet_settings.pressure_sensors} className="temp-bottom" label="Odor Control (pressure)"  state={state}/>
-                        <RenderPhMeter exists={state.cabinet_settings.root_ph_sensor} className="temp-middle" label="Root pH"  state={state}/>
+                        <RenderTemperatureMeter exists={props.state.cabinet_settings.temp_air_middle} className="temp-top" label="Air Temperature" state={props.state}/>
+                        <RenderHumidityMeter exists={props.state.cabinet_settings.humidity_sensor} className="temp-middle" label="Humidity"  state={props.state}/>
+                        <RenderPressureMeter exists={props.state.cabinet_settings.pressure_sensors} className="temp-bottom" label="Odor Control (pressure)"  state={props.state}/>
+                        <RenderPhMeter exists={props.state.cabinet_settings.root_ph_sensor} className="temp-middle" label="Root pH"  state={props.state}/>
                     </div>
                     <div className="detail-group" >
-                        <RenderTextStatus  state={state}/>
+                        <RenderTextStatus  state={props.state}/>
                     </div>
                 </div>
             </Grommet>

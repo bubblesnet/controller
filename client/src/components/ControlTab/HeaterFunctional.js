@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 function RenderHeater (props) {
     console.log("RenderHeater "+props.on)

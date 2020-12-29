@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from "react";
-
-
+import React from "react";
 
 function RenderWaterPump (props) {
     let ret
@@ -21,6 +19,5 @@ function RenderWaterPump (props) {
 
     return (ret)
 }
-
 
 export default RenderWaterPump;

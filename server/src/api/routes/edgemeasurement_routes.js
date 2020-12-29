@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const queue = require('../service/queue')
+const queue = require('../services/queue')
 
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device

@@ -9,8 +9,7 @@ import GoogleFontLoader from "react-google-font-loader";
 
 function RenderCabinetSettingsTab (props) {
     console.log("RenderCabinetSettingsTab props hum = "+props.state.cabinet_settings.humidifier)
-    let [state, setState] = useState({ cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings))});
-    let [display_settings, setDisplaySettings] = useState(JSON.parse(JSON.stringify(props.state.display_settings)));
+    let [local_state, setState] = useState({ cabinet_settings: JSON.parse(JSON.stringify(props.state.cabinet_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
@@ -19,11 +18,10 @@ function RenderCabinetSettingsTab (props) {
     function applyChanges(e) {
         setApplyButtonState(false);
         setResetButtonState(false);
-        props.setStateFromChild(state)
+        props.setStateFromChild(local_state)
     }
 
     function resetChanges(e) {
-        console.log("RenderCabinetSettingsTab resetChanges props hum = " + props.state.cabinet_settings.humidifier);
         setApplyButtonState(false);
         setResetButtonState(false);
         let x = JSON.parse(JSON.stringify(props.state.cabinet_settings))
@@ -38,125 +36,125 @@ function RenderCabinetSettingsTab (props) {
 
     function setEnclosureType(s) {
         console.log("setEnclosureType to "+JSON.stringify(s))
-        state.cabinet_settings.enclosure_type = s
-        changeState(state)
+        local_state.cabinet_settings.enclosure_type = s
+        changeState(local_state)
     }
 
     function setTubDepth(s) {
         console.log("setTubDepth to "+JSON.stringify(s))
         if( s === '' ) {
-            state.cabinet_settings.tub_depth = ''
+            local_state.cabinet_settings.tub_depth = ''
         } else {
-            state.cabinet_settings.tub_depth = Number(s)
+            local_state.cabinet_settings.tub_depth = Number(s)
         }
-        changeState(state)
+        changeState(local_state)
     }
 
     function setTubVolume(s) {
         console.log("setTubVolume to "+JSON.stringify(s))
         if( s === '' ) {
-            state.cabinet_settings.tub_volume = ''
+            local_state.cabinet_settings.tub_volume = ''
         } else {
-            state.cabinet_settings.tub_volume = Number(s)
+            local_state.cabinet_settings.tub_volume = Number(s)
         }
-        changeState(state)
+        changeState(local_state)
     }
 
     function toggleHumidifier(e) {
-        state.cabinet_settings.humidifier = !state.cabinet_settings.humidifier
-        changeState(state)
+        local_state.cabinet_settings.humidifier = !local_state.cabinet_settings.humidifier
+        changeState(local_state)
     }
     function toggleRootPhSensor(e) {
-        state.cabinet_settings.root_ph_sensor = !state.cabinet_settings.root_ph_sensor
-        changeState(state)
+        local_state.cabinet_settings.root_ph_sensor = !props.state.cabinet_settings.root_ph_sensor
+        changeState(local_state)
     }
     function toggleExhaustFan(e) {
-        state.cabinet_settings.exhaust_fan = !state.cabinet_settings.exhaust_fan
-        changeState(state)
+        local_state.cabinet_settings.exhaust_fan = !props.state.cabinet_settings.exhaust_fan
+        changeState(local_state)
     }
     function toggleIntakeFan(e) {
-        state.cabinet_settings.intake_fan = !state.cabinet_settings.intake_fan
-        changeState(state)
+        local_state.cabinet_settings.intake_fan = !props.state.cabinet_settings.intake_fan
+        changeState(local_state)
     }
     function toggleWaterLevelSensor(e) {
-        state.cabinet_settings.water_level_sensor = !state.cabinet_settings.water_level_sensor
-        changeState(state)
+        local_state.cabinet_settings.water_level_sensor = !props.state.cabinet_settings.water_level_sensor
+        changeState(local_state)
     }
 
     function toggleHumiditySensor(e) {
-        state.cabinet_settings.humidity_sensor = !state.cabinet_settings.humidity_sensor
-        changeState(state)
+        local_state.cabinet_settings.humidity_sensor = !props.state.cabinet_settings.humidity_sensor
+        changeState(local_state)
     }
     function toggleExternalHumiditySensor(e) {
-        state.cabinet_settings.external_humidity_sensor = !state.cabinet_settings.external_humidity_sensor
-        changeState(state)
+        local_state.cabinet_settings.external_humidity_sensor = !props.state.cabinet_settings.external_humidity_sensor
+        changeState(local_state)
     }
     function toggleExternalThermometer(e) {
-        state.cabinet_settings.external_thermometer = !state.cabinet_settings.external_thermometer
-        changeState(state)
+        local_state.cabinet_settings.external_thermometer = !props.state.cabinet_settings.external_thermometer
+        changeState(local_state)
     }
     function toggleThermometerTop(e) {
-        state.cabinet_settings.thermometer_top = !state.cabinet_settings.thermometer_top
-        changeState(state)
+        local_state.cabinet_settings.thermometer_top = !props.state.cabinet_settings.thermometer_top
+        changeState(local_state)
     }
     function toggleThermometerMiddle(e) {
-        state.cabinet_settings.thermometer_middle = !state.cabinet_settings.thermometer_middle
-        changeState(state)
+        local_state.cabinet_settings.thermometer_middle = !props.state.cabinet_settings.thermometer_middle
+        changeState(local_state)
     }
     function toggleThermometerBottom(e) {
-        state.cabinet_settings.thermometer_bottom = !state.cabinet_settings.thermometer_bottom
-        changeState(state)
+        local_state.cabinet_settings.thermometer_bottom = !props.state.cabinet_settings.thermometer_bottom
+        changeState(local_state)
     }
     function toggleWaterThermometer(e) {
-        state.cabinet_settings.thermometer_water = !state.cabinet_settings.thermometer_water
-        changeState(state)
+        local_state.cabinet_settings.thermometer_water = !props.state.cabinet_settings.thermometer_water
+        changeState(local_state)
     }
     function toggleHeater(e) {
-        state.cabinet_settings.heater = !state.cabinet_settings.heater
-        changeState(state)
+        local_state.cabinet_settings.heater = !props.state.cabinet_settings.heater
+        changeState(local_state)
     }
     function toggleWaterPump(e) {
-        state.cabinet_settings.water_pump = !state.cabinet_settings.water_pump
-        changeState(state)
+        local_state.cabinet_settings.water_pump = !props.state.cabinet_settings.water_pump
+        changeState(local_state)
     }
     function toggleAirPump(e) {
-        state.cabinet_settings.air_pump = !state.cabinet_settings.air_pump
-        changeState(state)
+        local_state.cabinet_settings.air_pump = !props.state.cabinet_settings.air_pump
+        changeState(local_state)
     }
     function toggleLightSensor(e) {
-        state.cabinet_settings.light_sensor = !state.cabinet_settings.light_sensor
-        changeState(state)
+        local_state.cabinet_settings.light_sensor = !props.state.cabinet_settings.light_sensor
+        changeState(local_state)
     }
     function toggleMovementSensor(e) {
-        state.cabinet_settings.movement_sensor = !state.cabinet_settings.movement_sensor
-        changeState(state)
+        local_state.cabinet_settings.movement_sensor = !props.state.cabinet_settings.movement_sensor
+        changeState(local_state)
     }
     function toggleOuterDoorSensor(e) {
-        state.cabinet_settings.outer_door_sensor = !state.cabinet_settings.outer_door_sensor
-        changeState(state)
+        local_state.cabinet_settings.outer_door_sensor = !props.state.cabinet_settings.outer_door_sensor
+        changeState(local_state)
     }
     function toggleCabinetDoorSensor(e) {
-        state.cabinet_settings.cabinet_door_sensor = !state.cabinet_settings.cabinet_door_sensor
-        changeState(state)
+        local_state.cabinet_settings.cabinet_door_sensor = !props.state.cabinet_settings.cabinet_door_sensor
+        changeState(local_state)
     }
     function togglePressureSensors(e) {
-        state.cabinet_settings.pressure_sensors = !state.cabinet_settings.pressure_sensors
-        changeState(state)
+        local_state.cabinet_settings.pressure_sensors = !props.state.cabinet_settings.pressure_sensors
+        changeState(local_state)
     }
     function toggleGerminateLight(e) {
-        state.cabinet_settings.light_germinate = !state.cabinet_settings.light_germinate
-        changeState(state)
+        local_state.cabinet_settings.light_germinate = !props.state.cabinet_settings.light_germinate
+        changeState(local_state)
     }
     function toggleVegetativeLight(e) {
-        state.cabinet_settings.light_vegetative = !state.cabinet_settings.light_vegetative
-        changeState(state)
+        local_state.cabinet_settings.light_vegetative = !props.state.cabinet_settings.light_vegetative
+        changeState(local_state)
     }
     function toggleBloomLight(e) {
-        state.cabinet_settings.light_bloom = !state.cabinet_settings.light_bloom
-        changeState(state)
+        local_state.cabinet_settings.light_bloom = !props.state.cabinet_settings.light_bloom
+        changeState(local_state)
     }
 
-    console.log("RenderCabinetSettingsTab cabinetsettings rendering with state.humidifier set to "+ state.cabinet_settings.humidifier)
+    console.log("RenderCabinetSettingsTab cabinetsettings rendering with props.state.humidifier set to "+ props.state.cabinet_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -174,10 +172,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="light-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={state.cabinet_settings.light_germinate}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={state.cabinet_settings.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={state.cabinet_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={props.state.cabinet_settings.light_germinate}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={props.state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={props.state.cabinet_settings.light_bloom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={props.state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -185,9 +183,9 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="humidity-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={state.cabinet_settings.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensor} checked={state.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked={state.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={local_state.cabinet_settings.humidifier}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensor} checked= {local_state.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_state.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -195,12 +193,12 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  id="temperature-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked={state.cabinet_settings.heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked={state.cabinet_settings.thermometer_top}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked={state.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked={state.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked={state.cabinet_settings.external_thermometer}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked={state.cabinet_settings.thermometer_water}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked= {local_state.cabinet_settings.heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked= {local_state.cabinet_settings.thermometer_top}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_state.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_state.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_state.cabinet_settings.external_thermometer}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_state.cabinet_settings.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -208,10 +206,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={state.cabinet_settings.water_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked={state.cabinet_settings.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked={state.cabinet_settings.water_level_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked={state.cabinet_settings.root_ph_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked= {local_state.cabinet_settings.water_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked= {local_state.cabinet_settings.air_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_state.cabinet_settings.water_level_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_state.cabinet_settings.root_ph_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -221,9 +219,9 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Airflow and Odor</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked={state.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked={state.cabinet_settings.intake_fan}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked={state.cabinet_settings.exhaust_fan}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked= {local_state.cabinet_settings.pressure_sensors}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked= {local_state.cabinet_settings.intake_fan}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked= {local_state.cabinet_settings.exhaust_fan}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -231,9 +229,9 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  >
                                 <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" onChange={toggleCabinetDoorSensor} checked={state.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked={state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Cabinet Door Sensor" onChange={toggleCabinetDoorSensor} checked= {local_state.cabinet_settings.cabinet_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_state.cabinet_settings.outer_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_state.cabinet_settings.movement_sensor}/></TableCell></TableRow>
                                 </tbody>
                                 </Table>
                             </TableCell>
@@ -242,26 +240,26 @@ function RenderCabinetSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options={state.cabinet_settings.enclosure_options} value={state.cabinet_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
+                                <RadioButtonGroup name="enclosure-type" options= {props.state.cabinet_settings.enclosure_options} value= {props.state.cabinet_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={state.cabinet_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
+                                <TextInput value= {props.state.cabinet_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                             </TableCell>
-                            <TableCell>{display_settings.tub_depth_units}</TableCell>
+                            <TableCell>{props.state.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value={state.cabinet_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
+                                <TextInput value= {props.state.cabinet_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                             </TableCell>
-                            <TableCell >{display_settings.tub_volume_units}</TableCell>
+                            <TableCell >{props.state.display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                        </tbody>
                     </Table>
-            <RenderFormActions state={state} applyAction={applyChanges} resetAction={resetChanges}
+            <RenderFormActions state= {local_state} applyAction={applyChanges} resetAction={resetChanges}
                                resetButtonState={reset_button_state}
                                defaultsButtonState={defaults_button_state}
                                applyButtonState={apply_button_state}

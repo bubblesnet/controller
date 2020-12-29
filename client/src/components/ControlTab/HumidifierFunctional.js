@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from "react";
-
-
+import React from "react";
 
 function RenderHumidifier (props) {
     let ret

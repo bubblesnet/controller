@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import Switch from "react-input-switch";
 import {TableRow,TableCell} from "grommet";
 import './controlTab.css'
