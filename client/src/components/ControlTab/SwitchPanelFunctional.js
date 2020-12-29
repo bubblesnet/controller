@@ -2,59 +2,6 @@ import React, { useState} from "react";
 import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
-import { grommet } from 'grommet/themes';
-import { deepMerge } from 'grommet/utils';
-
-const suggestions = Array(100)
-    .fill()
-    .map((_, i) => `suggestion ${i + 1}`);
-
-const customTheme = deepMerge(grommet, {
-    global: {
-        input: {
-            padding: {
-                horizontal: 'small',
-                vertical: 'medium',
-            },
-        },
-    },
-    textInput: {
-        extend: () => `
-      font-size: 20px;
-      width: 300px;
-      margin: 0 auto;
-
-      &:focus {
-        box-shadow: none;
-        border-color: initial;
-      }
-    `,
-        container: {
-            extend: () => `
-        height: 100px;
-        width: 400px;
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        border-radius: 10px;
-      `,
-        },
-        placeholder: {
-            extend: () => `
-        width: 100%;
-        color: #1e1a11;
-      `,
-        },
-        suggestions: {
-            extend: () => `
-        color: #3d3522;
-        li {
-          border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-        }
-      `,
-        },
-    },
-});
 
 function RenderSwitchPanel (props) {
     let [switchControl, setSwitchControl] = useState(props.switchControl)

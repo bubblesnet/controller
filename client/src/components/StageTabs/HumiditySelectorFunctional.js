@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid,Image, Grommet, Box, RangeInput, Stack, Text } from 'grommet';
+import { Grid,Image, Box, RangeInput } from 'grommet';
 import humidity from '../../images/humidityicon.png'
 import './stagesTab.css';
 import '../../Palette.css';

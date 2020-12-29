@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Grid, Table, TableRow,TableCell} from 'grommet';
+import React, {useState} from 'react';
+import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
@@ -7,9 +7,6 @@ import {Box} from "grommet";
 function RenderStateTextStatus (props) {
 
     let [state, setState] = useState(props.state); //
-
-    useEffect(() => {
-    }, [state]);
 
     console.log("RenderStateTextStatus state = "+JSON.stringify(state))
  let ret =

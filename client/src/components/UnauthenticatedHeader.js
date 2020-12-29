@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 function UnauthenticatedHeader (props) {
     console.log("BubblesApp render props = " + JSON.stringify(props))

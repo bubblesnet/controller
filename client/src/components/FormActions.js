@@ -1,4 +1,4 @@
-import {Box, Button, Grid, Select, TableCell, TableRow} from "grommet";
+import {Button, Grid} from "grommet";
 import React, {useState} from "react";
 
 function RenderFormActions (props) {
@@ -10,7 +10,7 @@ function RenderFormActions (props) {
     function resetAction() {
         props.resetAction();
     }
-    function applyAction(e) {
+    function applyAction() {
         props.applyAction(state);
     }
     let applyDisabled = false
@@ -25,7 +25,6 @@ function RenderFormActions (props) {
     if( props.defaultsButtonState === false ) {
         defaultsDisabled=true
     }
-    let d = 'disabled'
     // The color supplied to the button is the only way to make a border appear.
     let ret = <>
             <Grid

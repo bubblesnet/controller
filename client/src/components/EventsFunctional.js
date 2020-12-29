@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../App.css';
-import Loader from "./Loader";
 
-function RenderOverview (props) {
+
+function RenderOverview () {
     let ret = <div>
         <p>unimplemented</p>
     </div>

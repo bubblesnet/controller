@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
@@ -8,16 +8,12 @@ import {
     TextInput,
     Table,
     TableRow,
-    TableCell,
-    Select,
-    RadioButton,
-    RadioButtonGroup,
-    Grid
+    TableCell
 } from 'grommet'
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
-import {grommet} from "grommet/themes"
+
 
 function RenderServerSettingsTab (props) {
 
@@ -26,10 +22,9 @@ function RenderServerSettingsTab (props) {
     }
 
     console.log("RenderServerSettingsTab")
-    let [text, setText] = useState({}); //
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
-    let x = [];
+
     console.log("rendering with font set to " + values.theme.global.font.family)
     let ret =
         <Grommet theme={props.theme}>

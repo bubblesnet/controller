@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, TextInput, Table, TableRow, TableCell, Select, RadioButton, RadioButtonGroup} from 'grommet'
+import {Grommet, Table, TableRow, TableCell, Select, RadioButtonGroup} from 'grommet'
 import './displaySettingsTab.css'
 import RenderFormActions from "../FormActions";
-import fontlist from './fontlist.json'
+import fontlist from "./fontlist.json"
+
 import GoogleFontLoader from "react-google-font-loader";
-import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 
 function RenderDisplaySettingsTab (props) {
@@ -21,7 +22,7 @@ function RenderDisplaySettingsTab (props) {
     let [defaultsButtonState, setDefaultsButtonState] = useState(true)
 
     let x = [];
-    if(fonts.length == 0 ) {
+    if(fonts.length === 0 ) {
         fontlist.forEach(function (item) {
             x.push(item.family)
         });
@@ -62,7 +63,7 @@ function RenderDisplaySettingsTab (props) {
     }
 
     function applyFontChangeGlobally() {
-        let x = values
+
         props.onApplyFontChange(values.current_font)
         setResetButtonState(false);
         setApplyButtonState(false);

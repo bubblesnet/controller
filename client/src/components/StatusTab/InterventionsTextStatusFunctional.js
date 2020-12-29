@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Grid, Table, TableRow} from 'grommet';
+import React, {useState} from 'react';
+import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
@@ -24,12 +24,6 @@ function RenderStateTextStatus (props) {
     };
 
     let [values, setValues] = useState(initValues); //
-
-    useEffect(() => {
-        console.log("RenderStatus useEffect")
-        const timer = setTimeout(() => setValues(initValues, 4000));
-        return () => clearTimeout(timer);
-    }, [values]);
 
     let ret =
         <Grid className={"status-table-holder"}

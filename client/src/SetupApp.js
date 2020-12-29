@@ -3,22 +3,13 @@ import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
 
-import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
-import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
-import RenderEvents from "./components/EventsFunctional";
-import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
-import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFunctional"
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
-import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-import {useIntl} from 'react-intl'
+//import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
-
-import useWebSocket, { ReadyState } from 'react-use-websocket';
-import {Grommet} from "grommet";
 
 function SetupApp (props) {
 

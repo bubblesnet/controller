@@ -121,17 +121,19 @@ function normalizePort(val) {
 }
 
 app.listen(port, () => {
-    console.log(`App running on port ${port}.`)
+    console.log(`API server running on port ${port}.`)
 });
 
 
 var ws = require("nodejs-websocket")
 var connection
-console.log("listening on 8001")
-const emulateStatusChanges = async() => {
+console.log("Websocket server listening on 8001")
+
+const serveUIWebSockets = async() => {
     console.log("emulateStatusChanges")
     var server = ws.createServer(function (conn) {
         connection = conn
+        emulator.blah(connection,current_state);
         conn.on("connect", function () {
             console.log("New connection")
             connection = conn
@@ -148,42 +150,6 @@ const emulateStatusChanges = async() => {
         })
     }).listen(8001)
 }
-
-emulateStatusChanges();
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
-function sendFakeStatus() {
-    current_state.status.humidity_internal = 60 + getRandomInt(30)
-    let x = getRandomInt(2);
-    if(x == 0 )
-        current_state.status.temp_air_middle_direction = ""
-    else if (x == 1)
-        current_state.status.temp_air_middle_direction = "down"
-    else
-        current_state.status.temp_air_middle_direction = "up"
-
-    current_state.status.temp_air_top = 60 + getRandomInt(39)
-    current_state.status.temp_air_middle = 50 + getRandomInt(49)
-    current_state.status.temp_air_bottom = 40 + getRandomInt(49)
-    console.log("Sending humidity " + current_state.status.humidity_internal)
-    if (connection != null) {
-        connection.sendText(JSON.stringify(current_state))
-    }
-    setTimeout(() => {
-        sendFakeStatus()
-    }, 10000);
-
-}
-const updateStatus = async() => {
-        setTimeout(() => {
-            sendFakeStatus()
-        }, 10000);
-}
-
-updateStatus();
 
 var current_state = {
     "display_settings": {
@@ -338,8 +304,8 @@ var current_state = {
     }
 };
 
-
-
+serveUIWebSockets();
+var emulator = require('./edge-device-emulator');
 
 
 module.exports = {

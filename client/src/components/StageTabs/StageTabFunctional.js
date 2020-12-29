@@ -32,17 +32,14 @@ function RenderStageTab (props) {
         setState(JSON.parse(JSON.stringify(props.state)));
     }
 
-    const initialRange = [77, 81]
-    const [range, setRange] = useState(initialRange);
-    const RANGE_MIN = 60;
-    const RANGE_MAX =90;
+//    const initialRange = [77, 81]
+//    const [range, setRange] = useState(initialRange);
+//    const RANGE_MIN = 60;
+//    const RANGE_MAX =90;
 
     const label = 'Target Temperature Range'
-    useEffect(() => {
-        console.log("RenderGerminateTab useEffect port="+props.apiPort + " nodeEnv "+props.nodeEnv)
-    }, [range]);
 
-    let [state, setState] = useState(props.state ); //
+    let [state, setState] = useState(props.state); //
     let [applyButtonState, setapplyButtonState] = useState(false); //
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState, setdefaultsButtonState] = useState(true ); //

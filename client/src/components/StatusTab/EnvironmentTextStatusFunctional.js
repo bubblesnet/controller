@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Table, TableRow,TableCell} from 'grommet';
+import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";

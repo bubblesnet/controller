@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell, Select, RadioButton} from 'grommet'
+import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell} from 'grommet'
 import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
@@ -15,13 +15,13 @@ function RenderCabinetSettingsTab (props) {
     let [apply_button_state,setApplyButtonState] = useState(false)
 
 
-    function applyChanges(e) {
+    function applyChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
         props.setStateFromChild(local_state)
     }
 
-    function resetChanges(e) {
+    function resetChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
         let x = JSON.parse(JSON.stringify(props.state.cabinet_settings))
@@ -60,96 +60,96 @@ function RenderCabinetSettingsTab (props) {
         changeState(local_state)
     }
 
-    function toggleHumidifier(e) {
+    function toggleHumidifier() {
         local_state.cabinet_settings.humidifier = !local_state.cabinet_settings.humidifier
         changeState(local_state)
     }
-    function toggleRootPhSensor(e) {
+    function toggleRootPhSensor() {
         local_state.cabinet_settings.root_ph_sensor = !props.state.cabinet_settings.root_ph_sensor
         changeState(local_state)
     }
-    function toggleExhaustFan(e) {
+    function toggleExhaustFan() {
         local_state.cabinet_settings.exhaust_fan = !props.state.cabinet_settings.exhaust_fan
         changeState(local_state)
     }
-    function toggleIntakeFan(e) {
+    function toggleIntakeFan() {
         local_state.cabinet_settings.intake_fan = !props.state.cabinet_settings.intake_fan
         changeState(local_state)
     }
-    function toggleWaterLevelSensor(e) {
+    function toggleWaterLevelSensor() {
         local_state.cabinet_settings.water_level_sensor = !props.state.cabinet_settings.water_level_sensor
         changeState(local_state)
     }
 
-    function toggleHumiditySensor(e) {
+    function toggleHumiditySensor() {
         local_state.cabinet_settings.humidity_sensor = !props.state.cabinet_settings.humidity_sensor
         changeState(local_state)
     }
-    function toggleExternalHumiditySensor(e) {
+    function toggleExternalHumiditySensor() {
         local_state.cabinet_settings.external_humidity_sensor = !props.state.cabinet_settings.external_humidity_sensor
         changeState(local_state)
     }
-    function toggleExternalThermometer(e) {
+    function toggleExternalThermometer() {
         local_state.cabinet_settings.external_thermometer = !props.state.cabinet_settings.external_thermometer
         changeState(local_state)
     }
-    function toggleThermometerTop(e) {
+    function toggleThermometerTop() {
         local_state.cabinet_settings.thermometer_top = !props.state.cabinet_settings.thermometer_top
         changeState(local_state)
     }
-    function toggleThermometerMiddle(e) {
+    function toggleThermometerMiddle() {
         local_state.cabinet_settings.thermometer_middle = !props.state.cabinet_settings.thermometer_middle
         changeState(local_state)
     }
-    function toggleThermometerBottom(e) {
+    function toggleThermometerBottom() {
         local_state.cabinet_settings.thermometer_bottom = !props.state.cabinet_settings.thermometer_bottom
         changeState(local_state)
     }
-    function toggleWaterThermometer(e) {
+    function toggleWaterThermometer() {
         local_state.cabinet_settings.thermometer_water = !props.state.cabinet_settings.thermometer_water
         changeState(local_state)
     }
-    function toggleHeater(e) {
+    function toggleHeater() {
         local_state.cabinet_settings.heater = !props.state.cabinet_settings.heater
         changeState(local_state)
     }
-    function toggleWaterPump(e) {
+    function toggleWaterPump() {
         local_state.cabinet_settings.water_pump = !props.state.cabinet_settings.water_pump
         changeState(local_state)
     }
-    function toggleAirPump(e) {
+    function toggleAirPump() {
         local_state.cabinet_settings.air_pump = !props.state.cabinet_settings.air_pump
         changeState(local_state)
     }
-    function toggleLightSensor(e) {
+    function toggleLightSensor() {
         local_state.cabinet_settings.light_sensor = !props.state.cabinet_settings.light_sensor
         changeState(local_state)
     }
-    function toggleMovementSensor(e) {
+    function toggleMovementSensor() {
         local_state.cabinet_settings.movement_sensor = !props.state.cabinet_settings.movement_sensor
         changeState(local_state)
     }
-    function toggleOuterDoorSensor(e) {
+    function toggleOuterDoorSensor() {
         local_state.cabinet_settings.outer_door_sensor = !props.state.cabinet_settings.outer_door_sensor
         changeState(local_state)
     }
-    function toggleCabinetDoorSensor(e) {
+    function toggleCabinetDoorSensor() {
         local_state.cabinet_settings.cabinet_door_sensor = !props.state.cabinet_settings.cabinet_door_sensor
         changeState(local_state)
     }
-    function togglePressureSensors(e) {
+    function togglePressureSensors() {
         local_state.cabinet_settings.pressure_sensors = !props.state.cabinet_settings.pressure_sensors
         changeState(local_state)
     }
-    function toggleGerminateLight(e) {
+    function toggleGerminateLight() {
         local_state.cabinet_settings.light_germinate = !props.state.cabinet_settings.light_germinate
         changeState(local_state)
     }
-    function toggleVegetativeLight(e) {
+    function toggleVegetativeLight() {
         local_state.cabinet_settings.light_vegetative = !props.state.cabinet_settings.light_vegetative
         changeState(local_state)
     }
-    function toggleBloomLight(e) {
+    function toggleBloomLight() {
         local_state.cabinet_settings.light_bloom = !props.state.cabinet_settings.light_bloom
         changeState(local_state)
     }

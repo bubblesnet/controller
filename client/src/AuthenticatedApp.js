@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -13,16 +13,16 @@ import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-import {useIntl} from 'react-intl'
+// import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import {Grommet} from "grommet";
 
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
+    const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
 
@@ -42,8 +42,6 @@ function AuthenticatedApp (props) {
     messageHistory.current = useMemo(() =>
         messageHistory.current.concat(lastJsonMessage), [lastJsonMessage]);
 
-    const handleClickChangeSocketUrl = useCallback(() =>
-        setSocketUrl('wss://demos.kaazing.com/echo'), []);
 
     const sendit = () => {
         let msg = 'Hello ' + getRandomInt(100)
@@ -92,7 +90,7 @@ function AuthenticatedApp (props) {
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
     const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
-    const [language, setLanguage] = useState("all");
+//    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
 
