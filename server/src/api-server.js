@@ -1,5 +1,5 @@
 var express = require('express');
-var app = express()
+var apiServer = express()
 
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -26,15 +26,15 @@ var auth_routes = require('./api/routes/authcontroller_routes');
 var bubbles_queue = require('./api/models/bubbles_queue')
 
 var router = express.Router();
-app.locals = {};
-app.locals.config = require('./config/locals.js');
-app.locals.units = require('./api/services/formatted_units.js');
+apiServer.locals = {};
+apiServer.locals.config = require('./config/locals.js');
+apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+apiServer.set('views', path.join(__dirname, 'views'));
+apiServer.set('view engine', 'pug');
 
-app.use(function (req, res, next) {
+apiServer.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
@@ -55,44 +55,44 @@ var http = require('http'),
     bodyParser = require('body-parser'),
     mysql = require('mysql');
 
-app.use(bodyParser.urlencoded({
+apiServer.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.locals.moment = require('moment');
-app.locals.sprintf = require("sprintf-js").sprintf;
-app.locals.config = require('./config/locals.js');
-app.locals.units = require('./api/services/formatted_units.js');
+apiServer.locals.moment = require('moment');
+apiServer.locals.sprintf = require("sprintf-js").sprintf;
+apiServer.locals.config = require('./config/locals.js');
+apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+apiServer.set('views', path.join(__dirname, 'views'));
+apiServer.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//apiServer.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+apiServer.use(logger('dev'));
+apiServer.use(bodyParser.json());
+apiServer.use(bodyParser.urlencoded({extended: false}));
+apiServer.use(cookieParser());
+apiServer.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/users', user_routes);
-app.use('/api/auth', auth_routes);
-app.use('/api/video', video_routes);
-app.use("/api/edgecontrol", edgecontrol_routes);
-app.use("/api/measurement", edgemeasurement_routes);
-app.use("/api/icebreaker", icebreaker_routes);
-//app.use('/', index);
+apiServer.use('/api/users', user_routes);
+apiServer.use('/api/auth', auth_routes);
+apiServer.use('/api/video', video_routes);
+apiServer.use("/api/edgecontrol", edgecontrol_routes);
+apiServer.use("/api/measurement", edgemeasurement_routes);
+apiServer.use("/api/icebreaker", icebreaker_routes);
+//apiServer.use('/', index);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+apiServer.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+apiServer.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -122,7 +122,7 @@ function normalizePort(val) {
     return false;
 }
 
-app.listen(port, () => {
+apiServer.listen(port, () => {
     console.log(`API server running on port ${port}.`)
 });
 
@@ -338,6 +338,6 @@ serveUIWebSockets();
 
 
 module.exports = {
-    app: app
+    app: apiServer
 };
 
