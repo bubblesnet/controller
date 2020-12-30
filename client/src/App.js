@@ -5,7 +5,6 @@ import UnauthenticatedApp from './UnauthenticatedApp'
 import {useState} from "react";
 
 
-
 /** Fake login function
  *
  * @param e not used

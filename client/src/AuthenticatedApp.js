@@ -19,13 +19,26 @@ import initial_state from './initial_state.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
+
+const Stomp = require('stompit');
+
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
+    let lastValidJsonMessage
 
+    const handleWebSocketMessage = ( event ) => {
+        let x = JSON.parse(event.data)
+        if( typeof(x.status) === 'undefined' || x.status === null ) {
+            console.log("Received invalid message "+ event.data)
+        } else {
+            console.log("Received valid message")
+            setState(JSON.parse(event.data));
+        }
+    }
     const {
 //        sendMessage,
 //        lastMessage,
@@ -36,7 +49,7 @@ function AuthenticatedApp (props) {
         onOpen: () => console.log('websocket opened'),
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
-        onMessage: (event) => setState(JSON.parse(event.data)),
+        onMessage: (event) => handleWebSocketMessage(event), // This relies on receiving a "state" object from the server
     });
 
     messageHistory.current = useMemo(() =>
@@ -44,12 +57,10 @@ function AuthenticatedApp (props) {
 
 
     const sendit = () => {
-        let msg = 'Hello ' + getRandomInt(100)
         let x = JSON.parse(JSON.stringify(local_state))
         if (lastJsonMessage) {
             x = JSON.parse(JSON.stringify(lastJsonMessage))
         }
-        console.log("sending " + msg);
         x.status.humidity_internal = 69 + getRandomInt(10)
         sendJsonMessage(x);
     }
@@ -138,23 +149,22 @@ function AuthenticatedApp (props) {
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     let thestate = local_state
-    if (lastJsonMessage) {
-        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
-        thestate = JSON.parse(JSON.stringify(lastJsonMessage))
+    if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
+        lastValidJsonMessage = JSON.parse(JSON.stringify(lastJsonMessage))
+    } else {
+        console.log("Last json message is INVALID! " + (lastJsonMessage?JSON.stringify(lastJsonMessage):'null'))
+    }
+
+    if (typeof(lastValidJsonMessage) !== 'undefined' && lastValidJsonMessage !== null) {
+//        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
+        thestate = JSON.parse(JSON.stringify(lastValidJsonMessage))
     }
     console.log("authenticatedapp humidity = " + thestate.status.humidity_internal)
     console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
 
     return (
         <div className="App">
-                <Header setNodeEnv={setEnvironment}/>
-                <button
-                    onClick={handleClickSendMessage}
-                    disabled={readyState !== ReadyState.OPEN}
-                >
-                    Jiggle Internal Humidity
-                </button>
-
+                <Header setNodeEnv={setEnvironment} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
                 <Tabs margin="medium" flex="shrink">
                     <Tab title="Cabinet Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}

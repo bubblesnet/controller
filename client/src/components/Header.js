@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
+import {ReadyState} from "react-use-websocket";
+import getReadyState from '../AuthenticatedApp'
 
 function Header (props) {
     console.log("header render" )
@@ -23,6 +25,7 @@ function Header (props) {
         props.setNodeEnv(value)
     }
 
+    console.log("Rendering header with getReadyState = " + getReadyState())
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
@@ -37,6 +40,11 @@ function Header (props) {
             </header>
             <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>
+            <button onClick={props.handleClickSendMessage}
+                disabled={props.readyState !== ReadyState.OPEN} >
+                Ping
+            </button>
+
         </div>
    );
 }

@@ -1,38 +1,74 @@
 'use strict';
 const Stomp = require('stompit');
+let state = require('../../initial_state.json');
 
-var __stompClient = null;
 
 const connectOptions = {
     'host': 'localhost',
     'port': 61613,
-    'connectHeaders':{
+    'connectHeaders': {
         'host': '/',
         'login': 'user',
         'passcode': 'password',
-        'heart-beat': '5000,5000'
+//        'heart-beat': '5000,5000' LEAVE THIS TURNED OFF BECAUSE ACTIVEMQ TIMES OUT OTHERWISE
     }
 };
 
 const MessageProducer = function MessageProducer() {
 };
 
-MessageProducer.prototype.init = function init(){
-    return new Promise((resolve,reject) => {
-        console.log("promise");
-        Stomp.connect(connectOptions, function(error, client) {
+MessageProducer.prototype.init = function init(cb) {
+    console.log("bubbles_queue.init")
+    return new Promise((resolve, reject) => {
+        Stomp.connect(connectOptions, function (error, client) {
             console.log("STOMP client connected with sessionId ");
-            if( !error ) {
-                __stompClient = client
+            if (!error) {
+                cb(client)
                 resolve();
             } else {
-                console.log("STOMP client connect failed " + JSON.stringify(err))
+                console.log("STOMP client connect failed " + JSON.stringify(error))
                 reject();
             }
         });
-});};
+    });
+};
 
-MessageProducer.prototype.sendMessage = function sendMessage(messageToPublish){
+MessageProducer.prototype.subscribeToTopic = async function subscribeToTopic(__stompClient, cb) {
+    console.log("MessageProducer.prototype.subscribeToTopic")
+    const subscribeHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'ack': 'auto'
+    };
+    __stompClient.subscribe(subscribeHeaders, (error, message) => {
+        console.log('received a message');
+        message.readString('utf-8', function (error, body) {
+            if (error) {
+                console.log('read message error ' + error.message);
+                return;
+            }
+            console.log('read a message');
+            cb(body)
+//            __stompClient.ack(message);
+//            __stompClient.disconnect();
+        })
+    })
+}
+
+MessageProducer.prototype.sendMessageToTopic = function sendMessageToTopic(__stompClient, messageToPublish) {
+    console.log("sendMessage");
+    const sendHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'content-type': 'text/plain'
+    };
+
+    const frame = __stompClient.send(sendHeaders);
+    frame.write(messageToPublish);
+    frame.end();
+
+    console.log("sendMessageToTopic returns ");
+};
+
+MessageProducer.prototype.sendMessageToQueue = function sendMessageToQueue(__stompClient, messageToPublish) {
     console.log("sendMessage");
     const sendHeaders = {
         'destination': '/queue/bubbles',
@@ -46,7 +82,7 @@ MessageProducer.prototype.sendMessage = function sendMessage(messageToPublish){
     console.log("sendMessage returns ");
 };
 
-MessageProducer.prototype.subscribeToQueue = function subscribe() {
+MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompClient, cb) {
     console.log("subscribe");
     const subscribeHeaders = {
         'destination': '/queue/bubbles',
@@ -62,21 +98,22 @@ MessageProducer.prototype.subscribeToQueue = function subscribe() {
         console.log("reading")
 
         message.readString('utf-8', function (error, body) {
-            console.log("reading callback")
-            if (error) {
-                console.log('read message error ' + error.message);
-                return;
+                console.log("reading callback")
+                if (error) {
+                    console.log('read message error ' + error.message);
+                    return;
+                }
+                console.log('received message: ' + body);
+                cb(body);
+//            __stompClient.ack(message);
             }
-            console.log('received message: ' + body);
-            _stompClient.ack(message);
-        }
-    );
+        );
     });
 }
 
-MessageProducer.prototype.deInit = function deInit(){
-    this._stompClient.disconnect();
-    this._stompClient = null;
+MessageProducer.prototype.deInit = function deInit(_stompClient) {
+    _stompClient.disconnect();
+    _stompClient = null;
 }
 
 module.exports = new MessageProducer();
