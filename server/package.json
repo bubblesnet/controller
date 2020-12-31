@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/supervisor app",
+    "start-api": "node_modules/.bin/supervisor api-server",
+    "start-queue": "node_modules/.bin/supervisor queue-server",
+    "start-ws": "node_modules/.bin/supervisor ws-server",
     "test": "node_modules/.bin/nyc node_modules/.bin/mocha --timeout 10000 --reporter mochawesome --reporter-options reportDir=reports,reportName=ReportName --exit __tests__/*.js"
   },
   "dependencies": {

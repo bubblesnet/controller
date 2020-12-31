@@ -22,6 +22,7 @@ var edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
 var icebreaker_routes = require('./api/routes/icebreaker_routes');
 var user_routes = require('./api/routes/user_routes');
 var auth_routes = require('./api/routes/authcontroller_routes');
+var health_check = require('./api/routes/health_check_routes');
 
 var bubbles_queue = require('./api/models/bubbles_queue')
 
@@ -76,6 +77,7 @@ apiServer.use(bodyParser.urlencoded({extended: false}));
 apiServer.use(cookieParser());
 apiServer.use(express.static(path.join(__dirname, 'public')));
 
+apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
 apiServer.use('/api/auth', auth_routes);
 apiServer.use('/api/video', video_routes);
@@ -126,58 +128,12 @@ apiServer.listen(port, () => {
     console.log(`API server running on port ${port}.`)
 });
 
-var feeder = require('./topic-feeder-emulator');
-var ws = require("nodejs-websocket")
-var connection
-console.log("Websocket server listening on 8001")
 var __queueClient
 
 function setClient(client) {
     __queueClient = client;
 }
 
-
-const serveUIWebSockets = async() => {
-    console.log("emulateStatusChanges")
-    console.log("subscribe to activemq ui topic")
-    bubbles_queue.init(setClient).then( value => {
-        console.log("bubbles_queue.init succeeded, subscribing");
-        bubbles_queue.subscribeToTopic(__queueClient, function (body) {
-            if( typeof(connection) === 'undefined' ) {
-                console.log("no UI clients. yet")
-            } else if (connection === null ) {
-                console.log("had a UI client but he closed out and nulled")
-            }
-             else if( connection.readyState !== connection.OPEN) {
-                console.log("had a UI client but he closed out (crashed?)")
-            } else {
-                console.log("UI client is initialized and OPEN, sending")
-                connection.sendText(body)
-            }
-        });
-    }, reason => {
-        console.log("bubbles_queue.init failed "+reason)
-    });
-
-    var server = ws.createServer(function (conn) {
-        connection = conn
-//        feeder.blah();
-        conn.on("connect", function () {
-            console.log("New connection")
-            connection = conn
-        })
-        conn.on("text", function (str) {
-            let x = JSON.parse(str)
-            console.log("Received " + JSON.stringify(x))
-            current_state = x
-            conn.sendText(JSON.stringify(current_state))
-        })
-        conn.on("close", function (code, reason) {
-            console.log("Connection closed")
-            connection = null;
-        })
-    }).listen(8001)
-}
 
 var current_state = {
     "display_settings": {
@@ -331,11 +287,6 @@ var current_state = {
         }
     }
 };
-
-// noinspection JSIgnoredPromiseFromCall
-serveUIWebSockets();
-//var emulator = require('./edge-device-emulator');
-
 
 module.exports = {
     app: apiServer

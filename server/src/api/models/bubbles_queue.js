@@ -88,7 +88,6 @@ MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompCl
         'destination': '/queue/bubbles',
         'ack': 'auto'
     };
-
     __stompClient.subscribe(subscribeHeaders, function (error, message) {
         console.log("subscribe read message callback")
         if (error) {

@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 import {ReadyState} from "react-use-websocket";
 import getReadyState from '../AuthenticatedApp'
+import {Table, TableRow, TableCell} from 'grommet'
 
 function Header (props) {
     console.log("header render" )
@@ -24,7 +25,10 @@ function Header (props) {
         setApiPort(theApiPort);
         props.setNodeEnv(value)
     }
-
+    let webSocketLabel="Ping open WebSocket"
+    if( props.readyState !== ReadyState.OPEN ) {
+        webSocketLabel = "WebSocket server down"
+    }
     console.log("Rendering header with getReadyState = " + getReadyState())
     return (
         <div>
@@ -38,13 +42,11 @@ function Header (props) {
                     <div id="animated-gif-container" />
                 </span>
             </header>
-            <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
+                <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>
-            <button onClick={props.handleClickSendMessage}
-                disabled={props.readyState !== ReadyState.OPEN} >
-                Ping
-            </button>
-
+            <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
+            <button onClick={props.handleClickSendMessage} disabled={true} >{"API server down"}</button>
+            <button onClick={props.handleClickSendMessage} disabled={true}>{"Queue server down"}</button>
         </div>
    );
 }

@@ -39,8 +39,8 @@ router.post("/:userid/:deviceid", function (req, res, next) {
         // add json to queue
         console.log("sending to queue "+JSON.stringify(req.body))
         bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, JSON.stringify(req.body))
-        console.log("sending topic " + JSON.stringify(req.body))
-        bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, JSON.stringify(req.body))
+//        console.log("sending topic " + JSON.stringify(req.body))
+//        bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, JSON.stringify(req.body))
         // return OK
         res.json(req.body);
     }

@@ -1,45 +1,6 @@
-var express = require('express');
-var queueServer = express()
-
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-const path = require('path');
-var locals = require('./config/locals');
-var fs = require('fs');
-var db = require('./api/models/icebreaker_db');
-const disk = require('diskspace');
-var sprintf = require('sprintf-js').sprintf;
-
-var htmlDecode = require("js-htmlencode").htmlDecode;
-
 global.__root   = __dirname + '/';
 
-var video_routes = require('./api/routes/video_routes');
-var edgecontrol_routes = require('./api/routes/edgecontrol_routes');
-var edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
-var icebreaker_routes = require('./api/routes/icebreaker_routes');
-var user_routes = require('./api/routes/user_routes');
-var auth_routes = require('./api/routes/authcontroller_routes');
-
 var bubbles_queue = require('./api/models/bubbles_queue')
-
-queueServer.locals = {};
-queueServer.locals.config = require('./config/locals.js');
-queueServer.locals.units = require('./api/services/formatted_units.js');
-
-// view engine setup
-queueServer.set('views', path.join(__dirname, 'views'));
-queueServer.set('view engine', 'pug');
-
-queueServer.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
-    next();
-});
-
 var __queueClient
 
 function setClient(client) {
@@ -198,6 +159,19 @@ var current_state = {
         }
     }
 };
+
+const serveMessageQueue = async() => {
+    console.log("serveMessageQueue")
+    console.log("subscribe to activemq message queue")
+    bubbles_queue.init(setClient).then( value => {
+        console.log("bubbles_queue.init succeeded, subscribing");
+        bubbles_queue.subscribeToQueue(__queueClient, function (body) {
+                bubbles_queue.sendToTopic(body)
+        });
+    }, reason => {
+        console.log("bubbles_queue.init failed "+reason)
+    });
+}
 
 serveMessageQueue();
 

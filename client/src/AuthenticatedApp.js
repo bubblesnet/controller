@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -19,16 +19,27 @@ import initial_state from './initial_state.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-
 const Stomp = require('stompit');
 
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
+    const [apiConnected, setApiConnected] = useState(0);
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
     let lastValidJsonMessage
+
+/*    useEffect(async () => {
+        const result = await fetch('http://localhost:3003/healthcheck').then(res => {
+            console.log("API CONNECTED!");
+            setApiConnected( 1 );
+        }).catch(function(error){
+            console.log("API NOT CONNECTED!")
+            setApiConnected( -1 );
+        })
+    });
+*/
 
     const handleWebSocketMessage = ( event ) => {
         let x = JSON.parse(event.data)
@@ -96,6 +107,7 @@ function AuthenticatedApp (props) {
         local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
+
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
