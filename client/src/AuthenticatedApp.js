@@ -56,6 +56,8 @@ function AuthenticatedApp (props) {
         lastJsonMessage,
         readyState,
     } = useWebSocket(socketUrl, {
+        reconnectAttempts: 1000000,
+        reconnectInterval: 30000,
         onOpen: () => console.log('websocket opened'),
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -107,7 +109,6 @@ function AuthenticatedApp (props) {
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
 
-
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
@@ -123,7 +124,6 @@ function AuthenticatedApp (props) {
 
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-
         console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
         x.global.font.family = current_font;
         console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
