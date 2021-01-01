@@ -126,7 +126,7 @@
   },
   "switch_state": {
     "automaticControl": {
-      "on": true
+      "on": false
     },
     "humidifier": {
       "on": true
@@ -147,7 +147,7 @@
       "on": true
     },
     "currentGrowLight": {
-      "on": false
+      "on": true
     }
   }
 }

@@ -1,7 +1,7 @@
 global.__root   = __dirname + '/';
 
 var bubbles_queue = require('./api/models/bubbles_queue')
-var feeder = require('./topic-feeder-emulator');
+// var feeder = require('./topic-feeder-emulator');
 var ws = require("nodejs-websocket")
 var connection
 var __queueClient
@@ -43,7 +43,7 @@ const serveUIWebSockets = async() => {
             let x = JSON.parse(str)
             console.log("Received " + JSON.stringify(x))
             current_state = x
-            conn.sendText(JSON.stringify(current_state))
+//            conn.sendText(JSON.stringify(current_state))
         })
         conn.on("close", function (code, reason) {
             console.log("Connection closed")
@@ -200,7 +200,7 @@ var current_state = {
             "on": true
         },
         "currentGrowLight": {
-            "on": false
+            "on": true
         }
     }
 };

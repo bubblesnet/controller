@@ -166,7 +166,7 @@ const serveMessageQueue = async() => {
     bubbles_queue.init(setClient).then( value => {
         console.log("bubbles_queue.init succeeded, subscribing");
         bubbles_queue.subscribeToQueue(__queueClient, function (body) {
-                bubbles_queue.sendToTopic(body)
+                bubbles_queue.sendMessageToTopic(__queueClient,body)
         });
     }, reason => {
         console.log("bubbles_queue.init failed "+reason)
@@ -174,8 +174,3 @@ const serveMessageQueue = async() => {
 }
 
 serveMessageQueue();
-
-module.exports = {
-    app: queueServer
-};
-

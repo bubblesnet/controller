@@ -19,8 +19,6 @@ import initial_state from './initial_state.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-const Stomp = require('stompit');
-
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
@@ -42,6 +40,7 @@ function AuthenticatedApp (props) {
 */
 
     const handleWebSocketMessage = ( event ) => {
+        console.log("handling websocket message " + JSON.stringify(event.data))
         let x = JSON.parse(event.data)
         if( typeof(x.status) === 'undefined' || x.status === null ) {
             console.log("Received invalid message "+ event.data)

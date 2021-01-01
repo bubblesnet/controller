@@ -55,7 +55,7 @@ MessageProducer.prototype.subscribeToTopic = async function subscribeToTopic(__s
 }
 
 MessageProducer.prototype.sendMessageToTopic = function sendMessageToTopic(__stompClient, messageToPublish) {
-    console.log("sendMessage");
+    console.log("sendMessage "+messageToPublish);
     const sendHeaders = {
         'destination': '/topic/bubbles_ui',
         'content-type': 'text/plain'
@@ -69,14 +69,14 @@ MessageProducer.prototype.sendMessageToTopic = function sendMessageToTopic(__sto
 };
 
 MessageProducer.prototype.sendMessageToQueue = function sendMessageToQueue(__stompClient, messageToPublish) {
-    console.log("sendMessage");
+    console.log("sendMessage "+messageToPublish);
     const sendHeaders = {
         'destination': '/queue/bubbles',
         'content-type': 'text/plain'
     };
 
     const frame = __stompClient.send(sendHeaders);
-    frame.write('hello');
+    frame.write(messageToPublish);
     frame.end();
 
     console.log("sendMessage returns ");

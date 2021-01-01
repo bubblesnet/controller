@@ -132,7 +132,7 @@
       "on": true
     },
     "heater": {
-      "on": true
+      "on": false
     },
     "airPump": {
       "on": true
