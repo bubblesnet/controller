@@ -6,6 +6,9 @@ var ws = require("nodejs-websocket")
 var connection
 var __queueClient
 
+const SWITCH_COMMAND="switch"
+const STATUS_COMMAND="status"
+
 function setClient(client) {
     __queueClient = client;
 }
@@ -41,9 +44,16 @@ const serveUIWebSockets = async() => {
         })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
-            console.log("Received " + JSON.stringify(x))
-            current_state = x
-//            conn.sendText(JSON.stringify(current_state))
+            if (x.command === SWITCH_COMMAND) {
+                console.log("Received switch command " + str)
+            } else if (x.command === STATUS_COMMAND) {
+                console.log("Received status command " + str)
+                conn.sendText(JSON.stringify(current_state))
+            } else {
+                console.log("Echoing received state " + JSON.stringify(x))
+                current_state = x
+                conn.sendText(JSON.stringify(current_state))
+            }
         })
         conn.on("close", function (code, reason) {
             console.log("Connection closed")
