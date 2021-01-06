@@ -7,6 +7,7 @@ import {Box} from "grommet";
 function RenderStateTextStatus (props) {
 
     let [state, setState] = useState(props.state); //
+    let [settings, setSettings] = useState(props.settings); //
 
     console.log("RenderStateTextStatus state = "+JSON.stringify(state))
  let ret =
@@ -25,7 +26,7 @@ function RenderStateTextStatus (props) {
         gap={"xxsmall"} >
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
-        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{state.status.plant_height} {state.display_settings.plant_height_units}</Box>
+        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{state.status.plant_height} {settings.display_settings.plant_height_units}</Box>
         <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{state.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
         <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{state.automation_settings.current_stage}</Box>

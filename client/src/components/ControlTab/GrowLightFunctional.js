@@ -14,17 +14,17 @@ function RenderGrowLight (props) {
                     <div className="plant-holder" />
                     <div id="airtemp-holder-night" >
                         <div id="airtemptop-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_top} currentTemperature={props.state.status.temp_air_top} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction}/>
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_top} currentTemperature={props.state.status.temp_air_top} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction}/>
                         </div>
                         <div id="airtempmiddle-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_middle} currentTemperature={props.state.status.temp_air_middle} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction}/>
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_middle} currentTemperature={props.state.status.temp_air_middle} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction}/>
                         </div>
                         <div id="airtempbottom-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom} currentTemperature={props.state.status.temp_air_bottom} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction}/>
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom} currentTemperature={props.state.status.temp_air_bottom} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction}/>
                         </div>
                     </div>
                     <div id="humidity-holder" >
-                        <RenderHygrometer exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.state.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
+                        <RenderHygrometer exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.settings.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
                     </div>
                 </div>
         } else {
@@ -35,17 +35,17 @@ function RenderGrowLight (props) {
                     <div className="plant-holder" />
                     <div id="airtemp-holder-day" >
                         <div id="airtemptop-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_top}  currentTemperature={props.state.status.temp_air_top} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction}/>
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_top}  currentTemperature={props.state.status.temp_air_top} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction}/>
                         </div>
                         <div id="airtempmiddle-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_middle}  currentTemperature={props.state.status.temp_air_middle} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction} />
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_middle}  currentTemperature={props.state.status.temp_air_middle} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction} />
                         </div>
                         <div id="airtempbottom-text-holder">
-                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom}  currentTemperature={props.state.status.temp_air_bottom} units={props.state.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
+                            <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom}  currentTemperature={props.state.status.temp_air_bottom} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
                         </div>
                     </div>
                     <div id="humidity-holder" >
-                        <RenderHygrometer exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.state.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
+                        <RenderHygrometer exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.settings.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
                     </div>
                 </div>
         }

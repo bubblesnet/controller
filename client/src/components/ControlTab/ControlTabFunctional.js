@@ -93,12 +93,12 @@ function RenderControlTab(props) {
         wlruler = <div id="watertemp-holder">
             <RenderThermometer exists={props.state.cabinet_settings.thermometer_water}
                                className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}
-                               units={props.state.display_settings.temperature_units}
+                               units={props.settings.display_settings.temperature_units}
                                direction={props.state.status.temp_water_direction}/>
         </div>
 
         wl = <div id="water-level-text-holder">
-            {props.state.status.tub_water_level} {props.state.display_settings.tub_volume_units}
+            {props.state.status.tub_water_level} {props.settings.display_settings.tub_volume_units}
         </div>
     }
     let ret =
@@ -136,10 +136,11 @@ function RenderControlTab(props) {
                         </div>
                     </div>
                     <RenderGrowLight
+                        settings={props.settings}
                         exists={props.state.cabinet_settings.light_vegetative || props.state.cabinet_settings.light_bloom || props.state.cabinet_settings.light_germinate}
                         on={props.state.switch_state.currentGrowLight.on} state={props.state}/>
-                    <RenderHeater exists={props.state.cabinet_settings.heater} on={props.state.switch_state.heater.on}/>
-                    <RenderHumidifier exists={props.state.cabinet_settings.humidifier}
+                    <RenderHeater settings={props.settings} exists={props.state.cabinet_settings.heater} on={props.state.switch_state.heater.on}/>
+                    <RenderHumidifier settings={props.settings} exists={props.state.cabinet_settings.humidifier}
                                       on={props.state.switch_state.humidifier.on}/>
                     <div className="exhaust">
                         <div className="filter-and-exhaust-fan-holder">
@@ -149,19 +150,19 @@ function RenderControlTab(props) {
                     </div>
                     <div className="fans">
                         <div className="input-fan-holder">
-                            <RenderIntakeFan exists={props.state.cabinet_settings.intake_fan}
+                            <RenderIntakeFan settings={props.settings} exists={props.state.cabinet_settings.intake_fan}
                                              on={props.state.switch_state.intakeFan.on}/>
                         </div>
                     </div>
-                    <RenderWaterPump exists={props.state.cabinet_settings.water_pump}
+                    <RenderWaterPump settings={props.settings} exists={props.state.cabinet_settings.water_pump}
                                      on={props.state.switch_state.waterPump.on}/>
-                    <RenderAirPump exists={props.state.cabinet_settings.air_pump}
+                    <RenderAirPump settings={props.settings} exists={props.state.cabinet_settings.air_pump}
                                    on={props.state.switch_state.airPump.on}/>
                     <div id="water-level-ruler-holder"/>
 
                 </div>
                 <div id="controltab-buttongroup">
-                    <RenderSwitchPanel state={props.state} switchControl={values.switchControl}/>
+                    <RenderSwitchPanel settings={props.settings} state={props.state} switchControl={values.switchControl}/>
                 </div>
             </div>
         </Grommet>

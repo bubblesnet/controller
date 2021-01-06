@@ -6,6 +6,7 @@ import RenderStateTextStatus from "./StateTextStatusFunctional";
 import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
+import RenderStageSelector from "../StageTabs/StageSelector";
 
 function RenderTextStatus (props) {
     console.log("RenderTextStatus state = "+JSON.stringify(props.state))
@@ -23,16 +24,16 @@ function RenderTextStatus (props) {
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >
-                <RenderEnvironmentTextStatus  state={props.state}/>
+                <RenderEnvironmentTextStatus  settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'state'} >
-                <RenderStateTextStatus state={props.state}/>
+                <RenderStateTextStatus settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'security'} >
-                <RenderSecurityTextStatus  state={props.state}/>
+                <RenderSecurityTextStatus  settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'interventions'} >
-                <RenderInterventionsTextStatus  state={props.state}/>
+                <RenderInterventionsTextStatus  settings={props.settings} state={props.state}/>
             </Box>
         </Grid>
     return (ret)

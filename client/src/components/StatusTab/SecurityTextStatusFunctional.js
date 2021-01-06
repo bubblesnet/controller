@@ -42,7 +42,7 @@ function RenderSecurityTextStatus (props) {
             {cabinetdoor}
             {extpressure}
             {intpressure}
-            <RenderEnvValueWithDirection exists={props.state.cabinet_settings.pressure_sensors} gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.state.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
+            <RenderEnvValueWithDirection exists={props.state.cabinet_settings.pressure_sensors} gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.settings.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
         </Grid>
     return (ret)
 }

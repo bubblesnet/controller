@@ -4,9 +4,10 @@ import ReactSpeedometer from "react-d3-speedometer";
 
 function RenderPressureMeter (props) {
     let [state, setState] = useState(props.state); //
+    let [settings, setSettings] = useState(props.settings); //
 
     let value =  ""+state.status.pressure_external - state.status.pressure_internal
-    let valueText =  value+state.display_settings.pressure_units
+    let valueText =  value+settings.display_settings.pressure_units
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>

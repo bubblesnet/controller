@@ -8,32 +8,6 @@ function setClient(client) {
 }
 
 var current_state = {
-    "display_settings": {
-        "units": "METRIC",
-        "language": "en-us",
-        "languageOptions": [
-            "en-us",
-            "fr"
-        ],
-        "theme": "",
-        "current_font": "Aclonica",
-        "units_options": [
-            "IMPERIAL",
-            "METRIC"
-        ],
-        "tub_volume_units": "gallons",
-        "tub_depth_units": "inches",
-        "plant_height_units": "inches",
-        "humidity_units": "%",
-        "temperature_units": "F",
-        "pressure_units": "hPa",
-        "pressure_units_options": [
-            "hPa",
-            "mbar",
-            "mm Hg",
-            "psi"
-        ]
-    },
     "cabinet_settings": {
         "humidifier": true,
         "humidity_sensor": true,

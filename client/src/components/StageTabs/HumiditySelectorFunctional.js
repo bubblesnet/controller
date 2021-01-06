@@ -19,7 +19,7 @@ function RenderHumiditySelector(props) {
     const onChange = event => setValue(event.target.value);
     const min = props.state.automation_settings.humidity_min;
     const max = props.state.automation_settings.humidity_max;
-    const units = props.state.display_settings.humidity_units;
+    const units = props.settings.display_settings.humidity_units;
 
     return (
             <Grid

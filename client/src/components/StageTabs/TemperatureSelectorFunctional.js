@@ -15,11 +15,12 @@ function RenderTemperatureSelector(props) {
     }
 
     const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_settings, setSettings] = useState(JSON.parse(JSON.stringify(props.settings)));
 
     const onChange = event => setValue(event.target.value);
     const min = local_state.automation_settings.temperature_min;
     const max = local_state.automation_settings.temperature_max;
-    const units = local_state.display_settings.temperature_units;
+    const units = local_settings.display_settings.temperature_units;
 
     return (
             <Grid

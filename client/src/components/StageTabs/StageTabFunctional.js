@@ -40,6 +40,7 @@ function RenderStageTab (props) {
     const label = 'Target Temperature Range'
 
     let [state, setState] = useState(props.state); //
+    let [settings, setSettings] = useState(props.settings); //
     let [applyButtonState, setapplyButtonState] = useState(false); //
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState, setdefaultsButtonState] = useState(true ); //
@@ -72,19 +73,19 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector state={state} setStateFromChild={setStateFromChild}/>
+                            <RenderStageSelector settings={settings} state={state} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector state={state} setStateFromChild={setStateFromChild} />
+                            <RenderLightSelector settings={settings} state={state} setStateFromChild={setStateFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
+                            <RenderTemperatureSelector settings={settings} state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
+                            <RenderHumiditySelector settings={settings} state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
-                            <RenderFormActions applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>
+                            <RenderFormActions settings={settings} applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>
                         </Box>
                     </Grid>
                     </div>

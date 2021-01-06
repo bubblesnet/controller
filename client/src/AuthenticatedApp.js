@@ -16,6 +16,7 @@ import {grommet} from 'grommet/themes'
 // import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
+import initial_settings from './initial_settings.json'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
@@ -121,6 +122,7 @@ function AuthenticatedApp (props) {
     initial_state.current_font = bubbles_theme.global.font.family;
 
     const [local_state, setState] = useState(initial_state);
+    const [local_settings, setSettings] = useState(initial_settings);
 
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
@@ -179,19 +181,23 @@ function AuthenticatedApp (props) {
                 <Tabs margin="medium" flex="shrink">
                     <Tab title="Cabinet Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                          settings={local_settings}
                                           state={thestate} switch_state={thestate.switch_state}
                                           setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Status">
-                        <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}/>
+                        <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                         settings={local_settings}  state={local_state}/>
                     </Tab>
                     <Tab title="Cabinet Setup">
-                        <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}
+                        <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                        settings={local_settings} state={local_state}
                                         setStateFromChild={setCabinetSettingsStateFromChild}
                         />
                     </Tab>
                     <Tab title="Automation">
-                        <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} state={local_state}
+                        <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                        settings={local_settings} state={local_state}
                                         setStateFromChild={setAutomationStateFromChild}/>
                     </Tab>
                     <Tab title="Events">
@@ -199,7 +205,7 @@ function AuthenticatedApp (props) {
                     </Tab>
                     <Tab title="Display Settings">
                         <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                               state={local_state} onApplyFontChange={applyFontChange}
+                                               settings={local_settings} state={local_state} onApplyFontChange={applyFontChange}
                                                onLocalFontChange={localFontChange}/>
                     </Tab>
                     <Tab title="Server Settings">

@@ -3,7 +3,7 @@ import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 
 function RenderTemperatureMeter (props) {
-    let valueText = props.state.status.temp_air_middle +""+props.state.display_settings.temperature_units
+    let valueText = props.state.status.temp_air_middle +""+props.settings.display_settings.temperature_units
     let ret =
             <div className={props.className}>
                 <p className="meter-text">{props.label}</p>
