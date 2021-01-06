@@ -40,13 +40,39 @@ function AuthenticatedApp (props) {
     });
 */
 
+    const processMeasurementMessage = (message) => {
+        /*
+        "message_type": "measurement",
+            "measurement_type": "temperature",
+            "sample_timestamp": "105050987",
+            "sensor_name": "thermometer_top",
+            "value":  "27.3",
+            "units": "C"
+         */
+    }
+
     const handleWebSocketMessage = ( event ) => {
         console.log("handling websocket message " + JSON.stringify(event.data))
         let x = JSON.parse(event.data)
         if( typeof(x.status) === 'undefined' || x.status === null ) {
-            console.log("Received invalid message "+ event.data)
+            if( typeof(x.message_type) === 'undefined' || x.message_type === null ) {
+                console.log("Received invalid message " + event.data)
+            } else {
+                console.log("received message type "+x.message_type);
+                switch (x.message_type) {
+                    case "measurement":
+                        console.log("received measurement");
+                        break;
+                    case "event":
+                        console.log("received event");
+                        break;
+                    default:
+                        console.log("unknown message type " + x.message_type)
+                        break;
+                }
+            }
         } else {
-            console.log("Received valid message")
+            console.log("Received valid status message")
             setState(JSON.parse(event.data));
         }
     }
