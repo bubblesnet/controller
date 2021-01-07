@@ -10,9 +10,9 @@ function RenderThermometer (props) {
         className="arrowdown-icon"
     }
     let ret = <>
+        <div className={className} />
         <div className="thermo-icon" />
         {props.currentTemperature} {props.units}
-        <div className={className} />
     </>
 
     if(props.exists === false ) {

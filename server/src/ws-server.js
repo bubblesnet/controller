@@ -7,6 +7,7 @@ var connection
 var __queueClient
 
 const SWITCH_COMMAND="switch"
+const MEASUREMENT_MESSAGE = "measurement"
 const STATUS_COMMAND="status"
 
 function setClient(client) {
@@ -27,7 +28,7 @@ const serveUIWebSockets = async() => {
              else if( connection.readyState !== connection.OPEN) {
                 console.log("had a UI client but he closed out (crashed?)")
             } else {
-                console.log("UI client is initialized and OPEN, sending")
+                console.log("UI client is initialized and OPEN, sending msg " + body)
                 connection.sendText(body)
             }
         });

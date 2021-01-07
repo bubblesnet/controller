@@ -12,6 +12,7 @@ import RenderHeater from "./HeaterFunctional";
 import RenderHumidifier from "./HumidifierFunctional";
 import RenderSwitchPanel from "./SwitchPanelFunctional";
 import RenderThermometer from "./ThermometerFunctional";
+import RenderExternalMetrics from "./ExternalMetricsFunctional";
 import {Grommet, Table} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 
@@ -160,6 +161,9 @@ function RenderControlTab(props) {
                                    on={props.state.switch_state.airPump.on}/>
                     <div id="water-level-ruler-holder"/>
 
+                </div>
+                <div id={"controltab-externalgroup"}>
+                    <RenderExternalMetrics settings={props.settings} state={props.state} />
                 </div>
                 <div id="controltab-buttongroup">
                     <RenderSwitchPanel settings={props.settings} state={props.state} switchControl={values.switchControl}/>

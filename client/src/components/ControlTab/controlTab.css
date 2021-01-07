@@ -35,3 +35,68 @@
     text-align: center
 }
 
+#airtemptop-text-holder {
+    height: 40px;
+    right: 0;
+    position: absolute;
+    top: 0;
+    width: 100px;
+}
+#airtempmiddle-text-holder {
+    height: 40px;
+    right: 0;
+    position: absolute;
+    top: 100px;
+    width: 100px;
+}
+#airtempbottom-text-holder {
+    height: 40px;
+    right: 0;
+    position: absolute;
+    top: 200px;
+    width: 100px;
+}
+#airtempexternal-text-holder {
+    height: 40px;
+    right: 0;
+    position: absolute;
+    top: 0;
+    width: 60px;
+}
+
+#humiditytext-holder {
+    top: 120px;
+    left: 230px;
+    width: 40px;
+    height: 60px;
+    position: absolute;
+    color: black;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+#humidityexternal-text-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 60px;
+    width: 82px;
+}
+
+#controltab-externalgroup {
+    height: 120px;
+    left: 700px;
+    position: absolute;
+    top: 108px;
+    width: 175px;
+    font-size: large;
+}
+
+#controltab-buttongroup {
+    height: 600px;
+    left: 700px;
+    position: absolute;
+    top: 230px;
+    width: 175px;
+    font-size: large;
+}

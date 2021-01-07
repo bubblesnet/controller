@@ -13,7 +13,35 @@ function setClient(client) {
     __feederClient = client;
 }
 
-function sendFakeStatusToQueue() {
+/*
+       "message_type": "measurement",
+            "measurement_type": "temperature",
+            "sample_timestamp": "105050987",
+            "sensor_name": "thermometer_top",
+            "value":  "27.3",
+            "units": "C"
+
+ */
+function sendFakeMeasurementToTopic() {
+    console.log("sendFakeMeasurementToTopic")
+
+    let msg = {}
+    msg.message_type = "measurement"
+    msg.measurement_type= "humidity"
+    msg.sensor_name = "humidity_internal"
+    msg.sample_timestamp = Date.now = () => new Date().getTime();
+    msg.value = 20+ getRandomInt(69)
+    msg.units = "F"
+    console.log("Sending humidity to " + msg.value)
+    console.log("Sending message to topic " + JSON.stringify(msg))
+    bubbles_queue.sendMessageToTopic(__feederClient,JSON.stringify(msg))
+    setTimeout(() => {
+        sendFakeMeasurementToTopic()
+    }, 5000);
+
+}
+
+function sendFakeStatusToTopic() {
     console.log("sendFakeStatusToQueue")
     current_state.status.humidity_internal = 60 + getRandomInt(30)
     let x = getRandomInt(2);
@@ -33,13 +61,14 @@ function sendFakeStatusToQueue() {
         bubbles_queue.sendMessageToTopic(__feederClient,JSON.stringify(current_state))
 //    }
     setTimeout(() => {
-        sendFakeStatusToQueue()
+        sendFakeStatusToTopic()
     }, 10000);
 
 }
 const updateStatusTopic = async() => {
     setTimeout(() => {
-        sendFakeStatusToQueue()
+//        sendFakeStatusToTopic()
+        sendFakeMeasurementToTopic()
     }, 10000);
 }
 

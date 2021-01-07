@@ -40,13 +40,13 @@ MessageProducer.prototype.subscribeToTopic = async function subscribeToTopic(__s
         'ack': 'auto'
     };
     __stompClient.subscribe(subscribeHeaders, (error, message) => {
-        console.log('received a message');
+        console.log('received a message '+message);
         message.readString('utf-8', function (error, body) {
             if (error) {
                 console.log('read message error ' + error.message);
                 return;
             }
-            console.log('read a message');
+            console.log('read a message '+body);
             cb(body)
 //            __stompClient.ack(message);
 //            __stompClient.disconnect();

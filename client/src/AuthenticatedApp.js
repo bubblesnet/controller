@@ -27,7 +27,7 @@ function AuthenticatedApp (props) {
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
-    let lastValidJsonMessage
+    let lastCompleteStatusMessage
 
 /*    useEffect(async () => {
         const result = await fetch('http://localhost:3003/healthcheck').then(res => {
@@ -41,6 +41,7 @@ function AuthenticatedApp (props) {
 */
 
     const processMeasurementMessage = (message) => {
+        console.log("processMeasurementMessage "+JSON.stringify(message))
         /*
         "message_type": "measurement",
             "measurement_type": "temperature",
@@ -49,25 +50,31 @@ function AuthenticatedApp (props) {
             "value":  "27.3",
             "units": "C"
          */
+        applyMeasurementToState(message)
+    }
+
+    const applyMeasurementToState = (msg) => {
+        local_state.status[msg.sensor_name] = msg.value
     }
 
     const handleWebSocketMessage = ( event ) => {
         console.log("handling websocket message " + JSON.stringify(event.data))
-        let x = JSON.parse(event.data)
-        if( typeof(x.status) === 'undefined' || x.status === null ) {
-            if( typeof(x.message_type) === 'undefined' || x.message_type === null ) {
+        let msg = JSON.parse(event.data)
+        if( typeof(msg.status) === 'undefined' || msg.status === null ) {
+            if( typeof(msg.message_type) === 'undefined' || msg.message_type === null ) {
                 console.log("Received invalid message " + event.data)
             } else {
-                console.log("received message type "+x.message_type);
-                switch (x.message_type) {
+                console.log("received message type "+msg.message_type);
+                switch (msg.message_type) {
                     case "measurement":
                         console.log("received measurement");
+                        applyMeasurementToState(msg)
                         break;
                     case "event":
                         console.log("received event");
                         break;
                     default:
-                        console.log("unknown message type " + x.message_type)
+                        console.log("unknown message type " + msg.message_type)
                         break;
                 }
             }
@@ -187,19 +194,24 @@ function AuthenticatedApp (props) {
     console.log("AuthenticatedApp Rendering App with readyState = " + readyState)
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
-    let thestate = local_state
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
-        lastValidJsonMessage = JSON.parse(JSON.stringify(lastJsonMessage))
+        lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
     } else {
-        console.log("Last json message is INVALID! " + (lastJsonMessage?JSON.stringify(lastJsonMessage):'null'))
+        if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null ) {
+            console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+            processMeasurementMessage(lastJsonMessage)
+        } else {
+            console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+        }
     }
+    let thestate = local_state
 
-    if (typeof(lastValidJsonMessage) !== 'undefined' && lastValidJsonMessage !== null) {
+    if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
 //        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
-        thestate = JSON.parse(JSON.stringify(lastValidJsonMessage))
+        thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
     }
-    console.log("authenticatedapp humidity = " + thestate.status.humidity_internal)
-    console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
+    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
+ //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
 
     return (
         <div className="App">

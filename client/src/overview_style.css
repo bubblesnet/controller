@@ -250,8 +250,8 @@ body {
   height: 50px;
   left: 15px;
   position: absolute;
-  top: 50px;
-  width: 100px;
+  top: 40px;
+  width: 80px;
   background-image:url(images/dripping-water.gif);
   background-repeat:no-repeat;
 }
@@ -569,6 +569,24 @@ body {
   font-weight: bold;
   font-size: xx-large;
 }
+#externalhumidityicon-holder {
+  top: 0;
+  left: 40px;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+#externalhumiditytext-holder {
+  top: 20px;
+  left: 0;
+  width: 40px;
+  height: 60px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: xx-large;
+}
 
 #airtemp-holder-day {
   top: 40px;
@@ -589,27 +607,6 @@ body {
   color: white;
 }
 
-#airtemptop-text-holder {
-  height: 40px;
-  right: 0;
-  position: absolute;
-  top: 0;
-  width: 100px;
-}
-#airtempmiddle-text-holder {
-  height: 40px;
-  right: 0;
-  position: absolute;
-  top: 100px;
-  width: 100px;
-}
-#airtempbottom-text-holder {
-  height: 40px;
-  right: 0;
-  position: absolute;
-  top: 200px;
-  width: 100px;
-}
 .thermo-icon {
   top:0;
   right: 70px;
@@ -952,14 +949,7 @@ body {
   width: 351px;
 }
 
-#controltab-buttongroup {
-  height: 600px;
-  left: 700px;
-  position: absolute;
-  top: 107px;
-  width: 175px;
-  font-size: large;
-}
+
 
 #current-status-holder {
   font-weight: bold;
