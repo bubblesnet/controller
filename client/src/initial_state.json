@@ -23,6 +23,8 @@
     "tub_volume": 20.0,
     "intake_fan": true,
     "exhaust_fan": true,
+    "heat_lamp": true,
+    "heating_pad": true,
     "enclosure_options": [
       "Cabinet",
       "Tent"

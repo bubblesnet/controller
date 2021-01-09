@@ -9,6 +9,7 @@ function RenderExternalMetrics (props) {
 
     let ret =
         <>
+            <div id={"sun-moon-icon-holder"} />
         <div id="airtempexternal-text-holder">
             <RenderThermometer exists={props.state.cabinet_settings.thermometer_external}
                                currentTemperature={props.state.status.temp_air_external}

@@ -551,6 +551,15 @@ body {
   position: absolute;
   color: white;
 }
+#sun-moon-icon-holder {
+  top: 0;
+  left: 0;
+  width: 57px;
+  height: 57px;
+  position: absolute;
+  background: url(images/sunlight.png) no-repeat;
+}
+
 #humidityicon-holder {
   top: 100px;
   left: 270px;
