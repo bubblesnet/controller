@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../App.css';
+import sprintf from 'sprintf-js';
 
 function RenderThermometer (props) {
     let className=""
@@ -9,10 +10,12 @@ function RenderThermometer (props) {
     if(props.direction==="down") {
         className="arrowdown-icon"
     }
+    let value = sprintf.sprintf("%.1f", props.currentTemperature)
+    console.log("temp rendering as " + value)
     let ret = <>
         <div className={className} />
         <div className="thermo-icon" />
-        {props.currentTemperature} {props.units}
+        {value} {props.units}
     </>
 
     if(props.exists === false ) {

@@ -32,7 +32,29 @@
 .centered-thead-text {
     font-weight: bolder;
     font-size: large;
-    text-align: center
+    text-align: center;
+}
+
+.pressure-text-holder {
+    left: 10px;
+    top: 50px;
+    position: absolute;
+    height: 40px;
+    width: 100px;
+    font-weight: bolder;
+    font-size: large;
+    background-color: yellow;
+}
+
+.light-text-holder {
+    left: 10px;
+    top: 250px;
+    position: absolute;
+    height: 40px;
+    width: 100px;
+    font-weight: bolder;
+    font-size: large;
+    background-color: orange;
 }
 
 #airtemptop-text-holder {
@@ -72,7 +94,7 @@
     position: absolute;
     color: black;
     font-weight: bold;
-    font-size: xx-large;
+    font-size: x-large;
 }
 
 #humidityexternal-text-holder {

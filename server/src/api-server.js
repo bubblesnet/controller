@@ -124,8 +124,10 @@ function normalizePort(val) {
     return false;
 }
 
-apiServer.listen(port, () => {
-    console.log(`API server running on port ${port}.`)
+
+var hostname = '0.0.0.0'
+apiServer.listen(port, hostname, () => {
+    console.log(`API server listening on ${hostname} ${port}.`)
 });
 
 var __queueClient

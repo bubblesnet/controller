@@ -576,7 +576,7 @@ body {
   position: absolute;
   color: black;
   font-weight: bold;
-  font-size: xx-large;
+  font-size: large;
 }
 #externalhumidityicon-holder {
   top: 0;
@@ -594,7 +594,7 @@ body {
   position: absolute;
   color: black;
   font-weight: bold;
-  font-size: xx-large;
+  font-size: x-large;
 }
 
 #airtemp-holder-day {

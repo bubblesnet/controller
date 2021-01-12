@@ -30,6 +30,12 @@ function RenderGrowLight (props) {
         } else {
             ret =
                 <div className="growlight-container-on">
+                    <div className={"pressure-text-holder"} >
+                        xyz
+                    </div>
+                    <div className={"light-text-holder"} >
+                        sdfdsf
+                    </div>
                     <div className="plant-height-holder" />
                     <div className="growlight-on" />
                     <div className="plant-holder" />
@@ -44,9 +50,7 @@ function RenderGrowLight (props) {
                             <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom}  currentTemperature={props.state.status.temp_air_bottom} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
                         </div>
                     </div>
-                    <div id="humidity-holder" >
                         <RenderHygrometer prefix={""} exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.settings.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
-                    </div>
                 </div>
         }
     return (ret)

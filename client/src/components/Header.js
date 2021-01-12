@@ -45,8 +45,8 @@ function Header (props) {
                 <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>
             <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
-            <button onClick={props.handleClickSendMessage} disabled={true} >{"API server down"}</button>
-            <button onClick={props.handleClickSendMessage} disabled={true}>{"Queue server down"}</button>
+            <button onClick={props.handleClickSendMessage} >{"API server"}</button>
+            <button onClick={props.handleClickSendMessage} >{"ActiveMQ"}</button>
         </div>
    );
 }
