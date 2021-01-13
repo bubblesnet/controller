@@ -15,7 +15,7 @@ function RenderThermometer (props) {
     let ret = <>
         <div className={className} />
         <div className="thermo-icon" />
-        {value} {props.units}
+        <div className={"airtempexternal-text-holder"}>{value}{props.units}</div>
     </>
 
     if(props.exists === false ) {

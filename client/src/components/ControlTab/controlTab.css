@@ -35,55 +35,93 @@
     text-align: center;
 }
 
-.pressure-text-holder {
-    left: 10px;
-    top: 50px;
+.value-holder {
+    left: 0;
+    top: 2px;
     position: absolute;
     height: 40px;
-    width: 100px;
+    width: 40px;
     font-weight: bolder;
-    font-size: large;
-    background-color: yellow;
+    font-size: small;
+    color: black;
 }
 
 .light-text-holder {
     left: 10px;
-    top: 250px;
+    top: 200px;
     position: absolute;
     height: 40px;
-    width: 100px;
+    width: 70px;
     font-weight: bolder;
-    font-size: large;
-    background-color: orange;
+    font-size: small;
+}
+
+.externalpressure-holder {
+    height: 60px;
+    left: 10px;
+    position: absolute;
+    top: 70px;
+    width: 80px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+.pressure-text-holder {
+    height: 40px;
+    left: 10px;
+    position: absolute;
+    top: 60px;
+    width: 70px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+.pressure-holder {
+    height: 60px;
+    left: 10px;
+    position: absolute;
+    top: 60px;
+    width: 80px;
+    font-weight: bolder;
+    font-size: small;
 }
 
 #airtemptop-text-holder {
-    height: 40px;
+    height: 60px;
     right: 0;
     position: absolute;
     top: 0;
-    width: 100px;
+    width: 80px;
 }
 #airtempmiddle-text-holder {
-    height: 40px;
+    height: 60px;
     right: 0;
     position: absolute;
-    top: 100px;
-    width: 100px;
+    top: 80px;
+    width: 80px;
 }
 #airtempbottom-text-holder {
-    height: 40px;
+    height: 60px;
     right: 0;
     position: absolute;
     top: 200px;
-    width: 100px;
+    width: 80px;
 }
-#airtempexternal-text-holder {
-    height: 40px;
-    right: 0;
+
+#airtempexternal-holder {
+    height: 0px;
+    left: 10px;
     position: absolute;
     top: 0;
-    width: 60px;
+    width: 80px;
+    background-color: green;
+}
+
+.airtempexternal-text-holder {
+    top: 10px;
+    left: 0;
+    height: 50px;
+    width: 40px;
 }
 
 #humiditytext-holder {
@@ -97,19 +135,22 @@
     font-size: x-large;
 }
 
-#humidityexternal-text-holder {
+#xxexternalhumiditytext-holder {
     height: 60px;
     right: 0;
     position: absolute;
     top: 60px;
     width: 82px;
+    font-weight: bold;
+    font-size: xx-small;
+    background-color: blue;
 }
 
 #controltab-externalgroup {
-    height: 120px;
+    height: 160px;
     left: 700px;
     position: absolute;
-    top: 108px;
+    top: 40px;
     width: 175px;
     font-size: large;
 }

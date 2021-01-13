@@ -3,6 +3,7 @@ import React from "react";
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
+import sprintf from 'sprintf-js'
 
 function RenderEnvValueWithDirection (props) {
     let label_area=props.gridArea+''+'-label'
@@ -16,7 +17,7 @@ function RenderEnvValueWithDirection (props) {
     if(props.direction === 'down') {
         className='zero-arrowdown-icon'
     }
-    let valuestr = props.value + props.units
+    let valuestr = sprintf.sprintf( "%.1f %s", props.value, props.units )
     let ret =''
 
     if( props.exists === false ) {

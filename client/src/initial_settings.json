@@ -12,6 +12,7 @@
       "IMPERIAL",
       "METRIC"
     ],
+    "light_units": "lux",
     "tub_volume_units": "gallons",
     "tub_depth_units": "inches",
     "plant_height_units": "inches",

@@ -535,7 +535,7 @@ body {
 #watertemp-holder {
   top: 40px;
   right: 60px;
-  width: 100px;
+  width: 80px;
   height: 600px;
   position: absolute;
   color: black;
@@ -544,72 +544,115 @@ body {
 }
 
 #humidity-holder {
-  top: 60px;
-  left: 40px;
+  top: 100px;
+  left: 270px;
   width: 82px;
   height: 60px;
   position: absolute;
   color: white;
 }
+
 #sun-moon-icon-holder {
   top: 0;
-  left: 0;
+  right: 0;
   width: 57px;
   height: 57px;
   position: absolute;
   background: url(images/sunlight.png) no-repeat;
 }
 
-#humidityicon-holder {
-  top: 100px;
-  left: 270px;
+#xxhumidityicon-holder {
+  top: 0;
+  left: 0;
   width: 42px;
   height: 60px;
   position: absolute;
   background: url(images/humidityicon.png) no-repeat;
 }
+
+#humidityicon-holder {
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+
 #humiditytext-holder {
-  top: 120px;
-  left: 230px;
-  width: 40px;
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 50px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: small;
+}
+
+.pressure-icon-holder {
+  top: 10px;
+  left: 40px;
+  height: 60px;
+  width: 20px;
+  position: absolute;
+  background: url(images/barometer.png) no-repeat;
+}
+
+.light-icon-holder {
+  top: 10px;
+  left: 40px;
+  height: 60px;
+  width: 20px;
+  position: absolute;
+  background: url(images/internal_light.png) no-repeat;
+}
+
+#externalhumidityicon-holder {
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+
+#externalhumidity-holder {
+  bottom: 30px;
+  right: 0;
+  width: 80px;
   height: 60px;
   position: absolute;
   color: black;
   font-weight: bold;
   font-size: large;
 }
-#externalhumidityicon-holder {
-  top: 0;
-  left: 40px;
-  width: 42px;
-  height: 60px;
-  position: absolute;
-  background: url(images/humidityicon.png) no-repeat;
-}
+
 #externalhumiditytext-holder {
-  top: 20px;
+  top: 2px;
   left: 0;
-  width: 40px;
-  height: 60px;
+  width: 20px;
+  height: 50px;
   position: absolute;
   color: black;
   font-weight: bold;
-  font-size: x-large;
+  font-size: small;
 }
 
 #airtemp-holder-day {
   top: 40px;
-  right: 60px;
-  width: 100px;
+  right: 80px;
+  width: 80px;
   height: 280px;
   position: absolute;
   color: black;
   font-weight: bold;
   font-size: large;
 }
+
 #airtemp-holder-night {
   top: 40px;
-  right: 60px;
+  right: 80px;
   width: 100px;
   height: 280px;
   position: absolute;
@@ -618,9 +661,9 @@ body {
 
 .thermo-icon {
   top:0;
-  right: 70px;
-  height: 40px;
-  width: 12px;
+  right: 20px;
+  height: 60px;
+  width: 18px;
   position: absolute;
   background: url(images/thermometer-icon.png) no-repeat;
 }
@@ -639,16 +682,54 @@ body {
 }
 
 .arrowup-icon {
-  top:0;
-  right: 82px;
+  top: 10px;
+  right: 0;
   height: 30px;
   width: 13px;
   position: absolute;
   background: url(images/arrow-up.png) no-repeat;
 }
+
 .arrowdown-icon {
-  top:0;
-  right: 82px;
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
+}
+
+.barometerarrowup-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+
+.barometerarrowdown-icon {
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
+}
+
+
+.externalarrowup-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+
+.externalarrowdown-icon {
+  top: 10px;
+  right: 0;
   height: 30px;
   width: 13px;
   position: absolute;
@@ -729,7 +810,7 @@ body {
 }
 .plant-height-holder {
   height: 370px;
-  left: 82px;
+  left: 92px;
   position: absolute;
   top: 0;
   width: 51px;

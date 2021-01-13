@@ -43,6 +43,13 @@ const serveUIWebSockets = async() => {
             console.log("New connection")
             connection = conn
         })
+        conn.on("error", function (err) {
+            if( (""+err).includes("ECONNRESET")) {
+                console.log("client window closed")
+            } else {
+                console.log("error " + err)
+            }
+        })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND) {
@@ -57,7 +64,7 @@ const serveUIWebSockets = async() => {
             }
         })
         conn.on("close", function (code, reason) {
-            console.log("Connection closed")
+            console.log("Connection closed "+code+ " reason " + reason)
             connection = null;
         })
     }).listen(8001)

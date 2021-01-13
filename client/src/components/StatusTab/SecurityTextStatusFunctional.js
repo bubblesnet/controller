@@ -3,7 +3,7 @@ import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
-import RenderEnvValueWithDirection from "./EnvValueWithDirection";
+import sprintf from "sprintf-js";
 
 function RenderSecurityTextStatus (props) {
 
@@ -15,13 +15,17 @@ function RenderSecurityTextStatus (props) {
     if(props.state.cabinet_settings.cabinet_door_sensor) {
         cabinetdoor = <><Box gridArea={'cabinet-door-label'}>Cabinet Door</Box><Box gridArea={'cabinet-door-value'}>{props.state.status.cabinet_door_open?'OPEN':'CLOSED'}</Box></>
     }
-    let extpressure = <></>
-    if(props.state.cabinet_settings.pressure_sensors) {
-        extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box></>
-    }
     let intpressure = <></>
+    let extpressure = <></>
+    let pressurediff = <></>
+    let valuestr = ""
     if(props.state.cabinet_settings.pressure_sensors) {
-        intpressure = <><Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{props.state.status.pressure_internal}</Box></>
+         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external, props.settings.display_settings.pressure_units )
+        extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box></>
+         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_internal, props.settings.display_settings.pressure_units )
+        intpressure = <><Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{valuestr}</Box></>
+         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external-props.state.status.pressure_internal, props.settings.display_settings.pressure_units )
+        pressurediff = <><Box gridArea={'pressure-differential-label'}>Pressure Diff (odor)</Box><Box gridArea={'pressure-differential-value'}>{valuestr}</Box></>
     }
 
     let ret =
@@ -42,7 +46,7 @@ function RenderSecurityTextStatus (props) {
             {cabinetdoor}
             {extpressure}
             {intpressure}
-            <RenderEnvValueWithDirection exists={props.state.cabinet_settings.pressure_sensors} gridArea={'pressure-differential'} label='Pressure Differential' value={props.state.status.pressure_external-props.state.status.pressure_internal} units={props.settings.display_settings.pressure_units} direction={props.state.status.temp_air_external_direction} />
+            {pressurediff}
         </Grid>
     return (ret)
 }

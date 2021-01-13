@@ -6,7 +6,6 @@ import RenderStateTextStatus from "./StateTextStatusFunctional";
 import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
-import RenderStageSelector from "../StageTabs/StageSelector";
 
 function RenderTextStatus (props) {
     console.log("RenderTextStatus state = "+JSON.stringify(props.state))

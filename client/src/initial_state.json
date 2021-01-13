@@ -85,6 +85,8 @@
     "root_ph_direction": "down",
     "humidity_internal": 69,
     "humidity_internal_direction": "up",
+    "light_internal": 16743,
+    "light_internal_direction": "up",
     "humidity_external": 43,
     "humidity_external_direction": "down",
     "plant_height": 37,
@@ -94,6 +96,8 @@
     "cabinet_door_open": false,
     "pressure_external": 1021,
     "pressure_internal": 1018,
+    "pressure_external_direction": "",
+    "pressure_internal_direction": "down",
     "date_last_training": "never",
     "date_last_filter_change": "never",
     "tub_water_level": 14.9
