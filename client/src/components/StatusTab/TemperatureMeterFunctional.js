@@ -1,9 +1,10 @@
 import React from 'react';
 import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
+import sprintf from 'sprintf-js';
 
 function RenderTemperatureMeter (props) {
-    let valueText = props.state.status.temp_air_middle +""+props.settings.display_settings.temperature_units
+    let valueText = sprintf.sprintf("%.1f%s", props.state.status.temp_air_middle, props.settings.display_settings.temperature_units)
     let ret =
             <div className={props.className}>
                 <p className="meter-text">{props.label}</p>

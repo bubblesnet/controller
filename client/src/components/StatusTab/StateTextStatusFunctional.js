@@ -9,7 +9,7 @@ function RenderStateTextStatus (props) {
     let [state, setState] = useState(props.state); //
     let [settings, setSettings] = useState(props.settings); //
 
-    console.log("RenderStateTextStatus state = "+JSON.stringify(state))
+    console.log("RenderStateTextStatus")
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[

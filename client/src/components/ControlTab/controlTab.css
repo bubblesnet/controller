@@ -80,7 +80,7 @@
     height: 60px;
     left: 10px;
     position: absolute;
-    top: 60px;
+    top: 120px;
     width: 80px;
     font-weight: bolder;
     font-size: small;
@@ -124,16 +124,6 @@
     width: 40px;
 }
 
-#humiditytext-holder {
-    top: 120px;
-    left: 230px;
-    width: 40px;
-    height: 60px;
-    position: absolute;
-    color: black;
-    font-weight: bold;
-    font-size: x-large;
-}
 
 #xxexternalhumiditytext-holder {
     height: 60px;

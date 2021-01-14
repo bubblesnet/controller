@@ -65,92 +65,93 @@ function RenderCabinetSettingsTab (props) {
         changeState(local_state)
     }
     function toggleRootPhSensor() {
-        local_state.cabinet_settings.root_ph_sensor = !props.state.cabinet_settings.root_ph_sensor
+        local_state.cabinet_settings.root_ph_sensor = !local_state.cabinet_settings.root_ph_sensor
         changeState(local_state)
     }
     function toggleExhaustFan() {
-        local_state.cabinet_settings.exhaust_fan = !props.state.cabinet_settings.exhaust_fan
+        local_state.cabinet_settings.exhaust_fan = !local_state.cabinet_settings.exhaust_fan
         changeState(local_state)
     }
     function toggleIntakeFan() {
-        local_state.cabinet_settings.intake_fan = !props.state.cabinet_settings.intake_fan
+        local_state.cabinet_settings.intake_fan = !local_state.cabinet_settings.intake_fan
         changeState(local_state)
     }
     function toggleWaterLevelSensor() {
-        local_state.cabinet_settings.water_level_sensor = !props.state.cabinet_settings.water_level_sensor
+        local_state.cabinet_settings.water_level_sensor = !local_state.cabinet_settings.water_level_sensor
         changeState(local_state)
     }
 
     function toggleHumiditySensor() {
-        local_state.cabinet_settings.humidity_sensor = !props.state.cabinet_settings.humidity_sensor
+        local_state.cabinet_settings.humidity_sensor = !local_state.cabinet_settings.humidity_sensor
         changeState(local_state)
     }
     function toggleExternalHumiditySensor() {
-        local_state.cabinet_settings.external_humidity_sensor = !props.state.cabinet_settings.external_humidity_sensor
+        local_state.cabinet_settings.external_humidity_sensor = !local_state.cabinet_settings.external_humidity_sensor
         changeState(local_state)
     }
     function toggleExternalThermometer() {
-        local_state.cabinet_settings.external_thermometer = !props.state.cabinet_settings.external_thermometer
+        local_state.cabinet_settings.external_thermometer = !local_state.cabinet_settings.external_thermometer
         changeState(local_state)
     }
     function toggleThermometerTop() {
-        local_state.cabinet_settings.thermometer_top = !props.state.cabinet_settings.thermometer_top
+        local_state.cabinet_settings.thermometer_top = !local_state.cabinet_settings.thermometer_top
         changeState(local_state)
     }
     function toggleThermometerMiddle() {
-        local_state.cabinet_settings.thermometer_middle = !props.state.cabinet_settings.thermometer_middle
+        local_state.cabinet_settings.thermometer_middle = !local_state.cabinet_settings.thermometer_middle
         changeState(local_state)
     }
     function toggleThermometerBottom() {
-        local_state.cabinet_settings.thermometer_bottom = !props.state.cabinet_settings.thermometer_bottom
+        local_state.cabinet_settings.thermometer_bottom = !local_state.cabinet_settings.thermometer_bottom
         changeState(local_state)
     }
     function toggleWaterThermometer() {
-        local_state.cabinet_settings.thermometer_water = !props.state.cabinet_settings.thermometer_water
+        local_state.cabinet_settings.thermometer_water = !local_state.cabinet_settings.thermometer_water
         changeState(local_state)
     }
     function toggleHeater() {
-        local_state.cabinet_settings.heater = !props.state.cabinet_settings.heater
+        local_state.cabinet_settings.heater = !local_state.cabinet_settings.heater
         changeState(local_state)
     }
     function toggleWaterPump() {
-        local_state.cabinet_settings.water_pump = !props.state.cabinet_settings.water_pump
+        local_state.cabinet_settings.water_pump = !local_state.cabinet_settings.water_pump
         changeState(local_state)
     }
     function toggleAirPump() {
-        local_state.cabinet_settings.air_pump = !props.state.cabinet_settings.air_pump
+        local_state.cabinet_settings.air_pump = !local_state.cabinet_settings.air_pump
         changeState(local_state)
     }
     function toggleLightSensor() {
-        local_state.cabinet_settings.light_sensor = !props.state.cabinet_settings.light_sensor
+        local_state.cabinet_settings.light_sensor = !local_state.cabinet_settings.light_sensor
         changeState(local_state)
     }
     function toggleMovementSensor() {
-        local_state.cabinet_settings.movement_sensor = !props.state.cabinet_settings.movement_sensor
+        local_state.cabinet_settings.movement_sensor = !local_state.cabinet_settings.movement_sensor
         changeState(local_state)
     }
     function toggleOuterDoorSensor() {
-        local_state.cabinet_settings.outer_door_sensor = !props.state.cabinet_settings.outer_door_sensor
+        local_state.cabinet_settings.outer_door_sensor = !local_state.cabinet_settings.outer_door_sensor
         changeState(local_state)
     }
     function toggleCabinetDoorSensor() {
-        local_state.cabinet_settings.cabinet_door_sensor = !props.state.cabinet_settings.cabinet_door_sensor
+        local_state.cabinet_settings.cabinet_door_sensor = !local_state.cabinet_settings.cabinet_door_sensor
         changeState(local_state)
     }
     function togglePressureSensors() {
-        local_state.cabinet_settings.pressure_sensors = !props.state.cabinet_settings.pressure_sensors
+        local_state.cabinet_settings.pressure_sensors = !local_state.cabinet_settings.pressure_sensors
         changeState(local_state)
     }
+
     function toggleGerminateLight() {
-        local_state.cabinet_settings.light_germinate = !props.state.cabinet_settings.light_germinate
+        local_state.cabinet_settings.light_germinate = !local_state.cabinet_settings.light_germinate
         changeState(local_state)
     }
     function toggleVegetativeLight() {
-        local_state.cabinet_settings.light_vegetative = !props.state.cabinet_settings.light_vegetative
+        local_state.cabinet_settings.light_vegetative = !local_state.cabinet_settings.light_vegetative
         changeState(local_state)
     }
     function toggleBloomLight() {
-        local_state.cabinet_settings.light_bloom = !props.state.cabinet_settings.light_bloom
+        local_state.cabinet_settings.light_bloom = !local_state.cabinet_settings.light_bloom
         changeState(local_state)
     }
 
@@ -172,10 +173,10 @@ function RenderCabinetSettingsTab (props) {
                                 <Table id="light-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={props.state.cabinet_settings.light_germinate}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={props.state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={props.state.cabinet_settings.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={props.state.cabinet_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_state.cabinet_settings.light_germinate}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_state.cabinet_settings.light_vegetative}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_state.cabinet_settings.light_bloom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={local_state.cabinet_settings.light_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

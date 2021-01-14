@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
-
+import sprintf from 'sprintf-js';
 
 function RenderPhMeter (props) {
 
     let [state, setState] = useState(props.state); //
 
-    let valueText = state.status.root_ph +""
+    let valueText = sprintf.sprintf( "%.1f", state.status.root_ph )
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>

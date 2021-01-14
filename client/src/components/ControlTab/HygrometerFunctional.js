@@ -5,7 +5,7 @@ import sprintf from 'sprintf-js';
 function RenderHygrometer (props) {
     console.log("RenderHygrometer humidity = " + props.currentHumidity)
     let holderid = props.prefix + "humidity-holder"
-    let textid = "externalhumiditytext-holder"
+    let textid = props.prefix + "humiditytext-holder"
     let iconid = "externalhumidityicon-holder"
     let value = sprintf.sprintf("%2.1f", props.currentHumidity)
     let className = ""

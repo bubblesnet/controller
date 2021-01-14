@@ -11,7 +11,6 @@
     "thermometer_water": true,
     "water_pump": true,
     "air_pump": true,
-    "light_sensor": true,
     "cabinet_door_sensor": true,
     "outer_door_sensor": true,
     "movement_sensor": true,
@@ -29,6 +28,7 @@
       "Cabinet",
       "Tent"
     ],
+    "light_sensor": true,
     "light_bloom": true,
     "light_vegetative": true,
     "light_germinate": true
@@ -55,7 +55,7 @@
     ],
     "light_on_start_hour": 10,
     "target_temperature": 75,
-    "temperature_min": 60,
+    "temperature_min": 20,
     "temperature_max": 90,
     "humidity_min": 0,
     "humidity_max": 90,

@@ -8,7 +8,7 @@ import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 
 function RenderTextStatus (props) {
-    console.log("RenderTextStatus state = "+JSON.stringify(props.state))
+    console.log("RenderTextStatus")
 
     let ret =
         <Grid round={'small'} direction={'vertical'}

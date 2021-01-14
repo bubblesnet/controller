@@ -544,7 +544,7 @@ body {
 }
 
 #humidity-holder {
-  top: 100px;
+  top: 120px;
   left: 270px;
   width: 82px;
   height: 60px;
@@ -580,6 +580,17 @@ body {
 }
 
 #humiditytext-holder {
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 50px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+#externalhumiditytext-holder {
   top: 2px;
   left: 0;
   width: 20px;
@@ -628,16 +639,6 @@ body {
   font-size: large;
 }
 
-#externalhumiditytext-holder {
-  top: 2px;
-  left: 0;
-  width: 20px;
-  height: 50px;
-  position: absolute;
-  color: black;
-  font-weight: bold;
-  font-size: small;
-}
 
 #airtemp-holder-day {
   top: 40px;

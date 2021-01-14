@@ -9,6 +9,7 @@ import RenderEvents from "./components/EventsFunctional";
 import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
 import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFunctional"
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
+import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
@@ -157,6 +158,11 @@ function AuthenticatedApp (props) {
     const [local_state, setState] = useState(initial_state);
     const [local_settings, setSettings] = useState(initial_settings);
 
+    const applyMapChange = (value) => {
+        let x = JSON.parse(JSON.stringify(bubbles_theme));
+        console.log("AuthenticatedApp applyMapChange");
+    }
+
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
         console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
@@ -232,6 +238,11 @@ function AuthenticatedApp (props) {
                                         settings={local_settings} state={local_state}
                                         setStateFromChild={setCabinetSettingsStateFromChild}
                         />
+                    </Tab>
+                    <Tab title="Device Map">
+                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                     onMapChange={applyMapChange}
+                                     state={local_state}/>
                     </Tab>
                     <Tab title="Automation">
                         <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
