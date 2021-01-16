@@ -16,6 +16,8 @@ var htmlDecode = require("js-htmlencode").htmlDecode;
 
 global.__root   = __dirname + '/';
 
+var config_routes = require('./api/routes/config_routes');
+
 var video_routes = require('./api/routes/video_routes');
 var edgecontrol_routes = require('./api/routes/edgecontrol_routes');
 var edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
@@ -77,6 +79,7 @@ apiServer.use(bodyParser.urlencoded({extended: false}));
 apiServer.use(cookieParser());
 apiServer.use(express.static(path.join(__dirname, 'public')));
 
+apiServer.use('/api/config', config_routes);
 apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
 apiServer.use('/api/auth', auth_routes);
