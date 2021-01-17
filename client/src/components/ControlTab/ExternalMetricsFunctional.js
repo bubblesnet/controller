@@ -27,7 +27,7 @@ function RenderExternalMetrics (props) {
                     iconClassName={"pressure-icon-holder"}
                     value={props.state.status.pressure_external}
                     units={props.settings.display_settings.pressure_units}
-                    direction={"up"} />
+                    direction={props.state.status.pressure_external_direction} />
             </div>
         </>
     return (ret)

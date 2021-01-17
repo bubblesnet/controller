@@ -744,6 +744,15 @@ body {
   top: 0;
   width: 100px;
 }
+
+#root_ph_holder {
+  height: 40px;
+  right: 165px;
+  position: absolute;
+  bottom: 0;
+  width: 100px;
+}
+
 #water-level-ruler-holder {
   height: 180px;
   left: 630px;

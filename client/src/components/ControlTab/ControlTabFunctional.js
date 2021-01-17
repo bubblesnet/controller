@@ -15,6 +15,7 @@ import RenderThermometer from "./ThermometerFunctional";
 import RenderExternalMetrics from "./ExternalMetricsFunctional";
 import {Grommet, Table} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
+import RenderPhmeter from "./PhmeterFunctional";
 
 function RenderControlTab(props) {
 //    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
@@ -118,6 +119,9 @@ function RenderControlTab(props) {
                         <div id="tubedge-holder">
                         </div>
                         <div id="water-level-holder"> {wl} {wlruler}
+                        </div>
+                        <div id={"root_ph_holder"}>
+                            <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>
                         </div>
                     </div>
                     <div id="cabinet">

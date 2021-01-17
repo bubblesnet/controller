@@ -56,6 +56,7 @@ function AuthenticatedApp (props) {
 
     const applyMeasurementToState = (msg) => {
         local_state.status[msg.sensor_name] = msg.value
+        local_state.status[msg.sensor_name+"_direction"] = msg.direction
     }
 
     const handleWebSocketMessage = ( event ) => {
