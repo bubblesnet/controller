@@ -8,14 +8,17 @@
       "address": "0x76",
       "included_sensors": [
         {
-          "sensor_name": "humidity_sensor"
+          "sensor_name": "humidity_sensor",
+          "measurement_name": "internal_humidity"
         },
         {
           "sensor_name": "internal_pressure_sensor",
+          "measurement_name": "internal_pressure",
           "address": "44"
         },
         {
           "sensor_name": "thermometer_middle",
+          "measurement_name": "temp_air_middle",
           "address": "55"
         }
       ]
@@ -29,14 +32,17 @@
       "included_sensors": [
         {
           "sensor_name": "external_humidity_sensor",
+          "measurement_name": "external_humidity",
           "address": "55"
         },
         {
           "sensor_name": "external_pressure_sensor",
+          "measurement_name": "external_pressure",
           "address": "55"
         },
         {
           "sensor_name": "thermometer_external",
+          "measurement_name": "temp_air_external",
           "address": "55"
         }
       ]
@@ -50,32 +56,65 @@
       "included_sensors": [
         {
           "sensor_name": "light_sensor",
+          "measurement_name": "light_internal",
           "address": "55"
         }
       ]
     },
     {
       "container_name": "sense-go",
-      "deviceid": 70000008,
+      "deviceid": 70000007,
       "device_type": "ads1115",
       "protocol": "i2c",
       "address": "0x49",
       "included_sensors": [
         {
           "sensor_name": "water_level",
+          "measurement_name": "water_level",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc49_1_volts",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc49_2_volts",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc49_3_volts",
           "address": "55"
         }
       ]
     },
     {
       "container_name": "sense-go",
-      "deviceid": 70000008,
+      "deviceid": 70000007,
       "device_type": "ads1115",
       "protocol": "i2c",
       "address": "0x48",
       "included_sensors": [
         {
           "sensor_name": "",
+          "measurement_name": "adc48_0",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc48_1",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc48_2",
+          "address": "55"
+        },
+        {
+          "sensor_name": "",
+          "measurement_name": "adc48_3",
           "address": "55"
         }
       ]
@@ -89,32 +128,35 @@
       "included_sensors": [
         {
           "sensor_name": "movement_sensor",
+          "measurement_name": "movement",
           "address": "55"
         }
       ]
     },
     {
       "container_name": "sense-go",
-      "deviceid": 70000008,
+      "deviceid": 70000007,
       "device_type": "ezoph",
       "protocol": "i2c",
       "address": "0x63",
       "included_sensors": [
         {
           "sensor_name": "root_ph_sensor",
+          "measurement_name": "root_ph",
           "address": "55"
         }
       ]
     },
     {
       "container_name": "sense-go",
-      "deviceid": 70000008,
+      "deviceid": 70000007,
       "device_type": "hcsr04",
       "protocol": "i2c",
       "address": "0x47",
       "included_sensors": [
         {
           "sensor_name": "distance_sensor",
+          "measurement_name": "plant_height",
           "address": "55"
         }
       ]
@@ -128,6 +170,7 @@
       "included_sensors": [
         {
           "sensor_name": "cabinet_door_sensor",
+          "measurement_name": "cabinet_door_open",
           "address": "55"
         }
       ]
@@ -141,6 +184,7 @@
       "included_sensors": [
         {
           "sensor_name": "external_door_sensor",
+          "measurement_name": "external_door_open",
           "address": "55"
         }
       ]

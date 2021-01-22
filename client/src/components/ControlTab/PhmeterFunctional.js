@@ -3,7 +3,7 @@ import '../../App.css';
 import sprintf from 'sprintf-js';
 
 function RenderPhmeter (props) {
-    console.log("RenderPhmeter humidity = " + props.state.root_ph)
+    console.log("RenderPhmeter ph = " + props.state.root_ph)
     let value = sprintf.sprintf("%2.1f", props.state.root_ph)
     let className = ""
     if (props.direction === "up") {
