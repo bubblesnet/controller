@@ -55,6 +55,8 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
+        console.log("Applying "+msg.value + " to " + msg.measurement_name)
+        console.log(JSON.stringify(msg))
         local_state.status[msg.measurement_name] = msg.value
         local_state.status[msg.sensor_name+"_direction"] = msg.direction
     }
@@ -217,7 +219,7 @@ function AuthenticatedApp (props) {
 //        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
     }
-    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
+//    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
  //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
 
     return (
