@@ -55,10 +55,10 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
-        console.log("Applying "+msg.value + " to " + msg.measurement_name)
         console.log(JSON.stringify(msg))
         local_state.status[msg.measurement_name] = msg.value
         local_state.status[msg.sensor_name+"_direction"] = msg.direction
+        console.log("Applying "+msg.value + " " + local_state.status[msg.sensor_name+"_direction"]+ " to " + msg.measurement_name)
     }
 
     const handleWebSocketMessage = ( event ) => {
