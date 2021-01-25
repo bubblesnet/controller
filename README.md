@@ -15,3 +15,10 @@ original set of projects included:
 * File processors written in Java that read/write ActiveMQ, move file data into databases and archive files
 * A MySQL database
 * An Android/Android Things edge device that itself was a rewrite of a RPi python edge device
+
+Data structures
+
+A sensor on a device is referred to by its unique name
+The measurement the sensor takes also has a unique name
+The sensor and the measurement are linked in configuration not hard wired, so
+for instance you 'could' link a sensor named "humidity_sensor" to "air_temp_middle".
