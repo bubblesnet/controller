@@ -81,16 +81,16 @@ function RenderCabinetSettingsTab (props) {
         changeState(local_state)
     }
 
-    function toggleHumiditySensor() {
-        local_state.cabinet_settings.humidity_sensor = !local_state.cabinet_settings.humidity_sensor
+    function toggleHumiditySensorInternal() {
+        local_state.cabinet_settings.humidity_sensor_internal = !local_state.cabinet_settings.humidity_sensor_internal
         changeState(local_state)
     }
     function toggleExternalHumiditySensor() {
-        local_state.cabinet_settings.external_humidity_sensor = !local_state.cabinet_settings.external_humidity_sensor
+        local_state.cabinet_settings.humidity_sensor_external = !local_state.cabinet_settings.humidity_sensor_external
         changeState(local_state)
     }
     function toggleExternalThermometer() {
-        local_state.cabinet_settings.external_thermometer = !local_state.cabinet_settings.external_thermometer
+        local_state.cabinet_settings.thermometer_external = !local_state.cabinet_settings.thermometer_external
         changeState(local_state)
     }
     function toggleThermometerTop() {
@@ -185,8 +185,8 @@ function RenderCabinetSettingsTab (props) {
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
                                     <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={local_state.cabinet_settings.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensor} checked= {local_state.cabinet_settings.humidity_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_state.cabinet_settings.external_humidity_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensorInternal} checked= {local_state.cabinet_settings.humidity_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_state.cabinet_settings.humidity_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -198,7 +198,7 @@ function RenderCabinetSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked= {local_state.cabinet_settings.thermometer_top}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_state.cabinet_settings.thermometer_middle}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_state.cabinet_settings.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_state.cabinet_settings.external_thermometer}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_state.cabinet_settings.thermometer_external}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_state.cabinet_settings.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>

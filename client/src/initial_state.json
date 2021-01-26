@@ -1,13 +1,13 @@
 {
   "cabinet_settings": {
     "humidifier": true,
-    "humidity_sensor": true,
-    "external_humidity_sensor": true,
+    "humidity_sensor_internal": true,
+    "humidity_sensor_external": true,
     "heater": true,
     "thermometer_top": true,
     "thermometer_middle": true,
     "thermometer_bottom": true,
-    "external_thermometer": true,
+    "thermometer_external": true,
     "thermometer_water": true,
     "water_pump": true,
     "air_pump": true,
@@ -28,7 +28,7 @@
       "Cabinet",
       "Tent"
     ],
-    "light_sensor": true,
+    "light_sensor_internal": true,
     "light_bloom": true,
     "light_vegetative": true,
     "light_germinate": true

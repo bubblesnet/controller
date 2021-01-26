@@ -74,7 +74,7 @@ function RenderGrowLight (props) {
                             <RenderThermometer exists={props.state.cabinet_settings.thermometer_bottom}  currentTemperature={props.state.status.temp_air_bottom} units={props.settings.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
                         </div>
                     </div>
-                    <RenderHygrometer prefix={""} exists={props.state.cabinet_settings.humidity_sensor} currentHumidity={props.state.status.humidity_internal} units={props.settings.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
+                    <RenderHygrometer prefix={""} exists={props.state.cabinet_settings.humidity_sensor_internal} currentHumidity={props.state.status.humidity_internal} units={props.settings.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction}/>
                 </div>
         }
     return (ret)

@@ -59,8 +59,8 @@ const config = {
             device_type: "bme280",
             protocol: "i2c",
             address: "0x76",
-            included_sensors: [{sensor_name: "humidity_sensor"}
-                , {sensor_name: "internal_pressure_sensor", address: "44"}, {
+            included_sensors: [{sensor_name: "humidity_sensor_internal"}
+                , {sensor_name: "pressure_sensor_internal", address: "44"}, {
                     sensor_name: "thermometer_middle",
                     address: "55"
                 }]
@@ -71,8 +71,8 @@ const config = {
             device_type: "bme280",
             protocol: "i2c",
             address: "0x76",
-            included_sensors: [{sensor_name: "external_humidity_sensor", address: "55"},
-                {sensor_name: "external_pressure_sensor", address: "55"}, {
+            included_sensors: [{sensor_name: "humidity_sensor_external", address: "55"},
+                {sensor_name: "pressure_sensor_external", address: "55"}, {
                     sensor_name: "thermometer_external",
                     address: "55"
                 }]
@@ -83,7 +83,7 @@ const config = {
             device_type: "bh1750",
             protocol: "i2c",
             address: "0x23",
-            included_sensors: [{sensor_name: "light_sensor", address: "55"}]
+            included_sensors: [{sensor_name: "light_sensor_internal", address: "55"}]
         },
         {
             container_name: "sense-go",
@@ -144,17 +144,17 @@ const config = {
     ],
     cabinet_settings: {
         humidifier: true,
-        humidity_sensor: true,
-        external_humidity_sensor: true,
+        humidity_sensor_internal: true,
+        humidity_sensor_external: true,
         heater: true,
         thermometer_top: true,
         thermometer_middle: true,
         thermometer_bottom: true,
-        external_thermometer: true,
+        thermometer_external: true,
         thermometer_water: true,
         water_pump: true,
         air_pump: true,
-        light_sensor: true,
+        light_sensor_internal: true,
         cabinet_door_sensor: true,
         outer_door_sensor: true,
         movement_sensor: true,
