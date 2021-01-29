@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
+          apt-get install activemq
           npm install
           npm test
         working-directory: server
