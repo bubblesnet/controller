@@ -33,7 +33,6 @@ jobs:
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
-          /opt/activemq/bin/activemq status
           npm install
           npm test
         working-directory: server
