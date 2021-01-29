@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
-          sudo apt update
+          sudo apt update -y -q
           sudo apt-get install -y -q default-jre
           java -version
           sudo apt-get install -y -q activemq
@@ -36,6 +36,7 @@ jobs:
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
+          sudo /etc/init.d/activemq start
           sudo /usr/bin/activemq status
           npm install
           npm test
