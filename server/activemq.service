@@ -6,8 +6,8 @@ Type=forking
 User=activemq
 Group=activemq
 
-ExecStart=/opt/activemq/bin/activemq start
-ExecStop=/opt/activemq/bin/activemq stop
+ExecStart=/usr/share/activemq/bin/activemq start
+ExecStop=/usr/share/activemq/bin/activemq stop
 
 [Install]
 WantedBy=multi-user.target
