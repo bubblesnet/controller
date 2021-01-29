@@ -39,7 +39,6 @@ jobs:
           sudo systemctl enable activemq
           sudo /usr/bin/activemq start
           sudo /usr/bin/activemq status
-          sudo find / -name activemq.log -print
 
           npm install
           npm test
