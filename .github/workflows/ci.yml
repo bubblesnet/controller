@@ -16,7 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
+#       node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -30,7 +31,7 @@ jobs:
           sudo apt-get install default-jre
           java -version
           sudo apt-get install activemq
-          sudo find / -name activemq.xml -print
+          sudo find / -name activemq.jar -print
           sudo cp activemq.service /etc/systemd/system
           sudo systemctl daemon-reload
           sudo systemctl start activemq
