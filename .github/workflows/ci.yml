@@ -32,6 +32,8 @@ jobs:
           java -version
           sudo apt-get install -y -q activemq
           sudo cp activemq.service /etc/systemd/system
+          mkdir data
+          export ACTIVEMQ_DATA_DIR=$PWD/data
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
