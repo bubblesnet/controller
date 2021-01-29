@@ -30,6 +30,8 @@ jobs:
           sudo apt-get install default-jre
           java -version
           sudo apt-get install activemq
+          sudo find / -name activemq.xml -print
+          sudo cp activemq.service /etc/systemd/system
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
