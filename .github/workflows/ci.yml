@@ -32,12 +32,17 @@ jobs:
           java -version
           sudo apt-get install -y -q activemq
           sudo cp activemq.service /etc/systemd/system
-          mkdir data
+#          mkdir data
+#          export ACTIVEMQ_DATA_DIR=$PWD/data
+#          echo $ACTIVEMQ_DATA_DIR
           sudo touch /run/activemq.pid
           sudo chown activemq /run/activemq.pid
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
+          sudo /etc/init.d/activemq start
+#          sudo /usr/bin/activemq start
+          sudo ls -al $ACTIVEMQ_DATA_DIR
           sudo /usr/bin/activemq status
           sudo find / -name activemq.log -print
 
