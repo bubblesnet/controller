@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useRef } from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -19,27 +19,16 @@ import {grommet} from 'grommet/themes'
 import initial_state from './initial_state.json'
 import initial_settings from './initial_settings.json'
 
-import useWebSocket, { ReadyState } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 
 function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
-    const [apiConnected, setApiConnected] = useState(0);
+//    const [apiConnected, setApiConnected] = useState(0);
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
-
-/*    useEffect(async () => {
-        const result = await fetch('http://localhost:3003/healthcheck').then(res => {
-            console.log("API CONNECTED!");
-            setApiConnected( 1 );
-        }).catch(function(error){
-            console.log("API NOT CONNECTED!")
-            setApiConnected( -1 );
-        })
-    });
-*/
 
     const processMeasurementMessage = (message) => {
         console.log("processMeasurementMessage "+JSON.stringify(message))
@@ -57,8 +46,9 @@ function AuthenticatedApp (props) {
     const applyMeasurementToState = (msg) => {
         console.log(JSON.stringify(msg))
         local_state.status[msg.measurement_name] = msg.value
-        local_state.status[msg.sensor_name+"_direction"] = msg.direction
-        console.log("Applying "+msg.value + " " + local_state.status[msg.sensor_name+"_direction"]+ " to " + msg.measurement_name)
+        local_state.status[msg.measurement_name+"_direction"] = msg.direction
+//        console.log( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
+        console.log("Applying "+msg.value + " " + local_state.status[msg.measurement_name+"_direction"]+ " to " + msg.measurement_name)
     }
 
     const handleWebSocketMessage = ( event ) => {
@@ -88,8 +78,6 @@ function AuthenticatedApp (props) {
         }
     }
     const {
-//        sendMessage,
-//        lastMessage,
         sendJsonMessage,
         lastJsonMessage,
         readyState,
@@ -117,13 +105,15 @@ function AuthenticatedApp (props) {
     const handleClickSendMessage = useCallback(() =>
         sendit(), []);
 
-    const connectionStatus = {
+/*    const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
         [ReadyState.OPEN]: 'Open',
         [ReadyState.CLOSING]: 'Closing',
         [ReadyState.CLOSED]: 'Closed',
         [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
+
+ */
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
@@ -168,7 +158,7 @@ function AuthenticatedApp (props) {
 
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-        console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font)
+        console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value )
         x.global.font.family = current_font;
         console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
@@ -179,10 +169,12 @@ function AuthenticatedApp (props) {
         setCurrentFont(value)
     }
 
-    let setLang = (value) => {
+ /*   let setLang = (value) => {
         console.log("AuthenticatedApp setting language to " + value)
         setLanguage(value)
     }
+
+  */
 
     let setEnvironment = (value) => {
         console.log("AuthenticatedApp.setEnvironment(" + value + ")")

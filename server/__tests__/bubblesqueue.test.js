@@ -32,7 +32,7 @@ describe("BubblesQueue", () => {
             it( 'should return blah', async function() {
 //                await bubbles_queue.init(setClient)
                 console.log("subscribing ....")
-                bubbles_queue.subscribeToQueue();
+                bubbles_queue.subscribeToQueue(__testClient);
                 return "bleh";
             });
         }

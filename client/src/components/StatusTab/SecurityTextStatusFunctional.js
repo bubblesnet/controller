@@ -21,7 +21,7 @@ function RenderSecurityTextStatus (props) {
     let valuestr = ""
     if(props.state.cabinet_settings.pressure_sensors) {
          valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external, props.settings.display_settings.pressure_units )
-        extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{props.state.status.pressure_external}</Box></>
+        extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{valuestr}</Box></>
          valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_internal, props.settings.display_settings.pressure_units )
         intpressure = <><Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{valuestr}</Box></>
          valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external-props.state.status.pressure_internal, props.settings.display_settings.pressure_units )

@@ -13,28 +13,28 @@ function sendFakeMeasurement() {
     x = getRandomInt(9)
     switch (x) {
         case 1:
-            sendMeasurement("temperature", "temp_air_top", 20 + getRandomInt(79), "F")
+            sendMeasurement("temperature", "thermometer_top", "temp_air_top", 20 + getRandomInt(79), "F")
             break;
         case 2:
-            sendMeasurement("temperature", "temp_air_middle", 20 + getRandomInt(79), "F")
+            sendMeasurement("temperature", "thermometer_middle", "temp_air_middle", 20 + getRandomInt(79), "F")
             break;
         case 3:
-            sendMeasurement("temperature", "temp_air_bottom", 20 + getRandomInt(79), "F")
+            sendMeasurement("temperature", "thermometer_bottom", "temp_air_bottom", 20 + getRandomInt(79), "F")
             break;
         case 4:
-            sendMeasurement("temperature", "temp_air_external", 20 + getRandomInt(79), "F")
+            sendMeasurement("temperature", "thermometer_external", "temp_air_external", 20 + getRandomInt(79), "F")
             break;
         case 5:
-            sendMeasurement("temperature", "temp_water", 20 + getRandomInt(79), "F")
+            sendMeasurement("temperature", "thermometer_water", "temp_water", 20 + getRandomInt(79), "F")
             break;
         case 6:
-            sendMeasurement("humidity", "humidity_internal", 20 + getRandomInt(79), "%")
+            sendMeasurement("humidity", "humidity_sensor_internal", "humidity_internal", 20 + getRandomInt(79), "%")
             break;
         case 8:
-            sendMeasurement("humidity", "humidity_external", 20 + getRandomInt(79), "%")
+            sendMeasurement("humidity", "humidity_sensor_internal","humidity_external", 20 + getRandomInt(79), "%")
             break;
         case 7:
-            sendMeasurement("level", "tub_water_level", getRandomInt(150)/10, "gallons")
+            sendMeasurement("level", "water_level_sensor","tub_water_level", getRandomInt(150)/10, "gallons")
             break;
         default:
             break;
@@ -45,13 +45,14 @@ function sendFakeMeasurement() {
 }
 
 
-    function sendMeasurement(measurement_type,name,value,units) {
+    function sendMeasurement(measurement_type,sensor_name,measurement_name, value,units) {
     console.log("sendFakeMeasurement")
 
     let msg = {}
     msg.message_type = "measurement"
     msg.measurement_type= measurement_type
-    msg.sensor_name = name
+        msg.sensor_name = name
+        msg.measurement_name = name
     msg.sample_timestamp = Date.now = () => new Date().getTime();
     msg.value = value
     msg.units = units

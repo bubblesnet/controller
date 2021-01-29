@@ -78,6 +78,8 @@ var current_state = {
     },
     "status": {
         "units": "IMPERIAL",
+        "light_internal": 0.0,
+        "light_internal_direction": "",
         "temp_air_external": 65,
         "temp_air_external_direction": "up",
         "temp_air_top": 85,
@@ -100,7 +102,9 @@ var current_state = {
         "outer_door_open": false,
         "cabinet_door_open": false,
         "pressure_external": 1021,
+        "pressure_external_direction": "",
         "pressure_internal": 1018,
+        "pressure_internal_direction": "",
         "date_last_training": "never",
         "date_last_filter_change": "never",
         "tub_water_level": 14.9

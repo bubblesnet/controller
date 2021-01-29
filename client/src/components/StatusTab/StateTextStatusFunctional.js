@@ -3,6 +3,7 @@ import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
+import sprintf from 'sprintf-js'
 
 function RenderStateTextStatus (props) {
 
@@ -10,6 +11,7 @@ function RenderStateTextStatus (props) {
     let [settings, setSettings] = useState(props.settings); //
 
     console.log("RenderStateTextStatus")
+    let plant_height = sprintf.sprintf("%.1f", state.status.plant_height)
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[
@@ -26,7 +28,7 @@ function RenderStateTextStatus (props) {
         gap={"xxsmall"} >
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
-        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{state.status.plant_height} {settings.display_settings.plant_height_units}</Box>
+        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {settings.display_settings.plant_height_units}</Box>
         <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{state.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
         <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{state.automation_settings.current_stage}</Box>
