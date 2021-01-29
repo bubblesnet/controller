@@ -21,9 +21,9 @@ MessageProducer.prototype.init = function init(cb) {
     console.log("bubbles_queue.init")
     return new Promise((resolve, reject) => {
         Stomp.connect(connectOptions, function (error, client) {
-            console.log("STOMP client connected with sessionId ");
-            if (!error) {
-                cb(client)
+           if (!error) {
+               console.log("STOMP client connected");
+               cb(client)
                 resolve();
             } else {
                 console.log("STOMP client connect failed " + JSON.stringify(error))
