@@ -40,6 +40,7 @@ jobs:
           sudo systemctl enable activemq
           sudo /etc/init.d/activemq start
           sudo /usr/bin/activemq start
+          sudo ls -al $ACTIVEMQ_DATA_DIR
           sudo /usr/bin/activemq status
           sudo find / -name activemq.log -print
 
