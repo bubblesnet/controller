@@ -27,7 +27,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: |
           sudo apt-get install activemq
-          activemq-admin list
           npm install
           npm test
         working-directory: server

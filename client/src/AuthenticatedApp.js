@@ -44,11 +44,15 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
-        console.log(JSON.stringify(msg))
-        local_state.status[msg.measurement_name] = msg.value
-        local_state.status[msg.measurement_name+"_direction"] = msg.direction
+//        console.log(JSON.stringify(msg))
+        if( typeof msg.value === 'undefined' ) {
+            console.log("BAD measurement message " + JSON.stringify(msg))
+        } else {
+            local_state.status[msg.measurement_name] = msg.value
+            local_state.status[msg.measurement_name + "_direction"] = msg.direction
 //        console.log( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
-        console.log("Applying "+msg.value + " " + local_state.status[msg.measurement_name+"_direction"]+ " to " + msg.measurement_name)
+            console.log("Applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+        }
     }
 
     const handleWebSocketMessage = ( event ) => {

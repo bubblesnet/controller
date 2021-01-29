@@ -29,6 +29,7 @@ describe("BubblesQueue", () => {
         }
     );
     describe('Subscribe and read all', () => {
+        bubbles_queue.sendMessageToQueue(__testClient,"testing")
             it( 'should return blah', async function() {
 //                await bubbles_queue.init(setClient)
                 console.log("subscribing ....")
