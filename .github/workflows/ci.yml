@@ -35,6 +35,8 @@ jobs:
           mkdir data
           export ACTIVEMQ_DATA_DIR=$PWD/data
           echo $ACTIVEMQ_DATA_DIR
+          sudo touch /run/activemq.pid
+          sudo chown activemq /run/activemq.pid
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
