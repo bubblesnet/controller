@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
+          sudo apt update
+          sudo apt-get install default-jre
+          java -version
           sudo apt-get install activemq
           sudo systemctl daemon-reload
           sudo systemctl start activemq
