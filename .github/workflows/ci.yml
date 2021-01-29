@@ -25,5 +25,5 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - working-directory: server
+        working-directory: server
       - run: npm test
