@@ -35,6 +35,7 @@ jobs:
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           ls -al .
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          sudo chown -R activemq ./apache-activemq-${{matrix.activemq-version}}/*
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
           npm run coverage
