@@ -16,8 +16,8 @@ jobs:
 
     strategy:
       matrix:
-#       node-version: [10.x, 12.x, 14.x, 15.x]
-        node-version: [15.x]
+        #       node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [10.x, 12.x, 14.x, 15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -30,16 +30,11 @@ jobs:
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           java -version
-
           sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-5.16.1-bin.tar.gz >/dev/null 2> /dev/null
           sudo tar zxf apache-activemq-5.16.1-bin.tar.gz
           sudo ls -al .
           sudo rm ./apache-activemq-5.16.1-bin.tar.gz
-          sudo cat ./apache-activemq-5.16.1/conf/activemq.xml
           sudo ./apache-activemq-5.16.1/bin/activemq start
-
-          sudo netstat -antplF
-
           npm install
           npm test
         working-directory: server
