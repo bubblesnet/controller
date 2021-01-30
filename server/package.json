@@ -6,8 +6,8 @@
     "start-api": "node_modules/.bin/supervisor api-server",
     "start-queue": "node_modules/.bin/supervisor queue-server",
     "start-ws": "node_modules/.bin/supervisor ws-server",
-    "coverage": "node_modules/.bin/nyc npm run test",
-    "test": "node_modules/.bin/mocha --timeout 10000 --reporter mochawesome --reporter-options reportDir=reports,reportName=ReportName --exit __tests__/*.js"
+    "coverage": "node_modules/.bin/nyc --reporter=lcov npm run test ",
+    "test": "node_modules/.bin/mocha --timeout 10000  --exit __tests__/*.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
