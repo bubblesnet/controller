@@ -33,6 +33,7 @@ jobs:
 
           sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-5.16.1-bin.tar.gz >/dev/null 2> /dev/null
           sudo tar zxf apache-activemq-5.16.1-bin.tar.gz
+          sudo ls -al .
           sudo rm ./apache-activemq-5.16.1-bin.tar.gz
           sudo cat ./apache-activemq-5.16.1-bin/conf/activemq.xml
           sudo ./apache-activemq-5.16.1-bin/bin/activemq start
