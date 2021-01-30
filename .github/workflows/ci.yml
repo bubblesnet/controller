@@ -41,6 +41,8 @@ jobs:
           sudo ls -al /var/lib/activemq/data
           sudo ps -ef
           sudo /usr/bin/activemq status
+          sudo ls -al /var/lib/activemq/data
+          sudo ls -al /var/lib/activemq/conf
           sudo netstat -antplF
 
           npm install
