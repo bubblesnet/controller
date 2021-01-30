@@ -1,5 +1,7 @@
 # controller
 
+[![codecov](https://codecov.io/gh/bubblesnet/controller/branch/develop/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
+
 The controller is a control, and data collection and analysis service designed to 
 work with the bubblesnet edge-device.  It consists of:
 
