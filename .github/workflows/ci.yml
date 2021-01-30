@@ -31,11 +31,11 @@ jobs:
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           java -version
 
-          sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-5.16.1-bin.tar.gz
+          sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-5.16.1-bin.tar.gz >/dev/null 2> /dev/null
           sudo tar zxf apache-activemq-5.16.1-bin.tar.gz
           sudo rm ./apache-activemq-5.16.1-bin.tar.gz
-          sudo cat ./activemq/conf/activemq.xml
-          sudo ./activemq/bin/activemq start
+          sudo cat ./apache-activemq-5.16.1-bin/conf/activemq.xml
+          sudo ./apache-activemq-5.16.1-bin/bin/activemq start
 
           sudo netstat -antplF
 
