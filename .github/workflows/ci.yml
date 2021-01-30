@@ -42,5 +42,6 @@ jobs:
           sudo netstat -antplF
 
           npm install
+          sudo /usr/bin/activemq status
           npm test
         working-directory: server
