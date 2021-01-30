@@ -16,10 +16,9 @@ jobs:
 
     strategy:
       matrix:
-        #       node-version: [10.x, 12.x, 14.x, 15.x]
         node-version: [10.x, 12.x, 14.x, 15.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        # activemq-version: [5.16.1,5.15.14]
+        activemq-version: [5.16.1]
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +30,7 @@ jobs:
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           java -version
-          sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-5.16.1-bin.tar.gz >/dev/null 2> /dev/null
+          sudo wget https://downloads.apache.org/activemq/5.16.1/apache-activemq-{{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
           sudo tar zxf apache-activemq-5.16.1-bin.tar.gz
           sudo ls -al .
           sudo rm ./apache-activemq-5.16.1-bin.tar.gz
