@@ -34,6 +34,7 @@ jobs:
           sudo cp activemq.service /etc/systemd/system
           sudo touch /run/activemq.pid
           sudo chown activemq /run/activemq.pid
+          sudo chown -R activemq /var/lib/activemq/*
           sudo systemctl daemon-reload
           sudo systemctl start activemq
           sudo systemctl enable activemq
