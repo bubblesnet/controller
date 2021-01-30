@@ -9,35 +9,40 @@ function setClient(client) {
 
 describe("BubblesQueue", () => {
     describe('Init', () => {
-        it( 'should return blah', async function() {
-            console.log("initing ....")
-            await bubbles_queue.init(setClient);
-            return "blah";
-        });
-        }
-        );
-
-    describe('Send', () => {
-            it( 'should return blah', function() {
-                console.log("sending ....")
-                for( var i = 0; i < 10; i++ ) {
-                    bubbles_queue.sendMessageToQueue(__testClient, "blah "+i);
-                    bubbles_queue.sendMessageToTopic(__testClient,"blah "+i);
-                }
+            it('should return blah', async function () {
+                console.log("initing ....")
+                await bubbles_queue.init(setClient);
+                __testClient.disconnect();
                 return "blah";
             });
-        }
-    );
+        });
+
+    describe('Send', () => {
+        console.log("sending")
+        it('should return blah', async function () {
+            console.log("sending ....")
+            await bubbles_queue.init(setClient)
+            for (var i = 0; i < 10; i++) {
+                bubbles_queue.sendMessageToQueue(__testClient, "blah " + i);
+                bubbles_queue.sendMessageToTopic(__testClient, "blah " + i);
+            }
+            __testClient.disconnect();
+            return "blah";
+        });
+    });
+
     describe('Subscribe and read all', () => {
-        bubbles_queue.init(setClient);
-        bubbles_queue.sendMessageToQueue(__testClient,"testing")
-            it( 'should return blah', async function() {
-//                await bubbles_queue.init(setClient)
-                console.log("subscribing ....")
-                bubbles_queue.subscribeToQueue(__testClient);
-                return "bleh";
+        it('should return blah', async function () {
+            console.log("subbing")
+            await bubbles_queue.init(setClient)
+            console.log("subscribing ....")
+            bubbles_queue.sendMessageToQueue(__testClient, "testing")
+            bubbles_queue.subscribeToQueue(__testClient, function (body) {
+                console.log( "received " + body)
             });
-        }
-    );
+            __testClient.disconnect();
+           return ("bleh");
+        });
+    });
 
 });
