@@ -35,8 +35,8 @@ jobs:
           sudo tar zxf apache-activemq-5.16.1-bin.tar.gz
           sudo ls -al .
           sudo rm ./apache-activemq-5.16.1-bin.tar.gz
-          sudo cat ./apache-activemq-5.16.1-bin/conf/activemq.xml
-          sudo ./apache-activemq-5.16.1-bin/bin/activemq start
+          sudo cat ./apache-activemq-5.16.1/conf/activemq.xml
+          sudo ./apache-activemq-5.16.1/bin/activemq start
 
           sudo netstat -antplF
 
