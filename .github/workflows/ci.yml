@@ -37,7 +37,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
-          sudo npm run coverage
-          sudo bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v -s ./reports
-          sudo npm test
+          npm run coverage
+          bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v -s ./reports -X search
+          npm test
         working-directory: server
