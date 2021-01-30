@@ -31,10 +31,10 @@ jobs:
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           java -version
-          sudo wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
-          sudo tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          sudo ls -al .
-          sudo rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          ls -al .
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
           npm run coverage
