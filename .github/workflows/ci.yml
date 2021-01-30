@@ -39,7 +39,7 @@ jobs:
           sudo systemctl enable activemq
           sudo /usr/bin/activemq start
           sudo /usr/bin/activemq status
-          sudo nmap -open 127.0.0.1
+          sudo netstat -antplF
 
           npm install
           npm test
