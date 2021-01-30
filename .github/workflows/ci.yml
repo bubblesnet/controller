@@ -43,6 +43,7 @@ jobs:
           sudo /usr/bin/activemq status
           sudo ls -al /var/lib/activemq/data
           sudo ls -al /var/lib/activemq
+          sudo find / -name jetty.xml -print
           sudo netstat -antplF
 
           npm install
