@@ -39,10 +39,10 @@ jobs:
           sudo systemctl enable activemq
           sudo /usr/bin/activemq start
           sudo ls -al /var/lib/activemq/data
-          sudo ps -ef
+          sudo ps -ef | grep -i java
           sudo /usr/bin/activemq status
           sudo ls -al /var/lib/activemq/data
-          sudo ls -al /var/lib/activemq/conf
+          sudo ls -al /var/lib/activemq
           sudo netstat -antplF
 
           npm install
