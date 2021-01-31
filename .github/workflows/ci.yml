@@ -10,7 +10,6 @@ on:
     branches: [ develop ]
 
 jobs:
-  container-job:
     runs-on: ubuntu-latest
 
     services:
@@ -37,10 +36,15 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         env:
           # The hostname used to communicate with the PostgreSQL service container
-          POSTGRES_HOST: db
+          POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-        uses: actions/setup-node@v1
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5       uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
@@ -54,7 +58,7 @@ jobs:
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
 
-          sudo psql -h db -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
