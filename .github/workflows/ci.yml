@@ -10,64 +10,65 @@ on:
     branches: [ develop ]
 
 jobs:
-  runs-on: ubuntu-latest
+  runner-job:
+    runs-on: ubuntu-latest
 
-  services:
-    db:
-      image: postgres
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: bubbles_dev
-      ports:
-        - 5432:5432
-      # needed because the postgres container does not provide a healthcheck
-      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bubbles_dev
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-  strategy:
-    matrix:
-      node-version: [15.x, 10.x, 12.x, 14.x]
+    strategy:
+      matrix:
+        node-version: [15.x, 10.x, 12.x, 14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         #          sudo bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v -s ./reports
-      activemq-version: [5.16.1, 5.15.14]
+        activemq-version: [5.16.1, 5.15.14]
 
-  steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      env:
-        # The hostname used to communicate with the PostgreSQL service container
-        POSTGRES_HOST: localhost
-        # The default PostgreSQL port
-        POSTGRES_PORT: 5432
-        POSTGRES_PASSWORD: postgres
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5       uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: |
-        sudo apt update -y -q > /dev/null 2> /dev/null
-        sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
-        java -version
-        wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
-        tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-        ls -al .
-        rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-        sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
-        npm install
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5       uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          sudo apt update -y -q > /dev/null 2> /dev/null
+          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
+          java -version
+          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          ls -al .
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          npm install
 
-        sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
 
-        export PORT=3003
-        export ICEBREAKER_DB=icebreaker_dev
-        export NODE_ENV=DEV
-        cp config_ci.json config.json
-        node src/queue-server.js&
-        node src/ws-server.js&
-        sudo netstat -a
-        sudo npm run coverage
-        bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
-        npm test
-      working-directory: server
+          export PORT=3003
+          export ICEBREAKER_DB=icebreaker_dev
+          export NODE_ENV=DEV
+          cp config_ci.json config.json
+          node src/queue-server.js&
+          node src/ws-server.js&
+          sudo netstat -a
+          sudo npm run coverage
+          bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
+          npm test
+        working-directory: server
