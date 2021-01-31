@@ -10,9 +10,9 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
-
+  container-job:
     runs-on: ubuntu-latest
+    container: node:10.18-jessie
 
     services:
       db:
@@ -54,7 +54,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
-          
+
           sudo psql -h db -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
 
           export PORT=3003
