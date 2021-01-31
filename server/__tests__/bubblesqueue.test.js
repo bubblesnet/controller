@@ -40,11 +40,13 @@ describe("BubblesQueue", () => {
             bubbles_queue.subscribeToQueue(__testClient, function (body) {
                 console.log( "received " + body)
             });
+            bubbles_queue.sendMessageToQueue(__testClient, "testing")
             bubbles_queue.sendMessageToTopic(__testClient, "testing")
             bubbles_queue.subscribeToTopic(__testClient, function (body) {
                 console.log( "received " + body)
             });
-            __testClient.disconnect();
+            bubbles_queue.sendMessageToTopic(__testClient, "testing")
+            bubbles_queue.deInit(__testClient);
            return ("bleh");
         });
     });
