@@ -1,7 +1,7 @@
 
 const fs = require('fs');
 
-global.localconfig = {}
+global.localconfig = { bubbles_db_config: {}}
 
 try {
 

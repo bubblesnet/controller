@@ -5,7 +5,7 @@ const Pool = require('pg').Pool
 
 console.log('Creating initial bubbles database connection to '+JSON.stringify(locals.getLocals().bubbles_db_config));
 
-let pool = new Pool(locals.getLocals().bubbles_db_config);
+let pool = new Pool(localconfig.bubbles_db_config);
 
 const getPool = () => {
     return(pool)
