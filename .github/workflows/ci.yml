@@ -51,6 +51,7 @@ jobs:
           npm install
           sudo netstat -a
           ps -ef | grep -i postgres
+          sudo pg_config
           sudo createdb bubbles_dev
 
           export PORT=3003
