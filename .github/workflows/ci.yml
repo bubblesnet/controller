@@ -12,7 +12,7 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest
-    container: node:15.7.0-alpine3.10
+    container: node:14.15.4-buster
 
     services:
       db:
