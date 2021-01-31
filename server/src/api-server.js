@@ -21,7 +21,6 @@ var config_routes = require('./api/routes/config_routes');
 var video_routes = require('./api/routes/video_routes');
 var edgecontrol_routes = require('./api/routes/edgecontrol_routes');
 var edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
-var icebreaker_routes = require('./api/routes/icebreaker_routes');
 var user_routes = require('./api/routes/user_routes');
 var auth_routes = require('./api/routes/authcontroller_routes');
 var health_check = require('./api/routes/health_check_routes');
@@ -86,7 +85,6 @@ apiServer.use('/api/auth', auth_routes);
 apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edgecontrol_routes);
 apiServer.use("/api/measurement", edgemeasurement_routes);
-apiServer.use("/api/icebreaker", icebreaker_routes);
 //apiServer.use('/', index);
 
 // catch 404 and forward to error handler
