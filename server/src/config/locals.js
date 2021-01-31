@@ -24,13 +24,6 @@ global.localconfig = {
         database: 'bubbles_dev',
         port: 5432
     },
-    icebreaker_db_config: {
-        host: '192.168.21.237',
-        user: 'postgres',
-        password: 'postgres',
-        database: 'icebreaker_dev',
-        port: 5432
-    },
     /// TODO move this to env var
     secret: 'supersecret'
 };
