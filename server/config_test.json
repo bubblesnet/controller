@@ -25,4 +25,4 @@
     "port": "5432"
   },
   "secret": "supersecret"
-};
+}

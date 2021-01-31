@@ -53,6 +53,7 @@ jobs:
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
           export NODE_ENV=DEV
+          cp config_ci.json config.json
           node src/queue-server.js&
           node src/ws-server.js&
           sudo netstat -a
