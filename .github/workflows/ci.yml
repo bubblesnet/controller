@@ -12,7 +12,6 @@ on:
 jobs:
   container-job:
     runs-on: ubuntu-latest
-    container: node:14.15.4-buster
 
     services:
       db:
