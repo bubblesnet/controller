@@ -48,14 +48,13 @@ jobs:
           ls -al .
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
-          sudo npm install
+          npm install
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
           export NODE_ENV=DEV
           node src/queue-server.js&
           node src/ws-server.js&
-          cd ..
 
           sudo npm run coverage
           bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
