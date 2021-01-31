@@ -11,19 +11,21 @@
             vsprintf = require("sprintf-js").vsprintf;
 
         if (temperatureMonitoredSensor) {
-            if (temperatureMonitoredSensor.units == 'METRIC' &&
-                config.getLocals().units == 'IMPERIAL') {
+            if (temperatureMonitoredSensor.units === 'METRIC' &&
+                config.getLocals().units === 'IMPERIAL') {
                 ret.value = sprintf("%.1f", (temperatureMonitoredSensor.value * 9 / 5) + 32);
             }
-            else if (temperatureMonitoredSensor.units == 'IMPERIAL' &&
-                config.getLocals().units == 'METRIC') {
+            else if (temperatureMonitoredSensor.units === 'IMPERIAL' &&
+                config.getLocals().units === 'METRIC') {
                 ret.value = sprintf("%.1f", (temperatureMonitoredSensor.value - 32) * 5 / 9);
             }
-            if (config.getLocals().units == 'METRIC') {
+            if (config.getLocals().units === 'METRIC') {
+                ret.value = temperatureMonitoredSensor.value;
                 ret.units = "C";
             }
             else {
-                ret.units = 'F';
+                ret.value = temperatureMonitoredSensor.value;
+               ret.units = 'F';
             }
         }
         return ( ret );

@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "eslint": "^4.16.0",
+    "chai": "^4.2.0",
     "mochawesome": "*",
     "nyc": "*",
     "should": "~11.2.1"
