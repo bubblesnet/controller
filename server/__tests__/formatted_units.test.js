@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 
 describe("formatted_units", () => {
     console.log("formatted_units")
-    it('should return blah', function () {
+    it('Happy path', function () {
         localconfig.units = "IMPERIAL"
         let x = formatted_units.formattedTemperature({units: "IMPERIAL", value: 72.0});
         console.log(x)
