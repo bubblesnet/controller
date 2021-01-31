@@ -54,9 +54,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
-          export PGPASSFILE=./ci.pgpass
-          export PGPASSWORD=postgres
-          sudo createdb -h localhost -p 5432 bubbles_dev --no-password
+          sudo psql -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
