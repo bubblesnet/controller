@@ -36,6 +36,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
@@ -49,11 +54,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
-          sudo netstat -a
-          ps -ef | grep -i postgres
-          sudo ls -al /run
-          sudo ls -al /run/postgresql
-          sudo createdb bubbles_dev
+          sudo createdb -h $POSTGRES_HOST -p $POSTGRES_PORT bubbles_dev
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
