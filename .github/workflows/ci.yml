@@ -14,6 +14,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     strategy:
       matrix:
         node-version: [15.x, 10.x, 12.x, 14.x]
@@ -41,7 +53,6 @@ jobs:
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
           export NODE_ENV=DEV
-          node src/api-server.js&
           node src/queue-server.js&
           node src/ws-server.js&
           cd ..
