@@ -54,7 +54,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
-          sudo createdb -h $POSTGRES_HOST -p $POSTGRES_PORT bubbles_dev
+          sudo createdb -h postgres -p 5432 bubbles_dev
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
