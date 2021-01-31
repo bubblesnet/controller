@@ -1,7 +1,7 @@
 var express = require('express');
 var locals = require('../../config/locals');
 var fs = require('fs');
-var db = require('../models/icebreaker_db');
+var db = require('../models/bubbles_db');
 const disk = require('diskspace');
 var sprintf = require('sprintf-js').sprintf;
 

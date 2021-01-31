@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 const path = require('path');
 var locals = require('./config/locals');
 var fs = require('fs');
-var db = require('./api/models/icebreaker_db');
+var db = require('./api/models/bubbles_db');
 const disk = require('diskspace');
 var sprintf = require('sprintf-js').sprintf;
 
@@ -44,12 +44,6 @@ apiServer.use(function (req, res, next) {
 });
 
 const port  = normalizePort(process.env.PORT || '3000')
-
-const testrun_model = require('./api/models/icebreaker/testrun_model')
-const devicestatus_model = require('./api/models/icebreaker/devicestatus_model')
-const metrics_model = require('./api/models/icebreaker/metrics_model')
-const sbc_model = require('./api/models/icebreaker/sbc_model')
-const testqueue_model = require('./api/models/icebreaker/testqueue_model')
 
 var http = require('http'),
     fs = require('fs'),
