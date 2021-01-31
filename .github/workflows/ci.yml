@@ -50,6 +50,7 @@ jobs:
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
           sudo netstat -a
+          createdb bubbles_dev
 
           export PORT=3003
           export ICEBREAKER_DB=icebreaker_dev
