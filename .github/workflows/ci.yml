@@ -54,6 +54,7 @@ jobs:
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           npm install
+          export PGPASSWORD=postgres
           sudo createdb -h localhost -p 5432 bubbles_dev --username postgres --no-password
 
           export PORT=3003
