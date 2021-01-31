@@ -2,6 +2,11 @@
   "name": "bubblesweb",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -33,12 +38,20 @@
     "@babel/cli": "^7.12.8",
     "@babel/core": "^7.12.9",
     "@babel/plugin-transform-react-jsx": "^7.12.7",
-    "babel-plugin-react-intl": "^8.2.21"
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "babel-plugin-react-intl": "^8.2.25",
+    "@babel/preset-env": "7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/dom": "^7.29.4",
+    "react-test-renderer": "^17.0.1"
   },
   "scripts": {
     "start": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "extract-messages": "set NODE_ENV=production&& babel --plugins react-intl ./src >NUL"
   },

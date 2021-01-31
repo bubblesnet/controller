@@ -33,7 +33,7 @@ MessageProducer.prototype.init = function init(cb) {
     });
 };
 
-MessageProducer.prototype.subscribeToTopic = async function subscribeToTopic(__stompClient, cb) {
+MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompClient, cb) {
     console.log("MessageProducer.prototype.subscribeToTopic")
     const subscribeHeaders = {
         'destination': '/topic/bubbles_ui',

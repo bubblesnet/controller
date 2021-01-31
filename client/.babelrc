@@ -1,9 +1,25 @@
 {
-  "presets": ["react-app"],
+  "env": {
+    "development": {
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+    "test": {
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    }
+  },
+  "presets": [
+    "react-app"
+  ],
   "plugins": [
-    [ "react-intl", {
-      "messagesDir": "./build/messages",
-      "extractSourceLocation": true
-    }]
+    [
+      "react-intl",
+      {
+        "extractSourceLocation": true
+      }
+    ]
   ]
 }
