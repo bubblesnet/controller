@@ -28,8 +28,6 @@ jobs:
     strategy:
       matrix:
         node-version: [15.x, 10.x, 12.x, 14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        #          sudo bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v -s ./reports
         activemq-version: [5.16.1, 5.15.14]
 
     steps:
@@ -37,9 +35,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
-      - name: Install dependencies
+      # Performs a clean installation of ActiveMQ
         run: |
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
@@ -50,19 +46,31 @@ jobs:
           sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL client, populates
-        # the client with data, and retrieves data
-        # run: node client.js
+      - name: Setup PostgreSQL
+        # Creates the DB schema and loads initial table data
         run: |
           sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          ICEBREAKER_DB: icebreaker_dev
+        working-directory: server
+
+      - name: Run tests with coverage
+        # Runs a script that creates a PostgreSQL client, populates
+        # the client with data, and retrieves data
+        # run: node client.js
+        run: |
           cp config_ci.json config.json
           node src/queue-server.js&
           node src/ws-server.js&
           node src/api-server.js&
-          sudo npm run coverage
+        # sudo??
+          npm run coverage
           bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
         # Environment variables used by the app script to create
         # a new PostgreSQL client.
@@ -75,3 +83,4 @@ jobs:
           ICEBREAKER_DB: icebreaker_dev
           NODE_ENV: DEV
         working-directory: server
+
