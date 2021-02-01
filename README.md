@@ -1,6 +1,6 @@
 # controller
 
-[![PRs Welcome][prs-badge]][prs]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 [![GitHub stars](https://img.shields.io/github/stars/bubblesnet/controller.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/bubblesnet/controller/)
 [![codecov](https://codecov.io/gh/bubblesnet/controller/branch/1-feature-firstapis/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
