@@ -30,7 +30,7 @@ MessageProducer.prototype.init = async function init(cb) {
     return new Promise(async (resolve, reject) => {
         let count = 1
         clientSet = false;
-        while (clientSet === false && count < 20) {
+        while (clientSet === false && count <= 20) {
             console.log("initing .... " + count)
 
             await Stomp.connect(connectOptions, function (error, client) {
@@ -41,7 +41,9 @@ MessageProducer.prototype.init = async function init(cb) {
                     resolve();
                 } else {
                     console.log("STOMP client connect failed " + JSON.stringify(error))
-                    reject("STOMP client connect failed " + JSON.stringify(error));
+                    if( count === 20 ) {
+                        reject("STOMP client connect failed - too many retries " + JSON.stringify(error));
+                    }
                 }
             });
             if (!clientSet) {
