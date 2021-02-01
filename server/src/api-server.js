@@ -1,18 +1,19 @@
-var express = require('express');
-var apiServer = express()
+const express = require('express');
+const cors = require('cors')
+const apiServer = express()
 
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const path = require('path');
-var locals = require('./config/locals');
-var fs = require('fs');
-var db = require('./api/models/bubbles_db');
+const locals = require('./config/locals');
+const fs = require('fs');
+const db = require('./api/models/bubbles_db');
 const disk = require('diskspace');
-var sprintf = require('sprintf-js').sprintf;
+const sprintf = require('sprintf-js').sprintf;
 
-var htmlDecode = require("js-htmlencode").htmlDecode;
+const htmlDecode = require("js-htmlencode").htmlDecode;
 
 global.__root   = __dirname + '/';
 
@@ -45,12 +46,6 @@ apiServer.use(function (req, res, next) {
 
 const port  = normalizePort(process.env.PORT || '3000')
 
-var http = require('http'),
-    fs = require('fs'),
-    express = require('express'),
-    bodyParser = require('body-parser'),
-    mysql = require('mysql');
-
 apiServer.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -75,6 +70,7 @@ apiServer.use(express.static(path.join(__dirname, 'public')));
 apiServer.use('/api/config', config_routes);
 apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
+// apiServer.use(cors());
 apiServer.use('/api/auth', auth_routes);
 apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edgecontrol_routes);
@@ -96,8 +92,10 @@ apiServer.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+//    res.render('error');
 });
+
+
 
 /**
  * Normalize a port into a number, string, or false.

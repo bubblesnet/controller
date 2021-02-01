@@ -20,11 +20,13 @@ function setSuccessfulLogin(e) {
 function App() {
     console.log("Starting App")
 
-    let [successfulLogin, setSuccessfulLogin] = useState(false);
+    const [token, setToken] = useState({auth: false, token: ""});
+
 //    const user = useUser()
 //    return user ? <TestApp /> : <UnauthenticatedApp successfulLogin={setSuccessfulLogin}/>
 
-    return successfulLogin ? <AuthenticatedApp /> : <UnauthenticatedApp successfulLogin={setSuccessfulLogin}/>
+    console.log("Rendering App with token set to " + JSON.stringify(token ))
+    return (token.auth === true) ? <AuthenticatedApp /> : <UnauthenticatedApp setToken={setToken}/>
 }
 
 export default App

@@ -1,33 +1,52 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+const cors = require('cors')
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const user = require('../models/user')
 
-var VerifyToken = require('../services/verify_token');
+const VerifyToken = require('../services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var User = require('../services/user');
+router.use(cors());
+const User = require('../services/user');
 
 /**
  * Configure JWT
  */
-var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-var bcrypt = require('bcryptjs');
-var config = require('../../config/locals'); // get config file
+const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+const bcrypt = require('bcryptjs');
+const saltRounds = 10;
+const config = require('../../config/locals'); // get config file
+
+let myPlaintextPassword = "xyz"
+let myhash = ""
+
+bcrypt.genSalt(saltRounds, async function(err, salt) {
+    bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
+        if( err ) {
+            console.log("Error " + err )
+        }
+        // Store hash in your password DB.
+        myhash = hash
+        console.log("myhash = " + hash)
+    });
+});
 
 router.post('/login', function(req, res) {
+    console.log("api/auth/login generating token")
 
-    User.findOne({ email: req.body.email }, function (err, user) {
+    user.findOne(req.body.email, function (err, user) {
         if (err) return res.status(500).send('Error on the server.');
         if (!user) return res.status(404).send('No user found.');
 
         // check if the password is valid
-        var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
         if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
         // if user is found and password is valid
         // create a token
-        var token = jwt.sign({ id: user._id }, config.getLocals().secret, {
+        let token = jwt.sign({ id: user._id }, config.getLocals().secret, {
             expiresIn: 86400 // expires in 24 hours
         });
 

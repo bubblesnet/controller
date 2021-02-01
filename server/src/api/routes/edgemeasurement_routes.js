@@ -4,6 +4,7 @@ const bubbles_queue = require('../models/bubbles_queue')
 
 let __edgeMeasurementClient
 
+
 function setClient(client) {
     __edgeMeasurementClient = client;
 }
@@ -30,8 +31,8 @@ router.post("/:userid/:deviceid", function (req, res, next) {
  //               bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, req.body)
  //               bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, req.body)
                 // return OK
-            console.log("init finished")
-                res.json(req.body);
+            console.log("init finished");
+            res.json(req.body);
          }
         )
     } else {
