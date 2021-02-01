@@ -46,6 +46,15 @@ jobs:
         # Runs a script that creates a PostgreSQL client, populates
         # the client with data, and retrieves data
         # run: node client.js
+        run: |
+          cd server
+          npm install >/dev/null 2> /dev/null
+          sudo apt update -y -q > /dev/null 2> /dev/null
+          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
+          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         # Environment variable used by the `client.js` script to create
         # a new PostgreSQL client.
         env:
@@ -53,9 +62,4 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-      - name: Run against Node.js ${{ matrix.node-version }}
-        run: |
-          sudo apt update -y -q > /dev/null 2> /dev/null
-          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
-        working-directory: server
 
