@@ -34,8 +34,7 @@ jobs:
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
       - name: Install dependencies
-          working-directory: server
-        run: npm install
+        run: cd server;npm install
 
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL client, populates
