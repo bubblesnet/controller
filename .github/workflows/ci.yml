@@ -62,7 +62,6 @@ jobs:
           sudo netstat -a
           sudo npm run coverage
           bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
-          npm test
         # Environment variables used by the app script to create
         # a new PostgreSQL client.
         env:
