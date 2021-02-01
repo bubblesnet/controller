@@ -54,7 +54,8 @@ jobs:
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
       - name: Run against Node.js ${{ matrix.node-version }}
-        working-directory: server
         run: |
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
+        working-directory: server
+
