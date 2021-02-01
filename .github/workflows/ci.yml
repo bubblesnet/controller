@@ -40,7 +40,14 @@ jobs:
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
       - name: Install dependencies
-        run: npm install
+        run: |
+          sudo apt update -y -q > /dev/null 2> /dev/null
+          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
+          npm install >/dev/null 2> /dev/null
+          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
       - name: Connect to PostgreSQL
@@ -48,15 +55,7 @@ jobs:
         # the client with data, and retrieves data
         # run: node client.js
         run: |
-          npm install >/dev/null 2> /dev/null
-          sudo apt update -y -q > /dev/null 2> /dev/null
-          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
-          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
-          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
           sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
-
           cp config_ci.json config.json
           node src/queue-server.js&
           node src/ws-server.js&
