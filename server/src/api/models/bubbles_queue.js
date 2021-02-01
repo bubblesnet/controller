@@ -35,7 +35,7 @@ MessageProducer.prototype.init = async function init(cb) {
 
             await Stomp.connect(connectOptions, function (error, client) {
                 if (!error) {
-                    console.log("STOMP client connected");
+                    console.log("STOMP client connected on try #" + count);
                     clientSet = true;
                     cb(client)
                     resolve();
