@@ -56,6 +56,8 @@ jobs:
         # run: node client.js
         run: |
           sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
           cp config_ci.json config.json
           node src/queue-server.js&
           node src/ws-server.js&
