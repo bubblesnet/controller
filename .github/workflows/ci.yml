@@ -36,6 +36,7 @@ jobs:
         uses: actions/checkout@v2
 
       # Performs a clean installation of ActiveMQ
+      - name: "Install ActiveMQ ${{matrix.activemq-version}}"
         run: |
           sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
