@@ -9,43 +9,24 @@ function setClient(client) {
     clientSet = true;
 }
 
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
 
 describe("BubblesQueue", () => {
     describe('Init', () => {
-            it('should return blah', async function () {
-                let count = 1
-                while( clientSet === false  && count < 20) {
-                    console.log("initing .... " + count)
-                    await bubbles_queue.init(setClient);
-                    if( !clientSet ) {
-                        count++;
-                        await sleep(2000)
-                    }
-                }
-                clientSet = false;
-                bubbles_queue.deInit(__testClient);
-                return "blah";
-            });
+        it('should return blah', async function () {
+            console.log("initing .... ")
+            await bubbles_queue.init(setClient);
+            clientSet = false;
+            bubbles_queue.deInit(__testClient);
+            return "blah";
         });
+    });
 
     describe('Send', () => {
         console.log("sending")
         it('should return blah', async function () {
             console.log("sending ....")
-            let count = 1
-            while( clientSet === false  && count < 20) {
-                console.log("initing .... " + count)
-                await bubbles_queue.init(setClient);
-                if( !clientSet ) {
-                    count++;
-                    await sleep(2000)
-                }
-            }
+            console.log("initing .... ")
+            await bubbles_queue.init(setClient);
             for (var i = 0; i < 10; i++) {
                 bubbles_queue.sendMessageToQueue(__testClient, "blah " + i);
                 bubbles_queue.sendMessageToTopic(__testClient, "blah " + i);
@@ -59,15 +40,8 @@ describe("BubblesQueue", () => {
     describe('Subscribe and read all', () => {
         it('should return blah', async function () {
             console.log("subbing")
-            let count = 1
-            while( clientSet === false && count < 20) {
-                console.log("initing .... " + count)
-                await bubbles_queue.init(setClient);
-                if( !clientSet ) {
-                    count++;
-                    await sleep(2000)
-                }
-            }
+            console.log("initing .... ")
+            await bubbles_queue.init(setClient);
             console.log("subscribing ....")
             bubbles_queue.sendMessageToQueue(__testClient, "testing")
             bubbles_queue.subscribeToQueue(__testClient, function (body) {
@@ -84,5 +58,4 @@ describe("BubblesQueue", () => {
            return ("bleh");
         });
     });
-
 });

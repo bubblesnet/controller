@@ -59,7 +59,6 @@ jobs:
           cp config_ci.json config.json
           node src/queue-server.js&
           node src/ws-server.js&
-          sudo netstat -a
           sudo npm run coverage
           bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
         # Environment variables used by the app script to create

@@ -17,19 +17,39 @@ const connectOptions = {
 const MessageProducer = function MessageProducer() {
 };
 
+let clientSet = false
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
 MessageProducer.prototype.init = async function init(cb) {
     console.log("bubbles_queue.init")
     return new Promise(async (resolve, reject) => {
-        await Stomp.connect(connectOptions, function (error, client) {
-           if (!error) {
-               console.log("STOMP client connected");
-               cb(client)
-               resolve();
-            } else {
-                console.log("STOMP client connect failed " + JSON.stringify(error))
-                reject("STOMP client connect failed " + JSON.stringify(error));
+        let count = 1
+        clientSet = false;
+        while (clientSet === false && count < 20) {
+            console.log("initing .... " + count)
+
+            await Stomp.connect(connectOptions, function (error, client) {
+                if (!error) {
+                    console.log("STOMP client connected");
+                    clientSet = true;
+                    cb(client)
+                    resolve();
+                } else {
+                    console.log("STOMP client connect failed " + JSON.stringify(error))
+                    reject("STOMP client connect failed " + JSON.stringify(error));
+                }
+            });
+            if (!clientSet) {
+                count++;
+                await sleep(2000)
             }
-        });
+        }
+
     });
 };
 
