@@ -1,8 +1,9 @@
 # controller
 
 [![codecov](https://codecov.io/gh/bubblesnet/controller/branch/1-feature-firstapis/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
-![ci](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg)
-![Your Repository's Stats](https://contrib.rocks/image?repo=bubblesnet/controller)
+[![ci](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg)]
+[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors-)
+[![version][version-badge]][package] [![downloads][downloads-badge]][npmtrends]
 
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bubblesnet&show_icons=true)
 
