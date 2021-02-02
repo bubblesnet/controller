@@ -36,6 +36,21 @@ describe("user",   () => {
     })
 });
 
+describe("user",   () => {
+    console.log("find filled user")
+    it('Empty User', async function () {
+        try {
+            let x = await user.findOne('blah@blah.com');
+            console.log("found user = " + JSON.stringify(x))
+            expect(x.userid >= 0)
+        } catch (err) {
+            console.log("find user error "+err)
+            assert(false)
+        }
+    })
+});
+
+
 
 describe("user",  () => {
     console.log("update empty user string")
