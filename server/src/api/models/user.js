@@ -75,6 +75,22 @@ async function createEmptyUser(body) {
     })
 }
 
+async function createUser(body) {
+    return new Promise(function(resolve, reject) {
+        console.log("inserting new USER "+JSON.stringify(body))
+        let passwordhash = bcrypt.hashSync(body.password, 8);
+
+        pool.query("INSERT INTO public.user (body.firstname,body.lastname,body.email,passwordhash) VALUES ('','','','') RETURNING *", [], (error, results) => {
+            if (error) {
+                reject(error)
+            } else {
+                console.log("new userid " + results.rows[0])
+                resolve({userid: results.rows[0].userid, message: "A new user has been added :" + results.rows[0].userid})
+            }
+        })
+    })
+}
+
 
 async function updateSingleUserField(body) {
         console.log('updateSingleUserField')
@@ -134,6 +150,7 @@ module.exports = {
     updateSingleUserField: updateSingleUserField,
     getAllUsers: getAllUsers,
     createEmptyUser: createEmptyUser,
+    createUser: createUser,
     deleteUser: deleteUser,
     setPassword: setPassword,
     endPool: endPool,

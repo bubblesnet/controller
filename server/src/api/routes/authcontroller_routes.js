@@ -71,7 +71,7 @@ router.post('/register', function(req, res) {
 
             // if user is registered without errors
             // create a token
-            var token = jwt.sign({id: user._id}, config.secret, {
+            let token = jwt.sign({id: user._id}, config.secret, {
                 expiresIn: 86400 // expires in 24 hours
             });
 
@@ -82,11 +82,20 @@ router.post('/register', function(req, res) {
 function newUser(req,res, cb) {
     let hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
-    user.create({
+    user.createUser({
             name : req.body.name,
             email : req.body.email,
             password : hashedPassword
-        }, cb );
+        }, cb )
+        .then(function (user) {
+            console.log("Created real new user "+JSON.stringify(user));
+            return( user )
+        })
+        .catch(function (err) {
+            console.log("new User error "+err)
+            return( {} )
+        })
+    ;
 }
 
 router.get('/me', VerifyToken, function(req, res, next) {
