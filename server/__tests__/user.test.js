@@ -86,7 +86,7 @@ describe("user",  () => {
     console.log("update empty user string")
     it('Generate error bad user in updateSingleUserField string', function () {
         console.log("created_userid = " + JSON.stringify(created_userid))
-        let x = user.updateSingleUserField({userid: -99, fieldname: "firstname", value: "BLAH"})
+        let x = user.updateSingleUserField({userid: -99, fieldname: "badfieldname", value: "BLAH"})
             .then(function() {
                 console.log("user x = " + x)
                 assert(false)
