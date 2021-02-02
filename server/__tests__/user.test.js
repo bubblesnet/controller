@@ -27,12 +27,12 @@ describe("user",  () => {
     it('Update User', function () {
         console.log("created_userid = " + JSON.stringify(created_userid))
         let x = user.updateSingleUserField({userid: created_userid, fieldname: "firstname", value: "BLAH"})
-            .then(response => {
-                console.log(x)
-                expect(x.userid).greaterThanOrEqual(0)
+            .then(function() {
+                console.log("user x = " + x)
+                expect(x.userid >= 0)
             })
-            .catch(response => {
-                console.log(x)
+            .catch(function(err) {
+                console.log("update user catch error "+err+" response = " + x)
                 assert(false)
             });
     })
@@ -46,8 +46,9 @@ describe("auth",   () => {
             let x = await user.setPassword(created_userid, plaintext_password);
 
             expect(created_userid >= 0)
+            expect(x.userid >= 0)
         } catch (err) {
-            console.log("new user error "+err)
+            console.log("new user error " + err)
             assert(false)
         }
     })
@@ -58,12 +59,12 @@ describe("user",  () => {
     it('Update User', function () {
 
         let x = user.updateSingleUserField({userid: created_userid, fieldname: "timezone", value: -5})
-            .then(response => {
+            .then(function() {
                 console.log(JSON.stringify(x))
                 expect(x.userid>=0)
             })
-            .catch(response => {
-                console.log(x)
+            .catch(function(err) {
+                console.log("empty user catch error = " + err)
                 assert(false)
             });
     })
@@ -75,11 +76,11 @@ describe("user",  () => {
 
         let x = user.deleteUser(created_userid)
             .then(response => {
-                console.log(JSON.stringify(x))
+                console.log("delete user x = " + JSON.stringify(x))
                 expect(x.userid>=0)
             })
-            .catch(response => {
-                console.log(x)
+            .catch(function(err){
+                console.log("delete user catch error "+err)
                 assert(false)
             });
     })

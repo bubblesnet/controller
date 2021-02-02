@@ -63,28 +63,31 @@ router.get('/logout', function(req, res) {
     res.status(200).send({ auth: false, token: null });
 });
 
+
 router.post('/register', function(req, res) {
-
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    User.create({
-            name : req.body.name,
-            email : req.body.email,
-            password : hashedPassword
-        },
+    return (newUser(req, res,
         function (err, user) {
             if (err) return res.status(500).send("There was a problem registering the user`.");
 
             // if user is registered without errors
             // create a token
-            var token = jwt.sign({ id: user._id }, config.secret, {
+            var token = jwt.sign({id: user._id}, config.secret, {
                 expiresIn: 86400 // expires in 24 hours
             });
 
-            res.status(200).send({ auth: true, token: token });
-        });
-
+            res.status(200).send({auth: true, token: token});
+        }));
 });
+
+function newUser(req,res, cb) {
+    let hashedPassword = bcrypt.hashSync(req.body.password, 8);
+
+    user.create({
+            name : req.body.name,
+            email : req.body.email,
+            password : hashedPassword
+        }, cb );
+}
 
 router.get('/me', VerifyToken, function(req, res, next) {
 

@@ -75,29 +75,35 @@ async function createEmptyUser(body) {
     })
 }
 
+
 async function updateSingleUserField(body) {
-        console.log('updateUser')
+        console.log('updateSingleUserField')
         console.log("body = "+JSON.stringify(body))
         console.log(' typeof(body.value) = ' +  typeof(body.value))
-        if( typeof(body.value) === "string") {
-            console.log('UPDATE public.user SET '+body.fieldname+'= '+body.value+' WHERE userid = '+body.userid)
-            pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
-                if (error) {
-                    console.log(error)
-                    throw(error)
-                }
-                return({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
-            })
+    return new Promise(function(resolve, reject) {
+            if (typeof (body.value) === "string") {
+                console.log('UPDATE public.user SET ' + body.fieldname + '= ' + body.value + ' WHERE userid = ' + body.userid)
+                pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
+                    if (error) {
+                        console.log("err1 " + error)
+                        reject(error)
+                    } else {
+                        resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
+                    }
+                })
 
-        } else {
-            pool.query(`UPDATE public.user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
-                if (error) {
-                    console.log(error)
-                    throw(error)
-                }
-                return({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
-            })
+            } else {
+                pool.query(`UPDATE public.user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
+                    if (error) {
+                        console.log("err2 " + error)
+                        reject(error)
+                    } else {
+                        resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
+                    }
+                })
+            }
         }
+    );
 }
 
 async function setPassword(userid, plaintext_password) {
@@ -114,11 +120,12 @@ async function deleteUser(id) {
 
         pool.query('DELETE FROM user WHERE userid = $1', [userid], (error, results) => {
             if (error) {
-                console.log(error)
+                console.log("err3 " + error)
                 reject(error)
+            } else {
+                console.log("results " + JSON.stringify(results))
+                resolve({userid: id, message: 'USER deleted with ID ' + userid})
             }
-            console.log("results "+JSON.stringify(results))
-            resolve({ userid: id, message: 'USER deleted with ID '+userid})
         })
     })
 }
