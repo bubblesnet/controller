@@ -38,22 +38,6 @@ describe("user",  () => {
     })
 });
 
-describe("auth",   () => {
-    console.log("set password for empty user")
-    it('Set password', async function () {
-        try {
-            const plaintext_password = 'xyz'
-            let x = await user.setPassword(created_userid, plaintext_password);
-
-            expect(created_userid >= 0)
-            expect(x.userid >= 0)
-        } catch (err) {
-            console.log("new user error " + err)
-            assert(false)
-        }
-    })
-});
-
 describe("user",  () => {
     console.log("update empty user int")
     it('Update User', function () {
@@ -69,6 +53,39 @@ describe("user",  () => {
             });
     })
 });
+
+
+describe("auth",   () => {
+    console.log("set good password for real empty user")
+    it('Set password', async function () {
+        try {
+            const plaintext_password = 'xyz'
+            let x = await user.setPassword(created_userid, plaintext_password);
+
+            expect(created_userid >= 0)
+            expect(x.userid >= 0)
+        } catch (err) {
+            console.log("new user error " + err)
+            assert(false)
+        }
+    })
+});
+
+describe("auth",   () => {
+    console.log("set good password for bogus user")
+    it('Set password', async function () {
+        try {
+            const plaintext_password = 'xyz'
+            let x = await user.setPassword(-1, plaintext_password);
+            assert(false)
+        } catch (err) {
+            console.log("set pw error " + err)
+            expect(err)
+        }
+    })
+});
+
+
 
 describe("user",  () => {
     console.log("delete empty user int")
