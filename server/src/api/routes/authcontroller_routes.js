@@ -35,7 +35,10 @@ bcrypt.genSalt(saltRounds, async function(err, salt) {
 
 router.post('/login', function(req, res) {
     console.log("api/auth/login generating token")
+    findUser(req, res)
+})
 
+function findUser(req,res) {
     user.findOne(req.body.email, function (err, user) {
         if (err) return res.status(500).send('Error on the server.');
         if (!user) return res.status(404).send('No user found.');
@@ -54,7 +57,7 @@ router.post('/login', function(req, res) {
         res.status(200).send({ auth: true, token: token });
     });
 
-});
+}
 
 router.get('/logout', function(req, res) {
     res.status(200).send({ auth: false, token: null });

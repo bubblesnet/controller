@@ -1,19 +1,19 @@
 // authcontroller_routes.js
 
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var User = require('./services/user');
+const User = require('./services/user');
 
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-var config = require('../config');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const config = require('../config/locals');
 
-router.post('/register', function(req, res) {
 
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+function register( req,res) {
+    const hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
     User.create({
             name : req.body.name,
@@ -23,11 +23,16 @@ router.post('/register', function(req, res) {
         function (err, user) {
             if (err) return res.status(500).send("There was a problem registering the user.")
             // create a token
-            var token = jwt.sign({ id: user._id }, config.secret, {
+            const token = jwt.sign({ id: user._id }, config.getLocals().secret, {
                 expiresIn: 86400 // expires in 24 hours
             });
             res.status(200).send({ auth: true, token: token });
         });
+
+}
+
+router.post('/register', function(req, res) {
+    register(req,res)
 });
 
 router.get('/me', function(req, res) {

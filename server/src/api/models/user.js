@@ -1,4 +1,5 @@
 const locals = require("../../config/locals");
+const bcrypt = require('bcryptjs');
 
 const server_db = require('./bubbles_db')
 const pool = server_db.getPool()
@@ -40,6 +41,26 @@ async function getAllUsers() {
     })
 }
 
+async function findOne(email) {
+    console.log("findOne")
+    return new Promise(function (resolve, reject) {
+        let ssql = "select * from user where email = ''" + email +"'' "
+            + " order by lastname asc, firstname asc, email asc"
+        pool.query(ssql, (error, results) => {
+            if (error) {
+                reject(error)
+            }
+            if (results) {
+                 resolve(results.rows[0]);
+            } else {
+                //               reject("no data")
+                reject("no user found at id " + userid);
+            }
+        })
+    })
+}
+
+
 async function createEmptyUser(body) {
     return new Promise(function(resolve, reject) {
         console.log("inserting new USER "+JSON.stringify(body))
@@ -79,6 +100,11 @@ async function updateSingleUserField(body) {
         }
 }
 
+async function setPassword(userid, plaintext_password) {
+    let passwordhash = bcrypt.hashSync(plaintext_password, 8);
+    console.log("plaintext = " + plaintext_password+" hash = "+passwordhash)
+    return await updateSingleUserField({userid: userid, passwordhash: passwordhash})
+}
 
 async function deleteUser(id) {
     console.log("deleteUser "+id)
@@ -102,7 +128,9 @@ module.exports = {
     getAllUsers: getAllUsers,
     createEmptyUser: createEmptyUser,
     deleteUser: deleteUser,
+    setPassword: setPassword,
     endPool: endPool,
     getUser: getUser,
+    findOne: findOne
 }
 
