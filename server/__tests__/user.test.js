@@ -39,6 +39,39 @@ describe("user",  () => {
 });
 
 describe("user",  () => {
+    console.log("update empty user string")
+    it('Generate error bad user in updateSingleUserField string', function () {
+        console.log("created_userid = " + JSON.stringify(created_userid))
+        let x = user.updateSingleUserField({userid: -99, fieldname: "firstname", value: "BLAH"})
+            .then(function() {
+                console.log("user x = " + x)
+                assert(false)
+            })
+            .catch(function(err) {
+                console.log("update user catch error "+err+" response = " + x)
+                expect(err)
+            });
+    })
+});
+
+describe("user",  () => {
+    console.log("update empty user string")
+    it('Generate error bad user in updateSingleUserField int', function () {
+        console.log("created_userid = " + JSON.stringify(created_userid))
+        let x = user.updateSingleUserField({userid: -99, fieldname: "timezone", value: -5})
+            .then(function() {
+                console.log("user x = " + x)
+                assert(false)
+            })
+            .catch(function(err) {
+                console.log("update user catch error "+err+" response = " + x)
+                expect(err)
+            });
+    })
+});
+
+
+describe("user",  () => {
     console.log("update empty user int")
     it('Update User', function () {
 
@@ -104,7 +137,6 @@ describe("user",  () => {
 describe("user",  () => {
     console.log("Generate error in delete user")
     it('Generate error in delete user', function () {
-
         let x = user.deleteUser(-9)
             .then(response => {
                 console.log("delete user x = " + JSON.stringify(x))
