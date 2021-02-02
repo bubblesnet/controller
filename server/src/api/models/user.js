@@ -20,8 +20,7 @@ const getUser = (email_address, cb) => {
 async function getAllUsers() {
     console.log("user_model getUsers")
     return new Promise(function (resolve, reject) {
-        let ssql = "select * from user "
-            + " order by lastname asc, firstname asc, email asc"
+        let ssql = "select * from user order by lastname asc, firstname asc, email asc"
         pool.query(ssql, (error, results) => {
             if (error) {
                 reject(error)
@@ -44,9 +43,10 @@ async function getAllUsers() {
 async function findOne(email) {
     console.log("findOne")
     return new Promise(function (resolve, reject) {
-        let ssql = "select * from user where email = ''" + email +"'' "
-            + " order by lastname asc, firstname asc, email asc"
-        pool.query(ssql, (error, results) => {
+        let ssql = 'select * from user where email = $1 order by lastname asc, firstname asc, email asc'
+        console.log("ssql = "+ssql)
+        let values = [email]
+        pool.query(ssql, values, (error, results) => {
             if (error) {
                 reject(error)
             }
@@ -54,7 +54,7 @@ async function findOne(email) {
                  resolve(results.rows[0]);
             } else {
                 //               reject("no data")
-                reject("no user found at id " + userid);
+                reject("no user found at email " + email);
             }
         })
     })
@@ -80,7 +80,8 @@ async function createUser(body) {
         console.log("inserting new USER "+JSON.stringify(body))
         let passwordhash = bcrypt.hashSync(body.password, 8);
 
-        pool.query("INSERT INTO public.user (body.firstname,body.lastname,body.email,passwordhash) VALUES ('','','','') RETURNING *", [], (error, results) => {
+        pool.query("INSERT INTO public.user (firstname,lastname,email,passwordhash) VALUES ($1,$2,$3,$4) RETURNING *",
+            [body.firstname, body.lastname, body.email, passwordhash], (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -93,13 +94,14 @@ async function createUser(body) {
 
 
 async function updateSingleUserField(body) {
-        console.log('updateSingleUserField')
-        console.log("body = "+JSON.stringify(body))
-        console.log(' typeof(body.value) = ' +  typeof(body.value))
-    return new Promise(function(resolve, reject) {
-            if (typeof (body.value) === "string") {
-                console.log('UPDATE public.user SET ' + body.fieldname + '= ' + body.value + ' WHERE userid = ' + body.userid)
-                pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
+    console.log('updateSingleUserField')
+    console.log("body = " + JSON.stringify(body))
+    console.log(' typeof(body.value) = ' + typeof (body.value))
+    return new Promise(function (resolve, reject) {
+            console.log('UPDATE public.user SET ' + body.fieldname + '= ' + body.value + ' WHERE userid = ' + body.userid)
+//                pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
+            pool.query(`UPDATE public.user SET ${body.fieldname} = $1 WHERE userid = $2`,
+                [body.value, body.userid], (error, results) => {
                     if (error) {
                         console.log("err1 " + error)
                         reject(error)
@@ -107,17 +109,6 @@ async function updateSingleUserField(body) {
                         resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
                     }
                 })
-
-            } else {
-                pool.query(`UPDATE public.user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
-                    if (error) {
-                        console.log("err2 " + error)
-                        reject(error)
-                    } else {
-                        resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
-                    }
-                })
-            }
         }
     );
 }

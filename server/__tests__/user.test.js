@@ -21,6 +21,21 @@ describe("user",   () => {
     })
 });
 
+describe("user",   () => {
+    console.log("create filled user")
+    it('Filled User', async function () {
+        try {
+            let x = await user.createUser({firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz'});
+            console.log("new filled user = " + JSON.stringify(x))
+            created_userid = x.userid
+            expect(created_userid >= 0)
+        } catch (err) {
+            console.log("new user error "+err)
+            assert(false)
+        }
+    })
+});
+
 
 describe("user",  () => {
     console.log("update empty user string")

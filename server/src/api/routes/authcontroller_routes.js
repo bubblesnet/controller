@@ -55,6 +55,9 @@ function findUser(req,res) {
 
         // return the information including token as JSON
         res.status(200).send({ auth: true, token: token });
+    }).catch(function(err) {
+        console.log("error " + err)
+        if (err) return res.status(500).send('Error on the server .'+err);
     });
 
 }
