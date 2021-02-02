@@ -52,3 +52,19 @@ describe("user",  () => {
             });
     })
 });
+
+describe("user",  () => {
+    console.log("delete empty user int")
+    it('Update User', function () {
+
+        let x = user.deleteUser(created_userid)
+            .then(response => {
+                console.log(JSON.stringify(x))
+                expect(x.userid>=0)
+            })
+            .catch(response => {
+                console.log(x)
+                assert(false)
+            });
+    })
+});

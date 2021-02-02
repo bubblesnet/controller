@@ -92,7 +92,7 @@ async function deleteUser(id) {
                 reject(error)
             }
             console.log("results "+JSON.stringify(results))
-            resolve({ message: `USER deleted with ID`})
+            resolve({ userid: id, message: 'USER deleted with ID '+userid})
         })
     })
 }
