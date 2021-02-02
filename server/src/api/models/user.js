@@ -20,7 +20,7 @@ const getUser = (email_address, cb) => {
 async function getAllUsers() {
     console.log("user_model getUsers")
     return new Promise(function (resolve, reject) {
-        let ssql = "select * from user order by lastname asc, firstname asc, email asc"
+        let ssql = "select * from public.user order by lastname asc, firstname asc, email asc"
         pool.query(ssql, (error, results) => {
             if (error) {
                 reject(error)

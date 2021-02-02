@@ -50,6 +50,20 @@ describe("user",   () => {
     })
 });
 
+describe("user",   () => {
+    console.log("get all user")
+    it('Empty User', async function () {
+        try {
+            let x = await user.getAllUsers();
+            console.log("found users = " + JSON.stringify(x))
+            expect(x.length >= 0)
+        } catch (err) {
+            console.log("get all user error "+err)
+            assert(false)
+        }
+    })
+});
+
 
 
 describe("user",  () => {
