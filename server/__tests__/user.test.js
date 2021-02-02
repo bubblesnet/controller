@@ -1,26 +1,26 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
+const assert = require('assert');
 
 let created_userid = -1
-
-describe("user",  () => {
+/*
+describe("user",   () => {
     console.log("create empty user")
-    it('Empty User', function () {
-
-        let x = user.createEmptyUser({})
-            .then(response => {
-                console.log(x)
-                created_userid = x.userid
-                expect(x.userid).greaterThanOrEqual(0)
-            })
-            .catch(response => {
-                console.log(x)
-                assert(false)
-            });
+    it('Empty User', async function () {
+        try {
+            let x = await user.createEmptyUser({});
+            console.log("new user = " + JSON.stringify(x))
+            created_userid = x.userid
+            expect(x.userid).greaterThanOrEqual(0)
+        } catch (err) {
+            console.log("new user error "+err)
+            assert(false)
+        }
     })
 });
-
+*/
+/*
 describe("user",  () => {
     console.log("update empty user string")
     it('Update User', function () {
@@ -52,3 +52,4 @@ describe("user",  () => {
             });
     })
 });
+*/

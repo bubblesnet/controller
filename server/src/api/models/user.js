@@ -40,9 +40,9 @@ const getAllUsers = () => {
     })
 }
 
-const createEmptyUser = (body) => {
+function createEmptyUser(body) {
     return new Promise(function(resolve, reject) {
-        console.log("inserting new USER")
+        console.log("inserting new USER "+JSON.stringify(body))
         pool.query("INSERT INTO user (firstname,lastname,email) VALUES ('','','') RETURNING *", [], (error, results) => {
             if (error) {
                 reject(error)
@@ -53,8 +53,7 @@ const createEmptyUser = (body) => {
     })
 }
 
-const updateSingleUserField = (body) => {
-    return new Promise(function(resolve, reject) {
+function updateSingleUserField(body) {
         console.log('updateUser')
         console.log("body = "+body)
         ssql = 'UPDATE user SET '+body.fieldname+' = '+body.value+' WHERE userid='+body.userid;
@@ -64,21 +63,20 @@ const updateSingleUserField = (body) => {
             pool.query(`UPDATE user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
                 if (error) {
                     console.log(error)
-                    reject(error)
+                    throw(error)
                 }
-                resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
+                return({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
             })
 
         } else {
             pool.query(`UPDATE user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
                 if (error) {
                     console.log(error)
-                    reject(error)
+                    throw(error)
                 }
-                resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
+                return({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
             })
         }
-    })
 }
 
 
