@@ -73,7 +73,7 @@ describe("auth",   () => {
 
 describe("auth",   () => {
     console.log("set good password for bogus user")
-    it('Set password', async function () {
+    it('Generate error in set password', async function () {
         try {
             const plaintext_password = 'xyz'
             let x = await user.setPassword(-1, plaintext_password);
@@ -85,11 +85,9 @@ describe("auth",   () => {
     })
 });
 
-
-
 describe("user",  () => {
-    console.log("delete empty user int")
-    it('Update User', function () {
+    console.log("delete empty user")
+    it('Delete real empty user', function () {
 
         let x = user.deleteUser(created_userid)
             .then(response => {
@@ -102,3 +100,20 @@ describe("user",  () => {
             });
     })
 });
+
+describe("user",  () => {
+    console.log("Generate error in delete user")
+    it('Generate error in delete user', function () {
+
+        let x = user.deleteUser(-9)
+            .then(response => {
+                console.log("delete user x = " + JSON.stringify(x))
+                assert(false)
+            })
+            .catch(function(err){
+                console.log("delete user catch error "+err)
+                expect(err)
+            });
+    })
+});
+
