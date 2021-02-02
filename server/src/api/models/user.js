@@ -16,7 +16,7 @@ const getUser = (email_address, cb) => {
     cb( null, user )
 }
 
-const getAllUsers = () => {
+async function getAllUsers() {
     console.log("user_model getUsers")
     return new Promise(function (resolve, reject) {
         let ssql = "select * from user "
@@ -40,27 +40,27 @@ const getAllUsers = () => {
     })
 }
 
-function createEmptyUser(body) {
+async function createEmptyUser(body) {
     return new Promise(function(resolve, reject) {
         console.log("inserting new USER "+JSON.stringify(body))
-        pool.query("INSERT INTO user (firstname,lastname,email) VALUES ('','','') RETURNING *", [], (error, results) => {
+        pool.query("INSERT INTO public.user (firstname,lastname,email,passwordhash) VALUES ('','','','') RETURNING *", [], (error, results) => {
             if (error) {
                 reject(error)
+            } else {
+                console.log("new userid " + results.rows[0])
+                resolve({userid: results.rows[0].userid, message: "A new user has been added :" + results.rows[0].userid})
             }
-            console.log("new userid " + results.rows[0])
-            resolve({userid: results.rows[0], message: "A new user has been added added:"+results.rows[0]})
         })
     })
 }
 
-function updateSingleUserField(body) {
+async function updateSingleUserField(body) {
         console.log('updateUser')
-        console.log("body = "+body)
-        ssql = 'UPDATE user SET '+body.fieldname+' = '+body.value+' WHERE userid='+body.userid;
-        console.log(ssql)
+        console.log("body = "+JSON.stringify(body))
         console.log(' typeof(body.value) = ' +  typeof(body.value))
         if( typeof(body.value) === "string") {
-            pool.query(`UPDATE user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
+            console.log('UPDATE public.user SET '+body.fieldname+'= '+body.value+' WHERE userid = '+body.userid)
+            pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
                 if (error) {
                     console.log(error)
                     throw(error)
@@ -69,7 +69,7 @@ function updateSingleUserField(body) {
             })
 
         } else {
-            pool.query(`UPDATE user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
+            pool.query(`UPDATE public.user SET ${body.fieldname} = ${body.value} WHERE userid = ${body.userid}`, (error, results) => {
                 if (error) {
                     console.log(error)
                     throw(error)
@@ -80,7 +80,7 @@ function updateSingleUserField(body) {
 }
 
 
-const deleteUser = (id) => {
+async function deleteUser(id) {
     console.log("deleteUser "+id)
     return new Promise(function(resolve, reject) {
         const userid = parseInt(id)
