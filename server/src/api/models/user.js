@@ -103,7 +103,7 @@ async function updateSingleUserField(body) {
 async function setPassword(userid, plaintext_password) {
     let passwordhash = bcrypt.hashSync(plaintext_password, 8);
     console.log("plaintext = " + plaintext_password+" hash = "+passwordhash)
-    return await updateSingleUserField({userid: userid, passwordhash: passwordhash})
+    return await updateSingleUserField({userid: userid, fieldname: 'passwordhash', value: passwordhash})
 }
 
 async function deleteUser(id) {
