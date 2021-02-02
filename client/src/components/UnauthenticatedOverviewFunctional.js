@@ -40,10 +40,10 @@ Click here to see first-time setup instructions.
 
     const handleSubmit = async e => {
         e.preventDefault();
-        console.log("handleSubmit - calling out for token!")
+        console.log("handleSubmit - calling out for token for email "+username)
         const user = await loginUser({
-            username,
-            password
+            email: username,
+            password: password
         })
             .then((loginstate) =>{
                 console.log("Calling set token with " + loginstate.token)

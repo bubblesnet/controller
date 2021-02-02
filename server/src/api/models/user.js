@@ -43,14 +43,18 @@ async function getAllUsers() {
 async function findOne(email) {
     console.log("findOne")
     return new Promise(function (resolve, reject) {
+        console.log("email = " + email)
         let ssql = 'select * from public.user where email = $1 order by lastname asc, firstname asc, email asc'
         console.log("ssql = "+ssql)
         let values = [email]
-        pool.query(ssql, values, (error, results) => {
-            if (error) {
-                reject(error)
+        pool.query(ssql, values, (err, results) => {
+            console.log("callback from findOne")
+            if (err) {
+                console.log("findOne error " + err)
+                reject(err)
             }
-            if (results) {
+            else if (results && results.rowCount > 0) {
+                console.log("results row 0 = " + JSON.stringify(results.rows[0]))
                  resolve(results.rows[0]);
             } else {
                 //               reject("no data")
