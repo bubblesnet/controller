@@ -28,8 +28,8 @@ describe("BubblesQueue", () => {
             console.log("initing .... ")
             await bubbles_queue.init(setClient);
             for (var i = 0; i < 10; i++) {
-                bubbles_queue.sendMessageToQueue(__testClient, "blah " + i);
-                bubbles_queue.sendMessageToTopic(__testClient, "blah " + i);
+                bubbles_queue.sendMessageToQueue(__testClient, JSON.stringify({message: "blah " + i}));
+                bubbles_queue.sendMessageToTopic(__testClient, JSON.stringify({message: "blah " + i}));
             }
             clientSet = false;
             bubbles_queue.deInit(__testClient);
@@ -43,16 +43,16 @@ describe("BubblesQueue", () => {
             console.log("initing .... ")
             await bubbles_queue.init(setClient);
             console.log("subscribing ....")
-            bubbles_queue.sendMessageToQueue(__testClient, "testing")
+            bubbles_queue.sendMessageToQueue(__testClient, JSON.stringify({message: "testing"}))
             bubbles_queue.subscribeToQueue(__testClient, function (body) {
                 console.log( "received " + body)
             });
-            bubbles_queue.sendMessageToQueue(__testClient, "testing")
-            bubbles_queue.sendMessageToTopic(__testClient, "testing")
+            bubbles_queue.sendMessageToQueue(__testClient, JSON.stringify({message: "testing"}))
+            bubbles_queue.sendMessageToTopic(__testClient, JSON.stringify({message: "testing"}))
             bubbles_queue.subscribeToTopic(__testClient, function (body) {
                 console.log( "received " + body)
             });
-            bubbles_queue.sendMessageToTopic(__testClient, "testing")
+            bubbles_queue.sendMessageToTopic(__testClient, JSON.stringify({message: "testing"}))
             clientSet = false;
             bubbles_queue.deInit(__testClient);
            return ("bleh");
