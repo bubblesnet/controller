@@ -48,17 +48,18 @@ async function findOne(email) {
         console.log("ssql = "+ssql)
         let values = [email]
         pool.query(ssql, values, (err, results) => {
-            console.log("callback from findOne")
+            console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
                 console.log("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
-                console.log("results row 0 = " + JSON.stringify(results.rows[0]))
-                 resolve(results.rows[0]);
+                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
+                resolve(results.rows[0]);
             } else {
                 //               reject("no data")
-                reject("no user found at email " + email);
+                console.log("no user found at email " + email)
+                resolve(null);
             }
         })
     })

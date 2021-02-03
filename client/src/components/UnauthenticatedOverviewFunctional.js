@@ -39,9 +39,11 @@ Click here to see first-time setup instructions.
     const [password, setPassword] = useState();
 
     const handleSubmit = async e => {
-        e.preventDefault();
+        /*
+                e.preventDefault();
+        */
         console.log("handleSubmit - calling out for token for email "+username)
-        const user = await loginUser({
+        await loginUser({
             email: username,
             password: password
         })
@@ -68,8 +70,12 @@ Click here to see first-time setup instructions.
                           </Box>
                           <Text size="xlarge">Password:</Text>
                           <Box gap="small">
-                              <TextInput onChange={e => setPassword(e.target.value)}/>
-                              <Button alignSelf="center" onClick={handleSubmit}>Log in</Button>
+                              <TextInput type={"password"} onChange={e => setPassword(e.target.value)}/>
+                              <Button alignSelf="center"
+
+                                      width={'medium'} round={'large'}
+                                      active={"true"}
+                                      onClick={handleSubmit} label={"Log in"} />
                           </Box >
                       </Box>
                     </Box>

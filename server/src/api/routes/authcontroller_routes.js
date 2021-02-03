@@ -35,18 +35,26 @@ bcrypt.genSalt(saltRounds, async function(err, salt) {
 
 router.post('/login', function(req, res) {
     console.log("api/auth/login generating token")
-    findUser(req, res)
+    x = findUser(req, res).then( function(data) {
+        console.log("then findUser " + JSON.stringify(data))
+    })
+    console.log("after findUser " + JSON.stringify(x))
 })
 
-function findUser(req,res) {
+async function findUser(req,res) {
     console.log("Calling findone with email = " + req.body.email )
-    user.findOne(req.body.email, function (err, user) {
-        if (err) return res.status(500).send('Error on the server.');
-        if (!user) return res.status(404).send('No user found.');
+    user.findOne(req.body.email).then( function (user) {
+        if (!user) {
+            console.log("Sending 401 - auth failed No user found user = " + user)
+            return res.status(401).send('No user found.');
+        }
 
         // check if the password is valid
         let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
-        if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+        if (!passwordIsValid){
+            console.log("Sending 401 - auth failed")
+            return res.status(401).send({ auth: false, token: null });
+        }
 
         // if user is found and password is valid
         // create a token
@@ -55,9 +63,11 @@ function findUser(req,res) {
         });
 
         // return the information including token as JSON
-        res.status(200).send({ auth: true, token: token });
+        let retval = { auth: true, token: token }
+        console.log("returning 200 " + JSON.stringify(retval))
+        return res.status(200).send(retval);
     }).catch(function(err) {
-        console.log("error " + err)
+        console.log("Returning 500 error " + err)
         if (err) return res.status(500).send('Error on the server .'+err);
     });
 
