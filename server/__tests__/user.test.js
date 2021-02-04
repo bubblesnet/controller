@@ -16,7 +16,7 @@ describe("user",   () => {
             expect(created_userid >= 0)
         } catch (err) {
             console.log("new user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -31,7 +31,7 @@ describe("user",   () => {
             expect(created_userid >= 0)
         } catch (err) {
             console.log("new user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -45,7 +45,7 @@ describe("user",   () => {
             expect(x.rowCount >= 0)
         } catch (err) {
             console.log("update user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -59,7 +59,7 @@ describe("user",   () => {
             expect(x.userid >= 0)
         } catch (err) {
             console.log("find user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -73,7 +73,7 @@ describe("user",   () => {
             expect(x.userid >= 0)
         } catch (err) {
             console.log("find user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -83,11 +83,11 @@ describe("user",   () => {
     it('Empty User', async function () {
         try {
             let x = await user.getAllUsers();
-            console.log("found users = " + JSON.stringify(x))
+//            console.log("found users = " + JSON.stringify(x))
             expect(x.length >= 0)
         } catch (err) {
             console.log("get all user error "+err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -105,7 +105,7 @@ describe("user",  () => {
             })
             .catch(function(err) {
                 console.log("update user catch error "+err+" response = " + x)
-                assert(false)
+                expect(false)
             });
     })
 });
@@ -117,7 +117,7 @@ describe("user",  () => {
         let x = user.updateSingleUserField({userid: -99, fieldname: "badfieldname", value: "BLAH"})
             .then(function() {
                 console.log("user x = " + x)
-                assert(false)
+                expect(false)
             })
             .catch(function(err) {
                 console.log("update user catch error "+err+" response = " + x)
@@ -133,7 +133,7 @@ describe("user",  () => {
         let x = user.updateSingleUserField({userid: -99, fieldname: "timezone", value: -5})
             .then(function() {
                 console.log("user x = " + x)
-                assert(false)
+                expect(false)
             })
             .catch(function(err) {
                 console.log("update user catch error "+err+" response = " + x)
@@ -154,7 +154,7 @@ describe("user",  () => {
             })
             .catch(function(err) {
                 console.log("empty user catch error = " + err)
-                assert(false)
+                expect(false)
             });
     })
 });
@@ -171,7 +171,7 @@ describe("auth",   () => {
             expect(x.userid >= 0)
         } catch (err) {
             console.log("new user error " + err)
-            assert(false)
+            expect(false)
         }
     })
 });
@@ -182,7 +182,7 @@ describe("auth",   () => {
         try {
             const plaintext_password = 'xyz'
             let x = await user.setPassword(-1, plaintext_password);
-            assert(false)
+            expect(false)
         } catch (err) {
             console.log("set pw error " + err)
             expect(err)
@@ -201,7 +201,7 @@ describe("user",  () => {
             })
             .catch(function(err){
                 console.log("delete user catch error "+err)
-                assert(false)
+                expect(false)
             });
     })
 });
@@ -212,7 +212,7 @@ describe("user",  () => {
         let x = user.deleteUser(-9)
             .then(response => {
                 console.log("delete user x = " + JSON.stringify(x))
-                assert(false)
+                expect(false)
             })
             .catch(function(err){
                 console.log("delete user catch error "+err)

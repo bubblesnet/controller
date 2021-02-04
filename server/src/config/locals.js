@@ -1,28 +1,24 @@
 
 const fs = require('fs');
-global.configFilePath = './config.json'
+let configFilePath = './config.json'
 
 global.localconfig = { bubbles_db_config: {}}
 
-function reloadLocals() {
-    try {
-
-        const data = fs.readFileSync(configFilePath, 'utf8');
-
+function reloadLocals(filepath) {
+        console.log("Reading config from " + filepath)
+        const data = fs.readFileSync(filepath, 'utf8');
         // parse JSON string to JSON object
         localconfig = JSON.parse(data);
-
-
-    } catch (err) {
-        console.log(`Error reading file from disk: ${err}`);
-    }
 }
 
-reloadLocals();
+reloadLocals(configFilePath);
 
-(function () {
-    exports.getLocals = function () {
-        return (localconfig)
-    }
-    exports.reloadLocals = reloadLocals;
-}).call(this);
+function getLocals () {
+    return (localconfig)
+}
+
+
+module.exports = {
+    getLocals: getLocals,
+    reloadLocals: reloadLocals
+}

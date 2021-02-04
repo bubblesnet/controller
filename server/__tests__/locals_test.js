@@ -1,7 +1,7 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
-const assert = require('assert');
+const assert = require('chai').assert;
 const auth = require('../src/api/authcontroller')
 
 let created_userid = -1
@@ -11,14 +11,16 @@ describe("locals",   () => {
     const saveFilePath = config.configFilePath
     it('non-existent config',  function () {
         try {
-            config.configFilePath = "lksdjflasdjlfkjsldfjasdf"
-            config.reloadLocals();
-            let x = config.getLocals();
-            assert(false)
-        } catch (err) {
-            console.log("config read "+err)
-            assert(true)
-        } finally {
+            let erroredout = false;
+            try {
+                config.reloadLocals( "lksdjflasdjlfkjsldfjasdf");
+                console.log("after readlocals????")
+            } catch(err) {
+                console.log("config read err "+err)
+                erroredout = true
+            }
+            expect(erroredout).equals(true)
+         } finally {
             config.configFilePath = saveFilePath    // reset it so we don't screw up following tests
         }
     })
