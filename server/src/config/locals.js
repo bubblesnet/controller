@@ -23,5 +23,6 @@ reloadLocals();
 (function () {
     exports.getLocals = function () {
         return (localconfig)
-    };
+    }
+    exports.reloadLocals = reloadLocals;
 }).call(this);

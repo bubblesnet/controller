@@ -14,10 +14,10 @@ describe("locals",   () => {
             config.configFilePath = "lksdjflasdjlfkjsldfjasdf"
             config.reloadLocals();
             let x = config.getLocals();
-            expect(false)
+            assert(false)
         } catch (err) {
             console.log("config read "+err)
-            expect(true)
+            assert(true)
         } finally {
             config.configFilePath = saveFilePath    // reset it so we don't screw up following tests
         }
