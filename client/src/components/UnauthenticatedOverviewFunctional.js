@@ -44,7 +44,7 @@ Click here to see first-time setup instructions.
         */
         console.log("handleSubmit - calling out for token for email "+username)
         await loginUser({
-            email: username,
+            username: username,
             password: password
         })
             .then((loginstate) =>{
@@ -64,7 +64,7 @@ Click here to see first-time setup instructions.
                 <Box round="small" direction="column" background="#aabbff">
                     <Box gap="xlarge">
                       <Box margin="large" direction="column" gap="medium" width="medium" >
-                          <Text size="xlarge">Email:</Text>
+                          <Text size="xlarge">Username:</Text>
                           <Box>
                               <TextInput defaultValue={username} onChange={e => setUserName(e.target.value)}/>
                           </Box>

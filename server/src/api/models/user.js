@@ -40,13 +40,13 @@ async function getAllUsers() {
     })
 }
 
-async function findOne(email) {
-    console.log("findOne")
+async function findOneByUsername(username) {
+    console.log("findOneByUsername")
     return new Promise(function (resolve, reject) {
-        console.log("email = " + email)
-        let ssql = 'select * from public.user where email = $1 order by lastname asc, firstname asc, email asc'
+        console.log("username = " + username)
+        let ssql = 'select * from public.user where username = $1 order by lastname asc, firstname asc, email asc'
         console.log("ssql = "+ssql)
-        let values = [email]
+        let values = [username]
         pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
@@ -58,7 +58,32 @@ async function findOne(email) {
                 resolve(results.rows[0]);
             } else {
                 //               reject("no data")
-                console.log("no user found at email " + email)
+                console.log("no user found at username " + username)
+                resolve(null);
+            }
+        })
+    })
+}
+
+async function findOneByUserid(userid) {
+    console.log("findOneByUserid")
+    return new Promise(function (resolve, reject) {
+        console.log("userid = " + userid)
+        let ssql = 'select * from public.user where userid = $1 order by lastname asc, firstname asc, email asc'
+        console.log("ssql = "+ssql)
+        let values = [userid]
+        pool.query(ssql, values, (err, results) => {
+            console.log("callback from findOne with err " + err + " results " + results)
+            if (err) {
+                console.log("findOne error " + err)
+                reject(err)
+            }
+            else if (results && results.rowCount > 0) {
+                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
+                resolve(results.rows[0]);
+            } else {
+                //               reject("no data")
+                console.log("no user found at userid " + userid)
                 resolve(null);
             }
         })
@@ -69,7 +94,7 @@ async function findOne(email) {
 async function createEmptyUser(body) {
     return new Promise(function(resolve, reject) {
         console.log("inserting new USER "+JSON.stringify(body))
-        pool.query("INSERT INTO public.user (firstname,lastname,email,passwordhash) VALUES ('','','','') RETURNING *", [], (error, results) => {
+        pool.query("INSERT INTO public.user (username,firstname,lastname,email,passwordhash) VALUES ('','','','','') RETURNING *", [], (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -82,11 +107,8 @@ async function createEmptyUser(body) {
 
 async function createUser(body) {
     return new Promise(function(resolve, reject) {
-        console.log("inserting new USER "+JSON.stringify(body))
-        let passwordhash = bcrypt.hashSync(body.password, 8);
-
-        pool.query("INSERT INTO public.user (firstname,lastname,email,passwordhash) VALUES ($1,$2,$3,$4) RETURNING *",
-            [body.firstname, body.lastname, body.email, passwordhash], (error, results) => {
+        pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+            [body.username, body.firstname, body.lastname, body.email, body.passwordhash], (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -94,6 +116,21 @@ async function createUser(body) {
                 resolve({userid: results.rows[0].userid, message: "A new user has been added :" + results.rows[0].userid})
             }
         })
+    })
+}
+
+async function updateUser(body) {
+    body.passwordhash = bcrypt.hashSync(body.password, 8);
+    return new Promise(function(resolve, reject) {
+        pool.query("UPDATE public.user set firstname=$1,lastname=$2,passwordhash=$3, email=$4 where userid=$5 RETURNING *",
+            [body.firstname, body.lastname, body.passwordhash, body.email, body.userid], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    console.log("updated email " + body.email)
+                    resolve({userid: results.rows[0].userid, message: "user has been modified :" + results.rowCount})
+                }
+            })
     })
 }
 
@@ -147,10 +184,12 @@ module.exports = {
     getAllUsers: getAllUsers,
     createEmptyUser: createEmptyUser,
     createUser: createUser,
+    updateUser: updateUser,
     deleteUser: deleteUser,
     setPassword: setPassword,
     endPool: endPool,
     getUser: getUser,
-    findOne: findOne
+    findOneByUsername: findOneByUsername,
+    findOneByUserid: findOneByUserid
 }
 

@@ -1,11 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
 
-var VerifyToken = require(__root + 'api/services/verify_token');
+const VerifyToken = require(__root + 'api/services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: true }));
-var User = require('../services/user');
+const User = require('../services/user');
+const UserModel = require('../models/user');
 
 // CREATES A NEW USER
 router.post('/', function (req, res) {
@@ -28,12 +29,25 @@ router.get('/', function (req, res) {
     });
 });
 
-// GETS A SINGLE USER FROM THE DATABASE
+// GETS A SINGLE USER FROM THE DATABASE BY ID - normal case
 router.get('/:id', function (req, res) {
-    User.findById(req.params.id, function (err, user) {
-        if (err) return res.status(500).send("There was a problem finding the user.");
-        if (!user) return res.status(404).send("No user found.");
+    UserModel.findOneByUserid(req.params.id).then( function ( user) {
+        if (!user) return res.status(401).send("No user found.");
+        return res.status(200).send(user);
+    }).catch(function(err) {
+        return res.status(500).send("There was a problem finding the user - err "+err);
+    });
+});
+
+// GETS A SINGLE USER FROM THE DATABASE - unusual case
+router.get('/name/:id', function (req, res) {
+    console.log("Get by name " + req.params.id)
+    UserModel.findOneByUsername(req.params.id).then( function (user) {
+        if (!user) return res.status(401).send("No user found.");
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3005")
         res.status(200).send(user);
+    }).catch(function(err){
+        return res.status(500).send("There was a problem finding the user "+err);
     });
 });
 

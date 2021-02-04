@@ -42,8 +42,8 @@ router.post('/login', function(req, res) {
 })
 
 async function findUser(req,res) {
-    console.log("Calling findone with email = " + req.body.email )
-    user.findOne(req.body.email).then( function (user) {
+    console.log("Calling findOneByUsername with body = " + JSON.stringify(req.body) )
+    user.findOneByUsername(req.body.username).then( function (user) {
         if (!user) {
             console.log("Sending 401 - auth failed No user found user = " + user)
             return res.status(401).send('No user found.');
@@ -99,7 +99,7 @@ function newUser(req,res, cb) {
     user.createUser({
             name : req.body.name,
             email : req.body.email,
-            password : hashedPassword
+            passwordhash : hashedPassword
         }, cb )
         .then(function (user) {
             console.log("Created real new user "+JSON.stringify(user));

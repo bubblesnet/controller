@@ -25,7 +25,7 @@ describe("user",   () => {
     console.log("create filled user")
     it('Filled User', async function () {
         try {
-            let x = await user.createUser({firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz'});
+            let x = await user.createUser({username: 'notadmin', firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz', passwordhash: ''});
             console.log("new filled user = " + JSON.stringify(x))
             created_userid = x.userid
             expect(created_userid >= 0)
@@ -37,10 +37,38 @@ describe("user",   () => {
 });
 
 describe("user",   () => {
-    console.log("find filled user")
+    console.log("update filled user")
+    it('Update Filled User', async function () {
+        try {
+            let x = await user.updateUser({userid: created_userid, username: 'notadmin', firstname:'Johnx',lastname:'Rodleyx', email:'blah@blah.com', password:'xyz', passwordhash: ''});
+            console.log("updated filled user = " + JSON.stringify(x))
+            expect(x.rowCount >= 0)
+        } catch (err) {
+            console.log("update user error "+err)
+            assert(false)
+        }
+    })
+});
+
+describe("user",   () => {
+    console.log("find filled user by name")
     it('Empty User', async function () {
         try {
-            let x = await user.findOne('blah@blah.com');
+            let x = await user.findOneByUsername('notadmin', );
+            console.log("found user = " + JSON.stringify(x))
+            expect(x.userid >= 0)
+        } catch (err) {
+            console.log("find user error "+err)
+            assert(false)
+        }
+    })
+});
+
+describe("user",   () => {
+    console.log("find filled user by id")
+    it('Empty User', async function () {
+        try {
+            let x = await user.findOneByUserid(created_userid, );
             console.log("found user = " + JSON.stringify(x))
             expect(x.userid >= 0)
         } catch (err) {
