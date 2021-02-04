@@ -21,6 +21,7 @@ exports.sendTestEmail2 = function () {
         text: testemailtext,
         html: testemailhtml,
     }
+    console.log("Sending email via unit test")
     sgMail
         .send(msg)
         .then(() => {

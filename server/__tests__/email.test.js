@@ -11,5 +11,6 @@ describe("email",   () => {
     console.log("send test email")
     it('send test email',  function () {
             email.sendTestEmail2();
+            console.log("after sendtestemail2")
      })
 });
