@@ -1,11 +1,12 @@
 
 const fs = require('fs');
+global.configFilePath = './config.json'
 
 global.localconfig = { bubbles_db_config: {}}
 
 try {
 
-    const data = fs.readFileSync('./config.json', 'utf8');
+    const data = fs.readFileSync(configFilePath, 'utf8');
 
     // parse JSON string to JSON object
     localconfig = JSON.parse(data);
