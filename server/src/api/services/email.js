@@ -1,16 +1,37 @@
 /**
  * Created by rodley on 4/21/2017.
  */
-const helper = require('sendgrid').mail;
-var from_email = new helper.Email('rodley@rodley.com');
-var to_email = new helper.Email('john@rodley.com');
-var testemailsubject = 'Hello World from the SendGrid Node.js Library!';
-var testemailcontent = new helper.Content('text/plain', 'Hello, Email!');
-var testemailbody = new helper.Mail(from_email, testemailsubject, to_email, testemailcontent);
+const sgMail = require('@sendgrid/mail')
+var from_email = 'sendgridrodley@gmail.com';
+var to_email = 'sendgridrodley@gmail.com'
+var testemailsubject = 'Test of BubblesNet email notification function';
+var testemailtext =  'Greetings from Bubblesnet'
+var testemailhtml = '<strong>Greetings from Bubblesnet</strong>';
 const locals = require('../../config/locals');
 
-var sg = require('sendgrid')(locals.getLocals().sendgridFullAccessAPIKey);
+// using Twilio SendGrid's v3 Node.js Library
+// https://github.com/sendgrid/sendgrid-nodejs
+exports.sendTestEmail2 = function () {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
+    const msg = {
+        to: to_email, // Change to your recipient
+        from: from_email, // Change to your verified sender
+        subject: testemailsubject,
+        text: testemailtext,
+        html: testemailhtml,
+    }
+    sgMail
+        .send(msg)
+        .then(() => {
+            console.log('Email sent')
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+}
+
+/*
 exports.sendATestEmail = function (cb) {
     var request = sg.emptyRequest({
         method: 'POST',
@@ -50,3 +71,4 @@ exports.sendANotification = function (type, notification, alertcondition, cb) {
 
     sg.API(request, cb);
 };
+*/

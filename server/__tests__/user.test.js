@@ -1,7 +1,7 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
-const assert = require('assert');
+const assert = require('chai').assert;
 const auth = require('../src/api/authcontroller')
 
 let created_userid = -1

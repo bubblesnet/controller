@@ -34,7 +34,7 @@
     "pug": "*",
     "q": "*",
     "redis": "^3.0.2",
-    "sendgrid": "~5.0.0",
+    "@sendgrid/mail": "^7.4.2",
     "serve-favicon": "~2.3.2",
     "socket.io": "^2.1.0",
     "sprintf-js": "~1.0.3",
