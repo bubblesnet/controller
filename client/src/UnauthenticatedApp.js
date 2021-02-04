@@ -7,7 +7,7 @@ function UnauthenticatedApp(props) {
     return (
         <>
         <UnauthenticatedHeader data-testid="animated-gif-container" nodeEnv='development'/>
-        <RenderUnauthenticatedOverview nodeEnv='development' apiPort='0' setToken={props.setToken}/>
+        <RenderUnauthenticatedOverview nodeEnv='development' apiPort='0' processLoginResult={props.processLoginResult}/>
         </>
     )
 }

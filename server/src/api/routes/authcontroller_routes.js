@@ -63,7 +63,7 @@ async function findUser(req,res) {
         });
 
         // return the information including token as JSON
-        let retval = { auth: true, token: token }
+        let retval = { auth: true, username: user.username, firstname: user.firstname, lastname: user.lastname, token: token }
         console.log("returning 200 " + JSON.stringify(retval))
         return res.status(200).send(retval);
     }).catch(function(err) {

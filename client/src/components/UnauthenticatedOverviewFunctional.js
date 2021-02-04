@@ -36,26 +36,36 @@ Click here to see first-time setup instructions.
 `;
 
     const [username, setUserName] = useState();
-    const [password, setPassword] = useState();
+    const [password, setPassword] = useState("");   // Set to a value so that controlled-uncontrolled error doesn't get thrown
+    const [failed, setFailed] = useState(false);
 
     const handleSubmit = async e => {
         /*
                 e.preventDefault();
         */
-        console.log("handleSubmit - calling out for token for email "+username)
+        console.log("handleSubmit - calling out for token for user "+username)
         await loginUser({
             username: username,
             password: password
         })
             .then((loginstate) =>{
                 console.log("Calling set token with " + loginstate.token)
-                props.setToken(loginstate);
+                loginstate.auth=true;
+                props.processLoginResult(loginstate);   // Will re-render grandparent
             })
             .catch((err) => {
                 console.log("login failed = " + err)
-                props.setToken({auth: false, token: ""});
+                /// TODO if processlogin rerenders grandparent, these 2 rerenders are not helpful
+                setFailed(true)
+                setPassword("")
+                props.processLoginResult({auth: false});
             });
     };
+
+    let login_status = <Box><Text>login failed</Text></Box>
+    if( !failed ) {
+        login_status = <></>
+    }
 
     let ret =
         <Box direction="column" >
@@ -70,13 +80,14 @@ Click here to see first-time setup instructions.
                           </Box>
                           <Text size="xlarge">Password:</Text>
                           <Box gap="small">
-                              <TextInput type={"password"} onChange={e => setPassword(e.target.value)}/>
+                              <TextInput type={"password"} value={password} onChange={e => setPassword(e.target.value)}/>
                               <Button alignSelf="center"
 
                                       width={'medium'} round={'large'}
                                       active={"true"}
                                       onClick={handleSubmit} label={"Log in"} />
                           </Box >
+                          {login_status}
                       </Box>
                     </Box>
                 </Box>
