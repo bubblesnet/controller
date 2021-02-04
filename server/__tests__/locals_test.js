@@ -12,6 +12,7 @@ describe("locals",   () => {
     it('non-existent config',  function () {
         try {
             config.configFilePath = "lksdjflasdjlfkjsldfjasdf"
+            config.reloadLocals();
             let x = config.getLocals();
             expect(false)
         } catch (err) {
