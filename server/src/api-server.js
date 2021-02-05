@@ -1,5 +1,6 @@
 const express = require('express');
 const apiServer = express()
+const util = require("./util")
 
 const favicon = require('serve-favicon');
 const logger = require('morgan');
@@ -34,7 +35,7 @@ apiServer.use(function (req, res, next) {
     next();
 });
 
-const port  = normalizePort(process.env.PORT || '3000')
+const port  = util.normalizePort(process.env.PORT || '3000')
 
 apiServer.use(bodyParser.urlencoded({
     extended: true
@@ -82,29 +83,6 @@ apiServer.use(function (err, req, res, next) {
     res.status(err.status || 500);
 //    res.render('error');
 });
-
-
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-    const port = parseInt(val, 10);
-
-    if (isNaN(port)) {
-        // named pipe
-        return val;
-    }
-
-    if (port >= 0) {
-        // port number
-        return port;
-    }
-
-    return false;
-}
-
 
 const hostname = '0.0.0.0'
 apiServer.listen(port, hostname, () => {
