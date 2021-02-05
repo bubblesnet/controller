@@ -12,8 +12,8 @@ global.__root   = __dirname + '/';
 
 const config_routes = require('./api/routes/config_routes');
 const video_routes = require('./api/routes/video_routes');
-const edgecontrol_routes = require('./api/routes/edgecontrol_routes');
-const edgemeasurement_routes = require('./api/routes/edgemeasurement_routes');
+const edge_control_routes = require('./api/routes/edgecontrol_routes');
+const edge_measurement_routes = require('./api/routes/edgemeasurement_routes');
 const user_routes = require('./api/routes/user_routes');
 const auth_routes = require('./api/routes/authcontroller_routes');
 const health_check = require('./api/routes/health_check_routes');
@@ -63,8 +63,8 @@ apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
 apiServer.use('/api/auth', auth_routes);
 apiServer.use('/api/video', video_routes);
-apiServer.use("/api/edgecontrol", edgecontrol_routes);
-apiServer.use("/api/measurement", edgemeasurement_routes);
+apiServer.use("/api/edgecontrol", edge_control_routes);
+apiServer.use("/api/measurement", edge_measurement_routes);
 
 // catch 404 and forward to error handler
 apiServer.use(function (req, res, next) {
@@ -88,12 +88,6 @@ const hostname = '0.0.0.0'
 apiServer.listen(port, hostname, () => {
     console.log(`API server listening on ${hostname} ${port}.`)
 });
-
-let __queueClient
-
-function setClient(client) {
-    __queueClient = client;
-}
 
 module.exports = {
     app: apiServer

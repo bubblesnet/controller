@@ -3,42 +3,13 @@ let current_state = {}
 let connection
 
 const axios = require('axios')
+const util = require('./util')
+const emulator_util = require('./emulator-util')
 
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
 
 function sendFakeMeasurement() {
-    x = getRandomInt(9)
-    switch (x) {
-        case 1:
-            sendMeasurement("temperature", "thermometer_top", "temp_air_top", 20 + getRandomInt(79), "F")
-            break;
-        case 2:
-            sendMeasurement("temperature", "thermometer_middle", "temp_air_middle", 20 + getRandomInt(79), "F")
-            break;
-        case 3:
-            sendMeasurement("temperature", "thermometer_bottom", "temp_air_bottom", 20 + getRandomInt(79), "F")
-            break;
-        case 4:
-            sendMeasurement("temperature", "thermometer_external", "temp_air_external", 20 + getRandomInt(79), "F")
-            break;
-        case 5:
-            sendMeasurement("temperature", "thermometer_water", "temp_water", 20 + getRandomInt(79), "F")
-            break;
-        case 6:
-            sendMeasurement("humidity", "humidity_sensor_internal", "humidity_internal", 20 + getRandomInt(79), "%")
-            break;
-        case 8:
-            sendMeasurement("humidity", "humidity_sensor_internal","humidity_external", 20 + getRandomInt(79), "%")
-            break;
-        case 7:
-            sendMeasurement("level", "water_level_sensor","tub_water_level", getRandomInt(150)/10, "gallons")
-            break;
-        default:
-            break;
-    }
+    let z = emulator_util.getFakeMeasurement()
+    sendMeasurement(z.measurement_type,z.sensor_name,z.measurement_name, z.value,z.units)
     setTimeout(() => {
         sendFakeMeasurement()
     }, 10000);
@@ -78,8 +49,8 @@ function sendText(msg) {
 }
 
 function sendFakeStatus() {
-    current_state.status.humidity_internal = 60 + getRandomInt(30)
-    let x = getRandomInt(2);
+    current_state.status.humidity_internal = 60 + util.getRandomInt(30)
+    let x = util.getRandomInt(2);
     if(x == 0 )
         current_state.status.temp_air_middle_direction = ""
     else if (x == 1)
@@ -87,9 +58,9 @@ function sendFakeStatus() {
     else
         current_state.status.temp_air_middle_direction = "up"
 
-    current_state.status.temp_air_top = 60 + getRandomInt(39)
-    current_state.status.temp_air_middle = 50 + getRandomInt(49)
-    current_state.status.temp_air_bottom = 40 + getRandomInt(49)
+    current_state.status.temp_air_top = 60 + util.getRandomInt(39)
+    current_state.status.temp_air_middle = 50 + util.getRandomInt(49)
+    current_state.status.temp_air_bottom = 40 + util.getRandomInt(49)
     console.log("Sending humidity " + current_state.status.humidity_internal)
     sendText(current_state)
     setTimeout(() => {

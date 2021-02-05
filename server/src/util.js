@@ -18,6 +18,13 @@ function normalizePort(val) {
     return false;
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+
 module.exports = {
-    normalizePort: normalizePort
+    normalizePort: normalizePort,
+    getRandomInt: getRandomInt
 };

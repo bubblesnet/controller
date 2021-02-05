@@ -1,11 +1,8 @@
 const bubbles_queue = require("./api/models/bubbles_queue")
 let state = require('./initial_state.json')
+const util = require('./util')
 
 let current_state = {}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
 
 let __feederClient
 
@@ -15,8 +12,8 @@ function setClient(client) {
 
 function sendFakeStatusToQueue() {
     console.log("sendFakeStatusToQueue")
-    current_state.status.humidity_internal = 60 + getRandomInt(30)
-    let x = getRandomInt(2);
+    current_state.status.humidity_internal = 60 + util.getRandomInt(30)
+    let x = util.getRandomInt(2);
     if(x == 0 )
         current_state.status.temp_air_middle_direction = ""
     else if (x == 1)
@@ -24,9 +21,9 @@ function sendFakeStatusToQueue() {
     else
         current_state.status.temp_air_middle_direction = "up"
 
-    current_state.status.temp_air_top = 60 + getRandomInt(39)
-    current_state.status.temp_air_middle = 50 + getRandomInt(49)
-    current_state.status.temp_air_bottom = 40 + getRandomInt(49)
+    current_state.status.temp_air_top = 60 + util.getRandomInt(39)
+    current_state.status.temp_air_middle = 50 + util.getRandomInt(49)
+    current_state.status.temp_air_bottom = 40 + util.getRandomInt(49)
     console.log("Sending humidity " + current_state.status.humidity_internal)
 //    if (bubbles_queue.__stompClient != null) {
         console.log("sending message to topic")
