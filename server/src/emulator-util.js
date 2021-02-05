@@ -36,6 +36,25 @@ function getFakeMeasurement() {
     return (z);
 }
 
+function getFakeStatus() {
+    let current_state = {status: {}}
+
+    current_state.status.humidity_internal = 60 + util.getRandomInt(30)
+    let x = util.getRandomInt(2);
+    if(x == 0 )
+        current_state.status.temp_air_middle_direction = ""
+    else if (x == 1)
+        current_state.status.temp_air_middle_direction = "down"
+    else
+        current_state.status.temp_air_middle_direction = "up"
+
+    current_state.status.temp_air_top = 60 + util.getRandomInt(39)
+    current_state.status.temp_air_middle = 50 + util.getRandomInt(49)
+    current_state.status.temp_air_bottom = 40 + util.getRandomInt(49)
+    return( current_state )
+}
+
 module.exports = {
-    getFakeMeasurement: getFakeMeasurement
+    getFakeMeasurement: getFakeMeasurement,
+    getFakeStatus: getFakeStatus
 }
