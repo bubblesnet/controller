@@ -23,8 +23,8 @@ describe("email",   () => {
             email_recipient: "sendgridrodley@gmail.com",
             notificationid: 10944
         }
-        email.sendANotification("testype", notification, function () {
-            expect(true)
+        email.sendANotification("testype", notification, function (err) {
+            expect(!err)
         });
         console.log("after sendANotification")
     });

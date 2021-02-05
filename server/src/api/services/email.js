@@ -11,7 +11,7 @@ const locals = require('../../config/locals');
 
 // using Twilio SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
-exports.sendATestEmail = function () {
+function sendATestEmail () {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
     const msg = {
@@ -28,11 +28,11 @@ exports.sendATestEmail = function () {
             console.log('Email sent')
         })
         .catch((error) => {
-            console.error(error)
+            console.error("sendATestEmail error " + error)
         })
 }
 
-exports.sendAMessage = function(to, from, subject, shortmessage, longmessage, cb) {
+function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
     const msg = {
         to: to, // Change to your recipient
         from: from, // Change to your verified sender
@@ -44,21 +44,28 @@ exports.sendAMessage = function(to, from, subject, shortmessage, longmessage, cb
     sgMail.send(msg)
         .then(() => {
             console.log('Email sent')
+            cb(null);
         })
         .catch((error) => {
-            console.error(error)
+            console.error("sendAMessage error " + error)
+            cb(error);
         })
-    cb();
 }
 
 
 
-exports.sendANotification = function (type, notification, alertcondition, cb) {
+function sendANotification (type, notification, alertcondition, cb) {
     console.log('sendANotification ' + notification.notificationid);
     sendAMessage(notification.email_recipient,locals.getLocals().sendgridSenderEmailAddress,
         type + ' notification from BubblesWeb',alertcondition.shortmessage,
-        "Reference notification [" + notification.notificationid + "]", function() {
-            console.log("callback from sendAMessage");
+        "Reference notification [" + notification.notificationid + "]", function(err) {
+            console.log("callback from sendAMessage with err = " + err);
         })
 };
+
+module.exports = {
+    sendANotification:sendANotification,
+    sendAMessage:sendAMessage,
+    sendATestEmail:sendATestEmail
+}
 

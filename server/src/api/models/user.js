@@ -165,11 +165,11 @@ async function deleteUser(id) {
     console.log("deleteUser "+id)
     return new Promise(function(resolve, reject) {
         const userid = parseInt(id)
-        console.log("DELETE FROM user WHERE userid "+userid)
+        console.log("DELETE FROM public.user WHERE userid "+userid)
 
-        pool.query('DELETE FROM user WHERE userid = $1', [userid], (error, results) => {
+        pool.query('DELETE FROM public.user WHERE userid = $1', [userid], (error, results) => {
             if (error) {
-                console.log("err3 " + error)
+                console.log("deleteUser err3 " + error)
                 reject(error)
             } else {
                 console.log("results " + JSON.stringify(results))
