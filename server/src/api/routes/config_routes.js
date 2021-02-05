@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const bubbles_queue = require('../models/bubbles_queue')
+const express = require('express');
+const router = express.Router();
+const util = require('../../util')
+const fs = require('fs')
 
 let __edgeMeasurementClient
 
@@ -210,6 +211,21 @@ router.get("/:userid/:deviceid", function (req, res, next) {
 
 
         res.json(config);
+});
+
+
+router.get("/modules", function (req, res, next) {
+    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+    // read config from file
+    let filepath = "src" + "/" + "./module_types.json"
+    res.json(util.readJsonFile(filepath));
+});
+
+router.get("/containers", function (req, res, next) {
+    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+    // read config from file
+    let filepath = "src" + "/" + "./container_names.json"
+    res.json(util.readJsonFile(filepath));
 });
 
 module.exports = router;

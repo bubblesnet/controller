@@ -1,0 +1,11 @@
+{
+  "module_types": [
+    "bme280",
+    "ads1115",
+    "adxl345",
+    "bmp280",
+    "ezoph",
+    "hcsr04",
+    "GPIO"
+  ]
+}
