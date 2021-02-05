@@ -1,0 +1,9 @@
+{
+
+  "verbose": true,
+
+  "testURL": "http://localhost/",
+
+  "testMatch": ["**index.test.js?(x)"]
+
+}

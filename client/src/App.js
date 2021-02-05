@@ -1,76 +1,55 @@
-import React, {useState} from 'react';
+import * as React from 'react'
+//import {useUser,login} from './context/UserContext'
+import AuthenticatedApp from './AuthenticatedApp'
+import UnauthenticatedApp from './UnauthenticatedApp'
+import SetupApp from './SetupApp'
+import {useState} from "react";
+import useToken from './useToken';
 
-import RenderTestQueueListFunctional from "./TestQueueListFunctional";
-import RenderTestRunListFunctional from "./TestRunListFunctional";
-import RenderMetrics from "./MetricsPanelFunctional";
-import RenderSBCEditor from "./SBCEditor";
-import {Tabs, Tab, Img} from "rendition";
-import RenderDeviceStatusListFunctional from "./DeviceStatusListFunctional";
-import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
-import Iceberg from './iceberg.png'
+/** Fake login function
+ *
+ * @param e not used
+ */
+/*
+function setSuccessfulLogin(e) {
+    console.log("successfulLogin");
+    login(e)
+}
 
-function App (props) {
-    console.log("IceBreakerApp render props = " + JSON.stringify(props))
-    let [database, setDatabase] = useState("production"); // The array of SingleBoardComputers
-    let [port, setPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
-    let [language, setLanguage] = useState("all")
+ */
+/*
+function getToken() {
+    const tokenString = sessionStorage.getItem('token')
+    const userToken = JSON.parse(tokenString);
+    return userToken?.token
+}
 
-    let setLang = (value) => {
-        console.log("App setting lantuage to " + value)
-        setLanguage(value)
-    }
+function setToken(loginResult) {
+        sessionStorage.setItem('token', JSON.stringify(loginResult.token));
+}
 
-    let setEnvironment = (value) => {
-//        console.log("setEnvironment(" + value + ")")
-        var thedatabase = value
-        var theport
-        if (thedatabase === "production") {
-            theport = 3001;
-        } else if (thedatabase === "test") {
-            theport = 3002;
-        } else if (thedatabase === "development") {
-            theport = 3003;
+ */
+
+function App() {
+    console.log("Starting App")
+    let needs_setup = false
+    const { token, setToken } = useToken();
+
+    function processLoginResult(loginResult) {
+        console.log("processLoginResult "+loginResult)
+        if(loginResult.auth === true ) {
+            console.log("Setting token to " + JSON.stringify(loginResult))
+            setToken(loginResult)  // this inspires the rerender that gets us the authenticatedApp
+//            setLocalToken(loginResult.token)
         }
-//        console.log("setting state db to " + thedatabase + " port to " + theport)
-//        console.log("IceBreakerApp render port = " + port)
-        setDatabase(thedatabase);
-        setPort(theport);
     }
 
-    return (
-        <div className="App">
-            <header className="IcebergApp-header">
-                <span style={{
-                    'width': '25%',
-                    'alignItems': 'flex-start',
-                    'marginLeft': '25px'
-                }}>Icebreaker ({database})</span>
-                <span style={{'width': '50%'}}/>
-                <span style={{'width': '25%'}}><Img style={{'marginRight': '25px', 'float': 'right'}}
-                                                    src={Iceberg}/></span>
-            </header>
-            <RenderEnvironmentPickerFunctional database={database} port={port}
-                                               handleClick={setEnvironment}/>
-            <Tabs margin="medium" flex="shrink">
-                <Tab title="Metrics">
-                    <RenderMetrics database={database} port={port}/>
-                </Tab>
-                <Tab title="Work Queue">
-                    <RenderTestQueueListFunctional database={database} port={port} language={language}
-                                                   onChangeLanguage={setLang}/>
-                </Tab>
-                <Tab title="Workers">
-                    <RenderDeviceStatusListFunctional database={database} port={port}/>
-                </Tab>
-                <Tab title="Runs">
-                    <RenderTestRunListFunctional database={database} port={port}/>
-                </Tab>
-                <Tab title="SBC Targets">
-                    <RenderSBCEditor database={database} port={port} blah={"blahblah"}/>
-                </Tab>
-            </Tabs>
-        </div>
-    );
+    console.log("Rendering App with token set to " + JSON.stringify(token))
+    if( needs_setup ) {
+        return <SetupApp readyState={true}/>
+    }
+
+    return (token?.auth === true) ? <AuthenticatedApp /> : <UnauthenticatedApp processLoginResult={processLoginResult}/>
 }
 
 export default App

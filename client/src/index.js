@@ -1,15 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import * as serviceWorker from './serviceWorker';
-import { Provider as RenditionProvider } from 'rendition'
+import { Provider as RenditionProvider } from 'rendition';
+import {IntlProvider} from "react-intl";
 import App from './App';
+import locale_en from "./translations/en.json";
+import locale_nl from "./translations/nl.json";
+
+const data = {
+    'nl': locale_nl,
+    'en': locale_en
+};
+
+function getComputation(a, b){
+    return a + b;
+
+}
+
+const language = navigator.language.split(/[-_]/)[0];
 
 ReactDOM.render(
     <React.StrictMode>
-    <RenditionProvider >
-        <App />
-    </RenditionProvider>,
+        <IntlProvider locale={language} messages={data[language]}>
+            <RenditionProvider >
+                <App />
+            </RenditionProvider>
+        </IntlProvider>
     </React.StrictMode>,
 
     document.getElementById('root')
@@ -19,3 +35,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+

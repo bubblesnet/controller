@@ -1,4 +1,5 @@
 export PORT=3001
 export ICEBREAKER_DB=icebreaker_prod
-cd server
-node src/server.js
+export NODE_ENV=PRODUCTION
+cd server || exit
+node src/api-server.js
