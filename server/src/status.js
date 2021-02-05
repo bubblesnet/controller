@@ -186,6 +186,6 @@ exports.status = function (userid, deviceid, cb) {
                 }
             }
         );
-        
+
  */
     }
