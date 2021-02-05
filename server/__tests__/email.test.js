@@ -9,8 +9,24 @@ let created_userid = -1
 
 describe("email",   () => {
     console.log("send test email")
-    it('send test email',  function () {
-            email.sendTestEmail2();
-            console.log("after sendtestemail2")
-     })
+    it('send test email', function () {
+        email.sendATestEmail();
+        console.log("after sendATestEmail")
+    });
+
+    it('send test email', function () {
+        console.log("callback from sendAMessage");
+        let alertcondition = {
+            shortmessage: "Short message"
+        }
+        let notification = {
+            email_recipient: "sendgridrodley@gmail.com",
+            notificationid: 10944
+        }
+        email.sendANotification("testype", notification, function () {
+            expect(true)
+        });
+        console.log("after sendANotification")
+    });
+
 });
