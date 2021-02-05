@@ -8,7 +8,7 @@ var sprintf = require('sprintf-js').sprintf;
 /* GET users listing. */
 exports.status = function (userid, deviceid, cb) {
         console.log("statusbyuserdevice user: " + userid + " device: " + deviceid);
-
+/*
         var userdirectory = locals.getLocals().usersdirectory + '/' + userid;
         disk.check(locals.getLocals().deviceForDiskCheck, function (err, result) {
                 console.log(result.free);
@@ -186,4 +186,6 @@ exports.status = function (userid, deviceid, cb) {
                 }
             }
         );
+        
+ */
     }

@@ -3,7 +3,7 @@ const should = require("should");
 
 // This agent refers to PORT where program is runninng.
 
-const server = supertest.agent("http://localhost:3003");
+const server = supertest.agent("http://localhost:3003",{});
 
 // UNIT test begin
 
