@@ -76,15 +76,14 @@ async function createDevice(body) {
 }
 
 async function updateDevice(body) {
-    body.passwordhash = bcrypt.hashSync(body.password, 8);
     return new Promise(function(resolve, reject) {
-        pool.query("UPDATE public.user set firstname=$1,lastname=$2,passwordhash=$3, email=$4 where userid=$5 RETURNING *",
-            [body.firstname, body.lastname, body.passwordhash, body.email, body.userid], (error, results) => {
+        pool.query("UPDATE device set devicename=$1,devicetypeid_devicetype=$2 where deviceid=$3 RETURNING *",
+            [body.devicename, body.devicetypeid, body.deviceid], (error, results) => {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("updated email " + body.email)
-                    resolve({userid: results.rows[0].userid, message: "user has been modified :" + results.rowCount})
+                    console.log("updated updateDevice " + body.deviceid)
+                    resolve({deviceid: body.deviceid, message: "device has been modified :" + results.rowCount})
                 }
             })
     })
@@ -101,7 +100,7 @@ async function deleteDevice(deviceid) {
                 reject(error)
             } else {
                 console.log("results " + JSON.stringify(results))
-                resolve({userid: id, message: 'device deleted with ID ' + deviceid})
+                resolve({deviceid: deviceid, message: 'device deleted with ID ' + deviceid})
             }
         })
     })
@@ -112,6 +111,7 @@ module.exports = {
     createDevice: createDevice,
     findAllByUserid: findAllByUserid,
     deleteDevice: deleteDevice,
+    updateDevice:updateDevice,
     endPool: endPool,
 }
 
