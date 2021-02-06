@@ -33,14 +33,14 @@ async function findAllByUserid(userid) {
         console.log("ssql = "+ssql)
         let values = [userid]
         pool.query(ssql, values, (err, results) => {
-            console.log("callback from findAllByUserid with err " + err + " results " + results)
+//            console.log("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
                 console.log("findAllByUserid error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
                 console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
-                resolve(results.rows[0]);
+                resolve(results.rows);
             } else {
                 //               reject("no data")
                 console.log("no devices found for userid " + userid)
@@ -110,7 +110,7 @@ async function deleteDevice(deviceid) {
 module.exports = {
     getAllDevices: getAllDevices,
     createDevice: createDevice,
-    updateDevice: updateDevice,
+    findAllByUserid: findAllByUserid,
     deleteDevice: deleteDevice,
     endPool: endPool,
 }
