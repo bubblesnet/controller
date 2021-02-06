@@ -7,6 +7,7 @@ var email = require('./email');
 var notificationsserviced = 0;
 var notificationsneeded = 100000;
 
+function getNewAlertConditions(cb) {
 db.getNewAlertConditions(function (err, result) {
     console.log('called db callback with result = ' + JSON.stringify(result));
     notificationsneeded = result.length;
@@ -138,7 +139,6 @@ db.getNewAlertConditions(function (err, result) {
             // if usesms is checked
             // send sms
             // save smssent bit set
-
         })(i);
     }
 });
@@ -153,5 +153,9 @@ db.getNewAlertConditions(function (err, result) {
         console.log('process.exit');
         process.exit();
     }
-})();
+})();}
+
+module.exports = {
+    getNewAlertConditions: getNewAlertConditions
+}
 

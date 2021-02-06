@@ -107,7 +107,7 @@ async function createEmptyUser(body) {
 
 async function createUser(body) {
     return new Promise(function(resolve, reject) {
-        pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+        pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash,created) VALUES ($1,$2,$3,$4,$5,current_timestamp) RETURNING *",
             [body.username, body.firstname, body.lastname, body.email, body.passwordhash], (error, results) => {
             if (error) {
                 reject(error)
