@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const util = require('../../util')
-const fs = require('fs')
-
-let __edgeMeasurementClient
+const cors = require('cors')
 
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
@@ -205,14 +203,14 @@ const config = {
 
 }
 
+/// TODO shouldn't need this once packaged
+router.use(cors());
+
 router.get("/:userid/:deviceid", function (req, res, next) {
-    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+    console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
         // read config from file
-
-
         res.json(config);
 });
-
 
 router.get("/modules", function (req, res, next) {
     console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);

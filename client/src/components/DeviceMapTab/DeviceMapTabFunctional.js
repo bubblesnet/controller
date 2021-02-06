@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import './deviceMapTab.css';
 import '../../Palette.css';
@@ -17,12 +17,60 @@ import GoogleFontLoader from "react-google-font-loader";
 
 import DeviceMap from "./devicemap.json"
 
+async function getContainerNames() {
+    console.log("getContainerNames calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        const response = await fetch('http://localhost:3003/api/config/containers');
+        if(response.ok) {
+            let x = await response.json();
+            console.log("Got container_names " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            console.log("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+async function getModuleTypes() {
+    console.log("getModuleTypes calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        const response = await fetch('http://localhost:3003/api/config/modules');
+        if(response.ok) {
+            let x = await response.json();
+            console.log("Got module_types " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            console.log("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
 function RenderDeviceMapTab (props) {
 
     let [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
+    let [container_names,setContainerNames] = useState()
+    let [module_types,setModuleTypes] = useState()
+    const [nodeEnv, setNodeEnv] = useState("DEV");
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let x = await getContainerNames()
+            console.log("containers " + JSON.stringify(x))
+            setContainerNames(x.container_names)
+            x = await getModuleTypes()
+            console.log("modules " + JSON.stringify(x))
+            setModuleTypes(x.module_types)
+        }
+        fetchData();
+    }, [nodeEnv])
 
     function testDatabase(e) {
 
@@ -32,8 +80,14 @@ function RenderDeviceMapTab (props) {
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
 
+    let cntainer_names = ["sense-go","sense-python"]
+    let mdule_types = ["bme280","bmp280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]
+    let devices = [70000007,70000008]
+
     function getRow(attached_device) {
-        return( <TableRow><TableCell>{getDeviceSelector(attached_device)}</TableCell>
+        console.log("getRow " + JSON.stringify(attached_device))
+        return(<TableRow>
+            <TableCell>{getDeviceSelector(attached_device)}</TableCell>
             <TableCell>{getContainerSelector(attached_device)}</TableCell>
             <TableCell>{getTypeSelector(attached_device)}</TableCell>
             <TableCell>{getAddress(attached_device)}</TableCell>
@@ -42,13 +96,23 @@ function RenderDeviceMapTab (props) {
     }
 
     function getDeviceSelector(attached_device) {
-        return <Select options={[70000007,70000008]} value={attached_device.deviceid} />
+        return <Select options={devices} value={attached_device.deviceid} />
     }
+
     function getContainerSelector(attached_device) {
-        return <Select options={["sense-go","sense-python"]} value={attached_device.container_name} />
+        if (!container_names) {
+            return <Select options={[]}/>
+        } else {
+            return <Select options={container_names} value={attached_device.container_name}/>
+        }
     }
+
     function getTypeSelector(attached_device) {
-        return <Select options={["bme280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]} value={attached_device.device_type} />
+        if (!module_types) {
+            return <Select options={[]}/>
+        } else {
+            return <Select options={module_types} value={attached_device.device_type}/>
+        }
     }
 
     function getAddress( attached_device ) {
@@ -86,8 +150,10 @@ function RenderDeviceMapTab (props) {
             />
             <div className="global_container_">
                     <Table id="devicemap-table" >
+                        <tbody>
                         <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
                         {DeviceMap.attached_devices.map(getRow)}
+                        </tbody>
                     </Table>
                 <RenderFormActions state={local_state} applyAction={applyChanges} resetAction={resetChanges}
                                    resetButtonState={reset_button_state}
