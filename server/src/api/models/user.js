@@ -105,6 +105,35 @@ async function createEmptyUser(body) {
     })
 }
 
+/*
+        userid_User: x.userid,
+        useemailforsecurity: true,
+        usesmsforsecurity: true,
+        useemailforplantprogress: true,
+        usesmsforplantprogress: true,
+        useemailformaintenancerequired
+        usesmsformaintenancerequired: true,
+        useemailforinformation: true,
+        usesmsforinformation: true,
+
+ */
+async function createSettings(body) {
+    return new Promise(function(resolve, reject) {
+        pool.query("INSERT INTO usersettings (userid_User,useemailforsecurity, usesmsforsecurity, useemailforplantprogress," +
+            "usesmsforplantprogress, useemailformaintenancerequired, usesmsformaintenancerequired,useemailforinformation,usesmsforinformation ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)" +
+            " RETURNING *",
+            [body.userid, body.useemailforsecurity, body.usesmsforsecurity, body.useemailforplantprogress, body.usesmsforplantprogress, body.useemailformaintenancerequired,
+            body.usesmsformaintenancerequired, body.useemailforinformation, body.usesmsforinformation], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    console.log("new usersettings " + results.rows[0])
+                    resolve({usersettingsid: results.rows[0].usersettingsid, message: "A new usersettings has been added :" + results.rows[0].usersettingsid})
+                }
+            })
+    })
+}
+
 async function createUser(body) {
     return new Promise(function(resolve, reject) {
         pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash,created) VALUES ($1,$2,$3,$4,$5,current_timestamp) RETURNING *",
@@ -172,7 +201,7 @@ async function deleteUser(id) {
                 console.log("deleteUser err3 " + error)
                 reject(error)
             } else {
-                console.log("results " + JSON.stringify(results))
+//                console.log("results " + JSON.stringify(results))
                 resolve({userid: id, message: 'USER deleted with ID ' + userid})
             }
         })
@@ -190,6 +219,7 @@ module.exports = {
     endPool: endPool,
     getUser: getUser,
     findOneByUsername: findOneByUsername,
-    findOneByUserid: findOneByUserid
+    findOneByUserid: findOneByUserid,
+    createSettings: createSettings
 }
 

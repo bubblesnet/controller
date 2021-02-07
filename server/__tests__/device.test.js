@@ -44,7 +44,7 @@ describe("device GETTERS", () => {
             }
             let b = await device.getAllDevices()
                 .then(function (x) {
-                    console.log("getAllDevices = " + JSON.stringify(x))
+ //                   console.log("getAllDevices = " + JSON.stringify(x))
                     return( x.length > 0 )
                 })
                 .catch(function (err) {

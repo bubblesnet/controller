@@ -29,6 +29,20 @@ async function setupForThisFile(create_device,create_event) {
     good_userid = x.userid
     console.log("userid = " + good_userid)
     assert(good_userid > 0)
+    let s = {
+        userid: good_userid,
+        useemailforsecurity: 1,
+        usesmsforsecurity: 1,
+        useemailforplantprogress: 1,
+        usesmsforplantprogress: 1,
+        useemailformaintenancerequired: 1,
+        usesmsformaintenancerequired: 1,
+        useemailforinformation: 1,
+        usesmsforinformation: 1,
+    }
+    let us = await user.createSettings(s);
+    assert(us.usersettingsid > 0 );
+
     let d = {
         userid: x.userid,
         devicetypeid: 0,

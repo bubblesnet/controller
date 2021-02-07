@@ -8,7 +8,7 @@ const endPool = () => {
 
 async function createEvent(event) {
     return new Promise(function(resolve, reject) {
-        console.log("inserting new event "+JSON.stringify(event))
+ //       console.log("inserting new event "+JSON.stringify(event))
 
         pool.query("INSERT INTO event (userid_User, " +
             "deviceid_Device, datetimemillis, type, message, subeventdatemillis, floatvalue, intvalue, stringvalue, textvalue, rawjson, time, filename) " +
@@ -18,7 +18,7 @@ async function createEvent(event) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("new event " + results.rows[0])
+//                    console.log("new event " + results.rows[0])
                     resolve({eventid: results.rows[0].eventid, message: "A new event has been added :" + results.rows[0].eventid})
                 }
             })

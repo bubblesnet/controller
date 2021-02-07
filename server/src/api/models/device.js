@@ -39,7 +39,7 @@ async function findAllByUserid(userid) {
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
-                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
+//                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
                 resolve(results.rows);
             } else {
                 //               reject("no data")
@@ -68,7 +68,7 @@ async function createDevice(body) {
             if (error) {
                 reject(error)
             } else {
-                console.log("new deviceid " + results.rows[0])
+//                console.log("new deviceid " + results.rows[0])
                 resolve({deviceid: results.rows[0].deviceid, message: "A new device has been added :" + results.rows[0].deviceid})
             }
         })
@@ -82,7 +82,7 @@ async function updateDevice(body) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("updated updateDevice " + body.deviceid)
+//                    console.log("updated updateDevice " + body.deviceid)
                     resolve({deviceid: body.deviceid, rowcount: results.rowCount, message: "device has been modified :" + results.rowCount})
                 }
             })
@@ -99,7 +99,7 @@ async function deleteDevice(deviceid) {
                 console.log("deviceid err3 " + error)
                 reject(error)
             } else {
-                console.log("results " + JSON.stringify(results))
+//                console.log("results " + JSON.stringify(results))
                 resolve({deviceid: deviceid, rowcount: results.rowCount, message: 'device deleted with ID ' + deviceid})
             }
         })

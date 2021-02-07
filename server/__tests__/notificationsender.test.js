@@ -80,7 +80,7 @@ describe("good alertconditions", () => {
 
             let b = await alertcondition.createAlertCondition(good_alerts[i])
                 .then(function (x) {
-                    console.log("createAlertCondition = " + JSON.stringify(x))
+//                    console.log("createAlertCondition = " + JSON.stringify(x))
                     return( true )
                 })
                 .catch(function (err) {
@@ -91,8 +91,6 @@ describe("good alertconditions", () => {
         });
     }
 });
-
-
 
 describe("error bad alertconditions",   () => {
     console.log("create no-event alertcondition")
@@ -107,7 +105,7 @@ describe("error bad alertconditions",   () => {
             }
             let b = await alertcondition.createAlertCondition(bad_alerts[i])
                 .then(function (x) {
-                    console.log("createAlertCondition = " + JSON.stringify(x))
+//                    console.log("createAlertCondition = " + JSON.stringify(x))
                     return( false )
                 })
                 .catch(function (err) {
@@ -119,22 +117,66 @@ describe("error bad alertconditions",   () => {
     }
 });
 
-
-/*
 describe("notificationsender",   () => {
     console.log("Get new notifications")
     it('Get new notifications', async function () {
-        await nsender.getNewAlertConditions(function (x) {
+        await test_utils.setupForThisFile(true,true)
+        await setupEvents(good_userid, good_deviceid);
+        /*
+        await nsender.getNewAlertConditions( function (err,result) {
             try {
-                console.log("getNewAlertConditions = " + JSON.stringify(x))
-                expect(x.length >= 0)
+//                console.log("getNewAlertConditions = " + JSON.stringify(result))
+                assert(result.length >= 0)
             } catch (err) {
                 console.log("getNewAlertConditions error " + err)
-                expect(false)
+                assert(false)
             }
-
         });
+        
+         */
     });
 });
 
- */
+async function setupEvents( userid, deviceid ) {
+    for( let i in event_types ) {
+        let v = {
+            userid: userid,
+            deviceid: deviceid,
+            type: event_types[i],
+            message: 'test event message',
+            datetimemillis: new Date().getTime(),
+            subeventdatetimemillis: 0,
+            floatvalue: 0.0,
+            intvalue: i,
+            stringvalue: "blah",
+            textvalue: "",
+            rawjson: {},
+            time: 0,
+            filename: 'testfile.json'
+        };
+
+        x = await event.createEvent(v)
+    }
+}
+
+
+let event_types = [
+    "SYSTEM_START",
+    "ANDROIDEXCEPTION",
+    "WIFIFAIL",
+    "WIFICONNECT",
+    "POWERON",
+    "POWEROFF",
+    "GERMINATION",
+    "COTYLEDON",
+    "FIRSTLEAF",
+    "WATERLEAK",
+    "DOOR_OPEN",
+    "DOOR_CLOSE",
+    "CABINETMOVEMENT",
+    "POTENTIALHACK",
+    "WATERADDED",
+    "RESERVOIRCHANGED",
+    "PHADDED",
+    "NUTESADDED",
+    "WATER_LEVEL_LOW" ];
