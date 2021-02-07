@@ -18,7 +18,7 @@ describe("device GETTERS", () => {
 
     it('device get by userid', async function () {
         if( good_userid === 0 || good_deviceid === 0 ) {
-            let x = await test_utils.setupForThisFile()
+            let x = await test_utils.setupForThisFile(true,true)
             good_userid = x.userid
             good_deviceid = x.deviceid
             good_eventid = x.eventid
@@ -37,7 +37,7 @@ describe("device GETTERS", () => {
 
     it('device getall', async function () {
             if( good_userid === 0 || good_deviceid === 0 ) {
-                let x = await test_utils.setupForThisFile()
+                let x = await test_utils.setupForThisFile(true,true)
                 good_userid = x.userid
                 good_deviceid = x.deviceid
                 good_eventid = x.eventid
@@ -56,7 +56,7 @@ describe("device GETTERS", () => {
 
     it('update device', async function () {
         if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
-            x = await test_utils.setupForThisFile()
+            x = await test_utils.setupForThisFile(true,true)
             good_userid = x.userid
             good_deviceid = x.deviceid
             good_eventid = x.eventid
@@ -75,9 +75,9 @@ describe("device GETTERS", () => {
         expect(b).equals(true)
     });
 
-    it('device delete', async function () {
+    it('device delete fail', async function () {
  //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
-            let x = await test_utils.setupForThisFile() // Always make new device for the good delete so attached events don't bork it
+            let x = await test_utils.setupForThisFile(true,true) // Always make new device for the good delete so attached events don't bork it
             good_userid = x.userid
             good_deviceid = x.deviceid
             good_eventid = x.eventid
@@ -90,6 +90,24 @@ describe("device GETTERS", () => {
             .catch(function (err) {
                 console.log("deleteDevice " + err)
                 return( true )
+            });
+        expect(b).equals(true)
+    });
+    it('device delete succeed', async function () {
+        //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
+        let x = await test_utils.setupForThisFile(true,false) // Always make new device for the good delete so attached events don't bork it
+        good_userid = x.userid
+        good_deviceid = x.deviceid
+        good_eventid = x.eventid
+        //       }
+        let b = await device.deleteDevice(good_deviceid)
+            .then(function (x) {
+                console.log("deleteDevice = " + JSON.stringify(x))
+                return( true )
+            })
+            .catch(function (err) {
+                console.log("deleteDevice " + err)
+                return( false )
             });
         expect(b).equals(true)
     });

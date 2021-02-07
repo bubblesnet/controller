@@ -52,7 +52,7 @@ let good_alerts = [
     }]
 
 before(async () => {
-     x = await test_utils.setupForThisFile()
+     x = await test_utils.setupForThisFile(true,true)
     good_userid = x.userid;
      good_deviceid = x.deviceid;
      good_eventid = x.eventid;
@@ -66,7 +66,7 @@ describe("good alertconditions", () => {
         console.log("good_userid = " + good_userid)
         it(' create good alertcondition', async function () {
             if( good_userid === 0 || good_deviceid === 0 ) {
-                await test_utils.setupForThisFile()
+                await test_utils.setupForThisFile(true,true)
             }
             if( good_alerts[i].userid === 0 ) {
                 good_alerts[i].userid = good_userid

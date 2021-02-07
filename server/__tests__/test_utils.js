@@ -16,7 +16,7 @@ let good_deviceid = 0
 let good_eventid = 0
 
 
-async function setupForThisFile() {
+async function setupForThisFile(create_device,create_event) {
     console.log("setupForThisFile")
     let u = {
         firstname: "test",
@@ -34,21 +34,35 @@ async function setupForThisFile() {
         devicetypeid: 0,
         devicename: "test" + triggered_datetimemillis
     }
-    x = await device.createDevice(d)
-    good_deviceid = x.deviceid
-    assert(good_deviceid > 0)
-    console.log("deviceid = " + good_deviceid)
+    if( create_device ) {
+        x = await device.createDevice(d)
+        good_deviceid = x.deviceid
+        assert(good_deviceid > 0)
+        console.log("deviceid = " + good_deviceid)
 
-    let v = {
-        userid: good_userid,
-        deviceid: good_deviceid, type: 'testtype', message: 'test message', datetimemillis: 0, subeventdatetimemillis: 0,
-        floatvalue: 0.0, intvalue: 0, stringvalue: "blah", textvalue: "", rawjson: {}, time: 0, filename: 'testfile.json'
-    };
+        if( create_event) {
+            let v = {
+                userid: good_userid,
+                deviceid: good_deviceid,
+                type: 'testtype',
+                message: 'test message',
+                datetimemillis: 0,
+                subeventdatetimemillis: 0,
+                floatvalue: 0.0,
+                intvalue: 0,
+                stringvalue: "blah",
+                textvalue: "",
+                rawjson: {},
+                time: 0,
+                filename: 'testfile.json'
+            };
 
-    x = await event.createEvent(v)
-    good_eventid = x.eventid
-    assert(good_eventid > 0)
-    console.log("eventid = " + good_eventid)
+            x = await event.createEvent(v)
+            good_eventid = x.eventid
+            assert(good_eventid > 0)
+            console.log("eventid = " + good_eventid)
+        }
+    }
     z = { userid: good_userid, deviceid: good_deviceid, eventid: good_eventid}
     return(z)
 
