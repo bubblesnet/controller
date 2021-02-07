@@ -36,6 +36,21 @@ describe("user",   () => {
     })
 });
 
+describe("user create error",   () => {
+    console.log("create filled user error")
+    it('Filled User', async function () {
+        try {
+            let x = await user.createUser({ firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz', passwordhash: ''});
+            console.log("new filled user = " + JSON.stringify(x))
+            created_userid = x.userid
+            expect(false).to.be.true
+        } catch (err) {
+            console.log("new user error "+err)
+            expect(err).not.to.be.undefined;
+        }
+    })
+});
+
 describe("user",   () => {
     console.log("update filled user")
     it('Update Filled User', async function () {
@@ -74,6 +89,34 @@ describe("user",   () => {
         } catch (err) {
             console.log("find user error "+err)
             expect(false)
+        }
+    })
+});
+
+describe("user findOneByUserid error",   () => {
+    console.log("user findOneByUserid error")
+    it('user findOneByUserid error', async function () {
+        try {
+            let x = await user.findOneByUserid("adfasdf" );
+            console.log("found user = " + JSON.stringify(x))
+            expect(false).to.be.true
+        } catch (err) {
+            console.log("find user error "+err)
+            expect(err).not.to.be.undefined
+        }
+    })
+});
+
+describe("user findOneByUsername error",   () => {
+    console.log("user findOneByUsername error")
+    it('user findOneByUsername error', async function () {
+        try {
+            let x = await user.findOneByUsername();
+            console.log("found user = " + JSON.stringify(x))
+            expect(false).to.be.true
+        } catch (err) {
+            console.log("find user error "+err)
+            expect(err).not.to.be.undefined
         }
     })
 });
@@ -159,6 +202,22 @@ describe("user",  () => {
     })
 });
 
+describe("user update error",  () => {
+    console.log("user update error")
+    it('user update error', async function () {
+
+        let x = await user.updateSingleUserField({userid: "asfasfasfdff", fieldname: "timezone", value: -5})
+            .then(function() {
+                console.log(JSON.stringify(x))
+                expect(false).to.be.true;
+            })
+            .catch(function(err) {
+                console.log("empty user catch error = " + err)
+                expect(err).not.to.be.undefined;
+            });
+    })
+});
+
 
 describe("auth",   () => {
     console.log("set good password for real empty user")
@@ -206,6 +265,23 @@ describe("user",  () => {
     })
 });
 
+describe("error delete  user",  () => {
+    console.log("error delete  user")
+    it('error delete  user', async function () {
+
+        let x = await user.deleteUser("lksjdlf")
+            .then(response => {
+                console.log("delete user x = " + JSON.stringify(x))
+                expect(false).to.be.true;
+            })
+            .catch(function(err){
+                console.log("delete user catch error "+err)
+                expect(err).not.to.be.undefined;
+            });
+    })
+});
+
+
 describe("user",  () => {
     console.log("Generate error in delete user")
     it('Generate error in delete user', function () {
@@ -221,3 +297,9 @@ describe("user",  () => {
     })
 });
 
+describe("user endpool",  () => {
+    console.log("endpool")
+    it('endpool', function () {
+        user.endPool();
+    });
+});

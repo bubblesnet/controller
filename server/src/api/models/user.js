@@ -7,6 +7,7 @@ const endPool = () => {
     pool.end()
 }
 
+/*
 const getUser = (email_address, cb) => {
     let user = {
         found: true,
@@ -16,6 +17,8 @@ const getUser = (email_address, cb) => {
     }
     cb( null, user )
 }
+
+ */
 
 async function getAllUsers() {
     console.log("user_model getUsers")
@@ -210,12 +213,12 @@ async function deleteUser(id) {
 
 function getUserSettings (userid, cb) {
     console.log("user.getUserSettings " + userid);
-    return pool.query('select * from usersettings where userid_user = ?', [userid], function (err, result) {
+    return pool.query('select * from usersettings where userid_user = $1', [userid], function (err, result) {
 //        console.log('getUserSettings err ' + err + ' result ' + result);
 //        console.log('getUserSettings results = ' + JSON.stringify(result));
-        if (err === null) {
+//        if (err === null) {
             return cb(err, result);
-        }
+//        }
     });
 }
 
@@ -228,7 +231,7 @@ module.exports = {
     deleteUser: deleteUser,
     setPassword: setPassword,
     endPool: endPool,
-    getUser: getUser,
+//    getUser: getUser,
     findOneByUsername: findOneByUsername,
     findOneByUserid: findOneByUserid,
     createSettings: createSettings,

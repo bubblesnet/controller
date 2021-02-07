@@ -42,6 +42,11 @@ async function setupForThisFile(create_device,create_event) {
     }
     let us = await user.createSettings(s);
     assert(us.usersettingsid > 0 );
+    user.getUserSettings(good_userid, function(err, result) {
+        expect(err).to.be.undefined;
+        expect(result).not.to.be.undefined;
+        expect(result.rows).not.to.be.undefined;
+    })
 
     let d = {
         userid: x.userid,
