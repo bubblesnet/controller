@@ -1,14 +1,16 @@
 /**
  * Created by rodley on 4/21/2017.
  */
-var db = require('../models/bubbles_db');
-var email = require('./email');
+const db = require('../models/bubbles_db');
+const email = require('./email');
+const notification = require('../models/notification')
+const alertcondition = require('../models/alertcondition')
 
-var notificationsserviced = 0;
-var notificationsneeded = 100000;
+let notificationsserviced = 0;
+let notificationsneeded = 100000;
 
 function getNewAlertConditions(cb) {
-    let alerts = db.getNewAlertConditions(function (err, result) {
+    let alerts = alertcondition.getNewAlertConditions(function (err, result) {
         let notifications = [];
         let notification_count = 0;
 //        console.log('called db callback with result = ' + JSON.stringify(result));
@@ -94,7 +96,7 @@ function getNewAlertConditions(cb) {
                     sms_required: sms_required,
 //                    sms_recipient: alertcondition.mobilenumber
                 });
-                db.createNotification(notifications[notification_count], function (err, insertResult) {
+                notification.createNotification(notifications[notification_count], function (err, insertResult) {
                     if (err) {
                         console.log("createNotification failed " + err + " skipping send");
                         notificationsserviced++;
@@ -112,7 +114,7 @@ function getNewAlertConditions(cb) {
                                         console.log("send email for notification " + notification_count + " failed " + err);
                                     } else {
                                         console.log("notification " + notification_count + " email sent");
-                                        db.setEmailNotificationSent(notifications[notification_count], function (err, response) {
+                                        notification.setEmailNotificationSent(notifications[notification_count], function (err, response) {
                                             console.log("notification sent set for notificationid " + notifications[notification_count].notificationid);
                                             notificationsserviced++;
                                         });
@@ -120,7 +122,7 @@ function getNewAlertConditions(cb) {
                                 });
                             } else {
                                 console.log("notification sent set for IGNORED notificationid " + notifications[notification_count].notificationid);
-                                db.setEmailNotificationSent(notifications[notification_count], function (err, response) {
+                                notification.setEmailNotificationSent(notifications[notification_count], function (err, response) {
                                     console.log("notification sent set for notificationid " + notifications[notification_count].notificationid);
                                     notificationsserviced++;
                                 });

@@ -208,6 +208,17 @@ async function deleteUser(id) {
     })
 }
 
+function getUserSettings (userid, cb) {
+    console.log("user.getUserSettings " + userid);
+    return pool.query('select * from usersettings where userid_user = ?', [userid], function (err, result) {
+//        console.log('getUserSettings err ' + err + ' result ' + result);
+//        console.log('getUserSettings results = ' + JSON.stringify(result));
+        if (err === null) {
+            return cb(err, result);
+        }
+    });
+}
+
 module.exports = {
     updateSingleUserField: updateSingleUserField,
     getAllUsers: getAllUsers,
@@ -220,6 +231,7 @@ module.exports = {
     getUser: getUser,
     findOneByUsername: findOneByUsername,
     findOneByUserid: findOneByUserid,
-    createSettings: createSettings
+    createSettings: createSettings,
+    getUserSettings
 }
 

@@ -5,6 +5,9 @@ const pool = server_db.getPool()
 const endPool = () => {
     pool.end()
 }
+let good_userid = 0
+let good_deviceid = 0
+
 
 async function createEvent(event) {
     return new Promise(function(resolve, reject) {
