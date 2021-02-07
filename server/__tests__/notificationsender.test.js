@@ -1,6 +1,7 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const nsender = require("../src/api/services/notificationsender");
+const notif = require("../src/api/models/notification");
 const alertcondition = require("../src/api/models/alertcondition");
 const assert = require('chai').assert;
 const auth = require('../src/api/authcontroller')
@@ -117,24 +118,63 @@ describe("error bad alertconditions",   () => {
     }
 });
 
+describe("createNotification",   () => {
+    console.log("createNotification")
+    it('createNotification',  async function () {
+
+        let millis = Date.now()
+        await test_utils.setupForThisFile(true, true)
+
+        let good_notification = {
+            notificationid: 0,
+            userid: good_userid,
+            deviceid: good_deviceid,
+            eventid: good_eventid,
+            datetimemillis: millis,
+            email_required: 0,
+            email_recipient:'oncall@blah',
+            email_sent: 0,
+            sms_required: 0,
+            sms_recipient: 'xxx xxx xxxx',
+            sms_sent: 0,
+            viewedonwebui: 0
+        }
+        console.log("good_notification = " + JSON.stringify(good_notification))
+        notif.createNotification(good_notification, function(err,result) {
+            console.log("createNotification err = " + err)
+            expect(err).to.be.undefined;
+            expect(result).not.to.be.undefined;
+            expect(result.rows).not.to.be.undefined;
+            expect(result.rows[0]).not.to.be.undefined;
+            expect(result.rows[0].notificationid).not.to.be.undefined;
+//            console.log("createNotification result = " + JSON.stringify(result))
+            good_notification.notificationid = result.rows[0].notificationid
+            notif.setEmailNotificationSent(good_notification, function(err, result) {
+                expect(err).to.be.undefined;
+                expect(result).not.to.be.undefined;
+            })
+        })
+    })})
+
 describe("getNewAlertConditions",   () => {
     console.log("getNewAlertConditions")
     it('getNewAlertConditions', async function () {
         await test_utils.setupForThisFile(true,true)
         await setupEvents(good_userid, good_deviceid);
 
-        await alertcondition.getNewAlertConditions()
+        let b = await alertcondition.getNewAlertConditions()
             .then( function(result) {
                 console.log("getNewAlertConditions = " + JSON.stringify(result))
-                assert(result.rows.length >= 0)
+                return(result.rows.length >= 0)
             }
             )
             .catch( function(err) {
                 console.log("getNewAlertConditions error " + err)
-                assert(false)
+                return(false)
             })
-        })
-    });
+        assert(b === true)
+    })
+   });
 
 async function setupEvents( userid, deviceid ) {
     for( let i in event_types ) {

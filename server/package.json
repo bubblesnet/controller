@@ -23,7 +23,6 @@
     "express-session": "^1.17.1",
     "js-htmlencode": "0.3.0",
     "jsonwebtoken": "^7.4.1",
-    "mocha": "^8.2.1",
     "moment": "2.8.4",
     "moment-timezone": "*",
     "mongoose": "^4.8.5",
@@ -44,7 +43,8 @@
   },
   "devDependencies": {
     "eslint": "^4.16.0",
-    "chai": "^4.2.0",
+    "chai": "^4.3.0",
+    "mocha": "^8.2.1",
     "mochawesome": "*",
     "nyc": "*",
     "should": "~11.2.1",
