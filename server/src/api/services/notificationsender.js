@@ -9,8 +9,8 @@ const alertcondition = require('../models/alertcondition')
 let notificationsserviced = 0;
 let notificationsneeded = 100000;
 
-function getNewAlertConditions(cb) {
-    let alerts = alertcondition.getNewAlertConditions(function (err, result) {
+async function getNewAlertConditions() {
+    let alerts = await alertcondition.getNewAlertConditions(function (err, result) {
         let notifications = [];
         let notification_count = 0;
 //        console.log('called db callback with result = ' + JSON.stringify(result));
@@ -138,8 +138,9 @@ function getNewAlertConditions(cb) {
                 // send sms
                 // save smssent bit set
             }
-        return(cb (notifications))
+        return(notifications)
     });
+    return( alerts )
 }
 
 /*

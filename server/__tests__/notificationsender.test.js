@@ -10,6 +10,7 @@ const user = require('../src/api/models/user')
 const device = require('../src/api/models/device')
 const event = require('../src/api/models/event')
 
+
 let created_userid = -1
 let triggered_datetimemillis = 1612640845000;
 
@@ -174,6 +175,25 @@ describe("getNewAlertConditions",   () => {
             })
     })
    });
+
+describe("notif getNewAlertConditions",   () => {
+    console.log("notif getNewAlertConditions")
+    it('notif getNewAlertConditions', async function () {
+        await test_utils.setupForThisFile(true,true)
+        await setupEvents(good_userid, good_deviceid);
+
+        let b = await nsender.getNewAlertConditions()
+            .then( function(result) {
+                    console.log("notif getNewAlertConditions = " + JSON.stringify(result))
+                    expect(result).not.to.be.undefined
+                }
+            )
+            .catch( function(err) {
+                console.log("notif getNewAlertConditions error " + err)
+                expect(err).to.be.undefined
+            })
+    })
+});
 
 async function setupEvents( userid, deviceid ) {
     for( let i in event_types ) {
