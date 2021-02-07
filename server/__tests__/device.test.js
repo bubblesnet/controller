@@ -41,13 +41,12 @@ describe("device GETTERS", () => {
         let b = await device.findAllByUserid(good_userid)
             .then(function (x) {
                 console.log("getAllDevices = " + JSON.stringify(x))
-                return( x.length > 0 )
+                expect( x ).not.to.be.undefined
             })
             .catch(function (err) {
                 console.log("getAllDevices " + err)
-                return( false )
+                expect( err ).to.be.undefined
             });
-        expect(b).equals(true)
     });
 
     it('device getall', async function () {
@@ -149,10 +148,11 @@ describe("device GETTERS", () => {
     });
 
 });
-
+/*
 describe("device endpool",  () => {
     console.log("device endpool")
     it('device endpool', function () {
         device.endPool();
     });
 });
+ */
