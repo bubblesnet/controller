@@ -165,14 +165,13 @@ describe("getNewAlertConditions",   () => {
         let b = await alertcondition.getNewAlertConditions()
             .then( function(result) {
                 console.log("getNewAlertConditions = " + JSON.stringify(result))
-                return(result.rows.length >= 0)
+                expect(result).not.to.be.undefined
             }
             )
             .catch( function(err) {
                 console.log("getNewAlertConditions error " + err)
-                return(false)
+                expect(err).to.be.undefined
             })
-        assert(b === true)
     })
    });
 

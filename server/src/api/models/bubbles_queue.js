@@ -65,7 +65,6 @@ MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompCl
         console.log('received a message '+message);
         message.readString('utf-8', function (error, body) {
             if (error) {
-                console.log('read message error ' + error.message);
                 return;
             }
             console.log('read a message '+body);
@@ -113,7 +112,7 @@ MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompCl
     __stompClient.subscribe(subscribeHeaders, function (error, message) {
         console.log("subscribe read message callback")
         if (error) {
-            console.log('subscribe error ' + error.message);
+//            console.log('subscribe error ' + error.message);
             return;
         }
         console.log("reading")
@@ -121,7 +120,7 @@ MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompCl
         message.readString('utf-8', function (error, body) {
                 console.log("reading callback")
                 if (error) {
-                    console.log('read message error ' + error.message);
+//                    console.log('read message error ' + error.message);
                     return;
                 }
                 console.log('received message: ' + body);

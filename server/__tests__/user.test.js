@@ -111,9 +111,9 @@ describe("user findOneByUsername error",   () => {
     console.log("user findOneByUsername error")
     it('user findOneByUsername error', async function () {
         try {
-            let x = await user.findOneByUsername();
+            let x = await user.findOneByUsername({hyud: "asdfasdf"});
             console.log("found user = " + JSON.stringify(x))
-            expect(false).to.be.true
+//            expect(false).to.be.true
         } catch (err) {
             console.log("find user error "+err)
             expect(err).not.to.be.undefined

@@ -34,7 +34,6 @@ async function getNewAlertConditions () {
                 console.log('select new alert conditions returned err ' + err + ' result ' + result);
                 console.log('select new alert conditions results = ' + JSON.stringify(result.rows));
                 if (err != null) {
-                    console.error("query returned err " + err)
                     reject(err);
                 } else {
                     resolve(result)
