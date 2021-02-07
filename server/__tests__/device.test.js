@@ -29,6 +29,17 @@ describe("device GETTERS", () => {
             });
     });
 
+    it('error device get by userid', async function () {
+        let b = await device.findAllByUserid()
+            .then(function (x) {
+                console.log("getAllDevices = " + JSON.stringify(x))
+                expect( x ).to.be.undefined
+            })
+            .catch(function (err) {
+                console.log("error device get by userid " + err)
+                expect( err ).not.to.be.undefined
+            });
+    });
 
 
     it('device get by userid', async function () {
@@ -101,13 +112,27 @@ describe("device GETTERS", () => {
         let b = await device.updateDevice(z)
             .then(function (x) {
                 console.log("updateDevice = " + JSON.stringify(x))
-                return( x.rowcount === 0 )
+                expect( x).to.be.undefined
             })
             .catch(function (err) {
                 console.log("updateDevice " + err)
-                return( true )
+                expect(err).not.to.be.undefined
             });
-        expect(b).equals(true)
+    });
+
+    it('device create fail', async function () {
+        //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
+ //       let x = await test_utils.setupForThisFile(true,true) // Always make new device for the good delete so attached events don't bork it
+        //       }
+        let b = await device.createDevice({})
+            .then(function (x) {
+                console.log("createDevice = " + JSON.stringify(x))
+                expect(x).to.be.undefined
+            })
+            .catch(function (err) {
+                console.log("deleteDevice " + err)
+                expect(err).not.to.be.undefined
+            });
     });
 
     it('device delete fail', async function () {
