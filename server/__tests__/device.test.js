@@ -54,7 +54,7 @@ describe("device GETTERS", () => {
             expect(b).equals(true)
         });
 
-    it('update device', async function () {
+    it('update device success', async function () {
         if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
             x = await test_utils.setupForThisFile(true,true)
             good_userid = x.userid
@@ -71,6 +71,27 @@ describe("device GETTERS", () => {
             .catch(function (err) {
                 console.log("updateDevice " + err)
                 return( false )
+            });
+        expect(b).equals(true)
+    });
+
+    it('update device fail', async function () {
+        if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
+            x = await test_utils.setupForThisFile(true,true)
+            good_userid = x.userid
+            good_deviceid = x.deviceid
+            good_eventid = x.eventid
+        }
+        let z = {devicename: "updated", devicetypeid: 0, deviceid: 9999}
+
+        let b = await device.updateDevice(z)
+            .then(function (x) {
+                console.log("updateDevice = " + JSON.stringify(x))
+                return( x.rowcount === 0 )
+            })
+            .catch(function (err) {
+                console.log("updateDevice " + err)
+                return( true )
             });
         expect(b).equals(true)
     });
@@ -103,7 +124,7 @@ describe("device GETTERS", () => {
         let b = await device.deleteDevice(good_deviceid)
             .then(function (x) {
                 console.log("deleteDevice = " + JSON.stringify(x))
-                return( true )
+                return( x.rowcount === 1 )
             })
             .catch(function (err) {
                 console.log("deleteDevice " + err)

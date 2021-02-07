@@ -83,7 +83,7 @@ async function updateDevice(body) {
                     reject(error)
                 } else {
                     console.log("updated updateDevice " + body.deviceid)
-                    resolve({deviceid: body.deviceid, message: "device has been modified :" + results.rowCount})
+                    resolve({deviceid: body.deviceid, rowcount: results.rowCount, message: "device has been modified :" + results.rowCount})
                 }
             })
     })
@@ -100,7 +100,7 @@ async function deleteDevice(deviceid) {
                 reject(error)
             } else {
                 console.log("results " + JSON.stringify(results))
-                resolve({deviceid: deviceid, message: 'device deleted with ID ' + deviceid})
+                resolve({deviceid: deviceid, rowcount: results.rowCount, message: 'device deleted with ID ' + deviceid})
             }
         })
     })
