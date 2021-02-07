@@ -117,25 +117,24 @@ describe("error bad alertconditions",   () => {
     }
 });
 
-describe("notificationsender",   () => {
-    console.log("Get new notifications")
-    it('Get new notifications', async function () {
+describe("getNewAlertConditions",   () => {
+    console.log("getNewAlertConditions")
+    it('getNewAlertConditions', async function () {
         await test_utils.setupForThisFile(true,true)
         await setupEvents(good_userid, good_deviceid);
-        /*
-        await nsender.getNewAlertConditions( function (err,result) {
-            try {
-//                console.log("getNewAlertConditions = " + JSON.stringify(result))
-                assert(result.length >= 0)
-            } catch (err) {
+
+        await alertcondition.getNewAlertConditions()
+            .then( function(result) {
+                console.log("getNewAlertConditions = " + JSON.stringify(result))
+                assert(result.rows.length >= 0)
+            }
+            )
+            .catch( function(err) {
                 console.log("getNewAlertConditions error " + err)
                 assert(false)
-            }
-        });
-        
-         */
+            })
+        })
     });
-});
 
 async function setupEvents( userid, deviceid ) {
     for( let i in event_types ) {

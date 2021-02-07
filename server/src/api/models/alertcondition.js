@@ -26,17 +26,22 @@ async function createAlertCondition(alert) {
     })
 }
 
-function getNewAlertConditions (cb) {
+async function getNewAlertConditions () {
     console.log('db.getNewAlertConditions ');
-    return pool.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join public.user us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification)',
-        [], function (err, result) {
-            //       console.log('select new alert conditions returned err ' + err + ' result ' + result);
-//        console.log('select new alert conditions results = ' + JSON.stringify(result.rows));
-//        if (err == null) {
-            return cb(err, result.rows);
-//        }
-        });
-};
+    return new Promise(function (resolve, reject) {
+        pool.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join public.user us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification)',
+            [], function (err, result) {
+                console.log('select new alert conditions returned err ' + err + ' result ' + result);
+                console.log('select new alert conditions results = ' + JSON.stringify(result.rows));
+                if (err != null) {
+                    console.error("query returned err " + err)
+                    reject(err);
+                } else {
+                    resolve(result)
+                }
+            });
+    })
+}
 
 
 
