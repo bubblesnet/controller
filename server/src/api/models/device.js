@@ -38,13 +38,8 @@ async function findAllByUserid(userid) {
                 console.log("findAllByUserid error " + err)
                 reject(err)
             }
-            else if (results && results.rowCount > 0) {
-//                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
-                resolve(results.rows);
-            } else {
-                //               reject("no data")
-                console.log("no devices found for userid " + userid)
-                resolve(null);
+            else  {
+                resolve(results);
             }
         })
     })

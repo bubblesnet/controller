@@ -16,6 +16,21 @@ let good_eventid = 0
 describe("device GETTERS", () => {
     console.log("device getall")
 
+
+    it('device findAllByUserid error', async function () {
+        let b = await device.findAllByUserid()
+            .then(function (x) {
+                console.log("findAllByUserid = " + JSON.stringify(x))
+                expect(false).to.be.true
+            })
+            .catch(function (err) {
+                console.log("findAllByUserid " + err)
+                expect (err).not.to.be.undefined
+            });
+    });
+
+
+
     it('device get by userid', async function () {
         if( good_userid === 0 || good_deviceid === 0 ) {
             let x = await test_utils.setupForThisFile(true,true)
@@ -133,4 +148,11 @@ describe("device GETTERS", () => {
         expect(b).equals(true)
     });
 
+});
+
+describe("device endpool",  () => {
+    console.log("device endpool")
+    it('device endpool', function () {
+        device.endPool();
+    });
 });
