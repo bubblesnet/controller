@@ -29,7 +29,7 @@ async function createAlertCondition(alert) {
 async function getNewAlertConditions () {
     console.log('db.getNewAlertConditions ');
     return new Promise(function (resolve, reject) {
-        pool.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join public.user us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification)',
+        pool.query('select * from alertcondition a join usersettings u on a.userid_User = u.userid_User join public.user us on a.userid_User = us.userid left outer join event e on e.eventid=a.eventid_Event where alertconditionid not in (select alertconditionid_Alertcondition from notification where alertconditionid_Alertcondition is not null)',
             [], function (err, result) {
                 console.log('select new alert conditions returned err ' + err + ' result ' + result);
                 console.log('select new alert conditions results = ' + JSON.stringify(result.rows));
