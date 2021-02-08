@@ -113,7 +113,7 @@ async function getNewAlertConditions() {
                         if (note.email_required) {
                             if (locals.getLocals().sendEmailNotification === true) {
                                 console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
-                                email.sendANotification(type, note, alertcondition, function (err, response) {
+                                email.sendANotification(event_class, note, alertcondition, function (err, response) {
                                     if (err) {
                                         notificationsserviced++;
                                         console.log("send email for notification " + notification_count + " failed " + err);

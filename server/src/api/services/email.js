@@ -40,16 +40,19 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
         text: shortmessage,
         html: "<html><body><h1>"+shortmessage+"</h1><p>" + longmessage + "</p></body></html>",
     }
-
-    sgMail.send(msg)
-        .then(() => {
-            console.log('Email sent')
-            cb(null);
-        })
-        .catch((error) => {
-            console.error("sendAMessage error " + error)
-            cb(error);
-        })
+    if( typeof locals.getLocals().dontSendEmail === 'undefined' || locals.getLocals().dontSendEmail === true ) {
+        console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals().dontSendEmail )
+    } else {
+        sgMail.send(msg)
+            .then(() => {
+                console.log('Email sent')
+                cb(null);
+            })
+            .catch((error) => {
+                console.error("sendAMessage error " + error)
+                cb(error);
+            })
+    }
 }
 
 
