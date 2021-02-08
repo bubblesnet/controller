@@ -76,8 +76,8 @@ async function getNewAlertConditions() {
                 let sms_required = "0";
                 switch (event_class) {
                     case 'testing':
-                        email_required = true;
-                        sms_required = true;
+                        email_required = "1";
+                        sms_required = "1";
                         break;
 
                     case 'safety':
