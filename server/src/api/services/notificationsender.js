@@ -121,7 +121,7 @@ async function getNewAlertConditions() {
                         // if useemail is checked
                         // send email
                         console.log("note = " + JSON.stringify(note))
-                        console.log("note.email_required = " + note.email_required )
+                        console.log("note.email_required = " + note.email_required + " sendEmailNotification = " + locals.getLocals().sendEmailNotification )
                         if (note.email_required === "1") {
                             if (locals.getLocals().sendEmailNotification === true) {
                                 console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
