@@ -1,5 +1,5 @@
 const supertest = require("supertest");
-const should = require("chai").should;
+const should = require("should");
 
 // This agent refers to PORT where program is runninng.
 
