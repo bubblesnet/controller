@@ -10,13 +10,14 @@ let notificationsserviced = 0;
 let notificationsneeded = 100000;
 
 async function getNewAlertConditions() {
-    let alerts = await alertcondition.getNewAlertConditions(function (err, result) {
-        let notifications = [];
-        let notification_count = 0;
+    let alerts = await alertcondition.getNewAlertConditions()
+        .then(function (result) {
+            let notifications = [];
+            let notification_count = 0;
 //        console.log('called db callback with result = ' + JSON.stringify(result));
-        notificationsneeded = result.length;
-        for (let i = 0; i < result.length; i++) {
- //               console.log('result[i] = ' + result[i]);
+            notificationsneeded = result.length;
+            for (let i = 0; i < result.length; i++) {
+                //               console.log('result[i] = ' + result[i]);
                 let alertcondition = result[i];
 //                console.log('alertcondition = ' + JSON.stringify(alertcondition));
                 // create and save a notification with "sent" bits cleared and "required" bits set appropriately
@@ -87,7 +88,7 @@ async function getNewAlertConditions() {
                         break;
                 }
                 console.log('alertconditionid = ' + alertcondition.alertconditionid + ' userid = ' + alertcondition.userid_User);
-                notifications.push( {
+                notifications.push({
                     alertconditionid_Alertcondition: alertcondition.alertconditionid,
                     userid_User: alertcondition.userid,
                     datetimemillis: Date.now(),
@@ -132,15 +133,18 @@ async function getNewAlertConditions() {
                         }
                     }
                 });
-            notification_count++
+                notification_count++
                 // save emailsent bit set
                 // if usesms is checked
                 // send sms
                 // save smssent bit set
             }
-        return(notifications)
-    });
-    return( alerts )
+            return (notifications)
+        })
+        .catch(function (err) {
+            return(err)
+        });
+    return (alerts)
 }
 
 /*
