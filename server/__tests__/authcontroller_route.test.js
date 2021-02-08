@@ -1,5 +1,5 @@
 const supertest = require("supertest");
-const should = require("should");
+const should = require("chai").should;
 
 // This agent refers to PORT where program is runninng.
 
@@ -24,4 +24,19 @@ describe("Failed login test",function() {
                 done();
             });
     });
+
+    it("should pass login", function (done) {
+
+        //calling ADD api
+        server
+            .post('/api/auth/login')
+            .send({username: "blah", password: "xyz"})
+            .expect("Content-type", /json/)
+            .expect(999)
+            .end(function (err, res) {
+                res.status.should.equal(401);
+                done();
+            });
+    });
+
 });
