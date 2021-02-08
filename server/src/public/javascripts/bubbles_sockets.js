@@ -9,7 +9,7 @@ window.bubbles = {
             console.log('bubbles.js server closed the connection!!');
         });
         socket.on('error', function () {
-            console.log('bubbles.js socket error');
+            console.error('bubbles.js socket error');
             // window.location.reload();
         });
         socket.on('connect', function () {

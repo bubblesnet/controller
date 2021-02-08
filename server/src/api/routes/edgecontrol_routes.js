@@ -64,7 +64,7 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
     });
     client.on("error", function (err) {
         client.close();
-        console.log("Error: " + err);
+        console.error("Error: " + err);
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json("{ \"error\": \"" + err + "\"}");
     });
@@ -76,7 +76,7 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
             client.send(JSON.stringify(outboundmessage), 8777, eventresult[0].stringvalue);
         }
         else {
-            console.log("Failed to find IP address to send command to!!");
+            console.error("Failed to find IP address to send command to!!");
         }
     });
 });

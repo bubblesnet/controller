@@ -53,7 +53,7 @@ async function findOneByUsername(username) {
         pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.log("findOne error " + err)
+                console.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
@@ -78,7 +78,7 @@ async function findOneByUserid(userid) {
         pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.log("findOne error " + err)
+                console.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
@@ -177,7 +177,7 @@ async function updateSingleUserField(body) {
             pool.query(`UPDATE public.user SET ${body.fieldname} = $1 WHERE userid = $2`,
                 [body.value, body.userid], (error, results) => {
                     if (error) {
-                        console.log("err1 " + error)
+                        console.error("updateSingleUserField err1 " + error)
                         reject(error)
                     } else {
                         resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
@@ -201,7 +201,7 @@ async function deleteUser(id) {
 
         pool.query('DELETE FROM public.user WHERE userid = $1', [userid], (error, results) => {
             if (error) {
-                console.log("deleteUser err3 " + error)
+                console.error("deleteUser err3 " + error)
                 reject(error)
             } else {
 //                console.log("results " + JSON.stringify(results))

@@ -24,7 +24,7 @@ let myhash = ""
 bcrypt.genSalt(saltRounds, async function(err, salt) {
     bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
         if( err ) {
-            console.log("Error " + err )
+            console.error("Error " + err )
         }
         // Store hash in your password DB.
         myhash = hash
@@ -66,7 +66,7 @@ async function findUser(req,res) {
         console.log("returning 200 " + JSON.stringify(retval))
         return res.status(200).send(retval);
     }).catch(function(err) {
-        console.log("Returning 500 error " + err)
+        console.error("Returning 500 error " + err)
         if (err) return res.status(500).send('Error on the server .'+err);
     });
 
@@ -105,7 +105,7 @@ function newUser(req,res, cb) {
             return( user )
         })
         .catch(function (err) {
-            console.log("new User error "+err)
+            console.error("new User error "+err)
             return( {} )
         })
     ;

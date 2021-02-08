@@ -113,7 +113,7 @@ async function getNewAlertConditions() {
                 console.log("notifications " + JSON.stringify(notifications))
                 notification.createNotification(note, function (err, insertResult) {
                     if (err) {
-                        console.log("createNotification failed " + err + " skipping send");
+                        console.error("createNotification failed " + err + " skipping send");
                         notificationsserviced++;
                     } else {
                         note.notificationid = insertResult.rows[0].notificationid;

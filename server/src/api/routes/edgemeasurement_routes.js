@@ -10,7 +10,7 @@ function setClient(client) {
 }
 
 function initError(error) {
-    console.log("error " + error)
+    console.error("error " + error)
 }
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device

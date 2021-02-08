@@ -45,7 +45,7 @@ const serveUIWebSockets = async() => {
             if( (""+err).includes("ECONNRESET")) {
                 console.log("client window closed")
             } else {
-                console.log("error " + err)
+                console.error("error " + err)
             }
         })
         conn.on("text", function (str) {

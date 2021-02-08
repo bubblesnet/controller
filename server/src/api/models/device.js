@@ -35,7 +35,7 @@ async function findAllByUserid(userid) {
         pool.query(ssql, values, (err, results) => {
 //            console.log("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
-                console.log("findAllByUserid error " + err)
+                console.error("findAllByUserid error " + err)
                 reject(err)
             }
             else  {
@@ -91,7 +91,7 @@ async function deleteDevice(deviceid) {
 
         pool.query('DELETE FROM device WHERE deviceid = $1', [deviceid], (error, results) => {
             if (error) {
-                console.log("deviceid err3 " + error)
+                console.error("deviceid err3 " + error)
                 reject(error)
             } else {
 //                console.log("results " + JSON.stringify(results))
