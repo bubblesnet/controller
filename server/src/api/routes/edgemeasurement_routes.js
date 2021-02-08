@@ -35,10 +35,12 @@ async function postit(req, res, next) {
                 //               bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, req.body)
                 // return OK
                 console.log("init finished");
+                bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, JSON.stringify(req.body))
                 res.json(req.body);
             }
         )
-    } else {
+    }
+    else {
 
         // validate json
         // add json to queue

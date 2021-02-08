@@ -21,6 +21,10 @@ describe("edgemeasurement routes",   () => {
             console.log("postit callback")
             expect(false).to.be.true
         });
+        await emr.postit(req, res, function() {
+            console.log("postit callback")
+            expect(false).to.be.true
+        });
         console.log("after edge measurement")
         bubbles_queue.deInit(emr.getClient())
     });
