@@ -87,9 +87,59 @@ async function setupForThisFile(create_device,create_event) {
 
 }
 
+async function createCompleteSetOfAlertableEvents( userid, deviceid ) {
+    let alertlist = []
+    for( let i in event_types ) {
+        let v = {
+            userid: userid,
+            deviceid: deviceid,
+            type: event_types[i],
+            message: 'test event message',
+            datetimemillis: new Date().getTime(),
+            subeventdatetimemillis: 0,
+            floatvalue: 0.0,
+            intvalue: i,
+            stringvalue: "blah",
+            textvalue: "",
+            rawjson: {},
+            time: 0,
+            filename: 'testfile.json'
+        };
+
+        let x = await event.createEvent(v)
+        console.log("Created alertable event "+JSON.stringify(x))
+        v.eventid = x.eventid;
+        alertlist.push(v)
+    }
+    return(alertlist)
+}
+
+let event_types = [
+    "SYSTEM_START",
+    "ANDROIDEXCEPTION",
+    "WIFIFAIL",
+    "WIFICONNECT",
+    "POWERON",
+    "POWEROFF",
+    "GERMINATION",
+    "COTYLEDON",
+    "FIRSTLEAF",
+    "WATERLEAK",
+    "DOOR_OPEN",
+    "DOOR_CLOSE",
+    "CABINETMOVEMENT",
+    "POTENTIALHACK",
+    "WATERADDED",
+    "RESERVOIRCHANGED",
+    "PHADDED",
+    "NUTESADDED",
+    "WATER_LEVEL_LOW"
+];
+
 module.exports = {
     setupForThisFile,
     good_userid: good_userid,
     good_deviceid: good_deviceid,
-    good_eventid: good_eventid
+    good_eventid: good_eventid,
+    createCompleteSetOfAlertableEvents
 }

@@ -132,10 +132,10 @@ describe("createNotification",   () => {
             deviceid: good_deviceid,
             eventid: good_eventid,
             datetimemillis: millis,
-            email_required: 0,
+            email_required: 1,
             email_recipient:'oncall@blah',
             email_sent: 0,
-            sms_required: 0,
+            sms_required: 1,
             sms_recipient: 'xxx xxx xxxx',
             sms_sent: 0,
             viewedonwebui: 0
@@ -161,7 +161,7 @@ describe("getNewAlertConditions",   () => {
     console.log("getNewAlertConditions")
     it('getNewAlertConditions', async function () {
         await test_utils.setupForThisFile(true,true)
-        await setupEvents(good_userid, good_deviceid);
+        await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
 
         let b = await alertcondition.getNewAlertConditions()
             .then( function(result) {
@@ -180,61 +180,37 @@ describe("notif getNewAlertConditions",   () => {
     console.log("notif getNewAlertConditions")
     it('notif getNewAlertConditions', async function () {
         await test_utils.setupForThisFile(true,true)
-        await setupEvents(good_userid, good_deviceid);
+        let events = await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
+        for( let i in events ) {
+            let alert = {
+                eventid: events[i].eventid,
+                userid: good_userid,
+                deviceid: good_deviceid,
+                triggered_datetimemillis: Date.now(),
+                shortmessage: "short message " + i,
+                longmessage: "long message "+i
+            }
+            let ac = await alertcondition.createAlertCondition(alert)
+            console.log("created alertcondition " + JSON.stringify(ac))
+        }
 
         let b = await nsender.getNewAlertConditions()
             .then( function(result) {
                     console.log("notif getNewAlertConditions = " + JSON.stringify(result))
                     expect(result).not.to.be.undefined
+
+
                 }
             )
             .catch( function(err) {
                 console.log("notif getNewAlertConditions error " + err)
                 expect(err).to.be.undefined
             })
-    })
+     })
+
+
 });
 
-async function setupEvents( userid, deviceid ) {
-    for( let i in event_types ) {
-        let v = {
-            userid: userid,
-            deviceid: deviceid,
-            type: event_types[i],
-            message: 'test event message',
-            datetimemillis: new Date().getTime(),
-            subeventdatetimemillis: 0,
-            floatvalue: 0.0,
-            intvalue: i,
-            stringvalue: "blah",
-            textvalue: "",
-            rawjson: {},
-            time: 0,
-            filename: 'testfile.json'
-        };
-
-        x = await event.createEvent(v)
-    }
-}
 
 
-let event_types = [
-    "SYSTEM_START",
-    "ANDROIDEXCEPTION",
-    "WIFIFAIL",
-    "WIFICONNECT",
-    "POWERON",
-    "POWEROFF",
-    "GERMINATION",
-    "COTYLEDON",
-    "FIRSTLEAF",
-    "WATERLEAK",
-    "DOOR_OPEN",
-    "DOOR_CLOSE",
-    "CABINETMOVEMENT",
-    "POTENTIALHACK",
-    "WATERADDED",
-    "RESERVOIRCHANGED",
-    "PHADDED",
-    "NUTESADDED",
-    "WATER_LEVEL_LOW" ];
+
