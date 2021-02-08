@@ -130,7 +130,7 @@ async function createSettings(body) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("new usersettings " + results.rows[0])
+                    console.log("new usersettings " + JSON.stringify(results.rows[0]))
                     resolve({usersettingsid: results.rows[0].usersettingsid, message: "A new usersettings has been added :" + results.rows[0].usersettingsid})
                 }
             })

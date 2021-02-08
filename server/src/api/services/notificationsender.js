@@ -88,7 +88,6 @@ async function getNewAlertConditions() {
                         sms_required = alertcondition.usesmsforinformation;
                         break;
                 }
-                console.log('alertconditionid = ' + alertcondition.alertconditionid + ' userid = ' + alertcondition.userid_User);
                 note = {
                     alertconditionid_Alertcondition: alertcondition.alertconditionid,
                     userid: alertcondition.userid_user,
@@ -98,6 +97,7 @@ async function getNewAlertConditions() {
                     sms_required: sms_required,
 //                    sms_recipient: alertcondition.mobilenumber
                 };
+                console.log('note = ' + JSON.stringify(note));
                 notifications.push(note)
                 console.log("notifications " + JSON.stringify(notifications))
                 notification.createNotification(note, function (err, insertResult) {
@@ -105,12 +105,12 @@ async function getNewAlertConditions() {
                         console.log("createNotification failed " + err + " skipping send");
                         notificationsserviced++;
                     } else {
-                        console.log("notification " + insertResult.notificationid + " saved");
                         note.notificationid = insertResult.rows[0].notificationid;
+                        console.log("notification " + note.notificationid + " saved");
                         // if useemail is checked
                         // send email
                         console.log("note = " + JSON.stringify(note))
-                        if (note.email_required) {
+                        if (note.email_required === "1") {
                             if (locals.getLocals().sendEmailNotification === true) {
                                 console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
                                 email.sendANotification(event_class, note, alertcondition, function (err, response) {
