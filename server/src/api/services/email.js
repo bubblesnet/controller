@@ -42,6 +42,7 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
     }
     if( typeof locals.getLocals().dontSendEmail === 'undefined' || locals.getLocals().dontSendEmail === true ) {
         console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals().dontSendEmail )
+        cb(null);
     } else {
         sgMail.send(msg)
             .then(() => {
@@ -63,6 +64,7 @@ function sendANotification (type, notification, alertcondition, cb) {
         type + ' notification from BubblesWeb',alertcondition.shortmessage,
         "Reference notification [" + notification.notificationid + "]", function(err) {
             console.log("callback from sendAMessage with err = " + err);
+            cb(err,"sent")
         })
 };
 
