@@ -64,11 +64,22 @@ async function getNewAlertConditions() {
                     case 'WATER_LEVEL_LOW':
                         event_class = 'maintenance required';
                         break;
+                    case 'testtype':
+                        event_class = 'testing';
+                        break;
+                    default:
+                        console.error("Bad alert type " + alertcondition.type)
+                        break;
                 }
                 console.log('event_class = ' + event_class + " alert_condition type " + alertcondition.type + " useemail "+alertcondition.useemailforsecurity);
                 let email_required = "0";
                 let sms_required = "0";
                 switch (event_class) {
+                    case 'testing':
+                        email_required = true;
+                        sms_required = true;
+                        break;
+
                     case 'safety':
                     case 'security':
                     case 'system':
