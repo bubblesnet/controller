@@ -66,8 +66,8 @@ async function getNewAlertConditions() {
                         break;
                 }
                 console.log('event_class = ' + event_class);
-                var email_required = 0;
-                var sms_required = 0;
+                let email_required = "0";
+                let sms_required = "0";
                 switch (event_class) {
                     case 'safety':
                     case 'security':
@@ -110,6 +110,7 @@ async function getNewAlertConditions() {
                         // if useemail is checked
                         // send email
                         console.log("note = " + JSON.stringify(note))
+                        console.log("not.email_required = " + note.email_required )
                         if (note.email_required === "1") {
                             if (locals.getLocals().sendEmailNotification === true) {
                                 console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
