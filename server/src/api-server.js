@@ -85,11 +85,12 @@ apiServer.use(function (err, req, res, next) {
 });
 
 const hostname = '0.0.0.0'
-apiServer.listen(port, hostname, () => {
+let runningServer = apiServer.listen(port, hostname, () => {
     console.log(`API server listening on ${hostname} ${port}.`)
 });
 
 module.exports = {
+    runningServer,
     app: apiServer
 };
 
