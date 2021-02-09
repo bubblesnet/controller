@@ -133,8 +133,12 @@ MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompCl
 }
 
 MessageProducer.prototype.deInit = function deInit(_stompClient) {
-    _stompClient.disconnect();
-    _stompClient = null;
+    if( typeof __stompClient !== 'undefined' ) {
+        _stompClient.disconnect();
+        _stompClient = null;
+    } else {
+        console.error("Tried to disconnect from disconnected client")
+    }
 }
 
 module.exports = new MessageProducer();
