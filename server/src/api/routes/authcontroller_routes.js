@@ -74,6 +74,7 @@ async function findUser(req,res) {
 
 }
 
+/*
 router.get('/logout', function(req, res) {
     res.status(200).send({ auth: false, token: null });
 });
@@ -112,6 +113,8 @@ function newUser(req,res, cb) {
         })
     ;
 }
+
+ */
 
 module.exports = {
     router,
