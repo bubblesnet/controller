@@ -1,11 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+const express = require('express');
+const router = express.Router();
+/*
+const bodyParser = require('body-parser');
 
-var VerifyToken = require(__root + 'api/services/verify_token');
+// const VerifyToken = require(__root + 'api/services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: true }));
-var Event = require('../services/event');
+const Event = require('../services/event');
 
 // RETURNS ALL THE EVENTS IN THE DATABASE
 router.get('/', function (req, res) {
@@ -23,5 +24,7 @@ router.get('/:id', function (req, res) {
         res.status(200).send(user);
     });
 });
-
-module.exports = router;
+*/
+module.exports = {
+    router
+};
