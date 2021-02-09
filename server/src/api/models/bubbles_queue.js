@@ -52,7 +52,7 @@ MessageProducer.prototype.init = async function init(cb) {
                 await sleep(2000)
             }
         }
-
+        resolve();
     });
 };
 
