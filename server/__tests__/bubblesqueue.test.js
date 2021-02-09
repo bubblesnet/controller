@@ -27,7 +27,9 @@ describe("BubblesQueue", () => {
             console.log("sending ....")
             console.log("initing .... ")
             await bubbles_queue.init(setClient);
-            for (var i = 0; i < 10; i++) {
+            expect(clientSet).to.be.true
+            expect(__testClient).not.to.be.undefined
+            for (let i = 0; i < 10; i++) {
                 bubbles_queue.sendMessageToQueue(__testClient, JSON.stringify({message: "blah " + i}));
                 bubbles_queue.sendMessageToTopic(__testClient, JSON.stringify({message: "blah " + i}));
             }
