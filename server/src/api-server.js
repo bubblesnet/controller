@@ -10,13 +10,13 @@ const path = require('path');
 
 global.__root   = __dirname + '/';
 
-const config_routes = require('./api/routes/config_routes');
+const config_routes = require('./api/routes/config_routes').router;
 const video_routes = require('./api/routes/video_routes');
 const edge_control_routes = require('./api/routes/edgecontrol_routes');
 const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').router;
-const user_routes = require('./api/routes/user_routes');
+const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes');
-const health_check = require('./api/routes/health_check_routes');
+const health_check = require('./api/routes/health_check_routes').router;
 
 const router = express.Router();
 

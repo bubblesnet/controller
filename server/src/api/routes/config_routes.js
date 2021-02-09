@@ -206,24 +206,38 @@ const config = {
 /// TODO shouldn't need this once packaged
 router.use(cors());
 
-router.get("/:userid/:deviceid", function (req, res, next) {
+function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
-        // read config from file
-        res.json(config);
+    // read config from file
+    res.json(config);
+}
+router.get("/:userid/:deviceid", function (req, res, next) {
+    getDeviceConfig(req,res,next)
 });
 
-router.get("/modules", function (req, res, next) {
-    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+function getModules( req, res, next ) {
     // read config from file
     let filepath = "src" + "/" + "./module_types.json"
     res.json(util.readJsonFile(filepath));
+}
+
+router.get("/modules", function (req, res, next) {
+    getModules(req,res,next)
 });
 
-router.get("/containers", function (req, res, next) {
-    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+function getContainers( req, res, next ) {
     // read config from file
     let filepath = "src" + "/" + "./container_names.json"
     res.json(util.readJsonFile(filepath));
+}
+
+router.get("/containers", function (req, res, next) {
+    getContainers(req,res,next)
 });
 
-module.exports = router;
+module.exports = {
+    getDeviceConfig,
+    getContainers,
+    getModules,
+    router
+};

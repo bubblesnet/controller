@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 
-const VerifyToken = require(__root + 'api/services/verify_token');
+const VerifyToken = require('../services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 const UserModel = require('../models/user');
@@ -33,18 +33,22 @@ router.get('/', function (req, res) {
  */
 });
 
-// GETS A SINGLE USER FROM THE DATABASE BY ID - normal case
-router.get('/:id', function (req, res) {
+function getUserById( req, res ) {
     UserModel.findOneByUserid(req.params.id).then( function ( user) {
         if (!user) return res.status(401).send("No user found.");
         return res.status(200).send(user);
     }).catch(function(err) {
         return res.status(500).send("There was a problem finding the user - err "+err);
     });
+}
+
+// GETS A SINGLE USER FROM THE DATABASE BY ID - normal case
+router.get('/:id', function (req, res) {
+    getUserById(req,res)
 });
 
 // GETS A SINGLE USER FROM THE DATABASE - unusual case
-router.get('/name/:id', function (req, res) {
+function getUserByName( req, res ) {
     console.log("Get by name " + req.params.id)
     UserModel.findOneByUsername(req.params.id).then( function (user) {
         if (!user) return res.status(401).send("No user found.");
@@ -53,6 +57,10 @@ router.get('/name/:id', function (req, res) {
     }).catch(function(err){
         return res.status(500).send("There was a problem finding the user "+err);
     });
+}
+
+router.get('/name/:id', function (req, res) {
+    getUserByName(req,res)
 });
 
 // DELETES A USER FROM THE DATABASE
@@ -77,4 +85,8 @@ router.put('/:id', /* VerifyToken, */ function (req, res) {
 });
 
 
-module.exports = router;
+module.exports = {
+    getUserById,
+    getUserByName,
+    router
+};
