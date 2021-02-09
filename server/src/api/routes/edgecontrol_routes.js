@@ -17,7 +17,7 @@ const dgram = require("dgram");
  */
 router.get("/status/:userid/:deviceid", function (req, res, next) {
         console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
-    status.status(req.params.userid, req.params.deviceid, function (obj) {
+        status.status(req.params.userid, req.params.deviceid, function (obj) {
         res.render("asyncstatus", obj);
     });
 });
@@ -37,7 +37,7 @@ router.get("/status/:userid/:deviceid", function (req, res, next) {
  * @apiSuccess {String} lastname  Lastname of the User.
  */
 
-router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, next) {
+function getDeviceOutlets( req, res, next ) {
     console.log("command userid " + req.params.userid + " deviceid " + req.params.deviceid + " outletname " + req.params.outletname + " onoff " + req.params.onoff);
     var outletname = htmlDecode(req.params.outletname);
     var outboundmessage = {
@@ -62,6 +62,7 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json(returnmessage);
     });
+
     client.on("error", function (err) {
         client.close();
         console.error("Error: " + err);
@@ -79,7 +80,14 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
             console.error("Failed to find IP address to send command to!!");
         }
     });
+}
+
+router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, next) {
+    getDeviceOutlets(req,res,next)
 });
 
 
-module.exports = router;
+module.exports = {
+    getDeviceOutlets,
+    router
+};
