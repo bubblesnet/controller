@@ -15,7 +15,7 @@ const video_routes = require('./api/routes/video_routes').router;
 const edge_control_routes = require('./api/routes/edgecontrol_routes').router;
 const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').router;
 const user_routes = require('./api/routes/user_routes').router;
-const auth_routes = require('./api/routes/authcontroller_routes');
+const auth_routes = require('./api/routes/authcontroller_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
 
 const router = express.Router();

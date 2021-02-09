@@ -45,12 +45,12 @@ async function getAllUsers() {
 
 async function findOneByUsername(username) {
     console.log("findOneByUsername")
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("username = " + username)
         let ssql = 'select * from public.user where username = $1 order by lastname asc, firstname asc, email asc'
         console.log("ssql = "+ssql)
         let values = [username]
-        pool.query(ssql, values, (err, results) => {
+        await pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
                 console.error("findOne error " + err)

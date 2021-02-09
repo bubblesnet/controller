@@ -42,13 +42,15 @@ router.post('/login', function(req, res) {
 
 async function findUser(req,res) {
     console.log("Calling findOneByUsername with body = " + JSON.stringify(req.body) )
-    user.findOneByUsername(req.body.username).then( function (user) {
+    let u = await user.findOneByUsername(req.body.username).then( function (user) {
+        console.log("findOneByUsername callback user = " + JSON.stringify(user))
         if (!user) {
             console.log("Sending 401 - auth failed No user found user = " + user)
             return res.status(401).send('No user found.');
         }
 
         // check if the password is valid
+        console.log("Checking password")
         let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
         if (!passwordIsValid){
             console.log("Sending 401 - auth failed")
@@ -111,4 +113,7 @@ function newUser(req,res, cb) {
     ;
 }
 
-module.exports = router;
+module.exports = {
+    router,
+    findUser
+};
