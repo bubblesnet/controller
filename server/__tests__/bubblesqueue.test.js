@@ -1,5 +1,6 @@
 const bubbles_queue = require("../src/api/models/bubbles_queue")
 const assert = require('chai').assert;
+const expect = require('chai').expect;
 
 let __testClient
 let clientSet = false
