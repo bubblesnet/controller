@@ -64,6 +64,9 @@ const serveUIWebSockets = async(port) => {
             console.log("Connection closed "+code+ " reason " + reason)
             connection = null;
         })
+        conn.on("complete", function() {
+            console.log("ONCOMPLETE!!!!")
+        })
     })
     const server = z.listen(port)
     return( z )
