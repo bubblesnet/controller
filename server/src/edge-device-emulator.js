@@ -15,15 +15,14 @@ function sendFakeMeasurement() {
     }, 10000);
 }
 
+function sendMeasurement(msg) {
+    console.log("sendFakeMeasurement")
 
-    function sendMeasurement(msg) {
-        console.log("sendFakeMeasurement")
-
-        msg.sample_timestamp = Date.now = () => new Date().getTime();
-        console.log("Sending message to API " + JSON.stringify(msg))
-        sendText(msg)
-        console.log("end sendFakeMeasurement")
-    }
+    msg.sample_timestamp = Date.now = () => new Date().getTime();
+    console.log("Sending message to API " + JSON.stringify(msg))
+    sendText(msg)
+    console.log("end sendFakeMeasurement")
+}
 
 function sendText(msg) {
     let url = "http://192.168.21.237:3003/api/measurement/999999/111111"
@@ -39,7 +38,7 @@ function sendText(msg) {
         })
 
 }
-
+/*
 function sendFakeStatus() {
     current_state = emulator_util.getFakeStatus()
     console.log("Sending humidity " + current_state.status.humidity_internal)
@@ -49,17 +48,27 @@ function sendFakeStatus() {
     }, 10000);
 
 }
-const updateStatus = async() => {
-    setTimeout(() => {
+*/
+
+const updateStatus = async(singleCall) => {
+    return new Promise(function (resolve, reject) {
+        if (singleCall) {
+            sendFakeMeasurement()
+            resolve()
+        } else {
+            setTimeout(() => {
 //       sendFakeStatus()
-        sendFakeMeasurement()
-    }, 10000);
+                sendFakeMeasurement()
+            }, 10000);
+        }
+    });
 }
 
+x = updateStatus(process.env.ENV === "CI");
 
-updateStatus();
+module.exports = {
 
-
+}
 
 
 
