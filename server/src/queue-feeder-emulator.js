@@ -11,27 +11,14 @@ function setClient(client) {
     __feederClient = client;
 }
 
-function sendFakeStatusToQueue() {
-    console.log("sendFakeStatusToQueue")
-    current_state = emulator_util.getFakeStatus()
-    console.log("Sending humidity " + current_state.status.humidity_internal)
-//    if (bubbles_queue.__stompClient != null) {
-        console.log("sending message to topic")
-        bubbles_queue.sendMessageToQueue(__feederClient,JSON.stringify(current_state))
-//    }
-    setTimeout(() => {
-        sendFakeStatusToQueue()
-    }, 10000);
-
-}
 const updateStatusQueue = async() => {
     setTimeout(() => {
-        sendFakeStatusToQueue()
+        emulator_util.sendFakeStatusToQueue()
     }, 10000);
 }
 
 bubbles_queue.init(setClient).then(( value ) => {
     current_state = state;
-    updateStatusQueue();
+    x = updateStatusQueue();
 });
 

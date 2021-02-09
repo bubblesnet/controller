@@ -1,5 +1,8 @@
 
 const util = require("./util")
+const axios = require('axios')
+const bubbles_queue = require("./api/models/bubbles_queue")
+let current_state = {}
 
 function getFakeMeasurement() {
     let x = util.getRandomInt(9)
@@ -53,8 +56,100 @@ function getFakeStatus() {
     current_state.status.temp_air_bottom = 40 + util.getRandomInt(49)
     return( current_state )
 }
+function sendTextToAPI(msg) {
+    let url = "http://192.168.21.237:3003/api/measurement/999999/111111"
+
+    axios
+        .post(url, msg)
+        .then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+
+}
+
+function sendFakeMeasurement(singleCall) {
+    let z = getFakeMeasurement()
+    sendMeasurement(z)
+    if( !singleCall ) { /// TODO this duplicates timeout up one level
+        setTimeout(() => {
+            sendFakeMeasurement()
+        }, 10000);
+    }
+    return(z)
+}
+/*
+function sendFakeStatus() {
+    current_state = emulator_util.getFakeStatus()
+    console.log("Sending humidity " + current_state.status.humidity_internal)
+    sendText(current_state)
+    setTimeout(() => {
+        sendFakeStatus()
+    }, 10000);
+
+}
+*/
+
+
+function sendMeasurement(msg) {
+    console.log("sendFakeMeasurement")
+
+    msg.sample_timestamp = Date.now = () => new Date().getTime();
+    console.log("Sending message to API " + JSON.stringify(msg))
+    sendTextToAPI(msg)
+    console.log("end sendFakeMeasurement")
+}
+
+function sendFakeMeasurementToTopic(client) {
+    console.log("sendFakeMeasurementToTopic")
+
+    let msg = getFakeMeasurement()
+    console.log("Sending message to topic " + JSON.stringify(msg))
+    bubbles_queue.sendMessageToTopic(client,JSON.stringify(msg))
+    setTimeout(() => {
+        sendFakeMeasurementToTopic()
+    }, 5000);
+    return(msg)
+
+}
+
+function sendFakeStatusToQueue(client) {
+    console.log("sendFakeStatusToQueue")
+    current_state = getFakeStatus()
+    console.log("Sending humidity " + current_state.status.humidity_internal)
+//    if (bubbles_queue.__stompClient != null) {
+    console.log("sending message to topic")
+    bubbles_queue.sendMessageToQueue(client,JSON.stringify(current_state))
+//    }
+    setTimeout(() => {
+        sendFakeStatusToQueue()
+    }, 10000);
+    return( current_state )
+
+}
+
+function sendFakeStatusToTopic(client) {
+    console.log("sendFakeStatusToTopic")
+    console.log("sending message to topic")
+    current_state = getFakeStatus()
+    bubbles_queue.sendMessageToTopic(client,JSON.stringify(current_state))
+    setTimeout(() => {
+        sendFakeStatusToTopic()
+    }, 10000);
+    return(current_state)
+}
+
 
 module.exports = {
     getFakeMeasurement: getFakeMeasurement,
-    getFakeStatus: getFakeStatus
+    getFakeStatus: getFakeStatus,
+    sendTextToAPI,
+    sendFakeMeasurement,
+    sendMeasurement,
+    sendFakeMeasurementToTopic,
+    sendFakeStatusToTopic,
+    sendFakeStatusToQueue
 }
