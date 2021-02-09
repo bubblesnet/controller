@@ -11,7 +11,7 @@ const path = require('path');
 global.__root   = __dirname + '/';
 
 const config_routes = require('./api/routes/config_routes').router;
-const video_routes = require('./api/routes/video_routes');
+const video_routes = require('./api/routes/video_routes').router;
 const edge_control_routes = require('./api/routes/edgecontrol_routes').router;
 const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').router;
 const user_routes = require('./api/routes/user_routes').router;
