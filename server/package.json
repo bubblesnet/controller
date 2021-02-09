@@ -6,8 +6,8 @@
     "start-api": "node_modules/.bin/supervisor api-server",
     "start-queue": "node_modules/.bin/supervisor queue-server",
     "start-ws": "node_modules/.bin/supervisor ws-server",
-    "coverage": "node_modules/.bin/nyc --reporter=lcov npm run test ",
-    "localcoverage": "node_modules/.bin/nyc --reporter=html npm run test ",
+    "coverage": "node_modules/.bin/nyc -x **/javascripts/** --reporter=lcov npm run test ",
+    "localcoverage": "node_modules/.bin/nyc -x **/javascripts/** --reporter=html npm run test ",
     "test": "node_modules/.bin/mocha --timeout 10000  --exit __tests__/*.js"
   },
   "dependencies": {
