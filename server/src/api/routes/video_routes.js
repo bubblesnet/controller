@@ -15,25 +15,33 @@ var fs = require('fs');
  * @apiSuccess {Binary} picture jpeg picture binary
  */
 
-router.get('/:userid/:deviceid/:filename', function (req, res, next) {
-    res.writeHead(200, {'Content-Type': 'image/jpeg'});
-    var userdirectory = locals.getLocals().usersdirectory + '/' + req.params.userid;
+function getImage( req, res, next ) {
+    let userdirectory = locals.getLocals().usersdirectory + '/' + req.params.userid;
 
-    var picturefile = userdirectory + '/bubblespictures/' + req.params.filename;
+    let picturefile = userdirectory + '/bubblespictures/' + req.params.filename;
     console.log('filename is ' + picturefile);
-        fs.readFile(picturefile, function (err, data) {
-            console.log('filename is ' + picturefile);
-            if (err) {
-                res.end();
-            }
-            else {
-                res.write(data);
-                res.end();
-            }
-        });
+    fs.readFile(picturefile, function (err, data) {
+        console.log('filename is ' + picturefile);
+        if (err) {
+            res.writeHead(404, {'Content-Type': 'image/jpeg'});
+            res.end();
+        }
+        else {
+            res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            res.write(data);
+            res.end();
+        }
+    });
+}
+
+router.get('/:userid/:deviceid/:filename', function (req, res, next) {
+    getImage(req,res,next)
 });
 
 
 
 
-module.exports = router;
+module.exports = {
+    getImage,
+    router
+};
