@@ -37,10 +37,10 @@ router.get("/status/:userid/:deviceid", function (req, res, next) {
  * @apiSuccess {String} lastname  Lastname of the User.
  */
 
-function getDeviceOutlets( req, res, next ) {
+function getDeviceOutlets( client, req, res, next ) {
     console.log("command userid " + req.params.userid + " deviceid " + req.params.deviceid + " outletname " + req.params.outletname + " onoff " + req.params.onoff);
-    var outletname = htmlDecode(req.params.outletname);
-    var outboundmessage = {
+    let outletname = htmlDecode(req.params.outletname);
+    let outboundmessage = {
         onoff: req.params.onoff,
         outletName: outletname,
         messageType: "outletcontrol",
@@ -48,16 +48,14 @@ function getDeviceOutlets( req, res, next ) {
         protocolVersion: "1"
     };
 
-    const client = dgram.createSocket('udp4');
-
     client.on('listening', function () {
-        var address = client.address();
+        let address = client.address();
         console.log('UDP Server listening on ' + address.address + ":" + address.port);
     });
 
     client.on('message', function (message, remote) {
         console.log(remote.address + ':' + remote.port + ' - ' + message);
-        var returnmessage = JSON.parse(message);
+        let returnmessage = JSON.parse(message);
         client.close();
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json(returnmessage);
@@ -83,7 +81,8 @@ function getDeviceOutlets( req, res, next ) {
 }
 
 router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, next) {
-    getDeviceOutlets(req,res,next)
+    const client = dgram.createSocket('udp4');
+    getDeviceOutlets(client, req,res,next)
 });
 
 
