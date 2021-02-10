@@ -12,9 +12,12 @@ describe("Find User",function() {
         }
         const res = {
             status: function (code) {
-                console.log("status code " + code)
-                expect(code === 401).to.be.true
+                console.log("should fail login status code " + code)
+                expect(code ).to.equal(401)
                 return ({
+                    json: function(message) {
+                        return({})
+                    },
                     send: function (message) {
                         console.log("fail res.send msg = " + JSON.stringify(message));
                         return ({})
@@ -22,13 +25,15 @@ describe("Find User",function() {
                 })
             }
         }
-
+        console.log("await findUser")
         await au.findUser(reqfail1, res)
+        console.log("after await findUser")
     });
 });
 
 describe("Find User good",function() {
     it("should pass login", async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         const autr_username = 'autr_' + Date.now()
         const plaintext_password = 'xyz'
         const req_success = {
@@ -40,9 +45,12 @@ describe("Find User good",function() {
 
         const res_success = {
             status: function (code) {
-                console.log("status code " + code)
+                console.log("should pass login status code " + code)
                 expect(code).to.equal(200)
                 return ({
+                    json: function(message) {
+                        return({})
+                    },
                     send: function (message) {
                         console.log("success res.send msg = " + JSON.stringify(message));
                         return ({})

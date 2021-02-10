@@ -10,11 +10,13 @@ let created_userid = -1
 describe("email",   () => {
     console.log("send test email")
     it('send test email', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         email.sendATestEmail();
         console.log("after sendATestEmail")
     });
 
     it('send test email', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         console.log("callback from sendAMessage");
         let alertcondition = {
             shortmessage: "Short message"

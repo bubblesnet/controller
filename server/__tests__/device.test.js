@@ -18,7 +18,8 @@ describe("device GETTERS", () => {
 
 
     it('device findAllByUserid error', async function () {
-        let b = await device.findAllByUserid({xxx:98274})
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+       let b = await device.findAllByUserid({xxx:98274})
             .then(function (x) {
                 console.log("findAllByUserid = " + JSON.stringify(x))
                 expect(false).to.be.true
@@ -30,7 +31,8 @@ describe("device GETTERS", () => {
     });
 
     it('error device get by userid', async function () {
-        let b = await device.findAllByUserid()
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+       let b = await device.findAllByUserid()
             .then(function (x) {
                 console.log("getAllDevices = " + JSON.stringify(x))
                 expect( x ).to.be.undefined
@@ -43,6 +45,7 @@ describe("device GETTERS", () => {
 
 
     it('device get by userid', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         if( good_userid === 0 || good_deviceid === 0 ) {
             let x = await test_utils.setupForThisFile(true,true)
             good_userid = x.userid
@@ -61,6 +64,7 @@ describe("device GETTERS", () => {
     });
 
     it('device getall', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
             if( good_userid === 0 || good_deviceid === 0 ) {
                 let x = await test_utils.setupForThisFile(true,true)
                 good_userid = x.userid
@@ -80,6 +84,7 @@ describe("device GETTERS", () => {
         });
 
     it('update device success', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
             x = await test_utils.setupForThisFile(true,true)
             good_userid = x.userid
@@ -100,6 +105,7 @@ describe("device GETTERS", () => {
     });
 
     it('update device fail', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let b = await device.updateDevice()
             .then(function (x) {
@@ -116,6 +122,7 @@ describe("device GETTERS", () => {
         //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
  //       let x = await test_utils.setupForThisFile(true,true) // Always make new device for the good delete so attached events don't bork it
         //       }
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let b = await device.createDevice({})
             .then(function (x) {
                 console.log("createDevice = " + JSON.stringify(x))
@@ -128,6 +135,7 @@ describe("device GETTERS", () => {
     });
 
     it('device delete fail', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
  //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
             let x = await test_utils.setupForThisFile(true,true) // Always make new device for the good delete so attached events don't bork it
             good_userid = x.userid
@@ -146,6 +154,7 @@ describe("device GETTERS", () => {
         expect(b).equals(true)
     });
     it('device delete succeed', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         //       if( good_userid === 0 || good_deviceid === 0 || good_deviceid === 0) {
         let x = await test_utils.setupForThisFile(true,false) // Always make new device for the good delete so attached events don't bork it
         good_userid = x.userid

@@ -46,7 +46,7 @@ async function findUser(req,res) {
         console.log("findOneByUsername callback user = " + JSON.stringify(user))
         if (!user) {
             console.log("Sending 401 - auth failed No user found user = " + user)
-            return res.status(401).send('No user found.');
+            return res.status(401).json({message: ''});
         }
 
         // check if the password is valid
@@ -54,7 +54,7 @@ async function findUser(req,res) {
         let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
         if (!passwordIsValid){
             console.log("Sending 401 - auth failed")
-            return res.status(401).send({ auth: false, token: null });
+            return res.status(401).json({message: "", auth: false, token: null });
         }
 
         // if user is found and password is valid
@@ -66,10 +66,10 @@ async function findUser(req,res) {
         // return the information including token as JSON
         let retval = { auth: true, username: user.username, firstname: user.firstname, lastname: user.lastname, token: token }
         console.log("returning 200 " + JSON.stringify(retval))
-        return res.status(200).send(retval);
+        return res.status(200).json(retval);
     }).catch(function(err) {
         console.error("Returning 500 error " + err)
-        if (err) return res.status(500).send('Error on the server .'+err);
+        if (err) return res.status(500).json({message: 'Error on the server .'+err});
     });
 
 }

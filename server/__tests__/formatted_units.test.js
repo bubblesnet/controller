@@ -6,6 +6,7 @@ var expect = require('chai').expect;
 describe("formatted_units", () => {
     console.log("formatted_units")
     it('Happy path', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         localconfig.units = "IMPERIAL"
         let x = formatted_units.formattedTemperature({units: "IMPERIAL", value: 72.0});
         console.log("formatted_temperature " + x)

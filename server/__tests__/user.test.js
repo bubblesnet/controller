@@ -9,6 +9,7 @@ let created_userid = -1
 describe("user",   () => {
     console.log("create empty user")
     it('Empty User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.createEmptyUser({});
             console.log("new user = " + JSON.stringify(x))
@@ -24,6 +25,7 @@ describe("user",   () => {
 describe("user",   () => {
     console.log("create filled user")
     it('Filled User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.createUser({username: 'notadmin', firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz', passwordhash: ''});
             console.log("new filled user = " + JSON.stringify(x))
@@ -39,6 +41,7 @@ describe("user",   () => {
 describe("user create error",   () => {
     console.log("create filled user error")
     it('Filled User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.createUser({ firstname:'John',lastname:'Rodley', email:'blah@blah.com', password:'xyz', passwordhash: ''});
             console.log("new filled user = " + JSON.stringify(x))
@@ -54,6 +57,7 @@ describe("user create error",   () => {
 describe("user",   () => {
     console.log("update filled user")
     it('Update Filled User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.updateUser({userid: created_userid, username: 'notadmin', firstname:'Johnx',lastname:'Rodleyx', email:'blah@blah.com', password:'xyz', passwordhash: ''});
             console.log("updated filled user = " + JSON.stringify(x))
@@ -68,6 +72,7 @@ describe("user",   () => {
 describe("user",   () => {
     console.log("find filled user by name")
     it('Empty User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.findOneByUsername('notadmin', );
             console.log("found user = " + JSON.stringify(x))
@@ -82,6 +87,7 @@ describe("user",   () => {
 describe("user",   () => {
     console.log("find filled user by id")
     it('Empty User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.findOneByUserid(created_userid, );
             console.log("found user = " + JSON.stringify(x))
@@ -96,6 +102,7 @@ describe("user",   () => {
 describe("user findOneByUserid error",   () => {
     console.log("user findOneByUserid error")
     it('user findOneByUserid error', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.findOneByUserid("adfasdf" );
             console.log("found user = " + JSON.stringify(x))
@@ -110,6 +117,7 @@ describe("user findOneByUserid error",   () => {
 describe("user findOneByUsername error",   () => {
     console.log("user findOneByUsername error")
     it('user findOneByUsername error', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.findOneByUsername({hyud: "asdfasdf"});
             console.log("found user = " + JSON.stringify(x))
@@ -124,6 +132,7 @@ describe("user findOneByUsername error",   () => {
 describe("user",   () => {
     console.log("get all user")
     it('Empty User', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = await user.getAllUsers();
 //            console.log("found users = " + JSON.stringify(x))
@@ -141,6 +150,7 @@ describe("user",  () => {
     console.log("update empty user string")
     it('Update User', function () {
         console.log("created_userid = " + JSON.stringify(created_userid))
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let x = user.updateSingleUserField({userid: created_userid, fieldname: "firstname", value: "BLAH"})
             .then(function() {
                 console.log("user x = " + x)
@@ -157,6 +167,7 @@ describe("user",  () => {
     console.log("update empty user string")
     it('Generate error bad user in updateSingleUserField string', function () {
         console.log("created_userid = " + JSON.stringify(created_userid))
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let x = user.updateSingleUserField({userid: -99, fieldname: "badfieldname", value: "BLAH"})
             .then(function() {
                 console.log("user x = " + x)
@@ -173,6 +184,7 @@ describe("user",  () => {
     console.log("update empty user string")
     it('Generate error bad user in updateSingleUserField int', function () {
         console.log("created_userid = " + JSON.stringify(created_userid))
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let x = user.updateSingleUserField({userid: -99, fieldname: "timezone", value: -5})
             .then(function() {
                 console.log("user x = " + x)
@@ -189,6 +201,7 @@ describe("user",  () => {
 describe("user",  () => {
     console.log("update empty user int")
     it('Update User', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let x = user.updateSingleUserField({userid: created_userid, fieldname: "timezone", value: -5})
             .then(function() {
@@ -205,6 +218,7 @@ describe("user",  () => {
 describe("user update error",  () => {
     console.log("user update error")
     it('user update error', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let x = await user.updateSingleUserField({userid: "asfasfasfdff", fieldname: "timezone", value: -5})
             .then(function() {
@@ -222,6 +236,7 @@ describe("user update error",  () => {
 describe("auth",   () => {
     console.log("set good password for real empty user")
     it('Set password', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             const plaintext_password = 'xyz'
             let x = await user.setPassword(created_userid, plaintext_password);
@@ -238,6 +253,7 @@ describe("auth",   () => {
 describe("auth",   () => {
     console.log("set good password for bogus user")
     it('Generate error in set password', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             const plaintext_password = 'xyz'
             let x = await user.setPassword(-1, plaintext_password);
@@ -252,6 +268,7 @@ describe("auth",   () => {
 describe("user",  () => {
     console.log("delete empty user")
     it('Delete real empty user', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let x = user.deleteUser(created_userid)
             .then(response => {
@@ -268,6 +285,7 @@ describe("user",  () => {
 describe("error delete  user",  () => {
     console.log("error delete  user")
     it('error delete  user', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let x = await user.deleteUser("lksjdlf")
             .then(response => {
@@ -285,6 +303,7 @@ describe("error delete  user",  () => {
 describe("user",  () => {
     console.log("Generate error in delete user")
     it('Generate error in delete user', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let x = user.deleteUser(-9)
             .then(response => {
                 console.log("delete user x = " + JSON.stringify(x))
@@ -300,6 +319,7 @@ describe("user",  () => {
 describe("user endpool",  () => {
     console.log("endpool")
     it('endpool', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         user.endPool();
     });
 });

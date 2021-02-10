@@ -7,12 +7,12 @@ const server = supertest.agent("http://localhost:3003",{});
 // UNIT test begin
 describe("Failed login test",function() {
     it("should fail login", function (done) {
-
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
             //calling ADD api
             server
                 .post('/api/auth/login')
                 .send({username: "blah", password: "blah"})
-//                .expect("Content-type", /json/)
+                .expect("Content-type", /json/)
                 .expect(401, done);
         }
     )
@@ -21,6 +21,7 @@ describe("Failed login test",function() {
 
 /*
     it("should pass login", function (done) {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         //calling ADD api
         server

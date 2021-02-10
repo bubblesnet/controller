@@ -6,6 +6,7 @@ const vr = require('../src/api/routes/video_routes')
 describe("video_routes video_routes",   () => {
     console.log("video_routes routes")
     it('video_routes routes', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let req = {
             params: {
                 id: 90000009,

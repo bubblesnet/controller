@@ -16,6 +16,8 @@ describe("getLastKnownIPAddress", () => {
     let deviceid = 70000007;
 
     it('getLastKnownIPAddress', async function () {
+        console.log("start API server")
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         await dbd.getLastKnownIPAddress(userid, deviceid, function () {
             console.log("getlastknownip callback")
         })

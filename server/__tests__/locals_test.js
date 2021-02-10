@@ -10,6 +10,7 @@ describe("locals",   () => {
     console.log("read non-existent config")
     const saveFilePath = config.configFilePath
     it('non-existent config',  function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let erroredout = false;
             try {
@@ -29,6 +30,7 @@ describe("locals",   () => {
 describe("locals",   () => {
     console.log("read good config")
     it('good config',  function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         try {
             let x = config.getLocals();
             expect(true)

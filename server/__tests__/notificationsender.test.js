@@ -99,6 +99,7 @@ describe("error bad alertconditions",   () => {
 
     for( i in bad_alerts ) {
         it('error create no-event alertcondition', async function () {
+            console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
             if( bad_alerts[i].userid === 0 ) {
                 bad_alerts[i].userid = good_userid
             }
@@ -122,6 +123,7 @@ describe("error bad alertconditions",   () => {
 describe("createNotification",   () => {
     console.log("createNotification")
     it('createNotification',  async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
 
         let millis = Date.now()
         await test_utils.setupForThisFile(true, true)
@@ -162,6 +164,7 @@ describe("createNotification",   () => {
 describe("getNewAlertConditions",   () => {
     console.log("getNewAlertConditions")
     it('getNewAlertConditions', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         await test_utils.setupForThisFile(true,true)
         await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
 /*
@@ -183,6 +186,7 @@ describe("getNewAlertConditions",   () => {
 describe("notif getNewAlertConditions",   () => {
     console.log("notif getNewAlertConditions")
     it('notif getNewAlertConditions', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         await test_utils.setupForThisFile(true,true)
         let events = await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
         for( let i in events ) {

@@ -6,6 +6,7 @@ const hcroutes = require('../src/api/routes/user_routes')
 describe("user_routes routes",   () => {
     console.log("user_routes routes")
     it('user_routes routes', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let req = {
             params: {
                 id: 90000009,

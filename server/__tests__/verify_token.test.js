@@ -10,6 +10,7 @@ let created_userid = -1
 describe("verify bad token ERROR",   () => {
     console.log("verify token ERROR")
     it('verify token error', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let req = {
             headers: [],
         }
@@ -35,6 +36,7 @@ describe("verify bad token ERROR",   () => {
 describe("verify no token ERROR",   () => {
     console.log("verify no token ERROR")
     it('verify no token error', function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let req = {
             headers: [],
         }

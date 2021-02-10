@@ -7,6 +7,7 @@ const bubbles_queue = require('../src/api/models/bubbles_queue')
 describe("edgemeasurement routes",   () => {
     console.log("edgemeasurement routes")
     it('edgemeasurement routes', async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         let req = {
             body: {},
         }
