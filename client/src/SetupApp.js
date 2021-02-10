@@ -17,11 +17,31 @@ function SetupApp (props) {
 
     //Public API that will echo messages sent to it back to the client
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
-    const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [adminUser, setAdminUser] = useState({})
 
+    let api_server_port;
+    let websocket_server_port;
+    switch( props.nodeEnv) {
+        case "DEV":
+            api_server_port = 3003;
+            websocket_server_port = 8001;
+            break;
+        case "TEST":
+            api_server_port = 3002;
+            websocket_server_port = 8002;
+            break;
+        case "PRODUCTION":
+            api_server_port = 3001;
+            websocket_server_port = 8003;
+            break;
+        case "CI":
+            api_server_port = 3004;
+            websocket_server_port = 8004;
+            break;
+    }
 
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
@@ -40,8 +60,8 @@ function SetupApp (props) {
         console.log("getAdminUser calling out to api for deets")
 
         return new Promise( async (resolve, reject) => {
-            console.log("getAdminUser calling out to " + 'http://localhost:3003/users/name/admin')
-            const response = fetch('http://localhost:3003/api/users/name/admin').then( async function(response) {
+            console.log("getAdminUser calling out to " + 'http://localhost:"+apiPort+"/users/name/admin')
+            const response = fetch('http://localhost:"+apiPort+"/api/users/name/admin').then( async function(response) {
                 if (response.ok) {
                     console.log("getAdminUser Got user response.ok");
                     let user = await response.json();
@@ -60,17 +80,29 @@ function SetupApp (props) {
     let setEnvironment = (value) => {
         console.log("AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
-        let theApiPort;
-        if (theNodeEnvironment === "production") {
-            theApiPort = 3001;
-        } else if (theNodeEnvironment === "test") {
-            theApiPort = 3002;
-        } else if (theNodeEnvironment === "development") {
-            theApiPort = 3003;
+        let api_server_port;
+        let websocket_server_port;
+        switch( props.nodeEnv) {
+            case "DEV":
+                api_server_port = 3003;
+                websocket_server_port = 8001;
+                break;
+            case "TEST":
+                api_server_port = 3002;
+                websocket_server_port = 8002;
+                break;
+            case "PRODUCTION":
+                api_server_port = 3001;
+                websocket_server_port = 8003;
+                break;
+            case "CI":
+                api_server_port = 3004;
+                websocket_server_port = 8004;
+                break;
         }
-        console.log("setting state db to " + theNodeEnvironment + " port to " + theApiPort)
+        console.log("setting state db to " + theNodeEnvironment + " port to " + api_server_port)
         setNodeEnv(theNodeEnvironment);
-        setApiPort(theApiPort);
+        setApiPort(api_server_port);
     }
 
     console.log("SetupApp Rendering App with readyState = " )
@@ -80,11 +112,11 @@ function SetupApp (props) {
                 <Header setNodeEnv={setEnvironment}/>
                 <Tabs margin="medium" flex="shrink">
                     <Tab title="Server Settings">
-                        <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderSetup nodeEnv={nodeEnv} apiPort={api_server_port} theme={bubbles_theme}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
                     <Tab title="Admin User">
-                        <RenderUserSetupTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderUserSetupTab nodeEnv={nodeEnv} apiPort={api_server_port} theme={bubbles_theme}
                                      applicationSettings={local_state.application_settings}
                         username='admin' email={adminUser.email} firstName={adminUser.firstname} lastName={adminUser.lastname}/>
                     </Tab>

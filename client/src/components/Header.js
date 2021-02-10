@@ -13,18 +13,28 @@ function Header (props) {
     let setEnvironment = (value) => {
         console.log("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value
-        var theApiPort
-        if (theNodeEnv === "PRODUCTION") {
-            theApiPort = 3001;
-        } else if (theNodeEnv === "TEST") {
-            theApiPort = 3002;
-        } else if (theNodeEnv === "DEV") {
-            theApiPort = 3003;
-        } else if (theNodeEnv === "CI") {
-            theApiPort = 3004;
+        let api_server_port;
+        let websocket_server_port;
+        switch( theNodeEnv) {
+            case "DEV":
+                api_server_port = 3003;
+                websocket_server_port = 8001;
+                break;
+            case "TEST":
+                api_server_port = 3002;
+                websocket_server_port = 8002;
+                break;
+            case "PRODUCTION":
+                api_server_port = 3001;
+                websocket_server_port = 8003;
+                break;
+            case "CI":
+                api_server_port = 3004;
+                websocket_server_port = 8004;
+                break;
         }
         setNodeEnv(theNodeEnv);
-        setApiPort(theApiPort);
+        setApiPort(api_server_port);
         props.setNodeEnv(value)
     }
     console.log("after setenv")

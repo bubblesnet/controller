@@ -5,11 +5,11 @@ import {Button} from "rendition";
 import {Text, Box, TextInput, Markdown} from "grommet";
 
 
-async function loginUser(credentials) {
+async function loginUser(port, credentials) {
     console.log("loginUser calling out to api for token")
 
     return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://localhost:3003/api/auth/login', {
+        const response = await fetch('http://localhost:"++"/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,6 +34,26 @@ Enter your username and password to start configuring and controlling your Bubbl
                         
 Click here to see first-time setup instructions.
 `;
+    let websocket_server_port
+    let api_server_port;
+    switch( props.nodeEnv) {
+        case "DEV":
+            api_server_port = 3003;
+            websocket_server_port = 8001;
+            break;
+        case "TEST":
+            api_server_port = 3002;
+            websocket_server_port = 8002;
+            break;
+        case "PRODUCTION":
+            api_server_port = 3001;
+            websocket_server_port = 8003;
+            break;
+        case "CI":
+            api_server_port = 3004;
+            websocket_server_port = 8004;
+            break;
+    }
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState("");   // Set to a value so that controlled-uncontrolled error doesn't get thrown
@@ -44,7 +64,7 @@ Click here to see first-time setup instructions.
                 e.preventDefault();
         */
         console.log("handleSubmit - calling out for token for user "+username)
-        await loginUser({
+        await loginUser(api_server_port, {
             username: username,
             password: password
         })

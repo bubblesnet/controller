@@ -80,7 +80,6 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          PORT: 3003
           ICEBREAKER_DB: icebreaker_dev
           NODE_ENV: CI
         working-directory: server
