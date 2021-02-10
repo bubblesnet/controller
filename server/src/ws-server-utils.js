@@ -137,10 +137,13 @@ const serveUIWebSockets = async(port) => {
 
 function close() {
     bubbles_queue.deInit(__queueClient)
-    z.close();
+    if( typeof z !== 'undefined')
+        z.close();
+
 }
 
 module.exports = {
+    subscribeToTopic,
     serveUIWebSockets,
     close
 }

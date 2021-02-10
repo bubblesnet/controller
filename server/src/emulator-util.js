@@ -40,7 +40,8 @@ function getFakeMeasurement() {
 }
 
 function getFakeStatus() {
-    let current_state = {status: {}}
+//    let current_state = {status: {}}
+    let current_state = require('../src/initial_state.json')
 
     current_state.status.humidity_internal = 60 + util.getRandomInt(30)
     let x = util.getRandomInt(2);
@@ -56,6 +57,7 @@ function getFakeStatus() {
     current_state.status.temp_air_bottom = 40 + util.getRandomInt(49)
     return( current_state )
 }
+
 function sendTextToAPI(msg) {
     let url = "http://192.168.21.237:3003/api/measurement/999999/111111"
 

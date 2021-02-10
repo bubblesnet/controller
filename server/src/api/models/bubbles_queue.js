@@ -132,10 +132,10 @@ MessageProducer.prototype.subscribeToQueue = function subscribeToQueue(__stompCl
     });
 }
 
-MessageProducer.prototype.deInit = function deInit(_stompClient) {
+MessageProducer.prototype.deInit = function deInit(__stompClient) {
     if( typeof __stompClient !== 'undefined' ) {
-        _stompClient.disconnect();
-        _stompClient = null;
+        __stompClient.disconnect();
+        __stompClient = null;
     } else {
         console.error("Tried to disconnect from disconnected client")
     }
