@@ -5,6 +5,12 @@ const ws = require("nodejs-websocket")
 let message_sent = false
 const port = 9667
 
+describe("ws-server-util",   async () => {
+    it('ws-server-util', async function () {
+        console.log("ws-server-util")
+    }
+    )});
+
 /* DOESNT WORK
 describe("ws-server-util",   async () => {
     it('ws-server-util', async function () {

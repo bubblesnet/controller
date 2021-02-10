@@ -19,6 +19,7 @@ import RenderPhmeter from "./PhmeterFunctional";
 
 function RenderControlTab(props) {
 //    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
+    console.log("props.switch_state " + JSON.stringify(props.switch_state))
     const [values, setValues] = useState({
         switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},

@@ -44,7 +44,7 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
-//        console.log(JSON.stringify(msg))
+        console.log(JSON.stringify(msg))
         if( typeof msg.value === 'undefined' ) {
             console.log("BAD measurement message " + JSON.stringify(msg))
         } else {
@@ -77,8 +77,8 @@ function AuthenticatedApp (props) {
                 }
             }
         } else {
-            console.log("Received valid status message")
-            setState(JSON.parse(event.data));
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
+//            setState(JSON.parse(event.data));
         }
     }
     const {
@@ -209,14 +209,20 @@ function AuthenticatedApp (props) {
             console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
-    let thestate = local_state
+    console.log("local_switch state = " + JSON.stringify(local_state.switch_state))
+    let thestate = JSON.parse(JSON.stringify(local_state))
+    console.log("thestate switch state = " + JSON.stringify(thestate.switch_state))
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
 //        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
-        thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
+//        thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
+        console.log("after last complete status message thestate switch state = " + JSON.stringify(thestate.switch_state))
     }
 //    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
  //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
+
+//    console.log("thestate = " + JSON.stringify(thestate))
+//    console.log("thestate.switch_state = " + JSON.stringify(thestate.switch_state))
 
     return (
         <div className="App">
