@@ -1,6 +1,6 @@
 # BubblesNet Controller
 
-[![codecov](https://codecov.io/gh/bubblesnet/controller/branch/1-feature-firstapis/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
+[![codecov](https://codecov.io/gh/bubblesnet/controller/branch/6---CI-and-Testing/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
 ![ci](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg)
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
