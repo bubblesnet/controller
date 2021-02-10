@@ -7,6 +7,7 @@ describe("health_check_routes routes",   () => {
     console.log("health_check_routes routes")
     it('health_check_routes routes', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         let req = {
             params: {
                 userid: 90000009,

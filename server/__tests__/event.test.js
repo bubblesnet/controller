@@ -19,6 +19,7 @@ before(async () => {
 describe("event",   () => {
     it('Create good event', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         console.log("add good event")
         const good_event = {
             userid: good_userid,
@@ -50,6 +51,7 @@ describe("event",   () => {
 
     it('Create bad events', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
        console.log("add bad event")
         const badevents = [
             {

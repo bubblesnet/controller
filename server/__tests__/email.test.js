@@ -11,12 +11,14 @@ describe("email",   () => {
     console.log("send test email")
     it('send test email', function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         email.sendATestEmail();
         console.log("after sendATestEmail")
     });
 
     it('send test email', function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         console.log("callback from sendAMessage");
         let alertcondition = {
             shortmessage: "Short message"

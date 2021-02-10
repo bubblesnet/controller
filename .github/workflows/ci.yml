@@ -82,6 +82,6 @@ jobs:
           POSTGRES_PORT: 5432
           PORT: 3003
           ICEBREAKER_DB: icebreaker_dev
-          NODE_ENV: DEV
+          NODE_ENV: CI
         working-directory: server
 

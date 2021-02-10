@@ -2,9 +2,12 @@
 const au = require('../src/api/routes/authcontroller_routes')
 const expect = require('chai').expect
 const user = require('../src/api/models/user')
+const request = require("supertest");
 
 describe("Find User",function() {
     it("should fail login", async function () {
+        console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         const reqfail1 = {
             body: {
                 username: 'blahblah'

@@ -11,6 +11,7 @@ describe("verify bad token ERROR",   () => {
     console.log("verify token ERROR")
     it('verify token error', function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         let req = {
             headers: [],
         }
@@ -37,6 +38,7 @@ describe("verify no token ERROR",   () => {
     console.log("verify no token ERROR")
     it('verify no token error', function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         let req = {
             headers: [],
         }

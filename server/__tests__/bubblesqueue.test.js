@@ -15,6 +15,7 @@ describe("BubblesQueue", () => {
     describe('Init', () => {
         it('should return blah', async function () {
             console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+            expect( process.env.NODE_ENV ).not.to.be.undefined
             console.log("initing .... ")
             await bubbles_queue.init(setClient);
             clientSet = false;

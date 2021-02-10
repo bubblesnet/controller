@@ -67,6 +67,8 @@ describe("good alertconditions", () => {
     for( let i in good_alerts ) {
         console.log("good_userid = " + good_userid)
         it(' create good alertcondition', async function () {
+            console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+            expect( process.env.NODE_ENV ).not.to.be.undefined
             if( good_userid === 0 || good_deviceid === 0 ) {
                 await test_utils.setupForThisFile(true,true)
             }
@@ -100,6 +102,7 @@ describe("error bad alertconditions",   () => {
     for( i in bad_alerts ) {
         it('error create no-event alertcondition', async function () {
             console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+            expect( process.env.NODE_ENV ).not.to.be.undefined
             if( bad_alerts[i].userid === 0 ) {
                 bad_alerts[i].userid = good_userid
             }
@@ -124,6 +127,7 @@ describe("createNotification",   () => {
     console.log("createNotification")
     it('createNotification',  async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
 
         let millis = Date.now()
         await test_utils.setupForThisFile(true, true)
@@ -165,6 +169,7 @@ describe("getNewAlertConditions",   () => {
     console.log("getNewAlertConditions")
     it('getNewAlertConditions', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         await test_utils.setupForThisFile(true,true)
         await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
 /*
@@ -187,6 +192,7 @@ describe("notif getNewAlertConditions",   () => {
     console.log("notif getNewAlertConditions")
     it('notif getNewAlertConditions', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
         await test_utils.setupForThisFile(true,true)
         let events = await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
         for( let i in events ) {

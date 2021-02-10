@@ -8,6 +8,7 @@ const port = 9667
 describe("ws-server-util subscribe to ws",   async () => {
     it('ws-server-util run ws server', async function () {
             console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+            expect( process.env.NODE_ENV ).not.to.be.undefined
             console.log("ws-server-util run ws server")
             await wsu.runWebSocketServer(port)
 //           await connectToWebsocketServer(port)
@@ -16,6 +17,7 @@ describe("ws-server-util subscribe to ws",   async () => {
     )
     it('ws-server-util subscribe to topic', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
             console.log("ws-server-util subscribe to topic")
             await wsu.subscribeToTopic()
             await wsu.close()

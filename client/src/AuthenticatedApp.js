@@ -22,11 +22,33 @@ import initial_settings from './initial_settings.json'
 import useWebSocket from 'react-use-websocket';
 
 function AuthenticatedApp (props) {
+    console.log("props = " + JSON.stringify(props))
+
+    let websocket_server_port = 0;
+    let api_server_port = 0;
+    switch( props.nodeEnv) {
+        case "DEV":
+            api_server_port = 3003;
+            websocket_server_port = 8001;
+            break;
+        case "TEST":
+            api_server_port = 3002;
+            websocket_server_port = 8002;
+            break;
+        case "PRODUCTION":
+            api_server_port = 3001;
+            websocket_server_port = 8003;
+            break;
+        case "CI":
+            api_server_port = 3004;
+            websocket_server_port = 8004;
+            break;
+    }
 
     //Public API that will echo messages sent to it back to the client
 //    const [apiConnected, setApiConnected] = useState(0);
     const [language, setLanguage] = useState('');
-    const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
+    const [socketUrl, setSocketUrl] = useState('ws://localhost:'+websocket_server_port);
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
 
@@ -143,8 +165,8 @@ function AuthenticatedApp (props) {
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
-    const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
-    const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
+    const [apiPort, setApiPort] = useState(api_server_port);  // The port we should send queries to - depends on dev/test/prod
 //    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
@@ -183,20 +205,32 @@ function AuthenticatedApp (props) {
     let setEnvironment = (value) => {
         console.log("AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
-        let theApiPort;
-        if (theNodeEnvironment === "production") {
-            theApiPort = 3001;
-        } else if (theNodeEnvironment === "test") {
-            theApiPort = 3002;
-        } else if (theNodeEnvironment === "development") {
-            theApiPort = 3003;
+        let api_server_port;
+       switch( theNodeEnvironment) {
+            case "DEV":
+                api_server_port = 3003;
+                websocket_server_port = 8001;
+                break;
+            case "TEST":
+                api_server_port = 3002;
+                websocket_server_port = 8002;
+                break;
+            case "PRODUCTION":
+                api_server_port = 3001;
+                websocket_server_port = 8003;
+                break;
+            case "CI":
+                api_server_port = 3004;
+                websocket_server_port = 8004;
+                break;
         }
-        console.log("setting state db to " + theNodeEnvironment + " port to " + theApiPort)
+        console.log("setting state db to " + theNodeEnvironment + " port to " + api_server_port)
+        setSocketUrl('ws://localhost:'+websocket_server_port)
         setNodeEnv(theNodeEnvironment);
-        setApiPort(theApiPort);
+        setApiPort(api_server_port);
     }
 
-    console.log("AuthenticatedApp Rendering App with readyState = " + readyState)
+    console.log("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
@@ -226,7 +260,7 @@ function AuthenticatedApp (props) {
 
     return (
         <div className="App">
-                <Header setNodeEnv={setEnvironment} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
+                <Header setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
                 <Tabs margin="medium" flex="shrink">
                     <Tab title="Cabinet Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}

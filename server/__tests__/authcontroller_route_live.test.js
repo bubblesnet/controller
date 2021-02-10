@@ -1,4 +1,5 @@
 const supertest = require("supertest");
+const expect = require('chai').expect;
 
 // This agent refers to PORT where program is running.
 
@@ -8,6 +9,8 @@ const server = supertest.agent("http://localhost:3003",{});
 describe("Failed login test",function() {
     it("should fail login", function (done) {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
+        expect( process.env.NODE_ENV ).not.to.be.undefined
+
             //calling ADD api
             server
                 .post('/api/auth/login')
