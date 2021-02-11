@@ -5,29 +5,31 @@ import {Button} from "rendition";
 import {Text, Box, TextInput, Markdown} from "grommet";
 
 
-async function loginUser(port, credentials) {
-    console.log("loginUser calling out to api for token")
-
-    return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://localhost:"++"/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(credentials)
-        });
-        if(response.ok) {
-            let loginstate = await response.json();
-            console.log("Got loginstate " + JSON.stringify(loginstate));
-            resolve(loginstate)
-        } else {
-            console.log("error " + response.status)
-            reject( response.status )
-        }
-    })
-}
 
 function RenderUnauthenticatedOverview (props) {
+    async function loginUser(port, credentials) {
+        console.log("loginUser calling out to api on port "+port+" for token")
+        let url = 'http://localhost:'+3003+'/api/auth/login'
+        console.log("url = " + url)
+        return new Promise( async (resolve, reject) => {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            });
+            if(response.ok) {
+                let loginstate = await response.json();
+                console.log("Got loginstate " + JSON.stringify(loginstate));
+                resolve(loginstate)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
+
     const md = `
 ### Bubbles Controller
 Enter your username and password to start configuring and controlling your Bubbles installation.
@@ -35,25 +37,26 @@ Enter your username and password to start configuring and controlling your Bubbl
 Click here to see first-time setup instructions.
 `;
     let websocket_server_port
-    let api_server_port;
+    let api_port1
     switch( props.nodeEnv) {
         case "DEV":
-            api_server_port = 3003;
+            api_port1 = 3003;
             websocket_server_port = 8001;
             break;
         case "TEST":
-            api_server_port = 3002;
+            api_port1 = 3002;
             websocket_server_port = 8002;
             break;
         case "PRODUCTION":
-            api_server_port = 3001;
+            api_port1 = 3001;
             websocket_server_port = 8003;
             break;
         case "CI":
-            api_server_port = 3004;
+            api_port1 = 3004;
             websocket_server_port = 8004;
             break;
     }
+    const [api_server_port, setApiServerPort] = useState(api_port1);
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState("");   // Set to a value so that controlled-uncontrolled error doesn't get thrown
