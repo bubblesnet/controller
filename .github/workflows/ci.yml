@@ -60,6 +60,7 @@ jobs:
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
           ICEBREAKER_DB: icebreaker_dev
+          NODE_ENV: CI
         working-directory: server
 
       - name: Run tests with coverage
