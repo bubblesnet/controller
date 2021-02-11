@@ -14,10 +14,10 @@ async function createEvent(event) {
  //       console.log("inserting new event "+JSON.stringify(event))
 
         pool.query("INSERT INTO event (userid_User, " +
-            "deviceid_Device, datetimemillis, type, message, subeventdatemillis, floatvalue, intvalue, stringvalue, textvalue, rawjson, time, filename) " +
-            "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *",
+            "deviceid_Device, datetimemillis, type, message, subeventdatemillis, floatvalue, intvalue, stringvalue, textvalue, rawjson, time, filename, units) " +
+            "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *",
             [event.userid, event.deviceid, event.datetimemillis, event.type, event.message, event.subeventdatetimemillis,
-            event.floatvalue, event.intvalue, event.stringvalue, event.textvalue, event.rawjson, event.time, event.filename], (error, results) => {
+            event.floatvalue, event.intvalue, event.stringvalue, event.textvalue, event.rawjson, event.time, event.filename, event.units], (error, results) => {
                 if (error) {
                     reject(error)
                 } else {
