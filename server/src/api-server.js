@@ -106,22 +106,30 @@ apiServer.use(function (err, req, res, next) {
 //    res.render('error');
 });
 
+let listening = false
+
 const hostname = '0.0.0.0'
 let runningServer = apiServer.listen(api_server_port, hostname, () => {
     console.log(`API server listening on ${hostname} ${api_server_port}.`)
+    listening = true
 });
 
 function close() {
+    let ret
     runningServer.close( function(err) {
-        if( typeof err !== 'undefined' ) {
-            console.error('close error! '+err)
+        if (typeof err !== 'undefined') {
+            console.error('close error! ' + err)
+            ret = err
         } else {
             console.log('server closed')
         }
     })
+    return(ret);
 }
 
 module.exports = {
+    listening,
+    runningServer,
     close,
     app: apiServer
 };
