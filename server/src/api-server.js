@@ -17,11 +17,12 @@ const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').r
 const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
-
+console.log("starting router")
 const router = express.Router();
-
+console.log("after router")
 apiServer.locals = {};
 apiServer.locals.config = require('./config/locals.js');
+console.log("after locals")
 apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
