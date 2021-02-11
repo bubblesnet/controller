@@ -63,12 +63,13 @@ jobs:
           NODE_ENV: CI
         working-directory: server
 
-      - name: Run tests with coverage
+      - name: Run tests with coverage AND running servers
         # Runs a script that creates a PostgreSQL client, populates
         # the client with data, and retrieves data
         # run: node client.js
         run: |
           cp config_ci.json config.json
+          npm run coverage_without_servers
           node src/queue-server.js&
           node src/ws-server.js&
           node src/api-server.js&

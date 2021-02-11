@@ -26,7 +26,7 @@ switch( process.env.NODE_ENV ) {
 }
 
 
-/* not working in CI where no server running
+// not working in CI where no server running
 // UNIT test begin
 describe("Failed login test",function() {
     const server = supertest.agent("http://localhost:"+api_server_port+"",{});
@@ -45,7 +45,7 @@ describe("Failed login test",function() {
 }
 );
 
- */
+//
 
 /*
     it("should pass login", function (done) {
