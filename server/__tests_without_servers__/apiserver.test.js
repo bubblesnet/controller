@@ -7,7 +7,7 @@ describe("api server",   () => {
             console.log("process.env.NODE_ENV = " + process.env.NODE_ENV)
             expect(process.env.NODE_ENV).not.to.be.undefined
             console.log("closing server")
-            api_server.runningServer.close()
+            api_server.close()
     });
 });
 

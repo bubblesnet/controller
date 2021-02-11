@@ -111,8 +111,18 @@ let runningServer = apiServer.listen(api_server_port, hostname, () => {
     console.log(`API server listening on ${hostname} ${api_server_port}.`)
 });
 
+function close() {
+    runningServer.close( function(err) {
+        if( typeof err !== 'undefined' ) {
+            console.error('close error! '+err)
+        } else {
+            console.log('server closed')
+        }
+    })
+}
+
 module.exports = {
-    runningServer,
+    close,
     app: apiServer
 };
 
