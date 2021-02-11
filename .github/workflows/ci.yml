@@ -69,8 +69,6 @@ jobs:
         # run: node client.js
         run: |
           cp config_ci.json config.json
-          npm run coverage_without_servers
-          bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
           node src/queue-server.js&
           node src/ws-server.js&
           node src/api-server.js&
