@@ -44,7 +44,7 @@ jobs:
           wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
       - name: Setup PostgreSQL
