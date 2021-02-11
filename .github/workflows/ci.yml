@@ -69,7 +69,6 @@ jobs:
         # run: node client.js
         run: |
           cp config_ci.json config.json
-          sudo chmod -R 777 /home/runner/work/controller/controller/server/apache-activemq-*/*
           npm run coverage_without_servers
           bash <(curl -s -o /dev/null https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
         # Environment variables used by the app script to create
@@ -82,13 +81,14 @@ jobs:
           ICEBREAKER_DB: icebreaker_dev
           NODE_ENV: CI
         working-directory: server
-        
+
       - name: Run tests with coverage AND running servers
         # Runs a script that creates a PostgreSQL client, populates
         # the client with data, and retrieves data
         # run: node client.js
         run: |
           cp config_ci.json config.json
+          sudo chmod -R 777 /home/runner/work/controller/controller/server/apache-activemq-*/*
           node src/queue-server.js&
           node src/ws-server.js&
           node src/api-server.js&
