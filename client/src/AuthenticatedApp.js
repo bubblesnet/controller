@@ -21,34 +21,17 @@ import initial_settings from './initial_settings.json'
 
 import useWebSocket from 'react-use-websocket';
 
+import util from './util'
+
 function AuthenticatedApp (props) {
     console.log("props = " + JSON.stringify(props))
 
-    let websocket_server_port = 0;
-    let api_server_port = 0;
-    switch( props.nodeEnv) {
-        case "DEV":
-            api_server_port = 3003;
-            websocket_server_port = 8001;
-            break;
-        case "TEST":
-            api_server_port = 3002;
-            websocket_server_port = 8002;
-            break;
-        case "PRODUCTION":
-            api_server_port = 3001;
-            websocket_server_port = 8003;
-            break;
-        case "CI":
-            api_server_port = 3004;
-            websocket_server_port = 8004;
-            break;
-    }
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
     //Public API that will echo messages sent to it back to the client
 //    const [apiConnected, setApiConnected] = useState(0);
     const [language, setLanguage] = useState('');
-    const [socketUrl, setSocketUrl] = useState('ws://localhost:'+websocket_server_port);
+    const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
 
@@ -66,7 +49,7 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
-        console.log(JSON.stringify(msg))
+        console.log("applyMeasurementToState "+JSON.stringify(msg))
         if( typeof msg.value === 'undefined' ) {
             console.log("BAD measurement message " + JSON.stringify(msg))
         } else {
@@ -131,16 +114,6 @@ function AuthenticatedApp (props) {
     const handleClickSendMessage = useCallback(() =>
         sendit(), []);
 
-/*    const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-    }[readyState];
-
- */
-
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
     }
@@ -152,13 +125,13 @@ function AuthenticatedApp (props) {
     }
 
     function setSwitchStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+        console.log("3 thestate setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
         local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
 
     function setAutomationStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+        console.log("thestate setAutomationStateFromChild should rerender Heater to " + x.switch_state.heater.on)
         local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
@@ -166,7 +139,7 @@ function AuthenticatedApp (props) {
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
-    const [apiPort, setApiPort] = useState(api_server_port);  // The port we should send queries to - depends on dev/test/prod
+    const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
 //    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
@@ -205,29 +178,11 @@ function AuthenticatedApp (props) {
     let setEnvironment = (value) => {
         console.log("AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
-        let api_server_port;
-       switch( theNodeEnvironment) {
-            case "DEV":
-                api_server_port = 3003;
-                websocket_server_port = 8001;
-                break;
-            case "TEST":
-                api_server_port = 3002;
-                websocket_server_port = 8002;
-                break;
-            case "PRODUCTION":
-                api_server_port = 3001;
-                websocket_server_port = 8003;
-                break;
-            case "CI":
-                api_server_port = 3004;
-                websocket_server_port = 8004;
-                break;
-        }
-        console.log("setting state db to " + theNodeEnvironment + " port to " + api_server_port)
-        setSocketUrl('ws://localhost:'+websocket_server_port)
+        servers = util.get_server_ports_for_environment(props.nodeEnv)
+        console.log("setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
+        setSocketUrl('ws://localhost:'+servers.websocket_server_port)
         setNodeEnv(theNodeEnvironment);
-        setApiPort(api_server_port);
+        setApiPort(servers.api_server_port);
     }
 
     console.log("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
@@ -235,6 +190,7 @@ function AuthenticatedApp (props) {
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
+        console.log("5 thestate last complete heater = " + lastCompleteStatusMessage.switch_state.heater.on)
     } else {
         if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null ) {
             console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
@@ -243,20 +199,20 @@ function AuthenticatedApp (props) {
             console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
-    console.log("local_switch state = " + JSON.stringify(local_state.switch_state))
+//    console.log("local_switch state = " + JSON.stringify(local_state.switch_state))
     let thestate = JSON.parse(JSON.stringify(local_state))
-    console.log("thestate switch state = " + JSON.stringify(thestate.switch_state))
+    console.log("6 thestate switch heater state = " + thestate.switch_state.heater.on)
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
 //        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
-//        thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
-        console.log("after last complete status message thestate switch state = " + JSON.stringify(thestate.switch_state))
+        thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
+        console.log("7 after last complete status message thestate switch state heater = " + thestate.switch_state.heater.on)
     }
 //    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
  //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
 
 //    console.log("thestate = " + JSON.stringify(thestate))
-//    console.log("thestate.switch_state = " + JSON.stringify(thestate.switch_state))
+    console.log("8 thestate.switch_state.heater = " + thestate.switch_state.heater.on)
 
     return (
         <div className="App">

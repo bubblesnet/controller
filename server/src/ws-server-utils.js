@@ -28,13 +28,26 @@ async function subscribeToTopic() {
             else if( connection.readyState !== connection.OPEN) {
                 console.log("had a UI client but he closed out (crashed?)")
             } else {
-                console.log("UI client is initialized and OPEN, sending msg " + body)
+                console.log("UI client is initialized and OPEN, forwarding msg " + body)
                 connection.sendText(body)
             }
         });
     }, reason => {
         console.log("bubbles_queue.init failed "+reason)
     });
+}
+
+function ui_service_callback(body) {
+    if (typeof (connection) === 'undefined') {
+        console.log("no UI clients. yet")
+    } else if (connection === null) {
+        console.log("had a UI client but he closed out and nulled")
+    } else if (connection.readyState !== connection.OPEN) {
+        console.log("had a UI client but he closed out (crashed?)")
+    } else {
+        console.log("UI client is initialized and OPEN, echoing msg " + body)
+        connection.sendText(body)
+    }
 }
 
 function runWebSocketServer(port) {
@@ -57,7 +70,7 @@ function runWebSocketServer(port) {
             if (x.command === SWITCH_COMMAND) {
                 console.log("Received switch command " + str)
             } else {
-                console.log("Echoing received state " + JSON.stringify(x))
+                console.log("Echoing received state with heater set to " + x.switch_state.heater.on)
                 conn.sendText(JSON.stringify(x))
             }
         })
@@ -91,6 +104,7 @@ function close() {
 }
 
 module.exports = {
+    ui_service_callback,
     runWebSocketServer,
     subscribeToTopic,
     serveUIWebSockets,

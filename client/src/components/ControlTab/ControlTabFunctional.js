@@ -18,9 +18,8 @@ import GoogleFontLoader from "react-google-font-loader";
 import RenderPhmeter from "./PhmeterFunctional";
 
 function RenderControlTab(props) {
-//    const [automaticControlOn,setAutomaticControlOn] = useState(props.switch_state.automaticControl.on);
-    console.log("props.switch_state " + JSON.stringify(props.switch_state))
-    const [values, setValues] = useState({
+    console.log("1b thestate setting heater to " + props.switch_state.heater.on)
+    let values = {
         switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
             humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
@@ -31,10 +30,11 @@ function RenderControlTab(props) {
             exhaustFan: {on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
             currentGrowLight: {on: props.switch_state.currentGrowLight.on, toggle: toggleCurrentGrowLight}
         }
-    }); //
+    }
+    console.log("8a thestate RenderControlTab switch_state.heater = " + props.state.switch_state.heater.on + " values.switchControl.heater.on "+ values.switchControl.heater.on)
 
     function toggleAutomatic(e) {
-        console.log("toggleAutomatic should rerender Heater")
+        console.log("toggleAutomatic")
         let x = JSON.parse(JSON.stringify(props.state));
         x.switch_state.automaticControl.on = !x.switch_state.automaticControl.on;
         props.setStateFromChild(x)
@@ -42,53 +42,57 @@ function RenderControlTab(props) {
 
     function toggleHumidifier(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.humidifier.on = !x.switch_state.humidifier.on;
+        console.log("2 thestate toggleHumidifier from "+x.switch_state.humidifier.on+" to " +!x.switch_state.humidifier.on)
+        console.log("2a thestate toggleHumidifier from "+values.switchControl.humidifier.on+" to " +!values.switchControl.humidifier.on)
+        x.switch_state.humidifier.on = !values.switchControl.humidifier.on;
+        console.log("thestate toggleHumidifier heater up to " + x.switch_state.humidifier.on)
         props.setStateFromChild(x)
     }
 
     function toggleHeater(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.heater.on = !x.switch_state.heater.on;
+        console.log("2 thestate toggleHeater from "+x.switch_state.heater.on+" to " +!x.switch_state.heater.on)
+        console.log("2a thestate toggleHeater from "+values.switchControl.heater.on+" to " +!values.switchControl.heater.on)
+        x.switch_state.heater.on = !values.switchControl.heater.on;
+        console.log("thestate toggleHeater heater up to " + x.switch_state.heater.on)
         props.setStateFromChild(x)
     }
 
     function toggleIntakeFan(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.intakeFan.on = !x.switch_state.intakeFan.on;
+        x.switch_state.intakeFan.on = !values.switchControl.intakeFan.on;
         props.setStateFromChild(x)
     }
 
     function toggleExhaustFan(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.exhaustFan.on = !x.switch_state.exhaustFan.on;
+        x.switch_state.exhaustFan.on = !values.switchControl.exhaustFan.on;
         props.setStateFromChild(x)
     }
 
     function toggleCurrentGrowLight(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.currentGrowLight.on = !x.switch_state.currentGrowLight.on;
+        x.switch_state.currentGrowLight.on = !values.switchControl.currentGrowLight.on;
         props.setStateFromChild(x)
     }
 
     function toggleAirPump(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.airPump.on = !x.switch_state.airPump.on;
+        x.switch_state.airPump.on = !values.switchControl.airPump.on;
         props.setStateFromChild(x)
     }
 
     function toggleWaterPump(e) {
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.waterPump.on = !x.switch_state.waterPump.on;
+        x.switch_state.waterPump.on = !values.switchControl.waterPump.on;
         props.setStateFromChild(x)
     }
 
-    console.log("RenderControlTab humidity = " + props.state.status.humidity_internal)
-    console.log("RenderControlTab heater = " + props.state.switch_state.heater.on)
-//    console.log("RenderControlTab heater = " + props.state.switch_state.heater.on )
-    let wt = ""
+    console.log("9 thestate RenderControlTab switch_state.heater = " + props.state.switch_state.heater.on + " values.switchControl.heater.on "+ values.switchControl.heater.on)
+    let wt
 
-    let wl = ""
-    let wlruler = ""
+    let wl
+    let wlruler
     if (props.state.cabinet_settings.water_level_sensor === false) {
         wl = <></>
         wlruler = <></>

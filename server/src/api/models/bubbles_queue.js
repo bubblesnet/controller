@@ -2,10 +2,12 @@
 const Stomp = require('stompit');
 let state = require('../../initial_state.json');
 
+let util = require("../../util")
 
+let ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
 const connectOptions = {
-    'host': 'localhost',
-    'port': 61613,
+    'host': ports.activemq_server_host,
+    'port': ports.activemq_server_port,
     'connectHeaders': {
         'host': '/',
         'login': 'user',
@@ -69,7 +71,9 @@ MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompCl
                 return;
             }
             console.log('read a message '+body);
-            cb(body)
+            cb(body, function() {
+                console.log("topic callback?");
+            })
 //            __stompClient.ack(message);
 //            __stompClient.disconnect();
         })

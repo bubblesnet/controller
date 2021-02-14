@@ -9,7 +9,7 @@ function setClient(client) {
 }
 
 // TODO service of topic should be distinct from service of queue or queue benefit isn't realized - everything backs up
-// behind slow database. 
+// behind slow database.
 const serveMessageQueue = async() => {
     console.log("serveMessageQueue")
     console.log("subscribe to activemq message queue")

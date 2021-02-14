@@ -7,6 +7,9 @@ import './controlTab.css'
 function RenderDeviceSwitch (props) {
     function toggle(e) {
         if( props.automaticControl === props.off ) {
+            if(props.label === "Heater") {
+                console.log("1 thestate toggling switch " + props.label + " from " + props.onOff)
+            }
             props.toggle(e)
         }
     }
@@ -22,8 +25,10 @@ function RenderDeviceSwitch (props) {
         buttonBackgroundColor = 'red'
         buttonCheckedColor = 'green'
     }
-//    console.log("rendering switch with value " + props.onOff )
-    let ret = ""
+    if(props.label === "Heater") {
+        console.log("13 thestate rendering switch " + props.label + " with value " + props.onOff)
+    }
+    let ret
 
         if( props.exists === false ) {
             ret = <></>
