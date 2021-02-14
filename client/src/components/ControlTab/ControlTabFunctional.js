@@ -36,7 +36,7 @@ function RenderControlTab(props) {
     function toggleAutomatic(e) {
         console.log("toggleAutomatic")
         let x = JSON.parse(JSON.stringify(props.state));
-        x.switch_state.automaticControl.on = !x.switch_state.automaticControl.on;
+        x.switch_state.automaticControl.on = !values.switchControl.automaticControl.on;
         props.setStateFromChild(x)
     }
 

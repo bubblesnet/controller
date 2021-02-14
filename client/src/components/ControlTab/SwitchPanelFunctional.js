@@ -4,10 +4,8 @@ import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
 
 function RenderSwitchPanel (props) {
-    let [switchControl, setSwitchControl] = useState(props.switchControl)
-    let [automaticControlOn, setAutomaticControlOn] = useState(props.switchControl.automaticControl.on)
-
-
+    let automaticControlOn = props.switchControl.automaticControl.on
+    
     function toggleHumidifier(e) {
         console.log("1a thestate toggleHumidifier from " + props.switchControl.humidifier.on)
         props.switchControl.humidifier.toggle(e)
@@ -19,10 +17,7 @@ function RenderSwitchPanel (props) {
     }
 
     function toggleAutomatic(e) {
-        switchControl.automaticControl.on = !switchControl.automaticControl.on;
-        setSwitchControl(switchControl)
-        switchControl.automaticControl.toggle(e)
-        setAutomaticControlOn(!automaticControlOn)
+        props.switchControl.automaticControl.toggle(e)
     }
 
     let trackBackgroundColor = 'red'
