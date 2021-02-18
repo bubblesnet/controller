@@ -28,7 +28,7 @@ async function subscribeToTopic() {
             else if( connection.readyState !== connection.OPEN) {
                 console.log("had a UI client but he closed out (crashed?)")
             } else {
-                console.log("UI client is initialized and OPEN, forwarding msg " + body)
+//                console.log("UI client is initialized and OPEN, forwarding msg " + body)
                 connection.sendText(body)
             }
         });
@@ -69,9 +69,13 @@ function runWebSocketServer(port) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND) {
                 console.log("Received switch command " + str)
+                const sendHeaders = {
+                    'destination': '/topic/00999999/70000007',
+                    'content-type': 'text/json'
+                };
+                bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders,str)
             } else {
-                console.log("Echoing received state with heater set to " + x.switch_state.heater.on)
-                conn.sendText(JSON.stringify(x))
+                console.log("NOT Echoing received state")
             }
         })
         conn.on("close", function (code, reason) {

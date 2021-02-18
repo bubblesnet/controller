@@ -23,6 +23,8 @@ import useWebSocket from 'react-use-websocket';
 
 import util from './util'
 
+const SWITCH_COMMAND="switch"
+
 function AuthenticatedApp (props) {
     console.log("props = " + JSON.stringify(props))
 
@@ -60,6 +62,20 @@ function AuthenticatedApp (props) {
         }
     }
 
+    function toggleSwitchTo(switch_name, on ) {
+        console.log("toggleSwitchTo " + switch_name + " to " + on)
+        if( typeof(switch_name) === 'undefined') {
+            return
+        }
+        let newstate = JSON.parse(JSON.stringify(local_state))
+        if( typeof newstate.switch_state[switch_name] === 'undefined') {
+            console.error( "bad switch_name " + switch_name)
+            return
+        }
+        newstate.switch_state[switch_name].on = on
+        setState(newstate)
+    }
+
     const handleWebSocketMessage = ( event ) => {
         console.log("handling websocket message " + JSON.stringify(event.data))
         let msg = JSON.parse(event.data)
@@ -72,6 +88,10 @@ function AuthenticatedApp (props) {
                     case "measurement":
                         console.log("received measurement");
                         applyMeasurementToState(msg)
+                        break;
+                    case "switch_event":
+                        console.log("received switch event " + JSON.stringify(msg));
+                        toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
                         console.log("received event");
@@ -124,14 +144,23 @@ function AuthenticatedApp (props) {
         setState(newstate)
     }
 
-    function setSwitchStateFromChild(x) {
-        console.log("3 thestate setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+    function setSwitchStateFromChild(x, switch_name, on ) {
         local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+        let sw_name = switch_name
+        if( switch_name === "growLight") {
+            sw_name = "lightBloom"
+        }
+
+        let cmd = {
+            command: SWITCH_COMMAND,
+            switch_name: sw_name,
+            on: on
+        }
+        sendJsonMessage(cmd)
     }
 
     function setAutomationStateFromChild(x) {
-        console.log("thestate setAutomationStateFromChild should rerender Heater to " + x.switch_state.heater.on)
         local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
@@ -190,7 +219,6 @@ function AuthenticatedApp (props) {
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
-        console.log("5 thestate last complete heater = " + lastCompleteStatusMessage.switch_state.heater.on)
     } else {
         if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null ) {
             console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
@@ -199,20 +227,11 @@ function AuthenticatedApp (props) {
             console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
-//    console.log("local_switch state = " + JSON.stringify(local_state.switch_state))
     let thestate = JSON.parse(JSON.stringify(local_state))
-    console.log("6 thestate switch heater state = " + thestate.switch_state.heater.on)
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
-//        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
-        console.log("7 after last complete status message thestate switch state heater = " + thestate.switch_state.heater.on)
     }
-//    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
- //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
-
-//    console.log("thestate = " + JSON.stringify(thestate))
-    console.log("8 thestate.switch_state.heater = " + thestate.switch_state.heater.on)
 
     return (
         <div className="App">

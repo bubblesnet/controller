@@ -129,10 +129,14 @@ function sendMeasurement(msg) {
 
 function sendFakeMeasurementToTopic(client) {
     console.log("sendFakeMeasurementToTopic")
+    const sendHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'content-type': 'text/plain'
+    };
 
     let msg = getFakeMeasurement()
     console.log("Sending message to topic " + JSON.stringify(msg))
-    bubbles_queue.sendMessageToTopic(client,JSON.stringify(msg))
+    bubbles_queue.sendMessageToTopic(client,sendHeaders, JSON.stringify(msg))
     setTimeout(() => {
         sendFakeMeasurementToTopic()
     }, 5000);
@@ -156,10 +160,15 @@ function sendFakeStatusToQueue(client) {
 }
 
 function sendFakeStatusToTopic(client) {
+    const sendHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'content-type': 'text/plain'
+    };
+
     console.log("sendFakeStatusToTopic")
     console.log("sending message to topic")
     current_state = getFakeStatus()
-    bubbles_queue.sendMessageToTopic(client,JSON.stringify(current_state))
+    bubbles_queue.sendMessageToTopic(client,sendHeaders, JSON.stringify(current_state))
     setTimeout(() => {
         sendFakeStatusToTopic()
     }, 10000);

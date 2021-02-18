@@ -146,6 +146,8 @@ const config = {
         humidity_sensor_internal: true,
         humidity_sensor_external: true,
         heater: true,
+        heating_pad: true,
+        heat_lamp: true,
         thermometer_top: true,
         thermometer_middle: true,
         thermometer_bottom: true,

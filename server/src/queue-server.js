@@ -11,12 +11,17 @@ function setClient(client) {
 // TODO service of topic should be distinct from service of queue or queue benefit isn't realized - everything backs up
 // behind slow database.
 const serveMessageQueue = async() => {
+    const sendHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'content-type': 'text/plain'
+    };
+
     console.log("serveMessageQueue")
     console.log("subscribe to activemq message queue")
     bubbles_queue.init(setClient).then( value => {
         console.log("bubbles_queue.init succeeded, subscribing");
         bubbles_queue.subscribeToQueue(__queueClient, function (body) {
-                bubbles_queue.sendMessageToTopic(__queueClient,body)
+                bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders, body)
                 storeMessage(body);
         });
     }, reason => {

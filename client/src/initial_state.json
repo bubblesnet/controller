@@ -108,6 +108,18 @@
     "automaticControl": {
       "on": true
     },
+    "heatLamp": {
+      "on": true
+    },
+    "heatingPad": {
+      "on": true
+    },
+    "lightVegetative": {
+      "on": true
+    },
+    "lightBloom": {
+      "on": true
+    },
     "humidifier": {
       "on": true
     },

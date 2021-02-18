@@ -12,9 +12,27 @@ const connectOptions = {
         'host': '/',
         'login': 'user',
         'passcode': 'password',
-//        'heart-beat': '5000,5000' LEAVE THIS TURNED OFF BECAUSE ACTIVEMQ TIMES OUT OTHERWISE
+//        'heart-beat': '5000,5000' // LEAVE THIS TURNED OFF BECAUSE ACTIVEMQ TIMES OUT OTHERWISE
     }
 };
+/*  This is the error that turning on heart-beat causes ...
+Error: connection timed out
+    at Client._createError (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:240:15)
+    at Client.createTransportError (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:256:24)
+    at Timeout._onTimeout (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:228:29)
+←[90m    at listOnTimeout (internal/timers.js:549:17)←[39m
+←[90m    at processTimers (internal/timers.js:492:7)←[39m
+Emitted 'error' event on Client instance at:
+    at Client.destroy (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:126:14)
+    at Timeout._onTimeout (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:228:16)
+←[90m    at listOnTimeout (internal/timers.js:549:17)←[39m
+←[90m    at processTimers (internal/timers.js:492:7)←[39m {
+  isTransportError: ←[36m[Function: isTransportError]←[39m,
+  isProtocolError: ←[36m[Function: isProtocolError]←[39m,
+  isApplicationError: ←[36m[Function: isApplicationError]←[39m
+}
+
+ */
 
 const MessageProducer = function MessageProducer() {
 };
@@ -65,12 +83,12 @@ MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompCl
         'ack': 'auto'
     };
     __stompClient.subscribe(subscribeHeaders, (error, message) => {
-        console.log('received a message '+message);
+        console.log('received a message on topic '+subscribeHeaders.destination+' '+message);
         message.readString('utf-8', function (error, body) {
             if (error) {
                 return;
             }
-            console.log('read a message '+body);
+//            console.log('read a message '+body);
             cb(body, function() {
                 console.log("topic callback?");
             })
@@ -80,12 +98,15 @@ MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompCl
     })
 }
 
-MessageProducer.prototype.sendMessageToTopic = function sendMessageToTopic(__stompClient, messageToPublish) {
-    console.log("sendMessage "+messageToPublish);
+/*
     const sendHeaders = {
         'destination': '/topic/bubbles_ui',
         'content-type': 'text/plain'
     };
+
+ */
+MessageProducer.prototype.sendMessageToTopic = function sendMessageToTopic(__stompClient, sendHeaders, messageToPublish) {
+    console.log("sendMessage "+messageToPublish);
 
     const frame = __stompClient.send(sendHeaders);
     frame.write(messageToPublish);
