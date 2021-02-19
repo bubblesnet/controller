@@ -160,10 +160,21 @@ function AuthenticatedApp (props) {
         sendJsonMessage(cmd)
     }
 
-    function setAutomationStateFromChild(x) {
+    /*
+    function setAutomationStateFromChild(on) {
+        let cmd = {
+            command: SWITCH_COMMAND,
+            switch_name: "automatic",
+            on: on
+        }
+
         local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
-        sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+        sendJsonMessage(cmd)
+
+ //       sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
+
+     */
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
@@ -261,7 +272,7 @@ function AuthenticatedApp (props) {
                     <Tab title="Automation">
                         <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         settings={local_settings} state={local_state}
-                                        setStateFromChild={setAutomationStateFromChild}/>
+                                        setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Events">
                         <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>

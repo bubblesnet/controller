@@ -1,5 +1,6 @@
 global.__root   = __dirname + '/';
 const event = require('./api/models/event')
+const debug = require('debug')('queue-server')
 
 const bubbles_queue = require('./api/models/bubbles_queue')
 let __queueClient
@@ -16,21 +17,21 @@ const serveMessageQueue = async() => {
         'content-type': 'text/plain'
     };
 
-    console.log("serveMessageQueue")
-    console.log("subscribe to activemq message queue")
+    debug("serveMessageQueue")
+    debug("subscribe to activemq message queue")
     bubbles_queue.init(setClient).then( value => {
-        console.log("bubbles_queue.init succeeded, subscribing");
+        debug("bubbles_queue.init succeeded, subscribing");
         bubbles_queue.subscribeToQueue(__queueClient, function (body) {
                 bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders, body)
                 storeMessage(body);
         });
     }, reason => {
-        console.log("bubbles_queue.init failed "+reason)
+        debug("bubbles_queue.init failed "+reason)
     });
 }
 
 async function storeMessage(body) {
-    console.log("storeMessage " + body )
+    debug("storeMessage " + body )
     let message;
     try {
         message = JSON.parse(body)
@@ -51,7 +52,7 @@ async function storeMessage(body) {
                 // TODO need to decide whether to ALSO keep a file for each json message - hmmmm
                 message.filename = '';
                 let ev = event.createEvent(message);
-                console.log("storeMessage stored event " + JSON.stringify(ev))
+                debug("storeMessage stored event " + JSON.stringify(ev))
                 break;
             default:
                 console.error("Unhandled message type for storage " + JSON.stringify(message))

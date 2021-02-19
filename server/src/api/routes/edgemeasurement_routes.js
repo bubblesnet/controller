@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const bubbles_queue = require('../models/bubbles_queue')
+const logger = require('../../bubbles_logger').log
+
 
 let __edgeMeasurementClient
 
@@ -14,7 +16,7 @@ function getClient() {
 }
 
 function initError(error) {
-    console.error("error " + error)
+    logger.error("error " + error)
 }
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
@@ -34,7 +36,7 @@ async function postit(req, res, next) {
                 //               bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, req.body)
                 //               bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, req.body)
                 // return OK
-                console.log("init finished");
+                logger.log("silly","init finished");
                 bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, JSON.stringify(req.body))
                 res.json(req.body);
             }
@@ -44,9 +46,9 @@ async function postit(req, res, next) {
 
         // validate json
         // add json to queue
-        console.log("sending to queue " + JSON.stringify(req.body))
+        logger.log("silly","sending to queue " + JSON.stringify(req.body))
         bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, JSON.stringify(req.body))
-//        console.log("sending topic " + JSON.stringify(req.body))
+//        debug("sending topic " + JSON.stringify(req.body))
 //        bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, JSON.stringify(req.body))
         // return OK
         res.json(req.body);
@@ -56,7 +58,7 @@ async function postit(req, res, next) {
 }
 
 router.post("/:userid/:deviceid", function (req, res, next) {
-    console.log("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
+    logger.silly("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);
     postit(req,res,next)
 });
 

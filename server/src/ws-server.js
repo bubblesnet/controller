@@ -1,5 +1,7 @@
 global.__root   = __dirname + '/';
 const util = require('./util')
+const debug = require('debug')('ws-server')
+const logger = require("./bubbles_logger").log
 
 ports = util.get_server_ports_for_environment( process.env.NODE_ENV )
 

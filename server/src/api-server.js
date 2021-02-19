@@ -1,9 +1,10 @@
 const express = require('express');
 const apiServer = express()
 const util = require("./util")
+const logger = require("./bubbles_logger").log
 
 const favicon = require('serve-favicon');
-const logger = require('morgan');
+const morgan_logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -17,12 +18,13 @@ const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').r
 const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
-console.log("starting router")
+
+logger.info("starting router")
 const router = express.Router();
-console.log("after router")
+logger.silly("after router")
 apiServer.locals = {};
 apiServer.locals.config = require('./config/locals.js');
-console.log("after locals")
+logger.log('silly',"after locals")
 apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
@@ -53,7 +55,7 @@ apiServer.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 apiServer.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
-apiServer.use(logger('dev'));
+apiServer.use(morgan_logger('dev'));
 apiServer.use(bodyParser.json());
 apiServer.use(bodyParser.urlencoded({extended: false}));
 apiServer.use(cookieParser());
@@ -89,7 +91,7 @@ let listening = false
 
 const hostname = '0.0.0.0'
 let runningServer = apiServer.listen(ports.api_server_port, hostname, () => {
-    console.log(`API server listening on ${hostname} ${ports.api_server_port}.`)
+    logger.log('info',`API server listening on ${hostname} ${ports.api_server_port}.`)
     listening = true
 });
 
@@ -97,10 +99,10 @@ function close() {
     let ret
     runningServer.close( function(err) {
         if (typeof err !== 'undefined') {
-            console.error('close error! ' + err)
+            logger.error('close error! ' + err)
             ret = err
         } else {
-            console.log('server closed')
+            logger.info('server closed')
         }
     })
     return(ret);
