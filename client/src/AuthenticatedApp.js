@@ -11,6 +11,7 @@ import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFu
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
+import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
@@ -253,6 +254,11 @@ function AuthenticatedApp (props) {
                                           settings={local_settings}
                                           state={thestate} switch_state={thestate.switch_state}
                                           setStateFromChild={setSwitchStateFromChild}/>
+                    </Tab>
+                    <Tab title="Look Inside">
+                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                     onFontChange={applyFontChange}
+                                     applicationSettings={local_state.application_settings}/>
                     </Tab>
                     <Tab title="Status">
                         <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
