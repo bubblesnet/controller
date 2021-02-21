@@ -6,7 +6,6 @@ const endPool = () => {
     pool.end()
 }
 
-
 async function createAlertCondition(alert) {
     return new Promise(function(resolve, reject) {
         console.log("inserting new alertcondition "+JSON.stringify(alert))
