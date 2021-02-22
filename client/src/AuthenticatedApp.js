@@ -25,6 +25,7 @@ import useWebSocket from 'react-use-websocket';
 import util from './util'
 
 const SWITCH_COMMAND="switch"
+const PICTURE_COMMAND="picture"
 
 function AuthenticatedApp (props) {
     console.log("props = " + JSON.stringify(props))
@@ -38,6 +39,14 @@ function AuthenticatedApp (props) {
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
 
+    const takeAPicture = () => {
+        console.log("takeAPicture")
+        let cmd = {
+            command: PICTURE_COMMAND,
+
+        }
+        sendJsonMessage(cmd)
+    }
     const processMeasurementMessage = (message) => {
         console.log("processMeasurementMessage "+JSON.stringify(message))
         /*
@@ -132,6 +141,7 @@ function AuthenticatedApp (props) {
         x.status.humidity_internal = 69 + getRandomInt(10)
         sendJsonMessage(x);
     }
+
     const handleClickSendMessage = useCallback(() =>
         sendit(), []);
 
@@ -194,6 +204,7 @@ function AuthenticatedApp (props) {
     const applyMapChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
         console.log("AuthenticatedApp applyMapChange");
+        /// TODO FINISH!
     }
 
     const applyFontChange = (value) => {
@@ -257,7 +268,7 @@ function AuthenticatedApp (props) {
                     </Tab>
                     <Tab title="Look Inside">
                         <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                     onFontChange={applyFontChange}
+                                     onFontChange={applyFontChange} takeAPicture={takeAPicture}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
                     <Tab title="Status">

@@ -10,6 +10,7 @@ let z
 let __queueClient
 
 const SWITCH_COMMAND="switch"
+const PICTURE_COMMAND="picture"
 
 function setClient(client) {
     debug("setclient " + client)
@@ -68,8 +69,8 @@ function runWebSocketServer(port) {
         })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
-            if (x.command === SWITCH_COMMAND) {
-                debug("Received switch command " + str)
+            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND) {
+                debug("Received command " + str)
                 const sendHeaders = {
                     'destination': '/topic/00999999/70000007',
                     'content-type': 'text/json'
