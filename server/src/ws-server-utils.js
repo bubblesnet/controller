@@ -71,11 +71,14 @@ function runWebSocketServer(port) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND) {
                 debug("Received command " + str)
-                const sendHeaders = {
-                    'destination': '/topic/00999999/70000007',
-                    'content-type': 'text/json'
-                };
-                bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders,str)
+                let devices = ['70000007','70000008']
+                for( let i = 0; i < devices.length; i++ ) {
+                    const sendHeaders = {
+                        'destination': '/topic/00999999/'+devices[i],
+                        'content-type': 'text/json'
+                    };
+                    bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+                }
             } else {
                 debug("NOT Echoing received state")
             }

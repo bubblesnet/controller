@@ -54,7 +54,6 @@ apiServer.locals.units = require('./api/services/formatted_units.js');
 apiServer.set('views', path.join(__dirname, 'views'));
 apiServer.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
 apiServer.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 apiServer.use(morgan_logger('dev'));
 apiServer.use(bodyParser.json());
