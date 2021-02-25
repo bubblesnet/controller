@@ -24,13 +24,13 @@ router.post('/', function (req, res) {
 
 // RETURNS ALL THE USERS IN THE DATABASE
 router.get('/', function (req, res) {
-/*    User.find({}, function (err, users) {
+    /*
+    User.find({}, function (err, users) {
         if (err) return res.status(500).send("There was a problem finding the users.");
         res.status(200).send(users);
 
     });
-
- */
+    */
 });
 
 function getUserById( req, res ) {

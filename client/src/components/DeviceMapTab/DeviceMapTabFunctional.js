@@ -82,7 +82,7 @@ function RenderDeviceMapTab (props) {
 
     let cntainer_names = ["sense-go","sense-python"]
     let mdule_types = ["bme280","bmp280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]
-    let devices = [70000007,70000008]
+    let devices = [70000006,70000007,70000008]
 
     function getRow(attached_device) {
         console.log("getRow " + JSON.stringify(attached_device))

@@ -106,6 +106,10 @@ function AuthenticatedApp (props) {
                     case "event":
                         console.log("received event");
                         break;
+                    case "picture_event":
+                        console.log("received picture event");
+                        setLastPicture(lastpicture+1)
+                        break;
                     default:
                         console.log("unknown message type " + msg.message_type)
                         break;
@@ -194,6 +198,7 @@ function AuthenticatedApp (props) {
 //    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
+    const [lastpicture, setLastPicture] = useState(0)
 
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
@@ -243,11 +248,12 @@ function AuthenticatedApp (props) {
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
     } else {
-        if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null ) {
+        if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
+        lastJsonMessage.message_type === 'measurement') {
             console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
-            console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+            console.log("Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
     let thestate = JSON.parse(JSON.stringify(local_state))
@@ -268,7 +274,7 @@ function AuthenticatedApp (props) {
                     </Tab>
                     <Tab title="Look Inside">
                         <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                     onFontChange={applyFontChange} takeAPicture={takeAPicture}
+                                         lastpicture={lastpicture} onFontChange={applyFontChange} takeAPicture={takeAPicture}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
                     <Tab title="Status">
