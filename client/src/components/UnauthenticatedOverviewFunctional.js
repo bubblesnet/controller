@@ -7,28 +7,6 @@ import {Text, Box, TextInput, Markdown} from "grommet";
 
 
 function RenderUnauthenticatedOverview (props) {
-    async function loginUser(port, credentials) {
-        console.log("loginUser calling out to api on port "+port+" for token")
-        let url = 'http://localhost:'+3003+'/api/auth/login'
-        console.log("url = " + url)
-        return new Promise( async (resolve, reject) => {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credentials)
-            });
-            if(response.ok) {
-                let loginstate = await response.json();
-                console.log("Got loginstate " + JSON.stringify(loginstate));
-                resolve(loginstate)
-            } else {
-                console.log("error " + response.status)
-                reject( response.status )
-            }
-        })
-    }
 
     const md = `
 ### Bubbles Controller
@@ -57,6 +35,29 @@ Click here to see first-time setup instructions.
             break;
     }
     const [api_server_port, setApiServerPort] = useState(api_port1);
+
+    async function loginUser(port, credentials) {
+        console.log("loginUser calling out to api on port "+port+" for token")
+        let url = 'http://localhost:3003/api/auth/login'
+        console.log("url = " + url)
+        return new Promise( async (resolve, reject) => {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            });
+            if(response.ok) {
+                let loginstate = await response.json();
+                console.log("Got loginstate " + JSON.stringify(loginstate));
+                resolve(loginstate)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState("");   // Set to a value so that controlled-uncontrolled error doesn't get thrown

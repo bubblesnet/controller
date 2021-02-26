@@ -17,11 +17,12 @@ import GoogleFontLoader from "react-google-font-loader";
 
 import DeviceMap from "./devicemap.json"
 
-async function getContainerNames() {
+
+async function getContainerNames(host, port) {
     console.log("getContainerNames calling out to api")
 
     return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://localhost:3003/api/config/containers');
+        const response = await fetch('http://'+host+':'+port+'/api/config/containers');
         if(response.ok) {
             let x = await response.json();
             console.log("Got container_names " + JSON.stringify(x));
@@ -33,11 +34,11 @@ async function getContainerNames() {
     })
 }
 
-async function getModuleTypes() {
+async function getModuleTypes(host, port) {
     console.log("getModuleTypes calling out to api")
 
     return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://localhost:3003/api/config/modules');
+        const response = await fetch('http://'+host+':'+port+'/api/config/modules');
         if(response.ok) {
             let x = await response.json();
             console.log("Got module_types " + JSON.stringify(x));
@@ -62,10 +63,10 @@ function RenderDeviceMapTab (props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            let x = await getContainerNames()
+            let x = await getContainerNames(props.apiHost, props.apiPort)
             console.log("containers " + JSON.stringify(x))
             setContainerNames(x.container_names)
-            x = await getModuleTypes()
+            x = await getModuleTypes(props.apiHost, props.apiPort)
             console.log("modules " + JSON.stringify(x))
             setModuleTypes(x.module_types)
         }

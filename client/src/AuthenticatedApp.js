@@ -195,6 +195,7 @@ function AuthenticatedApp (props) {
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
+    const apiHost = "localhost"
 //    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
@@ -288,7 +289,7 @@ function AuthenticatedApp (props) {
                         />
                     </Tab>
                     <Tab title="Device Map">
-                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={apiHost} theme={bubbles_theme}
                                      onMapChange={applyMapChange}
                                      state={local_state}/>
                     </Tab>
