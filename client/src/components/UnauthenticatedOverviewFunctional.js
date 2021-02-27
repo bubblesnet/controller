@@ -38,7 +38,7 @@ Click here to see first-time setup instructions.
 
     async function loginUser(port, credentials) {
         console.log("loginUser calling out to api on port "+port+" for token")
-        let url = 'http://localhost:3003/api/auth/login'
+        let url = 'http://localhost:'+port+'/api/auth/login'
         console.log("url = " + url)
         return new Promise( async (resolve, reject) => {
             const response = await fetch(url, {
@@ -68,7 +68,8 @@ Click here to see first-time setup instructions.
                 e.preventDefault();
         */
         console.log("handleSubmit - calling out for token for user "+username)
-        await loginUser(api_server_port, {
+        /// TODO this hardwired port number is because api_server_port is showing up undefined here!
+        await loginUser(3003, {
             username: username,
             password: password
         })

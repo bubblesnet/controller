@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -27,6 +27,7 @@ import util from './util'
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
 
+
 function AuthenticatedApp (props) {
     console.log("props = " + JSON.stringify(props))
 
@@ -34,10 +35,28 @@ function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
 //    const [apiConnected, setApiConnected] = useState(0);
+    const [devices, setDevices] = useState([]);
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
+
+    const getDeviceList = (host, port, userid) => {
+        console.log("getDeviceList calling out to api")
+
+        return new Promise( async (resolve, reject) => {
+            const response = await fetch('http://'+host+':'+port+'/api/device/'+userid);
+            if(response.ok) {
+                let x = await response.json();
+                console.log(JSON.stringify(x))
+                console.log("Got devices " + JSON.stringify(x));
+                resolve(x)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
 
     const takeAPicture = () => {
         console.log("takeAPicture")
@@ -194,6 +213,19 @@ function AuthenticatedApp (props) {
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
+    useEffect(() => {
+        const fetchData = async () => {
+            let x = await getDeviceList('localhost', 3003, 90000009)
+            let arr = []
+            for( let i = 0; i < x.rowCount; i++ ) {
+                arr.push(x.rows[i].deviceid)
+            }
+            setDevices(arr)
+        }
+        fetchData();
+    }, [nodeEnv])
+
+
     const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
     const apiHost = "localhost"
 //    const [language, setLanguage] = useState("all");
@@ -274,7 +306,7 @@ function AuthenticatedApp (props) {
                                           setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Look Inside">
-                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={devices}
                                          lastpicture={lastpicture} onFontChange={applyFontChange} takeAPicture={takeAPicture}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>

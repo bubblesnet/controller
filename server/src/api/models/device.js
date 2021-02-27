@@ -24,9 +24,12 @@ async function getAllDevices() {
     })
 }
 
+async function getDevicesByUserId(userid) {
+    return( findAllByUserid(userid))
+}
 
 async function findAllByUserid(userid) {
-    console.log("findAllByUserid")
+    console.log("findAllByUserid "+userid)
     return new Promise(function (resolve, reject) {
         console.log("userid = " + userid)
         let ssql = 'select * from device where userid_user = $1 order by deviceid'
@@ -108,5 +111,6 @@ module.exports = {
     deleteDevice: deleteDevice,
     updateDevice:updateDevice,
     endPool: endPool,
+    getDevicesByUserId,
 }
 

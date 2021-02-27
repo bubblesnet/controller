@@ -57,7 +57,7 @@ describe("device GETTERS", () => {
         }
         let b = await device.findAllByUserid(good_userid)
             .then(function (x) {
-                console.log("getAllDevices = " + JSON.stringify(x))
+                console.log("getAllDevices = " + JSON.stringify(x.rows))
                 expect( x ).not.to.be.undefined
             })
             .catch(function (err) {

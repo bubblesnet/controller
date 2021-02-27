@@ -13,6 +13,7 @@ const path = require('path');
 global.__root   = __dirname + '/';
 
 const config_routes = require('./api/routes/config_routes').router;
+const device_routes = require('./api/routes/device_routes').router;
 const video_routes = require('./api/routes/video_routes').router;
 const edge_control_routes = require('./api/routes/edgecontrol_routes').router;
 const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').router;
@@ -66,6 +67,7 @@ apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
 apiServer.use('/api/auth', auth_routes);
 
+apiServer.use('/api/device', device_routes);
 apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edge_control_routes);
 apiServer.use("/api/measurement", edge_measurement_routes);
