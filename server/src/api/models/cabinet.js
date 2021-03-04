@@ -1,6 +1,9 @@
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 
+const stage = require('./stage')
+const modul = require('./module')
+const outlet = require('./outlet')
 const server_db = require('./bubbles_db')
 const pool = server_db.getPool()
 const endPool = () => {
@@ -47,6 +50,116 @@ async function findAllByUserid(userid) {
         })
     })
 }
+
+async function findCabinetIDByDeviceID(deviceid) {
+    return new Promise(function (resolve, reject) {
+        console.log("deviceid = " + deviceid)
+        let ssql = 'select distinct c.cabinetid from public.user u left outer join device d on u.userid = d.userid_user left outer join cabinet c on u.userid = c.userid_user where d.deviceid=$1'
+
+        console.log("ssql = " + ssql)
+        pool.query(ssql, [deviceid], async (err, results) => {
+            if (err) {
+                console.error("getConfigByCabinet error " + err)
+                reject(err)
+            } else {
+                let cabinetid = results.rows[0].cabinetid
+                console.log("found cabinetid " + cabinetid)
+                resolve(cabinetid)
+            }
+        })
+    })
+}
+
+async function getConfigByDevice(userid,deviceid) {
+    let cabinetid = await findCabinetIDByDeviceID(deviceid)
+    return (getConfigByCabinet(cabinetid, deviceid))
+}
+
+async function getConfigByCabinet(cabinetid, deviceid) {
+    console.log("getConfigByCabinet " + cabinetid)
+    return new Promise(function (resolve, reject) {
+        console.log("cabinetid = " + cabinetid)
+        let ssql = 'select * from cabinet c left outer join device d on d.cabinetid_cabinet = c.cabinetid where cabinetid=$1 order by cabinetid'
+        console.log("ssql = " + ssql)
+        pool.query(ssql, [cabinetid], async (err, results) => {
+//            console.log("callback from getConfigByCabinet with err " + err + " results " + results)
+            if (err) {
+                console.error("getConfigByCabinet error " + err)
+                reject(err)
+            } else {
+                if(results.rowCount === 0 ) {
+                    reject( new Error("no config for cabinet " + cabinetid))
+                } else {
+                let ret = JSON.parse(JSON.stringify(results.rows[0]));
+                ret.cabinetid = cabinetid
+                ret.deviceid = deviceid
+                ret.userid = ret.userid_user
+                delete ret.userid_user
+                let tamper = {xmove: ret.tamper_xmove, ymove: ret.tamper_ymove, zmove: ret.tamper_zmove}
+                delete ret.tamper_xmove
+                delete ret.tamper_ymove
+                delete ret.tamper_zmove
+                let camera = {
+                    picamera: ret.camera_picamera,
+                    resolutionX: ret.camera_resolutionx,
+                    resolutionY: ret.camera_resolutiony
+                }
+                delete ret.camera_picamera
+                delete ret.camera_resolutionx
+                delete ret.camera_resolutiony
+                let device_settings = JSON.parse(JSON.stringify(ret))
+                ret.tamper = tamper
+                ret.camera = camera
+                ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid)
+                ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
+
+                ret.device_settings = JSON.parse(JSON.stringify(device_settings))
+                ret.device_settings.enclosure_options = ["Cabinet", "Tent"],
+                    delete ret.device_settings.deviceid
+                delete ret.device_settings.automatic_control
+                delete ret.device_settings.deviceid
+                delete ret.device_settings.cabinetid
+                delete ret.device_settings.userid
+                delete ret.device_settings.controller_hostname
+                delete ret.device_settings.controller_api_port
+                delete ret.device_settings.stage
+                delete ret.device_settings.light_on_hour
+                delete ret.device_settings.time_between_pictures_in_seconds
+                delete ret.device_settings.time_between_sensor_polling_in_seconds
+                delete ret.humidifier
+                delete ret.humidity_sensor_internal
+                delete ret.humidity_sensor_external
+                delete ret.heater
+                delete ret.thermometer_top
+                delete ret.thermometer_middle
+                delete ret.thermometer_bottom
+                delete ret.thermometer_external
+                delete ret.thermometer_water
+                delete ret.water_pump
+                delete ret.air_pump
+                delete ret.light_sensor_internal
+                delete ret.cabinet_door_sensor
+                delete ret.outer_door_sensor
+                delete ret.movement_sensor
+                delete ret.pressure_sensors
+                delete ret.root_ph_sensor
+                delete ret.enclosure_type
+                delete ret.water_level_sensor
+                delete ret.intake_fan
+                delete ret.exhaust_fan
+                delete ret.heat_lamp
+                delete ret.heating_pad
+                delete ret.light_bloom
+                delete ret.light_vegetative
+                delete ret.light_germinate
+
+                ret.stage_schedules = stage.getStageSchedules(cabinetid)
+                resolve(ret);
+            }
+        }})
+    })
+}
+
 
 async function createCabinet(body) {
     return new Promise(function(resolve, reject) {
@@ -245,6 +358,7 @@ async function updateCabinet(body) {
     })
 }
 
+
 async function deleteCabinet(cabinetid) {
     console.log("deleteCabinet "+cabinetid)
     return new Promise(function(resolve, reject) {
@@ -270,6 +384,8 @@ module.exports = {
 //    findAllByUserid,
     deleteCabinet,
     updateCabinet,
+    getConfigByCabinet,
+    getConfigByDevice,
     endPool,
 }
 

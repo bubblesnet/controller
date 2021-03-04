@@ -90,7 +90,7 @@ async function updateDevice(body) {
 async function deleteDevice(deviceid) {
     console.log("deleteDevice "+deviceid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM device WHERE deviceid "+deviceid)
+        console.log("DELETE FROM device WHERE deviceid = "+deviceid)
 
         pool.query('DELETE FROM device WHERE deviceid = $1', [deviceid], (error, results) => {
             if (error) {

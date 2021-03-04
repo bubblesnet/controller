@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const util = require('../../util')
+const cabinet = require('../models/cabinet')
 const cors = require('cors')
 
 /**
@@ -208,11 +209,13 @@ const config = {
 /// TODO shouldn't need this once packaged
 router.use(cors());
 
-function getDeviceConfig(req,res,next) {
+async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
     // read config from file
-    res.json(config);
+    let x = await cabinet.getConfigByDevice(req.params.userid, req.params.deviceid)
+    res.json(x);
 }
+
 router.get("/:userid/:deviceid", function (req, res, next) {
     getDeviceConfig(req,res,next)
 });

@@ -2,7 +2,7 @@
 
 CREATE TABLE cabinet
 (
-    cabinetid                                SERIAL PRIMARY KEY,
+    cabinetid                              SERIAL PRIMARY KEY,
     userid_User                            int          NOT NULL,
     controller_hostname                    varchar(255) NULL,
     controller_api_port                    integer      NULL,

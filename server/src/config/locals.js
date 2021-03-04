@@ -6,7 +6,7 @@ global.localconfig = { bubbles_db_config: {}}
 
 function reloadLocals(filepath) {
 
-        console.log("Reading config from " + filepath)
+        console.log("locals.reloadLocals Reading config from " + filepath)
         const data = fs.readFileSync(filepath, 'utf8');
         // parse JSON string to JSON object
         localconfig = JSON.parse(data);

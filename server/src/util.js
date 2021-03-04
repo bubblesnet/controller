@@ -72,7 +72,7 @@ function getRandomInt(max) {
 }
 
 function readJsonFile(filepath) {
-    console.log("Reading config from " + filepath)
+    console.log("utils.readJsonFile Reading config from " + filepath)
     const data = fs.readFileSync(filepath, 'utf8');
     // parse JSON string to JSON object
     return(JSON.parse(data));
