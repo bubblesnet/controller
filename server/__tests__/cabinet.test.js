@@ -53,6 +53,38 @@ let good_update = {
         light_germinate: true
 }
 
+let sensor_names = [
+    "humidity_sensor_internal",
+    "humidity_sensor_external",
+    "thermometer_top",
+    "thermometer_middle",
+    "thermometer_bottom",
+    "thermometer_external",
+    "thermometer_water",
+    "light_sensor_internal",
+    "cabinet_door_sensor",
+    "outer_door_sensor",
+    "movement_sensor",
+    "pressure_sensors",
+    "root_ph_sensor",
+    "enclosure_type",
+    "water_level_sensor"
+    ]
+
+let controllable_devices = [
+    "humidifier",
+    "water_pump",
+    "air_pump",
+    "heater",
+    "intake_fan",
+    "exhaust_fan",
+    "heat_lamp",
+    "heating_pad",
+    "light_bloom",
+    "light_vegetative",
+    "light_germinate"
+]
+
 describe("cabinet",   () => {
     console.log("create/udpate/delete cabinet")
     it('Empty cabinet with update/delete', async function () {
@@ -63,13 +95,6 @@ describe("cabinet",   () => {
         expect(userid).not.undefined
         expect(userid).not.lessThan(0)
 
-        let dev = {devicename: "testdevice", devicetypeid: 0, userid: userid}
-        let d = await device.createDevice(dev);
-        expect(d).not.undefined
-        expect( d.deviceid).not.equals(0)
-        let good_deviceid = d.deviceid
-        console.log("Created deviceid " + good_deviceid)
-
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined
         try {
@@ -78,6 +103,14 @@ describe("cabinet",   () => {
             created_cabinetid = x.cabinetid
             expect(created_cabinetid >= 0)
             good_update.cabinetid = created_cabinetid
+
+            let dev = {devicename: "testdevice", devicetypeid: 0, userid: userid, cabinetid: created_cabinetid}
+            let d = await device.createDevice(dev);
+            expect(d).not.undefined
+            expect( d.deviceid).not.equals(0)
+            let good_deviceid = d.deviceid
+            console.log("Created deviceid " + good_deviceid)
+
             let y = await cabinet.updateCabinet(good_update)
             expect(y).not.undefined
             expect(y.rowcount).equals(1)
@@ -110,6 +143,26 @@ describe("cabinet",   () => {
             expect(conf.attached_devices.length).not.equals(0)
             console.log(JSON.stringify(conf))
 
+            for( let j = 0; j < 2; j++ ) {
+                let present = false
+                if(j > 0 ) {
+                    present = true
+                }
+                for (let i = 0; i < sensor_names.length; i++) {
+                    let z = await cabinet.setSensorPresent(created_cabinetid, sensor_names[i], present)
+                    expect(z).not.undefined
+                    expect(z.rowcount).not.undefined
+                    expect(z.rowcount).equals(1)
+                }
+
+                for (let i = 0; i < controllable_devices.length; i++) {
+                    let z = await cabinet.setSensorPresent(created_cabinetid, controllable_devices[i], present)
+                    expect(z).not.undefined
+                    expect(z.rowcount).not.undefined
+                    expect(z.rowcount).equals(1)
+                }
+            }
+
             for( let i = 0; i < outlet_list.length; i++ ) {
                 let f = await outlet.deleteOutlet(outlet_list[i].outletid)
                 expect(f).not.undefined
@@ -125,10 +178,10 @@ describe("cabinet",   () => {
             expect(k).not.undefined
             console.log(JSON.stringify(k))
 
- /*           let g = await device.deleteDevice(good_deviceid)
+            let g = await device.deleteDevice(good_deviceid)
             expect(g).not.undefined
             expect(g.rowcount).not.equals(0)
-*/
+
             let z = await cabinet.deleteCabinet(created_cabinetid)
             expect(z).not.undefined
             expect(z.cabinetid).not.undefined

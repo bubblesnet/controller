@@ -11,9 +11,9 @@ const pool = server_db.getPool()
 async function createSensor(body) {
 //    console.log(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
-        pool.query("insert into sensor (sensorname, moduleid_module, sensorname, measurementname) values ($1,$2,$3,$4)" +
+        pool.query("insert into sensor (sensor_name, moduleid_module, sensor_name, measurement_name) values ($1,$2,$3,$4)" +
             " RETURNING *",
-            [body.sensorname, body.moduleid, body.sensorname, body.measurementname], (error, results) => {
+            [body.sensor_name, body.moduleid, body.sensor_name, body.measurement_name], (error, results) => {
                 if (error) {
                     console.log("createSensor error " + error)
                     reject(error)
@@ -27,8 +27,8 @@ async function createSensor(body) {
 async function updateSensor(body) {
     console.log(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
-        pool.query("UPDATE sensor set moduleid_module=$2, sensorname=$3,measurementname=$4,extraconfig=$5 where sensorid=$1 ",
-            [body.sensorid, body.moduleid, body.sensorname, body.measurementname, body.extraconfig], (error, results) => {
+        pool.query("UPDATE sensor set moduleid_module=$2, sensor_name=$3,measurement_name=$4,extraconfig=$5 where sensorid=$1 ",
+            [body.sensorid, body.moduleid, body.sensor_name, body.measurement_name, body.extraconfig], (error, results) => {
                 if (error) {
                     console.log("updatesensor err " + error)
                     reject(error)
@@ -65,7 +65,7 @@ let defaultSensors = [
     {
         "containername": "sense-python",
         "deviceid": 0,
-        "sensorname": "Temp/Humidity/Pressure sensor",
+        "sensor_name": "Temp/Humidity/Pressure sensor",
         "sensortype": "bme280",
         "protocol": "i2c",
         "i2caddress": "0x76",
@@ -74,7 +74,7 @@ let defaultSensors = [
         "containername": "sense-python",
         "deviceid": 0,
         "sensortype": "bme280",
-        "sensorname": "Temp/Humidity/Pressure sensor",
+        "sensor_name": "Temp/Humidity/Pressure sensor",
         "protocol": "i2c",
         "i2caddress": "0x76",
     },
@@ -82,7 +82,7 @@ let defaultSensors = [
         "containername": "sense-python",
         "deviceid": 0,
         "sensortype": "bh1750",
-        "sensorname": "Accelerometer/Title-detector",
+        "sensor_name": "Accelerometer/Title-detector",
         "protocol": "i2c",
         "i2caddress": "0x23",
     },
@@ -90,7 +90,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "ads1115",
-        "sensorname": "AtoD Converter",
+        "sensor_name": "AtoD Converter",
         "protocol": "i2c",
         "i2caddress": "0x49",
     },
@@ -98,7 +98,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "ads1115",
-        "sensorname": "AtoD Converter",
+        "sensor_name": "AtoD Converter",
         "protocol": "i2c",
         "i2caddress": "0x48",
     },
@@ -106,7 +106,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "adxl345",
-        "sensorname": "Light sensor",
+        "sensor_name": "Light sensor",
         "protocol": "i2c",
         "i2caddress": "0x53"
     },
@@ -114,7 +114,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "ezoph",
-        "sensorname": "pH Sensor",
+        "sensor_name": "pH Sensor",
         "protocol": "i2c",
         "i2caddress": "0x63"
     },
@@ -122,7 +122,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "hcsr04",
-        "sensorname": "Ultrasonic Distance Sensor",
+        "sensor_name": "Ultrasonic Distance Sensor",
         "protocol": "i2c",
         "i2caddress": "0x47"
     },
@@ -130,7 +130,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "GPIO",
-        "sensorname": "GPIO",
+        "sensor_name": "GPIO",
         "protocol": "gpio",
         "i2caddress": "0x47"
     },
@@ -138,7 +138,7 @@ let defaultSensors = [
         "containername": "sense-go",
         "deviceid": 0,
         "sensortype": "GPIO",
-        "sensorname": "GPIO",
+        "sensor_name": "GPIO",
         "protocol": "gpio",
         "i2caddress": "0x47"
     }

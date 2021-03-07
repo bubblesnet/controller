@@ -62,21 +62,31 @@ async function findCabinetIDByDeviceID(deviceid) {
                 console.error("getConfigByCabinet error " + err)
                 reject(err)
             } else {
-                let cabinetid = results.rows[0].cabinetid
-                console.log("found cabinetid " + cabinetid)
-                resolve(cabinetid)
+                if(results.rowCount == 0 ) {
+                    reject( new Error("no cabinet for deviceid " + deviceid))
+                } else {
+                    let cabinetid = results.rows[0].cabinetid
+                    console.log("found cabinetid " + cabinetid)
+                    resolve(cabinetid)
+                }
             }
         })
     })
 }
 
 async function getConfigByDevice(userid,deviceid) {
-    let cabinetid = await findCabinetIDByDeviceID(deviceid)
+    let cabinetid
+    try {
+        cabinetid = await findCabinetIDByDeviceID(deviceid)
+    } catch(err) {
+        console.log("Caught rejection!")
+        return ({});
+    }
     return (getConfigByCabinet(cabinetid, deviceid))
 }
 
 async function getConfigByCabinet(cabinetid, deviceid) {
-    console.log("getConfigByCabinet " + cabinetid)
+    console.log("getConfigByCabinet " + cabinetid + ","+deviceid)
     return new Promise(function (resolve, reject) {
         console.log("cabinetid = " + cabinetid)
         let ssql = 'select * from cabinet c left outer join device d on d.cabinetid_cabinet = c.cabinetid where cabinetid=$1 order by cabinetid'
@@ -91,8 +101,8 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                     reject( new Error("no config for cabinet " + cabinetid))
                 } else {
                 let ret = JSON.parse(JSON.stringify(results.rows[0]));
-                ret.cabinetid = cabinetid
-                ret.deviceid = deviceid
+                ret.cabinetid = Number(cabinetid)
+                ret.deviceid = Number(deviceid)
                 ret.userid = ret.userid_user
                 delete ret.userid_user
                 let tamper = {xmove: ret.tamper_xmove, ymove: ret.tamper_ymove, zmove: ret.tamper_zmove}
@@ -114,7 +124,7 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
 
                 ret.device_settings = JSON.parse(JSON.stringify(device_settings))
-                ret.device_settings.enclosure_options = ["Cabinet", "Tent"],
+                ret.device_settings.enclosure_options = ["Cabinet", "Tent"]
                     delete ret.device_settings.deviceid
                 delete ret.device_settings.automatic_control
                 delete ret.device_settings.deviceid
@@ -376,12 +386,31 @@ async function deleteCabinet(cabinetid) {
     })
 }
 
+async function setSensorPresent(cabinetid,sensor_name,present) {
+    console.log("setSensorPresent "+sensor_name+" present " + present + " where cabinetid="+cabinetid)
+    return new Promise( function(resolve, reject) {
+        console.log("UPDATE cabinet set "+sensor_name+" = "+present+" where cabinetid="+cabinetid)
+
+        let ssql = 'UPDATE cabinet set '+sensor_name+'=$2 where cabinetid = $1 RETURNING *'
+        pool.query(ssql, [cabinetid, present], (error, results) => {
+            if (error) {
+                console.error("update cabinetid err3 " + error)
+                reject(error)
+            } else {
+                console.log("setSensorPresent results " + JSON.stringify(results))
+                resolve({cabinetid: cabinetid, rowcount: results.rowCount, message: 'cabinet updated ' + results.rowCount})
+            }
+        })
+    })
+}
+
 
 
 module.exports = {
 //    getAllCabinets,
     createCabinet,
 //    findAllByUserid,
+    setSensorPresent,
     deleteCabinet,
     updateCabinet,
     getConfigByCabinet,

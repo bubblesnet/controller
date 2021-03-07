@@ -71,14 +71,22 @@ function runWebSocketServer(port) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND) {
                 debug("Received command " + str)
-                let devices = ['70000006','70000007','70000008']
-                for( let i = 0; i < devices.length; i++ ) {
-                    const sendHeaders = {
-                        'destination': '/topic/90000009/'+devices[i],
+                let deviceid = x.deviceid
+                    let sendHeaders = {
+                        'destination': '/topic/90000009/70000006',
                         'content-type': 'text/json'
                     };
                     bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
-                }
+                 sendHeaders = {
+                    'destination': '/topic/90000009/70000007',
+                    'content-type': 'text/json'
+                };
+                bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+                 sendHeaders = {
+                    'destination': '/topic/90000009/70000008',
+                    'content-type': 'text/json'
+                };
+                bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
             } else {
                 debug("NOT Echoing received state")
             }

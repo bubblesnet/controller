@@ -216,6 +216,15 @@ async function getDeviceConfig(req,res,next) {
     res.json(x);
 }
 
+async function setPresent(req,res,next) {
+    let x = await cabinet.setSensorPresent(req,res,next)
+    return(x)
+}
+router.post("/:userid/:deviceid/sensor/:sensor_name/:present", function (req, res, next) {
+    let x = setPresent(req,res,next)
+    res.json(x);
+});
+
 router.get("/:userid/:deviceid", function (req, res, next) {
     getDeviceConfig(req,res,next)
 });

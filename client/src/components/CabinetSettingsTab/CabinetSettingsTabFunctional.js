@@ -60,8 +60,10 @@ function RenderCabinetSettingsTab (props) {
         changeState(local_state)
     }
 
+
     function toggleHumidifier() {
         local_state.cabinet_settings.humidifier = !local_state.cabinet_settings.humidifier
+        props.saveSetting(local_state.userid, local_state.deviceid, 'humidifier', local_state.cabinet_settings.humidifier)
         changeState(local_state)
     }
     function toggleRootPhSensor() {

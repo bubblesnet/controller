@@ -35,11 +35,37 @@ function AuthenticatedApp (props) {
 
     //Public API that will echo messages sent to it back to the client
 //    const [apiConnected, setApiConnected] = useState(0);
+    const [userid,setUserid] = useState(90000009);
+    const [deviceid,setDeviceid] = useState(70000007);
     const [devices, setDevices] = useState([]);
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
+
+    const saveSetting = (thing_name, present ) => {
+        console.log("saveSetting calling out to api")
+
+        return new Promise( async (resolve, reject) => {
+            const url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/config/'+userid+'/'+deviceid+'/sensor/'+thing_name+'/present/'+present;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            if(response.ok) {
+                let x = await response.json();
+                console.log(JSON.stringify(x))
+                console.log("Got devices " + JSON.stringify(x));
+                resolve(x)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
 
     const getDeviceList = (host, port, userid) => {
         console.log("getDeviceList calling out to api")
@@ -62,7 +88,6 @@ function AuthenticatedApp (props) {
         console.log("takeAPicture")
         let cmd = {
             command: PICTURE_COMMAND,
-
         }
         sendJsonMessage(cmd)
     }
@@ -315,7 +340,7 @@ function AuthenticatedApp (props) {
                                          settings={local_settings}  state={local_state}/>
                     </Tab>
                     <Tab title="Cabinet Setup">
-                        <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         settings={local_settings} state={local_state}
                                         setStateFromChild={setCabinetSettingsStateFromChild}
                         />
