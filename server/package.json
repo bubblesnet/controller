@@ -34,6 +34,7 @@
     "mysql": "*",
     "nodejs-websocket": "^1.7.2",
     "pg": "^8.5.1",
+    "@databases/pg": "^5.0.0",
     "pug": "*",
     "q": "*",
     "redis": "^3.0.2",

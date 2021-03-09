@@ -1,6 +1,7 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
+const cab = require("../src/api/models/cab");
 const outlet = require("../src/api/models/outlet");
 const device = require("../src/api/models/device");
 const cabinet = require("../src/api/models/cabinet");
@@ -84,6 +85,13 @@ let controllable_devices = [
     "light_vegetative",
     "light_germinate"
 ]
+describe("cab",   () => {
+    console.log("cab")
+    it('postgres sqljson', async function () {
+        let user_list = await cab.getConfigByUser(90000009)
+        expect(user_list).not.undefined
+    });
+});
 
 describe("cabinet",   () => {
     console.log("create/udpate/delete cabinet")

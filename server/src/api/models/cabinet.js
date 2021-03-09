@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const stage = require('./stage')
 const modul = require('./module')
 const outlet = require('./outlet')
+
 const server_db = require('./bubbles_db')
 const pool = server_db.getPool()
 const endPool = () => {
@@ -84,6 +85,8 @@ async function getConfigByDevice(userid,deviceid) {
     }
     return (getConfigByCabinet(cabinetid, deviceid))
 }
+
+
 
 async function getConfigByCabinet(cabinetid, deviceid) {
     console.log("getConfigByCabinet " + cabinetid + ","+deviceid)
