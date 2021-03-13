@@ -20,9 +20,6 @@ let good_update = {
         tamper_ymove: 0.99,
         tamper_zmove: 0.99,
         time_between_pictures_in_seconds: 122,
-        camera_picamera: true,
-        camera_resolutionX: 1,
-        camera_resolutionY: 1,
         time_between_sensor_polling_in_seconds: 133,
         humidifier: true,
         humidity_sensor_internal: true,
@@ -90,6 +87,8 @@ describe("cab",   () => {
     it('postgres sqljson', async function () {
         let user_list = await cab.getConfigByUser(90000009)
         expect(user_list).not.undefined
+        let cabinet_list = await cab.getCabinetConfigsByUser(90000009)
+        expect(cabinet_list).not.undefined
     });
 });
 

@@ -112,17 +112,8 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.tamper_xmove
                 delete ret.tamper_ymove
                 delete ret.tamper_zmove
-                let camera = {
-                    picamera: ret.camera_picamera,
-                    resolutionX: ret.camera_resolutionx,
-                    resolutionY: ret.camera_resolutiony
-                }
-                delete ret.camera_picamera
-                delete ret.camera_resolutionx
-                delete ret.camera_resolutiony
                 let device_settings = JSON.parse(JSON.stringify(ret))
                 ret.tamper = tamper
-                ret.camera = camera
                 ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid)
                 ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
 
@@ -276,7 +267,7 @@ async function createCabinet(body) {
 async function updateCabinet(body) {
     return new Promise(function(resolve, reject) {
         pool.query("UPDATE cabinet set " +
-            "controller_hostname=$2, "+
+            "controller_hostname=$2, " +
             "controller_api_port=$3, " +
             "stage=$4, " +
             "light_on_hour=$5, " +
@@ -284,38 +275,35 @@ async function updateCabinet(body) {
             "tamper_ymove=$7, " +
             "tamper_zmove=$8, " +
             "time_between_pictures_in_seconds=$9, " +
-            "camera_picamera=$10, " +
-            "camera_resolutionX=$11, " +
-            "camera_resolutionY=$12, " +
-            "time_between_sensor_polling_in_seconds=$13, " +
-            "humidifier=$14, " +
-            "humidity_sensor_internal=$15, " +
-            "humidity_sensor_external=$16, " +
-            "heater=$17, " +
-            "thermometer_top=$18, " +
-            "thermometer_middle=$19, " +
-            "thermometer_bottom=$20, " +
-            "thermometer_external=$21, " +
-            "thermometer_water=$22, " +
-            "water_pump=$23, " +
-            "air_pump=$24, " +
-            "light_sensor_internal=$25, " +
-            "cabinet_door_sensor=$26, " +
-            "outer_door_sensor=$27, " +
-            "movement_sensor=$28, " +
-            "pressure_sensors=$29, " +
-            "root_ph_sensor=$30, " +
-            "enclosure_type=$31, " +
-            "water_level_sensor=$32, " +
-            "tub_depth=$33, " +
-            "tub_volume=$34, " +
-            "intake_fan=$35, " +
-            "exhaust_fan=$36, " +
-            "heat_lamp=$37, " +
-            "heating_pad=$38, " +
-            "light_bloom=$39, " +
-            "light_vegetative=$40, " +
-            "light_germinate=$41 " +
+            "time_between_sensor_polling_in_seconds=$10, " +
+            "humidifier=$11, " +
+            "humidity_sensor_internal=$12, " +
+            "humidity_sensor_external=$13, " +
+            "heater=$14, " +
+            "thermometer_top=$15, " +
+            "thermometer_middle=$16, " +
+            "thermometer_bottom=$17, " +
+            "thermometer_external=$18, " +
+            "thermometer_water=$19, " +
+            "water_pump=$20, " +
+            "air_pump=$21, " +
+            "light_sensor_internal=$22, " +
+            "cabinet_door_sensor=$23, " +
+            "outer_door_sensor=$24, " +
+            "movement_sensor=$25, " +
+            "pressure_sensors=$26, " +
+            "root_ph_sensor=$27, " +
+            "enclosure_type=$28, " +
+            "water_level_sensor=$29, " +
+            "tub_depth=$30, " +
+            "tub_volume=$31, " +
+            "intake_fan=$32, " +
+            "exhaust_fan=$33, " +
+            "heat_lamp=$34, " +
+            "heating_pad=$35, " +
+            "light_bloom=$36, " +
+            "light_vegetative=$37, " +
+            "light_germinate=$38 " +
         "where cabinetid=$1 RETURNING *",
             [
                 body.cabinetid,
@@ -327,9 +315,6 @@ async function updateCabinet(body) {
             body.tamper_ymove,
             body.tamper_zmove,
             body.time_between_pictures_in_seconds,
-            body.camera_picamera,
-            body.camera_resolutionX,
-            body.camera_resolutionY,
             body.time_between_sensor_polling_in_seconds,
             body.humidifier,
             body.humidity_sensor_internal,

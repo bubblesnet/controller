@@ -160,6 +160,7 @@ describe("device GETTERS", () => {
             });
         expect(b).equals(true)
     });
+
     it('device delete succeed', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined
