@@ -4,6 +4,7 @@ const util = require('./util')
 const emulator_util = require('./emulator-util')
 
 let current_state = {}
+// this is a comment
 
 let __feederClient
 
