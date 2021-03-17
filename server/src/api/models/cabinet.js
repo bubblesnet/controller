@@ -114,7 +114,7 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.tamper_zmove
                 let device_settings = JSON.parse(JSON.stringify(ret))
                 ret.tamper = tamper
-                ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid)
+                ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid,deviceid)
                 ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
 
                 ret.device_settings = JSON.parse(JSON.stringify(device_settings))

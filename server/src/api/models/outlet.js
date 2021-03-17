@@ -89,13 +89,13 @@ async function deleteOutlet(outletid) {
     })
 }
 
-async function getOutletsByCabinet(cabinetid) {
-    console.log("getOutletsByCabinet")
+async function getOutletsByCabinetDevice(cabinetid, deviceid) {
+    console.log("getOutletsByCabinetDevice "+cabinetid+"/"+deviceid)
     return new Promise(function (resolve, reject) {
-        let ssql = "select onoff as on, deviceid_device as deviceid, * from outlet where cabinetid_cabinet =$1"
-        pool.query(ssql, [cabinetid], (error, results) => {
+        let ssql = "select onoff as on, deviceid_device as deviceid, * from outlet where cabinetid_cabinet=$1 AND deviceid_device=$2"
+        pool.query(ssql, [cabinetid,deviceid], (error, results) => {
             if (error) {
-                console.log("getOutletsByCabinet error " + error)
+                console.log("getOutletsByCabinetDevice error " + error)
                 reject(error)
             }
             if (results) {
@@ -111,7 +111,7 @@ async function getOutletsByCabinet(cabinetid) {
 module.exports = {
     createOutlet,
     createDefaultSetOfOutlets,
-    getOutletsByCabinet,
+    getOutletsByCabinet: getOutletsByCabinetDevice,
     updateOutlet,
     deleteOutlet
 }
