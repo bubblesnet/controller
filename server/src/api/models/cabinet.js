@@ -52,13 +52,13 @@ async function findAllByUserid(userid) {
     })
 }
 
-async function findCabinetIDByDeviceID(deviceid) {
+async function findCabinetIDByDeviceID(userid,deviceid) {
     return new Promise(function (resolve, reject) {
         console.log("deviceid = " + deviceid)
-        let ssql = 'select distinct c.cabinetid from public.user u left outer join device d on u.userid = d.userid_user left outer join cabinet c on u.userid = c.userid_user where d.deviceid=$1'
+        let ssql = 'select distinct c.cabinetid from public.user u left outer join device d on u.userid = d.userid_user left outer join cabinet c on u.userid = c.userid_user where d.deviceid=$1 and u.userid=$2'
 
         console.log("ssql = " + ssql)
-        pool.query(ssql, [deviceid], async (err, results) => {
+        pool.query(ssql, [deviceid,userid], async (err, results) => {
             if (err) {
                 console.error("getConfigByCabinet error " + err)
                 reject(err)
@@ -78,10 +78,10 @@ async function findCabinetIDByDeviceID(deviceid) {
 async function getConfigByDevice(userid,deviceid) {
     let cabinetid
     try {
-        cabinetid = await findCabinetIDByDeviceID(deviceid)
+        cabinetid = await findCabinetIDByDeviceID(userid,deviceid)
     } catch(err) {
-        console.log("Caught rejection!")
-        return ({});
+        console.log("Caught rejection " + err)
+        throw (err);
     }
     return (getConfigByCabinet(cabinetid, deviceid))
 }
@@ -114,8 +114,8 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.tamper_zmove
                 let device_settings = JSON.parse(JSON.stringify(ret))
                 ret.tamper = tamper
-                ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid,deviceid)
-                ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
+                ret.ac_outlets = await outlet.getOutletsByCabinetDevice(cabinetid,deviceid)
+                ret.edge_devices = await modul.getAllModulesByCabinet(cabinetid)
 
                 ret.device_settings = JSON.parse(JSON.stringify(device_settings))
                 ret.device_settings.enclosure_options = ["Cabinet", "Tent"]

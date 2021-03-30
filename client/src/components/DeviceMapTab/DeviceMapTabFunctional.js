@@ -153,7 +153,7 @@ function RenderDeviceMapTab (props) {
                     <Table id="devicemap-table" >
                         <tbody>
                         <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
-                        {DeviceMap.attached_devices.map(getRow)}
+                        {DeviceMap.edge_devices.map(getRow)}
                         </tbody>
                     </Table>
                 <RenderFormActions state={local_state} applyAction={applyChanges} resetAction={resetChanges}

@@ -1,10 +1,19 @@
 const {sql} = require('@databases/pg');
 const db = require('./database');
+const stage = require('./stage')
 
 async function getConfigByUser(uid) {
     const results = await db.query(sql`SELECT userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber FROM public.user where userid=${uid}`);
     let result = results[0]
     result.cabinets = await getCabinetConfigsByUser(uid)
+    /// TODO: GET the stage schedules and farm-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
+    for( let i = 0; i < result.cabinets.length; i++ ) {
+        result.controller_api_port = result.cabinets[i].controller_api_port
+        result.controller_hostname = result.cabinets[i].controller_hostname
+        delete result.cabinets[i].controller_api_port
+        delete result.cabinets[i].controller_hostname
+        result.cabinets[i].stage_schedules = stage.getStageSchedules(-1)
+    }
     console.log("\n\n\n"+JSON.stringify(result))
     return( result )
 }
@@ -31,7 +40,7 @@ async function getCabinetConfigsByUser(uid) {
                                                                                             module_name,
                                                                                             container_name,
                                                                                             module_type,
-                                                                                            i2caddress     as address,
+                                                                                            i2caddress as address,
                                                                                             protocol,
                                                                                             coalesce((
                                                                                                          SELECT array_to_json(array_agg(row_to_json(y)))
@@ -45,7 +54,21 @@ async function getCabinetConfigsByUser(uid) {
                                                                                      from module n
                                                                                      where n.deviceid_device = d.deviceid
                                                                                  ) y)
-                                                                   , '[]') as modules
+                                                                   , '[]') as modules,
+                                                               coalesce((
+                                                                            SELECT array_to_json(array_agg(row_to_json(o)))
+                                                                            FROM (
+                                                                                     SELECT outletid,
+                                                                                            
+                                                                                            name,
+                                                                                            index,
+                                                                                            bcm_pin_number,
+                                                                                            onoff
+                                                                                     from outlet o
+                                                                                     where o.deviceid_device = d.deviceid
+                                                                                 ) o)
+                                                                   , '[]') as ac_outlets
+
 
                                                         FROM cabinet z
                                                                  JOIN device d ON (d.cabinetid_cabinet = c.cabinetid)
@@ -53,7 +76,7 @@ async function getCabinetConfigsByUser(uid) {
                                                     ) x
                                            ),
                                            '[]'
-                                       ) AS attached_devices
+                                       ) AS edge_devices
             FROM public.user u
             JOIN cabinet c ON c.userid_user=u.userid
             WHERE u.userid=${uid}

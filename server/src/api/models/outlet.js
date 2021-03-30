@@ -111,7 +111,7 @@ async function getOutletsByCabinetDevice(cabinetid, deviceid) {
 module.exports = {
     createOutlet,
     createDefaultSetOfOutlets,
-    getOutletsByCabinet: getOutletsByCabinetDevice,
+    getOutletsByCabinetDevice,
     updateOutlet,
     deleteOutlet
 }

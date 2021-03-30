@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const util = require('../../util')
 const cabinet = require('../models/cabinet')
+const cab = require('../models/cab')
 const cors = require('cors')
 
 /**
@@ -52,7 +53,7 @@ const config = {
         ]
     },
 
-    attached_devices: [
+    edge_devices: [
         {
             container_name: "sense-python",
             deviceid: 70000007,
@@ -212,7 +213,9 @@ router.use(cors());
 async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
     // read config from file
-    let x = await cabinet.getConfigByDevice(req.params.userid, req.params.deviceid)
+//    let x = await cabinet.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
+    let x = await cab.getConfigByUser(req.params.userid).catch((err) =>
+    { console.log("caught err "+err)})
     res.json(x);
 }
 
@@ -226,6 +229,10 @@ router.post("/:userid/:deviceid/sensor/:sensor_name/:present", function (req, re
 });
 
 router.get("/:userid/:deviceid", function (req, res, next) {
+    getDeviceConfig(req,res,next)
+});
+
+router.get("/farm/:userid/:deviceid", function (req, res, next) {
     getDeviceConfig(req,res,next)
 });
 

@@ -51,7 +51,7 @@
       "light_germinate":false,
       "height_sensor":false,
       "automatic_control":true,
-      "attached_devices":[
+      "edge_devices":[
 
       ]
     },
@@ -96,7 +96,7 @@
       "light_germinate":true,
       "height_sensor":true,
       "automatic_control":true,
-      "attached_devices":[
+      "edge_devices":[
         {
           "cabinetid":1,
           "deviceid":70000007,
