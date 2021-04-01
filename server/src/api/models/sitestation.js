@@ -176,11 +176,11 @@ async function createStation(body) {
             "    tamper_xmove," +
             "    tamper_ymove," +
             "    tamper_zmove," +
-            "    time_between_pictures_in_seconds," +
-            "    camera_picamera," +
-            "    camera_resolutionX," +
-            "    camera_resolutionY," +
-            "    time_between_sensor_polling_in_seconds," +
+//            "    time_between_pictures_in_seconds," +
+//            "    camera_picamera," +
+//            "    camera_resolutionX," +
+//            "    camera_resolutionY," +
+//            "    time_between_sensor_polling_in_seconds," +
             "    humidifier," +
             "    humidity_sensor_internal," +
             "    humidity_sensor_external," +
@@ -218,11 +218,11 @@ async function createStation(body) {
             "    1.0," +
             "    1.0," +
             "    1.0," +
-            "    300," +
-            "    false," +
-            "    2592," +
-            "    1944," +
-            "    90," +
+//            "    300," +
+//            "    false," +
+//            "    2592," +
+//            "    1944," +
+//            "    90," +
             "    false," +
             "    false," +
             "    false," +

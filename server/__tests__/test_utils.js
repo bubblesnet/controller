@@ -2,6 +2,7 @@ const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const nsender = require("../src/api/services/notificationsender");
 const alertcondition = require("../src/api/models/alertcondition");
+const sitestation = require("../src/api/models/sitestation");
 const assert = require('chai').assert;
 const auth = require('../src/api/authcontroller')
 
@@ -12,6 +13,7 @@ const event = require('../src/api/models/event')
 let created_userid = -1
 let triggered_datetimemillis = 1612640845000;
 let good_userid = 0
+let good_stationid = 0
 let good_deviceid = 0
 let good_eventid = 0
 
@@ -53,6 +55,12 @@ async function setupForThisFile(create_device,create_event) {
         devicetypeid: 0,
         devicename: "test" + triggered_datetimemillis
     }
+
+    let body = {userid: good_userid}
+    let stat = await sitestation.createStation(body)
+    good_stationid = stat.stationid
+    expect(stat).to.not.be.null;
+
     if( create_device ) {
         x = await device.createDevice(d)
         good_deviceid = x.deviceid
@@ -82,7 +90,7 @@ async function setupForThisFile(create_device,create_event) {
             console.log("eventid = " + good_eventid)
         }
     }
-    z = { userid: good_userid, deviceid: good_deviceid, eventid: good_eventid}
+    let z = { userid: good_userid, stationid: good_stationid, deviceid: good_deviceid, eventid: good_eventid}
     return(z)
 
 }

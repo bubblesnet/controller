@@ -87,11 +87,11 @@ describe("cab",   () => {
     console.log("cab")
     it('postgres sqljson', async function () {
 
-        await z = test_utils.setupForThisFile(true,false)
-        
-        let user_list = await station.getConfigByUser(test_utils.good_userid)
+        let z = await test_utils.setupForThisFile(true,false)
+
+        let user_list = await station.getConfigByUser(z.userid)
         expect(user_list).not.undefined
-        let station_list = await sitestation.getConfigByDevice(test_utils.good_userid, test_utils.good_deviceid)
+        let station_list = await sitestation.getConfigByDevice(z.userid, z.deviceid)
         expect(station_list).not.undefined
     });
 });
