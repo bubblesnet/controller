@@ -25,7 +25,7 @@
       "psi"
     ]
   },
-  "cabinet_settings": {
+  "station_settings": {
     "humidifier": true,
     "humidity_sensor_internal": true,
     "humidity_sensor_external": true,
@@ -38,7 +38,7 @@
     "water_pump": true,
     "air_pump": true,
     "light_sensor_internal": true,
-    "cabinet_door_sensor": true,
+    "station_door_sensor": true,
     "outer_door_sensor": true,
     "movement_sensor": true,
     "pressure_sensors": true,

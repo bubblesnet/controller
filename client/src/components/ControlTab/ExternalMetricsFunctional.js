@@ -9,7 +9,7 @@ function RenderExternalMetrics (props) {
         <>
             <div id={"sun-moon-icon-holder"}/>
             <div id="airtempexternal-holder">
-                <RenderThermometer exists={props.state.cabinet_settings.thermometer_external}
+                <RenderThermometer exists={props.state.station_settings.thermometer_external}
                                    currentTemperature={props.state.status.temp_air_external}
                                    units={props.settings.display_settings.temperature_units}
                                    direction={props.state.status.temp_air_external_direction}/>
@@ -21,7 +21,7 @@ function RenderExternalMetrics (props) {
                                   direction={props.state.status.humidity_external_direction}/>
             </div>
             <div className="externalpressure-holder">
-                <RenderBarometer exists={props.state.cabinet_settings.pressure_sensors}
+                <RenderBarometer exists={props.state.station_settings.pressure_sensors}
                                  holderClassName={"pressure-holder"}
                                  textClassName={"pressure-text-holder"}
                     iconClassName={"pressure-icon-holder"}

@@ -38,8 +38,8 @@ for instance you 'could' link a sensor named "humidity_sensor" to "air_temp_midd
 ## Messaging
 
 The system runs on a single JSON message format.  These messages:
-* Are sent by the UI to the edge devices to control devices (Grow lights, heat ...) within the cabinet.
-* Are sent by the devices to tell the UI about conditions within the cabinet and are archived in the database.
+* Are sent by the UI to the edge devices to control devices (Grow lights, heat ...) within the station.
+* Are sent by the devices to tell the UI about conditions within the station and are archived in the database.
 
 In addition to crossing API boundaries, these messages are typically passed around within individiual 
 component applications (edge-device, UI ...) rather than decomposing the message and passing around
@@ -206,7 +206,7 @@ Add
 |  movement_sensor |  movement |
 |  root_ph_sensor |  root_ph |
 |  distance_sensor |  plant_height |
-|  cabinet_door_sensor |  cabinet_door_open |
+|  station_door_sensor |  station_door_open |
 |  external_door_sensor |  external_door_open |
 
 ## Switch names

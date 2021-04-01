@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const util = require('../../util')
-const cabinet = require('../models/cabinet')
-const cab = require('../models/cab')
+const station = require('../models/station')
+const sitestation = require('../models/sitestation')
 const cors = require('cors')
 
 /**
@@ -132,7 +132,7 @@ const config = {
             device_type: "GPIO",
             protocol: "gpio",
             address: "0x47",
-            included_sensors: [{sensor_name: "cabinet_door_sensor", address: "55"}]
+            included_sensors: [{sensor_name: "station_door_sensor", address: "55"}]
         },
         {
             container_name: "sense-go",
@@ -143,7 +143,7 @@ const config = {
             included_sensors: [{sensor_name: "external_door_sensor", address: "55"}]
         }
     ],
-    cabinet_settings: {
+    station_settings: {
         humidifier: true,
         humidity_sensor_internal: true,
         humidity_sensor_external: true,
@@ -158,7 +158,7 @@ const config = {
         water_pump: true,
         air_pump: true,
         light_sensor_internal: true,
-        cabinet_door_sensor: true,
+        station_door_sensor: true,
         outer_door_sensor: true,
         movement_sensor: true,
         pressure_sensors: true,
@@ -213,14 +213,14 @@ router.use(cors());
 async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
     // read config from file
-//    let x = await cabinet.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
-    let x = await cab.getConfigByUser(req.params.userid).catch((err) =>
+//    let x = await station.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
+    let x = await station.getConfigByUser(req.params.userid).catch((err) =>
     { console.log("caught err "+err)})
     res.json(x);
 }
 
 async function setPresent(req,res,next) {
-    let x = await cabinet.setSensorPresent(req,res,next)
+    let x = await sitestation.setSensorPresent(req,res,next)
     return(x)
 }
 router.post("/:userid/:deviceid/sensor/:sensor_name/:present", function (req, res, next) {
@@ -232,7 +232,7 @@ router.get("/:userid/:deviceid", function (req, res, next) {
     getDeviceConfig(req,res,next)
 });
 
-router.get("/farm/:userid/:deviceid", function (req, res, next) {
+router.get("/site/:userid/:deviceid", function (req, res, next) {
     getDeviceConfig(req,res,next)
 });
 

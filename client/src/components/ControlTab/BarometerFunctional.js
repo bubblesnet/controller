@@ -3,7 +3,7 @@ import '../../App.css';
 import sprintf from 'sprintf-js';
 
 /*
-                        <RenderBarometer exists={props.state.cabinet_settings.pressure_sensors}
+                        <RenderBarometer exists={props.state.station_settings.pressure_sensors}
                                          textClassName={"pressure-text-holder"}
                                          iconClassName={"pressure-icon-holder"}
                                          value={props.state.status.pressure_internal}
