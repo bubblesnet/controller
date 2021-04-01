@@ -2,6 +2,7 @@ const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
 const sitestation = require("../src/api/models/sitestation");
+const test_utils = require("./test_utils")
 const outlet = require("../src/api/models/outlet");
 const device = require("../src/api/models/device");
 const station = require("../src/api/models/station");
@@ -85,9 +86,12 @@ let controllable_devices = [
 describe("cab",   () => {
     console.log("cab")
     it('postgres sqljson', async function () {
-        let user_list = await station.getConfigByUser(90000009)
+
+        await z = test_utils.setupForThisFile(true,false)
+        
+        let user_list = await station.getConfigByUser(test_utils.good_userid)
         expect(user_list).not.undefined
-        let station_list = await sitestation.getConfigByDevice(90000009, 70000007)
+        let station_list = await sitestation.getConfigByDevice(test_utils.good_userid, test_utils.good_deviceid)
         expect(station_list).not.undefined
     });
 });
