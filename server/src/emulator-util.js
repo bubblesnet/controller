@@ -100,7 +100,7 @@ function sendFakeMeasurement(singleCall) {
     sendMeasurement(z)
     if( !singleCall ) { /// TODO this duplicates timeout up one level
         setTimeout(() => {
-            sendFakeMeasurement()
+            sendFakeMeasurement(singleCall)
         }, 10000);
     }
     return(z)
@@ -137,9 +137,9 @@ function sendFakeMeasurementToTopic(client) {
     let msg = getFakeMeasurement()
     console.log("Sending message to topic " + JSON.stringify(msg))
     bubbles_queue.sendMessageToTopic(client,sendHeaders, JSON.stringify(msg))
-    setTimeout(() => {
-        sendFakeMeasurementToTopic()
-    }, 5000);
+//    setTimeout(() => {
+//        sendFakeMeasurementToTopic(client)
+//    }, 5000);
     return(msg)
 
 }

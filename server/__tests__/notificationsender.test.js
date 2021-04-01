@@ -212,8 +212,6 @@ describe("notif getNewAlertConditions",   () => {
             .then( function(result) {
                     console.log("notif getNewAlertConditions = " + JSON.stringify(result))
                     expect(result).not.to.be.undefined
-
-
                 }
             )
             .catch( function(err) {

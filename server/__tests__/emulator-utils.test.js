@@ -43,15 +43,14 @@ describe("emulator-util",   () => {
 describe("emulator-utils", () => {
     console.log("emulator-utils")
 
-
     it('emulator-utils', async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined
         let b = emu.getFakeStatus()
         expect(b).not.to.be.undefined
+        await bubbles_queue.init(setClient)
         b = emu.sendFakeMeasurement(true)
         expect(b).not.to.be.undefined
-        await bubbles_queue.init(setClient)
         b = emu.sendFakeMeasurementToTopic(__feederClient)
         expect(b).not.to.be.undefined
         b = emu.sendFakeStatusToQueue(__feederClient)

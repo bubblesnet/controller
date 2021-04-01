@@ -1,4 +1,3 @@
-SET ICEBREAKER_DB=icebreaker_dev
 SET NODE_ENV=DEV
 SET DEBUG=api-server,edgemeasurement_routes
 SET LOG_LEVEL=silly

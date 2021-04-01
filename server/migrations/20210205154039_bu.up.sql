@@ -1,5 +1,5 @@
 --
--- Table structure for table devicetype
+-- Table structure for table module
 --
 CREATE TABLE module (
                             moduleid SERIAL PRIMARY KEY,
@@ -23,4 +23,4 @@ CREATE TABLE sensor (
 );
 
 ALTER TABLE device ADD COLUMN externalid varchar(100);
-ALTER TABLE device ADD COLUMN devicename varchar(100);
+-- ALTER TABLE device ADD COLUMN devicename varchar(100);

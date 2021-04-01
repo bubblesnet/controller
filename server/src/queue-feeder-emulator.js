@@ -14,7 +14,7 @@ function setClient(client) {
 
 const updateStatusQueue = async() => {
     setTimeout(() => {
-        emulator_util.sendFakeStatusToQueue()
+        emulator_util.sendFakeStatusToQueue(__feederClient)
     }, 10000);
 }
 

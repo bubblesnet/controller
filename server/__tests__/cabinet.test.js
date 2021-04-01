@@ -87,7 +87,7 @@ describe("cab",   () => {
     it('postgres sqljson', async function () {
         let user_list = await station.getConfigByUser(90000009)
         expect(user_list).not.undefined
-        let station_list = await sitestation.getCabinetConfigsByUser(90000009)
+        let station_list = await sitestation.getConfigByDevice(90000009, 70000007)
         expect(station_list).not.undefined
     });
 });
