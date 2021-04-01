@@ -50,16 +50,22 @@ jobs:
       - name: Setup PostgreSQL
         # Creates the DB schema and loads initial table data
         run: |
-          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210205154039_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
+          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_ci" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210205154039_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210211101505_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210226211054_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210227212026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210302130129_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210305151120_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210312202057_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210331183354_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          ICEBREAKER_DB: icebreaker_dev
           NODE_ENV: CI
         working-directory: server
 
@@ -83,7 +89,6 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          ICEBREAKER_DB: icebreaker_dev
           NODE_ENV: CI
         working-directory: server
 

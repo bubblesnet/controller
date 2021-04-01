@@ -107,12 +107,12 @@ function RenderControlTab(props) {
 
     let wl
     let wlRuler
-    if (props.state.cabinet_settings.water_level_sensor === false) {
+    if (props.state.station_settings.water_level_sensor === false) {
         wl = <></>
         wlRuler = <></>
     } else {
         wlRuler = <div id="watertemp-holder">
-            <RenderThermometer exists={props.state.cabinet_settings.thermometer_water}
+            <RenderThermometer exists={props.state.station_settings.thermometer_water}
                                className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}
                                units={props.settings.display_settings.temperature_units}
                                direction={props.state.status.temp_water_direction}/>
@@ -143,7 +143,7 @@ function RenderControlTab(props) {
                             <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>
                         </div>
                     </div>
-                    <div id="cabinet">
+                    <div id="station">
                     </div>
                     <div className="plant">
                         <div className="plant-holder">
@@ -161,26 +161,26 @@ function RenderControlTab(props) {
                     </div>
                     <RenderGrowLight
                         settings={props.settings}
-                        exists={props.state.cabinet_settings.light_vegetative || props.state.cabinet_settings.light_bloom || props.state.cabinet_settings.light_germinate}
+                        exists={props.state.station_settings.light_vegetative || props.state.station_settings.light_bloom || props.state.station_settings.light_germinate}
                         on={props.state.switch_state.currentGrowLight.on} state={props.state}/>
-                    <RenderHeater settings={props.settings} exists={props.state.cabinet_settings.heater} on={props.state.switch_state.heater.on}/>
-                    <RenderHumidifier settings={props.settings} exists={props.state.cabinet_settings.humidifier}
+                    <RenderHeater settings={props.settings} exists={props.state.station_settings.heater} on={props.state.switch_state.heater.on}/>
+                    <RenderHumidifier settings={props.settings} exists={props.state.station_settings.humidifier}
                                       on={props.state.switch_state.humidifier.on}/>
                     <div className="exhaust">
                         <div className="filter-and-exhaust-fan-holder">
-                            <RenderExhaustFan exists={props.state.cabinet_settings.exhaust_fan}
+                            <RenderExhaustFan exists={props.state.station_settings.exhaust_fan}
                                               on={props.state.switch_state.exhaustFan.on}/>
                         </div>
                     </div>
                     <div className="fans">
                         <div className="input-fan-holder">
-                            <RenderIntakeFan settings={props.settings} exists={props.state.cabinet_settings.intake_fan}
+                            <RenderIntakeFan settings={props.settings} exists={props.state.station_settings.intake_fan}
                                              on={props.state.switch_state.intakeFan.on}/>
                         </div>
                     </div>
-                    <RenderWaterPump settings={props.settings} exists={props.state.cabinet_settings.water_pump}
+                    <RenderWaterPump settings={props.settings} exists={props.state.station_settings.water_pump}
                                      on={props.state.switch_state.waterPump.on}/>
-                    <RenderAirPump settings={props.settings} exists={props.state.cabinet_settings.air_pump}
+                    <RenderAirPump settings={props.settings} exists={props.state.station_settings.air_pump}
                                    on={props.state.switch_state.airPump.on}/>
                     <div id="water-level-ruler-holder"/>
 

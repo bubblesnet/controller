@@ -199,7 +199,7 @@ function AuthenticatedApp (props) {
 
     function setCabinetSettingsStateFromChild(x) {
         let newstate = JSON.parse(JSON.stringify(local_state))
-        newstate.cabinet_settings = JSON.parse(JSON.stringify(x.cabinet_settings))
+        newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
         setState(newstate)
     }
 

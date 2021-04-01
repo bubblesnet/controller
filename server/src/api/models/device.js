@@ -61,8 +61,8 @@ async function findAllByUserid(userid) {
  */
 async function createDevice(body) {
     return new Promise(function(resolve, reject) {
-        pool.query("INSERT INTO device (devicename, devicetypeid_Devicetype, userid_User,created, cabinetid_cabinet) VALUES ($1,$2,$3,current_timestamp,$4) RETURNING *",
-            [body.devicename, body.devicetypeid, body.userid, body.cabinetid], (error, results) => {
+        pool.query("INSERT INTO device (devicename, devicetypeid_Devicetype, userid_User,created, stationid_Station) VALUES ($1,$2,$3,current_timestamp,$4) RETURNING *",
+            [body.devicename, body.devicetypeid, body.userid, body.stationid], (error, results) => {
             if (error) {
                 reject(error)
             } else {

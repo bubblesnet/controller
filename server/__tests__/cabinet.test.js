@@ -1,14 +1,15 @@
 const config = require("../src/config/locals.js");
 const expect = require('chai').expect;
 const user = require("../src/api/models/user");
-const cab = require("../src/api/models/cab");
+const sitestation = require("../src/api/models/sitestation");
+const test_utils = require("./test_utils")
 const outlet = require("../src/api/models/outlet");
 const device = require("../src/api/models/device");
-const cabinet = require("../src/api/models/cabinet");
+const station = require("../src/api/models/station");
 const modul = require("../src/api/models/module");
 const assert = require('chai').assert;
 
-let created_cabinetid = -1
+let created_stationid = -1
 
 
 let good_update = {
@@ -33,7 +34,7 @@ let good_update = {
         water_pump: true,
         air_pump: true,
         light_sensor_internal: true,
-        cabinet_door_sensor: true,
+        station_door_sensor: true,
         outer_door_sensor: true,
         movement_sensor: true,
         pressure_sensors: true,
@@ -60,7 +61,7 @@ let sensor_names = [
     "thermometer_external",
     "thermometer_water",
     "light_sensor_internal",
-    "cabinet_door_sensor",
+    "station_door_sensor",
     "outer_door_sensor",
     "movement_sensor",
     "pressure_sensors",
@@ -85,16 +86,19 @@ let controllable_devices = [
 describe("cab",   () => {
     console.log("cab")
     it('postgres sqljson', async function () {
-        let user_list = await cab.getConfigByUser(90000009)
+
+        let z = await test_utils.setupForThisFile(true,false)
+
+        let user_list = await station.getConfigByUser(z.userid)
         expect(user_list).not.undefined
-        let cabinet_list = await cab.getCabinetConfigsByUser(90000009)
-        expect(cabinet_list).not.undefined
+        let station_list = await sitestation.getConfigByDevice(z.userid, z.deviceid)
+        expect(station_list).not.undefined
     });
 });
 
-describe("cabinet",   () => {
-    console.log("create/udpate/delete cabinet")
-    it('Empty cabinet with update/delete', async function () {
+describe("station",   () => {
+    console.log("create/udpate/delete station")
+    it('Empty station with update/delete', async function () {
         let user_list = await user.getAllUsers()
         expect(user_list).not.undefined
         expect(user_list.length).not.lessThan(0)
@@ -105,29 +109,29 @@ describe("cabinet",   () => {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined
         try {
-            let x = await cabinet.createCabinet({userid: userid});
-            console.log("new cabinet = " + JSON.stringify(x))
-            created_cabinetid = x.cabinetid
-            expect(created_cabinetid >= 0)
-            good_update.cabinetid = created_cabinetid
+            let x = await station.createCabinet({userid: userid});
+            console.log("new station = " + JSON.stringify(x))
+            created_stationid = x.stationid
+            expect(created_stationid >= 0)
+            good_update.stationid = created_stationid
 
-            let dev = {devicename: "testdevice", devicetypeid: 0, userid: userid, cabinetid: created_cabinetid}
+            let dev = {devicename: "testdevice", devicetypeid: 0, userid: userid, stationid: created_stationid}
             let d = await device.createDevice(dev);
             expect(d).not.undefined
             expect( d.deviceid).not.equals(0)
             let good_deviceid = d.deviceid
             console.log("Created deviceid " + good_deviceid)
 
-            let y = await cabinet.updateCabinet(good_update)
+            let y = await station.updateStation(good_update)
             expect(y).not.undefined
             expect(y.rowcount).equals(1)
-            let bod = {userid: userid, cabinetid: created_cabinetid, deviceid: good_deviceid, name: "test", bcm_pin_number: 24, index: 3, onoff: true}
+            let bod = {userid: userid, stationid: created_stationid, deviceid: good_deviceid, name: "test", bcm_pin_number: 24, index: 3, onoff: true}
  //           console.log(JSON.stringify(bod))
             let a = await outlet.createOutlet(bod);
  //           console.log(JSON.stringify(a))
             expect(a.outletid).not.equals(0)
 
-            let b = await outlet.updateOutlet({outletid: a.outletid, cabinetid: created_cabinetid, deviceid: good_deviceid, name: 'updatedoutlet', index: 14, bcm_pin_number: 101, onoff: false })
+            let b = await outlet.updateOutlet({outletid: a.outletid, stationid: created_stationid, deviceid: good_deviceid, name: 'updatedoutlet', index: 14, bcm_pin_number: 101, onoff: false })
             expect(b).not.undefined
             expect(b.rowcount == 1 )
 
@@ -140,11 +144,11 @@ describe("cabinet",   () => {
             expect(module_list).not.undefined
             expect(module_list.length).not.equals(0)
 
-            let outlet_list = await outlet.createDefaultSetOfOutlets({cabinetid: created_cabinetid, deviceid: good_deviceid})
+            let outlet_list = await outlet.createDefaultSetOfOutlets({stationid: created_stationid, deviceid: good_deviceid})
             expect(outlet_list).not.undefined
             expect(outlet_list.length).not.equals(0)
 
-            let conf = await cabinet.getConfigByCabinet(created_cabinetid)
+            let conf = await station.getConfigByStation(created_stationid)
             expect(conf).not.undefined
             expect(conf.attached_devices).not.undefined
             expect(conf.attached_devices.length).not.equals(0)
@@ -156,14 +160,14 @@ describe("cabinet",   () => {
                     present = true
                 }
                 for (let i = 0; i < sensor_names.length; i++) {
-                    let z = await cabinet.setSensorPresent(created_cabinetid, sensor_names[i], present)
+                    let z = await station.setSensorPresent(created_stationid, sensor_names[i], present)
                     expect(z).not.undefined
                     expect(z.rowcount).not.undefined
                     expect(z.rowcount).equals(1)
                 }
 
                 for (let i = 0; i < controllable_devices.length; i++) {
-                    let z = await cabinet.setSensorPresent(created_cabinetid, controllable_devices[i], present)
+                    let z = await station.setSensorPresent(created_stationid, controllable_devices[i], present)
                     expect(z).not.undefined
                     expect(z.rowcount).not.undefined
                     expect(z.rowcount).equals(1)
@@ -181,7 +185,7 @@ describe("cabinet",   () => {
                 expect(g.rowcount == 1 )
             }
 
-            let k = await cabinet.getConfigByCabinet(created_cabinetid)
+            let k = await station.getConfigByStation(created_stationid)
             expect(k).not.undefined
             console.log(JSON.stringify(k))
 
@@ -189,13 +193,13 @@ describe("cabinet",   () => {
             expect(g).not.undefined
             expect(g.rowcount).not.equals(0)
 
-            let z = await cabinet.deleteCabinet(created_cabinetid)
+            let z = await station.deleteStation(created_stationid)
             expect(z).not.undefined
-            expect(z.cabinetid).not.undefined
-            expect(z.cabinetid).equals(created_cabinetid)
+            expect(z.stationid).not.undefined
+            expect(z.stationid).equals(created_stationid)
 
         } catch (err) {
-            console.log("new cabinet with delete error "+err)
+            console.log("new station with delete error "+err)
             expect(false)
         }
     })

@@ -4,6 +4,7 @@ const util = require('./util')
 const emulator_util = require('./emulator-util')
 
 let current_state = {}
+// this is a comment
 
 let __feederClient
 
@@ -13,7 +14,7 @@ function setClient(client) {
 
 const updateStatusQueue = async() => {
     setTimeout(() => {
-        emulator_util.sendFakeStatusToQueue()
+        emulator_util.sendFakeStatusToQueue(__feederClient)
     }, 10000);
 }
 

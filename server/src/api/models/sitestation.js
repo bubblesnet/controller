@@ -52,23 +52,23 @@ async function findAllByUserid(userid) {
     })
 }
 
-async function findCabinetIDByDeviceID(deviceid) {
+async function findCabinetIDByDeviceID(userid,deviceid) {
     return new Promise(function (resolve, reject) {
         console.log("deviceid = " + deviceid)
-        let ssql = 'select distinct c.cabinetid from public.user u left outer join device d on u.userid = d.userid_user left outer join cabinet c on u.userid = c.userid_user where d.deviceid=$1'
+        let ssql = 'select distinct c.stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on u.userid = c.userid_user where d.deviceid=$1 and u.userid=$2'
 
         console.log("ssql = " + ssql)
-        pool.query(ssql, [deviceid], async (err, results) => {
+        pool.query(ssql, [deviceid,userid], async (err, results) => {
             if (err) {
-                console.error("getConfigByCabinet error " + err)
+                console.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount == 0 ) {
-                    reject( new Error("no cabinet for deviceid " + deviceid))
+                    reject( new Error("no station for deviceid " + deviceid))
                 } else {
-                    let cabinetid = results.rows[0].cabinetid
-                    console.log("found cabinetid " + cabinetid)
-                    resolve(cabinetid)
+                    let stationid = results.rows[0].stationid
+                    console.log("found stationid " + stationid)
+                    resolve(stationid)
                 }
             }
         })
@@ -76,35 +76,35 @@ async function findCabinetIDByDeviceID(deviceid) {
 }
 
 async function getConfigByDevice(userid,deviceid) {
-    let cabinetid
+    let stationid
     try {
-        cabinetid = await findCabinetIDByDeviceID(deviceid)
+        stationid = await findCabinetIDByDeviceID(userid,deviceid)
     } catch(err) {
-        console.log("Caught rejection!")
-        return ({});
+        console.log("Caught rejection " + err)
+        throw (err);
     }
-    return (getConfigByCabinet(cabinetid, deviceid))
+    return (getConfigByStation(stationid, deviceid))
 }
 
 
 
-async function getConfigByCabinet(cabinetid, deviceid) {
-    console.log("getConfigByCabinet " + cabinetid + ","+deviceid)
+async function getConfigByStation(stationid, deviceid) {
+    console.log("getConfigByStation " + stationid + ","+deviceid)
     return new Promise(function (resolve, reject) {
-        console.log("cabinetid = " + cabinetid)
-        let ssql = 'select * from cabinet c left outer join device d on d.cabinetid_cabinet = c.cabinetid where cabinetid=$1 order by cabinetid'
+        console.log("stationid = " + stationid)
+        let ssql = 'select * from station c left outer join device d on d.stationid_station = c.stationid where stationid=$1 order by stationid'
         console.log("ssql = " + ssql)
-        pool.query(ssql, [cabinetid], async (err, results) => {
-//            console.log("callback from getConfigByCabinet with err " + err + " results " + results)
+        pool.query(ssql, [stationid], async (err, results) => {
+//            console.log("callback from getConfigByStation with err " + err + " results " + results)
             if (err) {
-                console.error("getConfigByCabinet error " + err)
+                console.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount === 0 ) {
-                    reject( new Error("no config for cabinet " + cabinetid))
+                    reject( new Error("no config for station " + stationid))
                 } else {
                 let ret = JSON.parse(JSON.stringify(results.rows[0]));
-                ret.cabinetid = Number(cabinetid)
+                ret.stationid = Number(stationid)
                 ret.deviceid = Number(deviceid)
                 ret.userid = ret.userid_user
                 delete ret.userid_user
@@ -114,15 +114,15 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.tamper_zmove
                 let device_settings = JSON.parse(JSON.stringify(ret))
                 ret.tamper = tamper
-                ret.ac_outlets = await outlet.getOutletsByCabinet(cabinetid)
-                ret.attached_devices = await modul.getAllModulesByCabinet(cabinetid)
+                ret.ac_outlets = await outlet.getOutletsByCabinetDevice(stationid,deviceid)
+                ret.edge_devices = await modul.getAllModulesByCabinet(stationid)
 
                 ret.device_settings = JSON.parse(JSON.stringify(device_settings))
                 ret.device_settings.enclosure_options = ["Cabinet", "Tent"]
                     delete ret.device_settings.deviceid
                 delete ret.device_settings.automatic_control
                 delete ret.device_settings.deviceid
-                delete ret.device_settings.cabinetid
+                delete ret.device_settings.stationid
                 delete ret.device_settings.userid
                 delete ret.device_settings.controller_hostname
                 delete ret.device_settings.controller_api_port
@@ -142,7 +142,7 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.water_pump
                 delete ret.air_pump
                 delete ret.light_sensor_internal
-                delete ret.cabinet_door_sensor
+                delete ret.station_door_sensor
                 delete ret.outer_door_sensor
                 delete ret.movement_sensor
                 delete ret.pressure_sensors
@@ -157,7 +157,7 @@ async function getConfigByCabinet(cabinetid, deviceid) {
                 delete ret.light_vegetative
                 delete ret.light_germinate
 
-                ret.stage_schedules = stage.getStageSchedules(cabinetid)
+                ret.stage_schedules = stage.getStageSchedules(stationid)
                 resolve(ret);
             }
         }})
@@ -165,9 +165,9 @@ async function getConfigByCabinet(cabinetid, deviceid) {
 }
 
 
-async function createCabinet(body) {
+async function createStation(body) {
     return new Promise(function(resolve, reject) {
-        pool.query("insert into cabinet (" +
+        pool.query("insert into station (" +
             "    userid_User," +
             "    controller_hostname," +
             "    controller_api_port," +
@@ -176,11 +176,11 @@ async function createCabinet(body) {
             "    tamper_xmove," +
             "    tamper_ymove," +
             "    tamper_zmove," +
-            "    time_between_pictures_in_seconds," +
-            "    camera_picamera," +
-            "    camera_resolutionX," +
-            "    camera_resolutionY," +
-            "    time_between_sensor_polling_in_seconds," +
+//            "    time_between_pictures_in_seconds," +
+//            "    camera_picamera," +
+//            "    camera_resolutionX," +
+//            "    camera_resolutionY," +
+//            "    time_between_sensor_polling_in_seconds," +
             "    humidifier," +
             "    humidity_sensor_internal," +
             "    humidity_sensor_external," +
@@ -193,7 +193,7 @@ async function createCabinet(body) {
             "    water_pump," +
             "    air_pump," +
             "    light_sensor_internal," +
-            "    cabinet_door_sensor," +
+            "    station_door_sensor," +
             "    outer_door_sensor," +
             "    movement_sensor," +
             "    pressure_sensors," +
@@ -218,11 +218,11 @@ async function createCabinet(body) {
             "    1.0," +
             "    1.0," +
             "    1.0," +
-            "    300," +
-            "    false," +
-            "    2592," +
-            "    1944," +
-            "    90," +
+//            "    300," +
+//            "    false," +
+//            "    2592," +
+//            "    1944," +
+//            "    90," +
             "    false," +
             "    false," +
             "    false," +
@@ -256,17 +256,17 @@ async function createCabinet(body) {
             if (error) {
                 reject(error)
             } else {
-                console.log("new cabinetid " + results.rows[0])
-                resolve({cabinetid: results.rows[0].cabinetid, message: "A new cabinet has been added :" + results.rows[0].cabinetid})
+                console.log("new stationid " + results.rows[0])
+                resolve({stationid: results.rows[0].stationid, message: "A new station has been added :" + results.rows[0].stationid})
             }
         })
     })
 }
 
 
-async function updateCabinet(body) {
+async function updateStation(body) {
     return new Promise(function(resolve, reject) {
-        pool.query("UPDATE cabinet set " +
+        pool.query("UPDATE station set " +
             "controller_hostname=$2, " +
             "controller_api_port=$3, " +
             "stage=$4, " +
@@ -288,7 +288,7 @@ async function updateCabinet(body) {
             "water_pump=$20, " +
             "air_pump=$21, " +
             "light_sensor_internal=$22, " +
-            "cabinet_door_sensor=$23, " +
+            "station_door_sensor=$23, " +
             "outer_door_sensor=$24, " +
             "movement_sensor=$25, " +
             "pressure_sensors=$26, " +
@@ -304,9 +304,9 @@ async function updateCabinet(body) {
             "light_bloom=$36, " +
             "light_vegetative=$37, " +
             "light_germinate=$38 " +
-        "where cabinetid=$1 RETURNING *",
+        "where stationid=$1 RETURNING *",
             [
-                body.cabinetid,
+                body.stationid,
                 body.controller_hostname,
                 body.controller_api_port,
                 body.stage,
@@ -328,7 +328,7 @@ async function updateCabinet(body) {
             body.water_pump,
             body.air_pump,
             body.light_sensor_internal,
-            body.cabinet_door_sensor,
+            body.station_door_sensor,
             body.outer_door_sensor,
             body.movement_sensor,
             body.pressure_sensors,
@@ -349,44 +349,44 @@ async function updateCabinet(body) {
                     console.log("update err " + error)
                     reject(error)
                 } else {
-                    console.log("updated "+results.rowCount+" rows of Cabinet " + body.cabinetid)
-                    resolve({cabinetid: body.cabinetid, rowcount: results.rowCount, message: "cabinet has been modified :" + results.rowCount})
+                    console.log("updated "+results.rowCount+" rows of Station " + body.stationid)
+                    resolve({stationid: body.stationid, rowcount: results.rowCount, message: "station has been modified :" + results.rowCount})
                 }
             })
     })
 }
 
 
-async function deleteCabinet(cabinetid) {
-    console.log("deleteCabinet "+cabinetid)
+async function deleteStation(stationid) {
+    console.log("deleteStation "+stationid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM cabinet WHERE cabinetid "+cabinetid)
+        console.log("DELETE FROM station WHERE stationid "+stationid)
 
-        pool.query('DELETE FROM cabinet WHERE cabinetid = $1', [cabinetid], (error, results) => {
+        pool.query('DELETE FROM station WHERE stationid = $1', [stationid], (error, results) => {
             if (error) {
-                console.error("delete cabinetid err3 " + error)
+                console.error("delete stationid err3 " + error)
                 reject(error)
             } else {
 //                console.log("results " + JSON.stringify(results))
-                resolve({cabinetid: cabinetid, rowcount: results.rowCount, message: 'cabinet deleted with ID ' + cabinetid})
+                resolve({stationid: stationid, rowcount: results.rowCount, message: 'station deleted with ID ' + stationid})
             }
         })
     })
 }
 
-async function setSensorPresent(cabinetid,sensor_name,present) {
-    console.log("setSensorPresent "+sensor_name+" present " + present + " where cabinetid="+cabinetid)
+async function setSensorPresent(stationid,sensor_name,present) {
+    console.log("setSensorPresent "+sensor_name+" present " + present + " where stationid="+stationid)
     return new Promise( function(resolve, reject) {
-        console.log("UPDATE cabinet set "+sensor_name+" = "+present+" where cabinetid="+cabinetid)
+        console.log("UPDATE station set "+sensor_name+" = "+present+" where stationid="+stationid)
 
-        let ssql = 'UPDATE cabinet set '+sensor_name+'=$2 where cabinetid = $1 RETURNING *'
-        pool.query(ssql, [cabinetid, present], (error, results) => {
+        let ssql = 'UPDATE station set '+sensor_name+'=$2 where stationid = $1 RETURNING *'
+        pool.query(ssql, [stationid, present], (error, results) => {
             if (error) {
-                console.error("update cabinetid err3 " + error)
+                console.error("update stationid err3 " + error)
                 reject(error)
             } else {
                 console.log("setSensorPresent results " + JSON.stringify(results))
-                resolve({cabinetid: cabinetid, rowcount: results.rowCount, message: 'cabinet updated ' + results.rowCount})
+                resolve({stationid: stationid, rowcount: results.rowCount, message: 'station updated ' + results.rowCount})
             }
         })
     })
@@ -396,12 +396,12 @@ async function setSensorPresent(cabinetid,sensor_name,present) {
 
 module.exports = {
 //    getAllCabinets,
-    createCabinet,
+    createStation: createStation,
 //    findAllByUserid,
     setSensorPresent,
-    deleteCabinet,
-    updateCabinet,
-    getConfigByCabinet,
+    deleteStation: deleteStation,
+    updateStation: updateStation,
+    getConfigByStation: getConfigByStation,
     getConfigByDevice,
     endPool,
 }

@@ -1,5 +1,5 @@
 {
-  "cabinet_settings": {
+  "station_settings": {
     "humidifier": true,
     "humidity_sensor_internal": true,
     "humidity_sensor_external": true,
@@ -11,7 +11,7 @@
     "thermometer_water": true,
     "water_pump": true,
     "air_pump": true,
-    "cabinet_door_sensor": true,
+    "station_door_sensor": true,
     "outer_door_sensor": true,
     "movement_sensor": true,
     "pressure_sensors": true,
@@ -93,7 +93,7 @@
     "start_date_current_stage": "25 days ago",
     "start_date_next_stage": "10 days from now",
     "outer_door_open": false,
-    "cabinet_door_open": false,
+    "station_door_open": false,
     "pressure_external": 0.0,
     "pressure_internal": 0.0,
     "pressure_external_direction": "",

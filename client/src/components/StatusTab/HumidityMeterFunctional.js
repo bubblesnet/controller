@@ -25,7 +25,7 @@ function RenderHumidityMeter (props) {
                 />
         </div>
 
-    if( props.state.cabinet_settings.humidity_sensor_internal === false ) {
+    if( props.state.station_settings.humidity_sensor_internal === false ) {
         ret = <></>
     }
 

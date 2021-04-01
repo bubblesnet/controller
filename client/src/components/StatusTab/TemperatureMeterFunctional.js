@@ -22,7 +22,7 @@ function RenderTemperatureMeter (props) {
                     ]}
                     />
             </div>
-    if( props.state.cabinet_settings.thermometer_middle === false ) {
+    if( props.state.station_settings.thermometer_middle === false ) {
         ret = <></>
     }
 

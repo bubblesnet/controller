@@ -59,7 +59,7 @@ stage_schedules =  [
     }
 ];
 
-function getStageSchedules(cabinetid) {
+function getStageSchedules(stationid) {
     return stage_schedules
 }
 
