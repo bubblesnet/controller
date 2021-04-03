@@ -169,8 +169,8 @@
       "address": "0x47",
       "included_sensors": [
         {
-          "sensor_name": "cabinet_door_sensor",
-          "measurement_name": "cabinet_door_open",
+          "sensor_name": "station_door_sensor",
+          "measurement_name": "station_door_open",
           "address": "55"
         }
       ]

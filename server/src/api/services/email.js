@@ -1,26 +1,25 @@
 /**
  * Created by rodley on 4/21/2017.
  */
-const sghelper = require('@sendgrid/helpers')
 const sgMail = require('@sendgrid/mail')
-var from_email = 'sendgridrodley@gmail.com';
-var to_email = 'sendgridrodley@gmail.com'
-var testemailsubject = 'Test of BubblesNet email notification function';
-var testemailtext =  'Greetings from Bubblesnet'
-var testemailhtml = '<strong>Greetings from Bubblesnet</strong>';
+const from_email = 'sendgridrodley@gmail.com';
+const to_email = 'sendgridrodley@gmail.com'
+const test_email_subject = 'Test of BubblesNet email notification function';
+const test_email_text =  'Greetings from Bubblesnet'
+const test_email_html = '<strong>Greetings from Bubblesnet</strong>';
 const locals = require('../../config/locals');
 
 // using Twilio SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
-exports.sendATestEmail = function () {
+function sendATestEmail () {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
     const msg = {
         to: to_email, // Change to your recipient
         from: from_email, // Change to your verified sender
-        subject: testemailsubject,
-        text: testemailtext,
-        html: testemailhtml,
+        subject: test_email_subject,
+        text: test_email_text,
+        html: test_email_html,
     }
     console.log("Sending email via unit test")
 
@@ -29,11 +28,11 @@ exports.sendATestEmail = function () {
             console.log('Email sent')
         })
         .catch((error) => {
-            console.error(error)
+            console.error("sendATestEmail error " + error)
         })
 }
 
-exports.sendAMessage = function (to, from, subject, shortmessage, longmessage, cb) {
+function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
     const msg = {
         to: to, // Change to your recipient
         from: from, // Change to your verified sender
@@ -41,25 +40,37 @@ exports.sendAMessage = function (to, from, subject, shortmessage, longmessage, c
         text: shortmessage,
         html: "<html><body><h1>"+shortmessage+"</h1><p>" + longmessage + "</p></body></html>",
     }
+    if( typeof locals.getLocals().dontSendEmail === 'undefined' || locals.getLocals().dontSendEmail === true ) {
+        console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals().dontSendEmail )
+        cb(null);
+    } else {
+        sgMail.send(msg)
+            .then(() => {
+                console.log('Email sent')
+                cb(null);
+            })
+            .catch((error) => {
+                console.error("sendAMessage error " + error)
+                cb(error);
+            })
+    }
+}
 
-    sgMail.send(msg)
-        .then(() => {
-            console.log('Email sent')
-        })
-        .catch((error) => {
-            console.error(error)
-        })
-    cb();
-};
 
-email = require('./email')
 
-exports.sendANotification = function (type, notification, alertcondition, cb) {
+function sendANotification (type, notification, alertcondition, cb) {
     console.log('sendANotification ' + notification.notificationid);
-    email.sendAMessage(notification.email_recipient,locals.getLocals().sendgridSenderEmailAddress,
+    sendAMessage(notification.email_recipient,locals.getLocals().sendgridSenderEmailAddress,
         type + ' notification from BubblesWeb',alertcondition.shortmessage,
-        "Reference notification [" + notification.notificationid + "]", function() {
-            console.log("callback from sendAMessage");
+        "Reference notification [" + notification.notificationid + "]", function(err) {
+            console.log("callback from sendAMessage with err = " + err);
+            cb(err,"sent")
         })
 };
+
+module.exports = {
+    sendANotification:sendANotification,
+    sendAMessage:sendAMessage,
+    sendATestEmail:sendATestEmail
+}
 

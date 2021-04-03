@@ -7,6 +7,7 @@ const endPool = () => {
     pool.end()
 }
 
+/*
 const getUser = (email_address, cb) => {
     let user = {
         found: true,
@@ -16,6 +17,8 @@ const getUser = (email_address, cb) => {
     }
     cb( null, user )
 }
+
+ */
 
 async function getAllUsers() {
     console.log("user_model getUsers")
@@ -42,15 +45,15 @@ async function getAllUsers() {
 
 async function findOneByUsername(username) {
     console.log("findOneByUsername")
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
         console.log("username = " + username)
         let ssql = 'select * from public.user where username = $1 order by lastname asc, firstname asc, email asc'
         console.log("ssql = "+ssql)
         let values = [username]
-        pool.query(ssql, values, (err, results) => {
+        await pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.log("findOne error " + err)
+                console.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
@@ -75,7 +78,7 @@ async function findOneByUserid(userid) {
         pool.query(ssql, values, (err, results) => {
             console.log("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.log("findOne error " + err)
+                console.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
@@ -105,9 +108,38 @@ async function createEmptyUser(body) {
     })
 }
 
+/*
+        userid_User: x.userid,
+        useemailforsecurity: true,
+        usesmsforsecurity: true,
+        useemailforplantprogress: true,
+        usesmsforplantprogress: true,
+        useemailformaintenancerequired
+        usesmsformaintenancerequired: true,
+        useemailforinformation: true,
+        usesmsforinformation: true,
+
+ */
+async function createSettings(body) {
+    return new Promise(function(resolve, reject) {
+        pool.query("INSERT INTO usersettings (userid_User,useemailforsecurity, usesmsforsecurity, useemailforplantprogress," +
+            "usesmsforplantprogress, useemailformaintenancerequired, usesmsformaintenancerequired,useemailforinformation,usesmsforinformation ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)" +
+            " RETURNING *",
+            [body.userid, body.useemailforsecurity, body.usesmsforsecurity, body.useemailforplantprogress, body.usesmsforplantprogress, body.useemailformaintenancerequired,
+            body.usesmsformaintenancerequired, body.useemailforinformation, body.usesmsforinformation], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    console.log("new usersettings " + JSON.stringify(results.rows[0]))
+                    resolve({usersettingsid: results.rows[0].usersettingsid, message: "A new usersettings has been added :" + results.rows[0].usersettingsid})
+                }
+            })
+    })
+}
+
 async function createUser(body) {
     return new Promise(function(resolve, reject) {
-        pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+        pool.query("INSERT INTO public.user (username, firstname,lastname,email,passwordhash,created) VALUES ($1,$2,$3,$4,$5,current_timestamp) RETURNING *",
             [body.username, body.firstname, body.lastname, body.email, body.passwordhash], (error, results) => {
             if (error) {
                 reject(error)
@@ -145,7 +177,7 @@ async function updateSingleUserField(body) {
             pool.query(`UPDATE public.user SET ${body.fieldname} = $1 WHERE userid = $2`,
                 [body.value, body.userid], (error, results) => {
                     if (error) {
-                        console.log("err1 " + error)
+                        console.error("updateSingleUserField err1 " + error)
                         reject(error)
                     } else {
                         resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
@@ -165,18 +197,29 @@ async function deleteUser(id) {
     console.log("deleteUser "+id)
     return new Promise(function(resolve, reject) {
         const userid = parseInt(id)
-        console.log("DELETE FROM user WHERE userid "+userid)
+        console.log("DELETE FROM public.user WHERE userid "+userid)
 
-        pool.query('DELETE FROM user WHERE userid = $1', [userid], (error, results) => {
+        pool.query('DELETE FROM public.user WHERE userid = $1', [userid], (error, results) => {
             if (error) {
-                console.log("err3 " + error)
+                console.error("deleteUser err3 " + error)
                 reject(error)
             } else {
-                console.log("results " + JSON.stringify(results))
+//                console.log("results " + JSON.stringify(results))
                 resolve({userid: id, message: 'USER deleted with ID ' + userid})
             }
         })
     })
+}
+
+function getUserSettings (userid, cb) {
+    console.log("user.getUserSettings " + userid);
+    return pool.query('select * from usersettings where userid_user = $1', [userid], function (err, result) {
+//        console.log('getUserSettings err ' + err + ' result ' + result);
+//        console.log('getUserSettings results = ' + JSON.stringify(result));
+//        if (err === null) {
+            return cb(err, result);
+//        }
+    });
 }
 
 module.exports = {
@@ -188,8 +231,10 @@ module.exports = {
     deleteUser: deleteUser,
     setPassword: setPassword,
     endPool: endPool,
-    getUser: getUser,
+//    getUser: getUser,
     findOneByUsername: findOneByUsername,
-    findOneByUserid: findOneByUserid
+    findOneByUserid: findOneByUserid,
+    createSettings: createSettings,
+    getUserSettings
 }
 

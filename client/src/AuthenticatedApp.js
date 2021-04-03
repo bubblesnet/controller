@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react';
+import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -11,6 +11,7 @@ import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFu
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
+import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
@@ -21,15 +22,75 @@ import initial_settings from './initial_settings.json'
 
 import useWebSocket from 'react-use-websocket';
 
+import util from './util'
+
+const SWITCH_COMMAND="switch"
+const PICTURE_COMMAND="picture"
+
+
 function AuthenticatedApp (props) {
+    console.log("props = " + JSON.stringify(props))
+
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
     //Public API that will echo messages sent to it back to the client
 //    const [apiConnected, setApiConnected] = useState(0);
+    const [userid,setUserid] = useState(90000009);
+    const [deviceid,setDeviceid] = useState(70000007);
+    const [devices, setDevices] = useState([]);
     const [language, setLanguage] = useState('');
-    const [socketUrl, setSocketUrl] = useState('ws://localhost:8001');
+    const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     const messageHistory = useRef([]);
     let lastCompleteStatusMessage
 
+    const saveSetting = (thing_name, present ) => {
+        console.log("saveSetting calling out to api")
+
+        return new Promise( async (resolve, reject) => {
+            const url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/config/'+userid+'/'+deviceid+'/sensor/'+thing_name+'/present/'+present;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            if(response.ok) {
+                let x = await response.json();
+                console.log(JSON.stringify(x))
+                console.log("Got devices " + JSON.stringify(x));
+                resolve(x)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
+
+    const getDeviceList = (host, port, userid) => {
+        console.log("getDeviceList calling out to api")
+
+        return new Promise( async (resolve, reject) => {
+            const response = await fetch('http://'+host+':'+port+'/api/device/'+userid);
+            if(response.ok) {
+                let x = await response.json();
+                console.log(JSON.stringify(x))
+                console.log("Got devices " + JSON.stringify(x));
+                resolve(x)
+            } else {
+                console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
+
+    const takeAPicture = () => {
+        console.log("takeAPicture")
+        let cmd = {
+            command: PICTURE_COMMAND,
+        }
+        sendJsonMessage(cmd)
+    }
     const processMeasurementMessage = (message) => {
         console.log("processMeasurementMessage "+JSON.stringify(message))
         /*
@@ -44,7 +105,7 @@ function AuthenticatedApp (props) {
     }
 
     const applyMeasurementToState = (msg) => {
-//        console.log(JSON.stringify(msg))
+        console.log("applyMeasurementToState "+JSON.stringify(msg))
         if( typeof msg.value === 'undefined' ) {
             console.log("BAD measurement message " + JSON.stringify(msg))
         } else {
@@ -53,6 +114,20 @@ function AuthenticatedApp (props) {
 //        console.log( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
             console.log("Applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
         }
+    }
+
+    function toggleSwitchTo(switch_name, on ) {
+        console.log("toggleSwitchTo " + switch_name + " to " + on)
+        if( typeof(switch_name) === 'undefined') {
+            return
+        }
+        let newstate = JSON.parse(JSON.stringify(local_state))
+        if( typeof newstate.switch_state[switch_name] === 'undefined') {
+            console.error( "bad switch_name " + switch_name)
+            return
+        }
+        newstate.switch_state[switch_name].on = on
+        setState(newstate)
     }
 
     const handleWebSocketMessage = ( event ) => {
@@ -68,8 +143,16 @@ function AuthenticatedApp (props) {
                         console.log("received measurement");
                         applyMeasurementToState(msg)
                         break;
+                    case "switch_event":
+                        console.log("received switch event " + JSON.stringify(msg));
+                        toggleSwitchTo(msg.switch_name, msg.on)
+                        break;
                     case "event":
                         console.log("received event");
+                        break;
+                    case "picture_event":
+                        console.log("received picture event");
+                        setLastPicture(lastpicture+1)
                         break;
                     default:
                         console.log("unknown message type " + msg.message_type)
@@ -77,8 +160,8 @@ function AuthenticatedApp (props) {
                 }
             }
         } else {
-            console.log("Received valid status message")
-            setState(JSON.parse(event.data));
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
+//            setState(JSON.parse(event.data));
         }
     }
     const {
@@ -106,18 +189,9 @@ function AuthenticatedApp (props) {
         x.status.humidity_internal = 69 + getRandomInt(10)
         sendJsonMessage(x);
     }
+
     const handleClickSendMessage = useCallback(() =>
         sendit(), []);
-
-/*    const connectionStatus = {
-        [ReadyState.CONNECTING]: 'Connecting',
-        [ReadyState.OPEN]: 'Open',
-        [ReadyState.CLOSING]: 'Closing',
-        [ReadyState.CLOSED]: 'Closed',
-        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-    }[readyState];
-
- */
 
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
@@ -125,29 +199,64 @@ function AuthenticatedApp (props) {
 
     function setCabinetSettingsStateFromChild(x) {
         let newstate = JSON.parse(JSON.stringify(local_state))
-        newstate.cabinet_settings = JSON.parse(JSON.stringify(x.cabinet_settings))
+        newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
         setState(newstate)
     }
 
-    function setSwitchStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+    function setSwitchStateFromChild(x, switch_name, on ) {
         local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+        let sw_name = switch_name
+        if( switch_name === "growLight") {
+            sw_name = "lightBloom"
+        }
+
+        let cmd = {
+            command: SWITCH_COMMAND,
+            switch_name: sw_name,
+            on: on
+        }
+        sendJsonMessage(cmd)
     }
 
-    function setAutomationStateFromChild(x) {
-        console.log("setSwitchStateFromChild should rerender Heater to " + x.switch_state.heater.on)
+    /*
+    function setAutomationStateFromChild(on) {
+        let cmd = {
+            command: SWITCH_COMMAND,
+            switch_name: "automatic",
+            on: on
+        }
+
         local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
-        sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+        sendJsonMessage(cmd)
+
+ //       sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
     }
+
+     */
 
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
-    const [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
-    const [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
+    useEffect(() => {
+        const fetchData = async () => {
+            let x = await getDeviceList('localhost', 3003, 90000009)
+            let arr = []
+            for( let i = 0; i < x.rowCount; i++ ) {
+                arr.push(x.rows[i].deviceid)
+            }
+            setDevices(arr)
+        }
+        fetchData();
+    }, [nodeEnv])
+
+
+    const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
+    const apiHost = "localhost"
 //    const [language, setLanguage] = useState("all");
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
+    const [lastpicture, setLastPicture] = useState(0)
 
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
@@ -158,6 +267,7 @@ function AuthenticatedApp (props) {
     const applyMapChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
         console.log("AuthenticatedApp applyMapChange");
+        /// TODO FINISH!
     }
 
     const applyFontChange = (value) => {
@@ -183,44 +293,36 @@ function AuthenticatedApp (props) {
     let setEnvironment = (value) => {
         console.log("AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
-        let theApiPort;
-        if (theNodeEnvironment === "production") {
-            theApiPort = 3001;
-        } else if (theNodeEnvironment === "test") {
-            theApiPort = 3002;
-        } else if (theNodeEnvironment === "development") {
-            theApiPort = 3003;
-        }
-        console.log("setting state db to " + theNodeEnvironment + " port to " + theApiPort)
+        servers = util.get_server_ports_for_environment(props.nodeEnv)
+        console.log("setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
+        setSocketUrl('ws://localhost:'+servers.websocket_server_port)
         setNodeEnv(theNodeEnvironment);
-        setApiPort(theApiPort);
+        setApiPort(servers.api_server_port);
     }
 
-    console.log("AuthenticatedApp Rendering App with readyState = " + readyState)
+    console.log("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
     } else {
-        if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null ) {
+        if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
+        lastJsonMessage.message_type === 'measurement') {
             console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
-            console.log("Last json message is INVALID! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+            console.log("Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
-    let thestate = local_state
+    let thestate = JSON.parse(JSON.stringify(local_state))
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
-//        console.log("lastjsonmessage = " + JSON.stringify(lastJsonMessage))
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
     }
-//    console.log("authenticatedapp status = " + JSON.stringify(thestate.status))
- //   console.log("authenticatedapp heater = " + thestate.switch_state.heater.on)
 
     return (
         <div className="App">
-                <Header setNodeEnv={setEnvironment} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
+                <Header setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
                 <Tabs margin="medium" flex="shrink">
                     <Tab title="Cabinet Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
@@ -228,25 +330,30 @@ function AuthenticatedApp (props) {
                                           state={thestate} switch_state={thestate.switch_state}
                                           setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
+                    <Tab title="Look Inside">
+                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={devices}
+                                         lastpicture={lastpicture} onFontChange={applyFontChange} takeAPicture={takeAPicture}
+                                     applicationSettings={local_state.application_settings}/>
+                    </Tab>
                     <Tab title="Status">
                         <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                          settings={local_settings}  state={local_state}/>
                     </Tab>
                     <Tab title="Cabinet Setup">
-                        <RenderSettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         settings={local_settings} state={local_state}
                                         setStateFromChild={setCabinetSettingsStateFromChild}
                         />
                     </Tab>
                     <Tab title="Device Map">
-                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={apiHost} theme={bubbles_theme}
                                      onMapChange={applyMapChange}
                                      state={local_state}/>
                     </Tab>
                     <Tab title="Automation">
                         <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         settings={local_settings} state={local_state}
-                                        setStateFromChild={setAutomationStateFromChild}/>
+                                        setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Events">
                         <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>

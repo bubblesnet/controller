@@ -44,29 +44,39 @@ jobs:
           wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          sudo ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
       - name: Setup PostgreSQL
         # Creates the DB schema and loads initial table data
         run: |
-          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_dev" "user=postgres dbname=postgres password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_dev password=postgres"
+          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_ci" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210205154039_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210211101505_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210226211054_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210227212026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210302130129_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210305151120_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210312202057_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210331183354_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          ICEBREAKER_DB: icebreaker_dev
+          NODE_ENV: CI
         working-directory: server
 
-      - name: Run tests with coverage
+
+      - name: Run tests with coverage AND running servers
         # Runs a script that creates a PostgreSQL client, populates
         # the client with data, and retrieves data
         # run: node client.js
         run: |
           cp config_ci.json config.json
+          npm run coverage_without_servers
           node src/queue-server.js&
           node src/ws-server.js&
           node src/api-server.js&
@@ -79,8 +89,6 @@ jobs:
           POSTGRES_HOST: localhost
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          PORT: 3003
-          ICEBREAKER_DB: icebreaker_dev
-          NODE_ENV: DEV
+          NODE_ENV: CI
         working-directory: server
 

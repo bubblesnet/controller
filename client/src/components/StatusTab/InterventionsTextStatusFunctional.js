@@ -10,7 +10,7 @@ function RenderStateTextStatus (props) {
         lightSchedule: "12/12",
         lastWaterChange: "10 days ago",
         powerConsumption: "40W",
-        cabinetDoor: "Closed",
+        stationDoor: "Closed",
         outerDoor: "Closed",
         lastTraining: "17 days ago",
         lastFilterChange: "never",

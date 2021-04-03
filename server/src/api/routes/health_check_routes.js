@@ -11,9 +11,17 @@ var router = express.Router();
  *
  * @apiSuccess {XXXX} XXXX XXXX
  */
+function getStatus(req,res,next) {
+    console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
+    res.json({"status": "ok" });
+
+}
+
 router.get("/", function (req, res, next) {
-        console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
-        res.json({"status": "ok" });
+    getStatus(req,res,next)
     });
 
-module.exports = router;
+module.exports = {
+    getStatus,
+    router
+};

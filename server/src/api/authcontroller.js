@@ -5,7 +5,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-const User = require('./services/user');
+// const User = require('./services/user');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -14,7 +14,7 @@ const config = require('../config/locals');
 
 function register( req,res) {
     const hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
+/*
     User.create({
             name : req.body.name,
             email : req.body.email,
@@ -28,7 +28,7 @@ function register( req,res) {
             });
             res.status(200).send({ auth: true, token: token });
         });
-
+*/
 }
 
 router.post('/register', function(req, res) {

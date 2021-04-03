@@ -17,7 +17,7 @@ const dgram = require("dgram");
  */
 router.get("/status/:userid/:deviceid", function (req, res, next) {
         console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
-    status.status(req.params.userid, req.params.deviceid, function (obj) {
+        status.status(req.params.userid, req.params.deviceid, function (obj) {
         res.render("asyncstatus", obj);
     });
 });
@@ -37,10 +37,10 @@ router.get("/status/:userid/:deviceid", function (req, res, next) {
  * @apiSuccess {String} lastname  Lastname of the User.
  */
 
-router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, next) {
+function getDeviceOutlets( client, req, res, next ) {
     console.log("command userid " + req.params.userid + " deviceid " + req.params.deviceid + " outletname " + req.params.outletname + " onoff " + req.params.onoff);
-    var outletname = htmlDecode(req.params.outletname);
-    var outboundmessage = {
+    let outletname = htmlDecode(req.params.outletname);
+    let outboundmessage = {
         onoff: req.params.onoff,
         outletName: outletname,
         messageType: "outletcontrol",
@@ -48,23 +48,22 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
         protocolVersion: "1"
     };
 
-    const client = dgram.createSocket('udp4');
-
     client.on('listening', function () {
-        var address = client.address();
+        let address = client.address();
         console.log('UDP Server listening on ' + address.address + ":" + address.port);
     });
 
     client.on('message', function (message, remote) {
         console.log(remote.address + ':' + remote.port + ' - ' + message);
-        var returnmessage = JSON.parse(message);
+        let returnmessage = JSON.parse(message);
         client.close();
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json(returnmessage);
     });
+
     client.on("error", function (err) {
         client.close();
-        console.log("Error: " + err);
+        console.error("Error: " + err);
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json("{ \"error\": \"" + err + "\"}");
     });
@@ -76,10 +75,18 @@ router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, ne
             client.send(JSON.stringify(outboundmessage), 8777, eventresult[0].stringvalue);
         }
         else {
-            console.log("Failed to find IP address to send command to!!");
+            console.error("Failed to find IP address to send command to!!");
         }
     });
+}
+
+router.get("/power/:userid/:deviceid/:outletname/:onoff", function (req, res, next) {
+    const client = dgram.createSocket('udp4');
+    getDeviceOutlets(client, req,res,next)
 });
 
 
-module.exports = router;
+module.exports = {
+    getDeviceOutlets,
+    router
+};

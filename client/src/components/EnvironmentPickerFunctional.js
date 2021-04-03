@@ -16,7 +16,7 @@ function RenderEnvironmentPickerFunctional(props) {
                 className="RenderEnvironmentPickerFunctional"
                 name="environment"
                 direction="row-responsive"
-                options={['development', 'test', 'production']}
+                options={['DEV', 'TEST', 'PRODUCTION']}
                 value={props.nodeEnv} onChange={(event) => setNodeEnv(event.target.value)}
             />
         </div>)

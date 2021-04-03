@@ -6,30 +6,44 @@ import getReadyState from '../AuthenticatedApp'
 import {Table, TableRow, TableCell} from 'grommet'
 
 function Header (props) {
-    console.log("header render" )
-    let [nodeEnv, setNodeEnv] = useState("production"); // The array of SingleBoardComputers
-    let [apiPort, setApiPort] = useState(3001);  // The port we should send queries to - depends on dev/test/prod
-
+    console.log("header render with props "+JSON.stringify(props) )
+    let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
+    let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
+    console.log("after useState")
     let setEnvironment = (value) => {
         console.log("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value
-        var theApiPort
-        if (theNodeEnv === "production") {
-            theApiPort = 3001;
-        } else if (theNodeEnv === "test") {
-            theApiPort = 3002;
-        } else if (theNodeEnv === "development") {
-            theApiPort = 3003;
+        let api_server_port;
+        let websocket_server_port;
+        switch( theNodeEnv) {
+            case "DEV":
+                api_server_port = 3003;
+                websocket_server_port = 8001;
+                break;
+            case "TEST":
+                api_server_port = 3002;
+                websocket_server_port = 8002;
+                break;
+            case "PRODUCTION":
+                api_server_port = 3001;
+                websocket_server_port = 8003;
+                break;
+            case "CI":
+                api_server_port = 3004;
+                websocket_server_port = 8004;
+                break;
         }
         setNodeEnv(theNodeEnv);
-        setApiPort(theApiPort);
+        setApiPort(api_server_port);
         props.setNodeEnv(value)
     }
+    console.log("after setenv")
     let webSocketLabel="Ping open WebSocket"
     if( props.readyState !== ReadyState.OPEN ) {
         webSocketLabel = "WebSocket server down"
     }
-    console.log("Rendering header with getReadyState = " + getReadyState())
+    console.log("after websocket")
+    console.log("Rendering header with getReadyState = something")
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >

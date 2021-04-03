@@ -1,154 +1,67 @@
 global.__root   = __dirname + '/';
+const event = require('./api/models/event')
+const debug = require('debug')('queue-server')
 
-var bubbles_queue = require('./api/models/bubbles_queue')
-var __queueClient
+const bubbles_queue = require('./api/models/bubbles_queue')
+let __queueClient
 
 function setClient(client) {
     __queueClient = client;
 }
 
-var current_state = {
-    "cabinet_settings": {
-        "humidifier": true,
-        "humidity_sensor_internal": true,
-        "humidity_sensor_external": true,
-        "heater": true,
-        "thermometer_top": true,
-        "thermometer_middle": true,
-        "thermometer_bottom": true,
-        "thermometer_external": true,
-        "thermometer_water": true,
-        "water_pump": true,
-        "air_pump": true,
-        "light_sensor_internal": true,
-        "cabinet_door_sensor": true,
-        "outer_door_sensor": true,
-        "movement_sensor": true,
-        "pressure_sensors": true,
-        "root_ph_sensor": true,
-        "enclosure_type": "Cabinet",
-        "water_level_sensor": true,
-        "tub_depth": 18.0,
-        "tub_volume": 20.0,
-        "intake_fan": true,
-        "exhaust_fan": true,
-        "enclosure_options": [
-            "Cabinet",
-            "Tent"
-        ],
-        "light_bloom": true,
-        "light_vegetative": true,
-        "light_germinate": true
-    },
-    "automation_settings": {
-        "current_stage": "Germinate",
-        "stage_options": [
-            "Germinate",
-            "Vegetative",
-            "Bloom",
-            "Harvest",
-            "Dry",
-            "Idle"
-        ],
-        "current_lighting_schedule": "12 on/12 off",
-        "lighting_schedule_options": [
-            "24 on",
-            "18 on/6 off",
-            "14 on/10 off",
-            "12 on/12 off",
-            "10 on/14 off",
-            "6 on/18 off",
-            "24 off"
-        ],
-        "light_on_start_hour": 10,
-        "target_temperature": 75,
-        "temperature_min": 60,
-        "temperature_max": 90,
-        "humidity_min": 0,
-        "humidity_max": 90,
-        "target_humidity": 70,
-        "humidity_target_range_low": 75,
-        "humidity_target_range_high": 85,
-        "current_light_type": "Grow Light Veg",
-        "light_type_options": [
-            "Germinate",
-            "Grow Light Veg",
-            "Grow Light Bloom"
-        ]
-    },
-    "status": {
-        "units": "IMPERIAL",
-        "light_internal": 0.0,
-        "light_internal_direction": "",
-        "temp_air_external": 65,
-        "temp_air_external_direction": "up",
-        "temp_air_top": 85,
-        "temp_air_top_direction": "up",
-        "temp_air_middle": 80,
-        "temp_air_middle_direction": "up",
-        "temp_air_bottom": 77,
-        "temp_air_bottom_direction": "down",
-        "temp_water": 70,
-        "temp_water_direction": "down",
-        "root_ph": 6.3,
-        "root_ph_direction": "down",
-        "humidity_internal": 44,
-        "humidity_internal_direction": "up",
-        "humidity_external": 43,
-        "humidity_external_direction": "down",
-        "plant_height": 37,
-        "start_date_current_stage": "25 days ago",
-        "start_date_next_stage": "10 days from now",
-        "outer_door_open": false,
-        "cabinet_door_open": false,
-        "pressure_external": 1021,
-        "pressure_external_direction": "",
-        "pressure_internal": 1018,
-        "pressure_internal_direction": "",
-        "date_last_training": "never",
-        "date_last_filter_change": "never",
-        "tub_water_level": 14.9
-    },
-    "application_settings": {},
-    "switch_state": {
-        "automaticControl": {
-            "on": true
-        },
-        "humidifier": {
-            "on": true
-        },
-        "heater": {
-            "on": true
-        },
-        "airPump": {
-            "on": true
-        },
-        "waterPump": {
-            "on": true
-        },
-        "intakeFan": {
-            "on": true
-        },
-        "exhaustFan": {
-            "on": true
-        },
-        "currentGrowLight": {
-            "on": false
-        }
-    }
-};
-
+// TODO service of topic should be distinct from service of queue or queue benefit isn't realized - everything backs up
+// behind slow database.
 const serveMessageQueue = async() => {
-    console.log("serveMessageQueue")
-    console.log("subscribe to activemq message queue")
+    const sendHeaders = {
+        'destination': '/topic/bubbles_ui',
+        'content-type': 'text/plain'
+    };
+
+    debug("serveMessageQueue")
+    debug("subscribe to activemq message queue")
     bubbles_queue.init(setClient).then( value => {
-        console.log("bubbles_queue.init succeeded, subscribing");
+        debug("bubbles_queue.init succeeded, subscribing");
         bubbles_queue.subscribeToQueue(__queueClient, function (body) {
-                bubbles_queue.sendMessageToTopic(__queueClient,body)
+                bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders, body)
+                storeMessage(body);
         });
     }, reason => {
-        console.log("bubbles_queue.init failed "+reason)
+        debug("bubbles_queue.init failed "+reason)
     });
+}
+
+async function storeMessage(body) {
+    debug("storeMessage " + body )
+    let message;
+    try {
+        message = JSON.parse(body)
+    } catch( error ) {
+        console.error("storeMessage error parsing message " + body)
+        return;
+    }
+    try {
+        switch( message.message_type) {
+            case 'measurement':
+                // TODO cleanup this message cleanup.  relation of device to user should be stored in memory
+                message.userid = 90000009;
+                message.datetimemillis = message.sample_timestamp;
+                // TODO this should be cleaned up in the message protocol so that it disappears
+                message.type = message.message_type;
+                message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;
+                message.rawjson = body;
+                // TODO need to decide whether to ALSO keep a file for each json message - hmmmm
+                message.filename = '';
+                let ev = event.createEvent(message);
+                debug("storeMessage stored event " + JSON.stringify(ev))
+                break;
+            default:
+                console.error("Unhandled message type for storage " + JSON.stringify(message))
+                break;
+        }
+    } catch( err ) {
+        console.error("storeMessage error saving message " + err + " " + message)
+        return;
+    }
 }
 
 serveMessageQueue();

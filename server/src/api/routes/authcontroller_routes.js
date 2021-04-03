@@ -24,7 +24,7 @@ let myhash = ""
 bcrypt.genSalt(saltRounds, async function(err, salt) {
     bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
         if( err ) {
-            console.log("Error " + err )
+            console.error("Error " + err )
         }
         // Store hash in your password DB.
         myhash = hash
@@ -42,17 +42,19 @@ router.post('/login', function(req, res) {
 
 async function findUser(req,res) {
     console.log("Calling findOneByUsername with body = " + JSON.stringify(req.body) )
-    user.findOneByUsername(req.body.username).then( function (user) {
+    let u = await user.findOneByUsername(req.body.username).then( function (user) {
+        console.log("findOneByUsername callback user = " + JSON.stringify(user))
         if (!user) {
             console.log("Sending 401 - auth failed No user found user = " + user)
-            return res.status(401).send('No user found.');
+            return res.status(401).json({message: ''});
         }
 
         // check if the password is valid
+        console.log("Checking password")
         let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
         if (!passwordIsValid){
             console.log("Sending 401 - auth failed")
-            return res.status(401).send({ auth: false, token: null });
+            return res.status(401).json({message: "", auth: false, token: null });
         }
 
         // if user is found and password is valid
@@ -64,14 +66,15 @@ async function findUser(req,res) {
         // return the information including token as JSON
         let retval = { auth: true, username: user.username, firstname: user.firstname, lastname: user.lastname, token: token }
         console.log("returning 200 " + JSON.stringify(retval))
-        return res.status(200).send(retval);
+        return res.status(200).json(retval);
     }).catch(function(err) {
-        console.log("Returning 500 error " + err)
-        if (err) return res.status(500).send('Error on the server .'+err);
+        console.error("Returning 500 error " + err)
+        if (err) return res.status(500).json({message: 'Error on the server .'+err});
     });
 
 }
 
+/*
 router.get('/logout', function(req, res) {
     res.status(200).send({ auth: false, token: null });
 });
@@ -105,10 +108,15 @@ function newUser(req,res, cb) {
             return( user )
         })
         .catch(function (err) {
-            console.log("new User error "+err)
+            console.error("new User error "+err)
             return( {} )
         })
     ;
 }
 
-module.exports = router;
+ */
+
+module.exports = {
+    router,
+    findUser
+};
