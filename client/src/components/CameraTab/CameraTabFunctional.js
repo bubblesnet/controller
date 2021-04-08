@@ -7,12 +7,9 @@ import ReactImageZoom from 'react-image-zoom';
 import {Text, Button, Box, Image, Grommet, Grid} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
-import DeviceMap from "../DeviceMapTab/devicemap.json";
-import initial_state from "../../initial_state.json";
-
 
 function RenderCameraTab(props) {
-    console.log("RenderCameraTab")
+    console.log("RenderCameraTab "+JSON.stringify(props.devices))
     let userid = "90000009"
 
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
@@ -24,7 +21,7 @@ function RenderCameraTab(props) {
     let rowcount = 0
     for( let i = 0; i < props.devices.length; i++ ) {
         let picture_url = 'http://' + servers.api_server_host + ':' + servers.api_server_port +
-            '/' + userid + '_' + props.devices[i] + '.jpg?' + props.lastpicture
+            '/' + userid + '_' + props.devices[i].deviceid + '.jpg?' + props.lastpicture
 
         ImageProps.push( {width: 800,  zoomWidth: 1600, img: picture_url});
 
@@ -41,7 +38,7 @@ function RenderCameraTab(props) {
         let labelAreaIndex = i*2
 
         console.log("getRow " + i +' labelAreaIndex '+labelAreaIndex + ' label '+props.devices[i]);
-        return( <><Text gridArea={"label"+i}>{props.devices[i]}</Text><Box gridArea={Areas[labelAreaIndex+1].name}><ReactImageZoom {...ImageProps[i]} /></Box></>);
+        return( <><Text gridArea={"label"+i}>{props.devices[i].deviceid}</Text><Box gridArea={Areas[labelAreaIndex+1].name}><ReactImageZoom {...ImageProps[i]} /></Box></>);
     }
 
     console.log(JSON.stringify(Areas))

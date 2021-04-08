@@ -15,8 +15,6 @@ import {
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import DeviceMap from "./devicemap.json"
-
 
 async function getContainerNames(host, port) {
     console.log("getContainerNames calling out to api")
@@ -52,6 +50,7 @@ async function getModuleTypes(host, port) {
 
 function RenderDeviceMapTab (props) {
 
+    let [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
     let [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
@@ -73,63 +72,90 @@ function RenderDeviceMapTab (props) {
         fetchData();
     }, [nodeEnv])
 
-    function testDatabase(e) {
-
-    }
-
     console.log("RenderServerSettingsTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
 
     let cntainer_names = ["sense-go","sense-python"]
     let mdule_types = ["bme280","bmp280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]
-    let devices = [70000006,70000007,70000008]
 
-    function getRow(attached_device) {
-        console.log("getRow " + JSON.stringify(attached_device))
-        return(<TableRow>
-            <TableCell>{getDeviceSelector(attached_device)}</TableCell>
-            <TableCell>{getContainerSelector(attached_device)}</TableCell>
-            <TableCell>{getTypeSelector(attached_device)}</TableCell>
-            <TableCell>{getAddress(attached_device)}</TableCell>
-            <TableCell>{attached_device.included_sensors.map(getIncludedSensor)}</TableCell>
-        </TableRow>)
+
+    function getAddress( module ) {
+        if( module.device_type === "GPIO" ) {
+            return ""
+        } else {
+            return module.address + " "
+        }
     }
+
+    function getContainerSelector(module) {
+        if (!container_names) {
+            return <Select options={[]}/>
+        } else {
+            return <Select options={container_names} value={module.container_name}/>
+        }
+    }
+
+    function getDeviceID(value,index,arr) {
+        return( value.deviceid )
+    }
+    let devices = station.attached_devices.map(getDeviceID)
 
     function getDeviceSelector(attached_device) {
         return <Select options={devices} value={attached_device.deviceid} />
     }
 
-    function getContainerSelector(attached_device) {
-        if (!container_names) {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={container_names} value={attached_device.container_name}/>
-        }
-    }
-
-    function getTypeSelector(attached_device) {
-        if (!module_types) {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={module_types} value={attached_device.device_type}/>
-        }
-    }
-
-    function getAddress( attached_device ) {
-        if( attached_device.device_type === "GPIO" ) {
-            return ""
-        } else {
-            return attached_device.address + " "
-        }
-    }
-
-    function getIncludedSensor( sensor ) {
+    function getIncludedSensor( sensor, index, arr ) {
         if( sensor.device_type === "GPIO" ) {
             return sensor.sensor_name + " "
         } else {
-            return sensor.sensor_name + ":" + sensor.address + " "
+            return sensor.sensor_name + ":" + sensor.measurement_name + " "
         }
+    }
+
+    function getSensorsForModule(module) {
+        return( module.included_sensors.map(getIncludedSensor))
+    }
+
+    function getModulerow( row, index, arr ) {
+        return <TableRow>
+            <TableCell>{getDeviceSelector(row.device)}</TableCell>
+            <TableCell>{getContainerSelector(row.module)}</TableCell>
+            <TableCell>{getTypeSelector(row.module)}</TableCell>
+            <TableCell>{getAddress(row.module)}</TableCell>
+            <TableCell>{row.sensors}</TableCell></TableRow>
+    }
+    function getModules() {
+        console.log("getModules " + JSON.stringify(station))
+        let arr = []
+        for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
+            for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
+                let row =
+               arr.push({deviceid: station.attached_devices[device_index], module: station.attached_devices[device_index].modules[module_index],
+                    sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
+            }
+        }
+        console.log("arr = " + JSON.stringify(arr))
+        let ret = <Table id="devicemap-table" >
+            <tbody>
+            <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
+            {arr.map(getModulerow)}
+            </tbody>
+        </Table>
+
+        return ret
+    }
+
+    function getTypeSelector(module) {
+        if (typeof mdule_types === 'undefined') {
+            return <Select options={[]}/>
+        } else {
+            return <Select options={mdule_types} value={module.module_type}/>
+        }
+    }
+
+    function testDatabase(e) {
+
     }
 
     function applyChanges() {
@@ -139,7 +165,9 @@ function RenderDeviceMapTab (props) {
 
     }
 
+    let modulerows = getModules()
     console.log("rendering with font set to " + values.theme.global.font.family)
+    console.log("station = " + JSON.stringify(station))
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
@@ -150,12 +178,7 @@ function RenderDeviceMapTab (props) {
                 ]}
             />
             <div className="global_container_">
-                    <Table id="devicemap-table" >
-                        <tbody>
-                        <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
-                        {DeviceMap.edge_devices.map(getRow)}
-                        </tbody>
-                    </Table>
+                        {modulerows}
                 <RenderFormActions state={local_state} applyAction={applyChanges} resetAction={resetChanges}
                                    resetButtonState={reset_button_state}
                                    defaultsButtonState={defaults_button_state}

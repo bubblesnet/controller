@@ -1,13 +1,14 @@
 import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
+import {Avatar, Button, Sidebar, Nav, Grid} from 'grommet'
 import Header from "./components/Header"
 
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
 import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
 import RenderEvents from "./components/EventsFunctional";
 import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
-import RenderSettings from "./components/CabinetSettingsTab/CabinetSettingsTabFunctional"
+import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
@@ -15,12 +16,15 @@ import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
+import {Add, Projects,Clock,Help} from 'grommet-icons'
+import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 // import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
 import initial_settings from './initial_settings.json'
 
 import useWebSocket from 'react-use-websocket';
+import './Palette.css'
 
 import util from './util'
 
@@ -33,11 +37,7 @@ function AuthenticatedApp (props) {
 
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
-    //Public API that will echo messages sent to it back to the client
-//    const [apiConnected, setApiConnected] = useState(0);
     const [userid,setUserid] = useState(90000009);
-    const [deviceid,setDeviceid] = useState(70000007);
-    const [devices, setDevices] = useState([]);
     const [language, setLanguage] = useState('');
     const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     const messageHistory = useRef([]);
@@ -47,7 +47,7 @@ function AuthenticatedApp (props) {
         console.log("saveSetting calling out to api")
 
         return new Promise( async (resolve, reject) => {
-            const url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/config/'+userid+'/'+deviceid+'/sensor/'+thing_name+'/present/'+present;
+            const url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/config/'+userid+'/'+'70000007'+'/sensor/'+thing_name+'/present/'+present;
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -62,6 +62,24 @@ function AuthenticatedApp (props) {
                 resolve(x)
             } else {
                 console.log("error " + response.status)
+                reject( response.status )
+            }
+        })
+    }
+    const getSite = (host, port, siteid) => {
+        console.log("getSite calling out to api")
+
+        return new Promise( async (resolve, reject) => {
+            const response = await fetch('http://'+host+':'+port+'/api/station/site/'+siteid);
+//            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
+            console.log("getSite response received")
+            if(response.ok) {
+                console.log("getSite awaiting site")
+                let x = await response.json();
+                console.log("getSite Got " + JSON.stringify(x));
+                resolve(x)
+            } else {
+                console.log("getSite error " + response.status)
                 reject( response.status )
             }
         })
@@ -83,7 +101,14 @@ function AuthenticatedApp (props) {
             }
         })
     }
+    const [open, setOpen] = React.useState(false);
 
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    const handleToClose = () => {
+        setOpen(false);
+    }
     const takeAPicture = () => {
         console.log("takeAPicture")
         let cmd = {
@@ -93,14 +118,6 @@ function AuthenticatedApp (props) {
     }
     const processMeasurementMessage = (message) => {
         console.log("processMeasurementMessage "+JSON.stringify(message))
-        /*
-        "message_type": "measurement",
-            "measurement_type": "temperature",
-            "sample_timestamp": "105050987",
-            "sensor_name": "thermometer_top",
-            "value":  "27.3",
-            "units": "C"
-         */
         applyMeasurementToState(message)
     }
 
@@ -197,7 +214,7 @@ function AuthenticatedApp (props) {
         return Math.floor(Math.random() * Math.floor(max));
     }
 
-    function setCabinetSettingsStateFromChild(x) {
+    function setStationSettingsStateFromChild(x) {
         let newstate = JSON.parse(JSON.stringify(local_state))
         newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
         setState(newstate)
@@ -219,36 +236,29 @@ function AuthenticatedApp (props) {
         sendJsonMessage(cmd)
     }
 
-    /*
-    function setAutomationStateFromChild(on) {
-        let cmd = {
-            command: SWITCH_COMMAND,
-            switch_name: "automatic",
-            on: on
-        }
-
-        local_state.automation_settings = JSON.parse(JSON.stringify(x.automation_settings))
-        sendJsonMessage(cmd)
-
- //       sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
-    }
-
-     */
-
 //    console.log("AuthenticatedApp initial theme " + JSON.stringify(initial_theme))
     console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+    const [siteid, setSiteid] = useState(1);
+    const [site, setSite] = useState({stations: [{attached_devices: [{}]}]});
+
     useEffect(() => {
         const fetchData = async () => {
-            let x = await getDeviceList('localhost', 3003, 90000009)
+            let z = {}
+            z.stations = await getSite('localhost', 3003, siteid)
+            console.log("site = " + JSON.stringify(z))
+            setSite(z)
+/*            let x = await getDeviceList('localhost', 3003, 90000009)
             let arr = []
             for( let i = 0; i < x.rowCount; i++ ) {
                 arr.push(x.rows[i].deviceid)
             }
             setDevices(arr)
+ */
         }
         fetchData();
     }, [nodeEnv])
+
 
 
     const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
@@ -320,18 +330,77 @@ function AuthenticatedApp (props) {
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
     }
 
+    function getStationButton(value, index, arr ) {
+        console.log("getStationButton value " + JSON.stringify(value))
+        return <Button label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
+    }
+
+    console.log("site.stations = " + JSON.stringify(site.stations))
     return (
         <div className="App">
                 <Header setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
-                <Tabs margin="medium" flex="shrink">
-                    <Tab title="Cabinet Control">
+            <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Add a station</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To add a station to this site, enter a unique station name here.
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Station Name"
+                        type="email"
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleToClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleToClose} color="primary">
+                        Add
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Grid
+                margin={"medium"}
+                justify={'center'}
+                round={'xxsmall'}
+                direction={'horizontal'}
+                fill
+                areas={[
+                    { name: 'sidebar', start: [0, 0], end: [0, 0] },
+                    { name: 'main', start: [1, 0], end: [1, 0] },
+                ]}
+                columns={['small','xlarge']}
+                rows={['800px']}
+                gap={"small"}
+            >
+                <Sidebar gridArea="sidebar" background="#477CBC" round="small"
+                         header={
+                             <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+                         }
+                         footer={
+                             <Button icon={<Help />} hoverIndicator />
+                         } >
+                    <Nav gap="small">
+                        <Button icon={<Add />} onClick={handleOpen}/>
+                        {site.stations.map(getStationButton)}
+                        <Button icon={<Clock />} hoverIndicator />
+                    </Nav>
+                </Sidebar>
+
+                <Tabs gridArea="main" margin="medium" flex="shrink">
+                    <Tab title="Station Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                           settings={local_settings}
                                           state={thestate} switch_state={thestate.switch_state}
                                           setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Look Inside">
-                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={devices}
+                        <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={site.stations[0].attached_devices}
                                          lastpicture={lastpicture} onFontChange={applyFontChange} takeAPicture={takeAPicture}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
@@ -339,15 +408,16 @@ function AuthenticatedApp (props) {
                         <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                          settings={local_settings}  state={local_state}/>
                     </Tab>
-                    <Tab title="Cabinet Setup">
+                    <Tab title="Station Setup">
                         <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         settings={local_settings} state={local_state}
-                                        setStateFromChild={setCabinetSettingsStateFromChild}
+                                        setStateFromChild={setStationSettingsStateFromChild}
                         />
                     </Tab>
                     <Tab title="Device Map">
                         <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={apiHost} theme={bubbles_theme}
                                      onMapChange={applyMapChange}
+                                         station={site.stations[0]}
                                      state={local_state}/>
                     </Tab>
                     <Tab title="Automation">
@@ -369,6 +439,7 @@ function AuthenticatedApp (props) {
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
                 </Tabs>
+            </Grid>
         </div>
     );
 }

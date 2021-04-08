@@ -7,8 +7,8 @@ import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-function RenderCabinetSettingsTab (props) {
-    console.log("RenderCabinetSettingsTab props hum = "+props.state.station_settings.humidifier)
+function RenderStationSettingsTab (props) {
+    console.log("RenderStationSettingsTab props hum = "+props.state.station_settings.humidifier)
     let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.state.station_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
@@ -135,7 +135,7 @@ function RenderCabinetSettingsTab (props) {
         local_state.station_settings.outer_door_sensor = !local_state.station_settings.outer_door_sensor
         changeState(local_state)
     }
-    function toggleCabinetDoorSensor() {
+    function toggleStationDoorSensor() {
         local_state.station_settings.station_door_sensor = !local_state.station_settings.station_door_sensor
         changeState(local_state)
     }
@@ -157,7 +157,7 @@ function RenderCabinetSettingsTab (props) {
         changeState(local_state)
     }
 
-    console.log("RenderCabinetSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
+    console.log("RenderStationSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -232,7 +232,7 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  >
                                 <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleCabinetDoorSensor} checked= {local_state.station_settings.station_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked= {local_state.station_settings.station_door_sensor}/></TableCell></TableRow>
                                 <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_state.station_settings.outer_door_sensor}/></TableCell></TableRow>
                                 <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_state.station_settings.movement_sensor}/></TableCell></TableRow>
                                 </tbody>
@@ -272,4 +272,4 @@ function RenderCabinetSettingsTab (props) {
     return (ret)
 }
 
-export default RenderCabinetSettingsTab;
+export default RenderStationSettingsTab;
