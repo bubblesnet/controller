@@ -49,13 +49,16 @@
     "jest": "^24.9.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/dom": "^7.29.4",
-    "react-test-renderer": "^17.0.1"
+    "react-test-renderer": "^17.0.1",
+    "jsdoc": "^3.6.6",
+    "better-docs": "^2.3.2"
   },
   "scripts": {
     "start": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
+    "docs": "jsdoc -c ./jsdoc_conf.json",
     "extract-messages": "set NODE_ENV=production&& babel --plugins react-intl ./src >NUL"
   },
   "eslintConfig": {
