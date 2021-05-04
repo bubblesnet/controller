@@ -63,7 +63,7 @@ function RenderStationSettingsTab (props) {
 
     function toggleHumidifier() {
         local_state.station_settings.humidifier = !local_state.station_settings.humidifier
-        props.saveSetting(local_state.userid, local_state.deviceid, 'humidifier', local_state.station_settings.humidifier)
+//        props.saveSetting(local_state.userid, local_state.deviceid, 'humidifier', local_state.station_settings.humidifier)
         changeState(local_state)
     }
     function toggleRootPhSensor() {
@@ -143,7 +143,6 @@ function RenderStationSettingsTab (props) {
         local_state.station_settings.pressure_sensors = !local_state.station_settings.pressure_sensors
         changeState(local_state)
     }
-
     function toggleGerminateLight() {
         local_state.station_settings.light_germinate = !local_state.station_settings.light_germinate
         changeState(local_state)

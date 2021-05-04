@@ -29,6 +29,12 @@ async function getConfigByUser(uid) {
         result.controller_hostname = result.stations[i].controller_hostname
         delete result.stations[i].controller_api_port
         delete result.stations[i].controller_hostname
+
+        result.stations[i].tamper = {xmove: result.stations[i].tamper_xmove, ymove: result.stations[i].tamper_ymove, zmove: result.stations[i].tamper_zmove}
+        delete result.stations[i].tamper_xmove
+        delete result.stations[i].tamper_ymove
+        delete result.stations[i].tamper_zmove
+
         result.stations[i].stage_schedules = stage.getStageSchedules(-1)
     }
     console.log("\n\n\n"+JSON.stringify(result))
@@ -38,7 +44,7 @@ async function getConfigByUser(uid) {
 async function getStationConfigsBySite(siteid) {
     const results = await db.query(
         sql`
-            SELECT stationid, current_stage, controller_hostname, controller_api_port, stage, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, station_name, location, stationid, current_stage, controller_hostname, controller_api_port, stage, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, station_door_sensor, outer_door_sensor, movement_sensor,
@@ -95,8 +101,9 @@ async function getStationConfigsBySite(siteid) {
                                            '[]'
                                        ) AS attached_devices
             FROM public.user u
-            JOIN station c ON c.userid_user=u.userid
-            WHERE u.userid in (select userid_user from site where siteid_site = ${siteid})
+            JOIN site i ON i.userid_user = u.userid
+            JOIN station c ON c.siteid_site=i.siteid
+            WHERE i.siteid = ${siteid}
   `,
     );
     console.log("\n\n\n"+JSON.stringify(results))
@@ -163,7 +170,8 @@ async function getStationConfigsByUser(uid) {
                                            '[]'
                                        ) AS attached_devices
             FROM public.user u
-            JOIN station c ON c.userid_user=u.userid
+            JOIN site ss ON ss.userid_user=u.userid
+            JOIN station c ON c.siteid_site=ss.siteid
             WHERE u.userid=${uid}
   `,
     );
@@ -171,7 +179,21 @@ async function getStationConfigsByUser(uid) {
     return( results )
 }
 
-async function addStation(name) {
+async function addStation(name, siteid) {
+    //    console.log(JSON.stringify(body))
+    return new Promise(function(resolve, reject) {
+        db.query("insert into station (station_name, siteid_site) values ($1,$2)" +
+            " RETURNING *",
+            [name,siteid], (error, results) => {
+                if (error) {
+                    console.log("addStation error " + error)
+                    reject(error)
+                } else {
+                    console.log("new station " + results.rows[0])
+                    resolve({stationid: results.rows[0].stationid, message: "A new stationid has been added :" + results.rows[0].stationid})
+                }
+            })
+    })
 }
 
 async function deleteStation(stationid) {

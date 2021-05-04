@@ -6,7 +6,7 @@ import RenderLightMeter from "./LightMeterFunctional";
 import RenderBarometer from "./BarometerFunctional";
 
 function RenderGrowLight (props) {
-    console.log("RenderGrowLight humidity = " + props.state.status.humidity_internal)
+//    console.log("RenderGrowLight humidity = " + props.state.status.humidity_internal)
     let ret
         if( props.on === false ) {
             ret =

@@ -3,7 +3,7 @@ import '../../App.css';
 import sprintf from 'sprintf-js';
 
 function RenderHygrometer (props) {
-    console.log("RenderHygrometer humidity = " + props.currentHumidity)
+//    console.log("RenderHygrometer humidity = " + props.currentHumidity)
     let holderid = props.prefix + "humidity-holder"
     let textid = props.prefix + "humiditytext-holder"
     let iconid = "externalhumidityicon-holder"
@@ -16,7 +16,7 @@ function RenderHygrometer (props) {
         className = sprintf.sprintf("externalarrowdown-icon", props.prefix)
     }
 
-    console.log("humidity rendering as " + value)
+//    console.log("humidity rendering as " + value)
     let ret = <>
         <div id={holderid}>
          <div id={textid}>

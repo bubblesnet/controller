@@ -55,8 +55,8 @@ async function findAllByUserid(userid) {
 async function findCabinetIDByDeviceID(userid,deviceid) {
     return new Promise(function (resolve, reject) {
         console.log("deviceid = " + deviceid)
-        let ssql = 'select distinct c.stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on u.userid = c.userid_user where d.deviceid=$1 and u.userid=$2'
-
+//        let ssql = 'select distinct c.stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on u.userid = c.userid_user where d.deviceid=$1 and u.userid=$2'
+        let ssql = 'select stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on c.stationid = d.stationid_station where d.deviceid=$1 and u.userid=$2'
         console.log("ssql = " + ssql)
         pool.query(ssql, [deviceid,userid], async (err, results) => {
             if (err) {
@@ -103,63 +103,62 @@ async function getConfigByStation(stationid, deviceid) {
                 if(results.rowCount === 0 ) {
                     reject( new Error("no config for station " + stationid))
                 } else {
-                let ret = JSON.parse(JSON.stringify(results.rows[0]));
-                ret.stationid = Number(stationid)
-                ret.deviceid = Number(deviceid)
-                ret.userid = ret.userid_user
-                delete ret.userid_user
-                let tamper = {xmove: ret.tamper_xmove, ymove: ret.tamper_ymove, zmove: ret.tamper_zmove}
-                delete ret.tamper_xmove
-                delete ret.tamper_ymove
-                delete ret.tamper_zmove
-                let device_settings = JSON.parse(JSON.stringify(ret))
-                ret.tamper = tamper
-                ret.ac_outlets = await outlet.getOutletsByCabinetDevice(stationid,deviceid)
-                ret.edge_devices = await modul.getAllModulesByCabinet(stationid)
+                    let ret = JSON.parse(JSON.stringify(results.rows[0]));
+                    ret.stationid = Number(stationid)
+                    ret.deviceid = Number(deviceid)
+                    ret.userid = ret.userid_user
+                    delete ret.userid_user
+                    ret.tamper = {xmove: ret.tamper_xmove, ymove: ret.tamper_ymove, zmove: ret.tamper_zmove}
+                    delete ret.tamper_xmove
+                    delete ret.tamper_ymove
+                    delete ret.tamper_zmove
+                    let device_settings = JSON.parse(JSON.stringify(ret))
+                    ret.ac_outlets = await outlet.getOutletsByCabinetDevice(stationid, deviceid)
+                    ret.edge_devices = await modul.getAllModulesByCabinet(stationid)
 
-                ret.device_settings = JSON.parse(JSON.stringify(device_settings))
-                ret.device_settings.enclosure_options = ["Cabinet", "Tent"]
+                    ret.device_settings = JSON.parse(JSON.stringify(device_settings))
+                    ret.device_settings.enclosure_options = ["Cabinet", "Tent"]
                     delete ret.device_settings.deviceid
-                delete ret.device_settings.automatic_control
-                delete ret.device_settings.deviceid
-                delete ret.device_settings.stationid
-                delete ret.device_settings.userid
-                delete ret.device_settings.controller_hostname
-                delete ret.device_settings.controller_api_port
-                delete ret.device_settings.stage
-                delete ret.device_settings.light_on_hour
-                delete ret.device_settings.time_between_pictures_in_seconds
-                delete ret.device_settings.time_between_sensor_polling_in_seconds
-                delete ret.humidifier
-                delete ret.humidity_sensor_internal
-                delete ret.humidity_sensor_external
-                delete ret.heater
-                delete ret.thermometer_top
-                delete ret.thermometer_middle
-                delete ret.thermometer_bottom
-                delete ret.thermometer_external
-                delete ret.thermometer_water
-                delete ret.water_pump
-                delete ret.air_pump
-                delete ret.light_sensor_internal
-                delete ret.station_door_sensor
-                delete ret.outer_door_sensor
-                delete ret.movement_sensor
-                delete ret.pressure_sensors
-                delete ret.root_ph_sensor
-                delete ret.enclosure_type
-                delete ret.water_level_sensor
-                delete ret.intake_fan
-                delete ret.exhaust_fan
-                delete ret.heat_lamp
-                delete ret.heating_pad
-                delete ret.light_bloom
-                delete ret.light_vegetative
-                delete ret.light_germinate
+                    delete ret.device_settings.automatic_control
+                    delete ret.device_settings.deviceid
+                    delete ret.device_settings.stationid
+                    delete ret.device_settings.userid
+                    delete ret.device_settings.controller_hostname
+                    delete ret.device_settings.controller_api_port
+                    delete ret.device_settings.stage
+                    delete ret.device_settings.light_on_hour
+                    delete ret.device_settings.time_between_pictures_in_seconds
+                    delete ret.device_settings.time_between_sensor_polling_in_seconds
+                    delete ret.humidifier
+                    delete ret.humidity_sensor_internal
+                    delete ret.humidity_sensor_external
+                    delete ret.heater
+                    delete ret.thermometer_top
+                    delete ret.thermometer_middle
+                    delete ret.thermometer_bottom
+                    delete ret.thermometer_external
+                    delete ret.thermometer_water
+                    delete ret.water_pump
+                    delete ret.air_pump
+                    delete ret.light_sensor_internal
+                    delete ret.station_door_sensor
+                    delete ret.outer_door_sensor
+                    delete ret.movement_sensor
+                    delete ret.pressure_sensors
+                    delete ret.root_ph_sensor
+                    delete ret.enclosure_type
+                    delete ret.water_level_sensor
+                    delete ret.intake_fan
+                    delete ret.exhaust_fan
+                    delete ret.heat_lamp
+                    delete ret.heating_pad
+                    delete ret.light_bloom
+                    delete ret.light_vegetative
+                    delete ret.light_germinate
 
-                ret.stage_schedules = stage.getStageSchedules(stationid)
-                resolve(ret);
-            }
+                    ret.stage_schedules = stage.getStageSchedules(stationid)
+                    resolve(ret);
+                }
         }})
     })
 }

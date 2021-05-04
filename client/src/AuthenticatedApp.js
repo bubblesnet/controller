@@ -13,6 +13,7 @@ import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctio
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
+import RenderSiteStationMenu from "./components/SiteStationMenu";
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
@@ -23,10 +24,12 @@ import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActio
 import initial_state from './initial_state.json'
 import initial_settings from './initial_settings.json'
 
+import utils from './api/utils.js'
 import useWebSocket from 'react-use-websocket';
 import './Palette.css'
 
 import util from './util'
+import {getSite,saveSetting} from './api/utils'
 
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
@@ -39,7 +42,7 @@ const PICTURE_COMMAND="picture"
  * @version: X.x
  */
 function AuthenticatedApp (props) {
-    console.log("props = " + JSON.stringify(props))
+    console.log("render AuthenticatedApp " + JSON.stringify(props))
 
 
     //
@@ -59,7 +62,11 @@ function AuthenticatedApp (props) {
      */
     function getStationButton(value, index, arr ) {
         console.log("getStationButton value " + JSON.stringify(value))
-        return <Button label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
+        return <Button onClick={changeStation} value={value.stationid} label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
+    }
+
+    function changeStation(ev) {
+//        alert("change station to "+ev.target.value)
     }
 
     /**
@@ -68,6 +75,67 @@ function AuthenticatedApp (props) {
      */
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
+    //
+    //
+    //
+    // STATE VARIABLES - CHANGING ANY OF THESE FROM SET FUNCTIONS WILL CAUSE RERENDER
+    //
+    //
+    //
+    /**
+     * The siteid of the site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
+     * Changing this causes a rerender
+     */
+    const [siteid, setSiteid] = useState(1);
+    /**
+     * The site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
+     * Changing this causes a rerender
+     */
+        /// TODO why do we need this AND siteid?
+    const [site, setSite] = useState({stations: [{attached_devices: [{}]}]});
+
+    const [siteName, setSiteName] = useState("undefined!!!");
+    /**
+     * The value of environment variable NODE_ENV which controls the hostname and port the API
+     * is listening on. Changing this causes a rerender
+     */
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+    /**
+     * Port the API server is listening on - change it and rerender
+     * @todo why is this here when we can derive it from nodeEnv
+     */
+    const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
+    /**
+     * Host the API server is running on - change it and rerender
+     * @todo why is this here when we can derive it from nodeEnv
+     */
+    const apiHost = "localhost"
+    /**
+     * Deep object of the current theme - change it and rerender
+     */
+    const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
+    /**
+     * Name of the current font family - change it and rerender
+     */
+    const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
+    const [currentStationIndex, setCurrentStationIndex] = useState(0)
+    const [lastpicture, setLastPicture] = useState(0)
+
+    function setStation( index ) {
+        console.log("setStation " + index)
+        setCurrentStationIndex(index)
+    }
+    initial_state.theme = bubbles_theme;
+    initial_state.current_font = bubbles_theme.global.font.family;
+
+    /**
+     * Local copy of all data (temp ...) - change and rerender
+     */
+    const [local_state, setState] = useState(initial_state);
+    /**
+     * Local copy of all settings - change and rerender
+     */
+    const [local_settings, setSettings] = useState(initial_settings);
     /**
      * If we login as a different user, rerender
      */
@@ -77,7 +145,7 @@ function AuthenticatedApp (props) {
      */
     const [language, setLanguage] = useState('');
     /**
-     * If we change the socket URL, rerender
+     * If we change the web socket URL, rerender
      */
     const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
     /**
@@ -85,65 +153,11 @@ function AuthenticatedApp (props) {
      * @type {React.MutableRefObject<*[]>}
      */
     const messageHistory = useRef([]);
-
     /**
      * The last complete status message received from outside.  Is this still used?
      */
     let lastCompleteStatusMessage
 
-
-    /**
-     * Get the configuration of the SITE specified by siteid from the API.
-     *
-     * @param host      hostname or ip of the controller API server
-     * @param port      port number of the controller API server
-     * @param siteid    ID of the site we want
-     * @returns {Promise<unknown>}  Response status (200 ...) from the API call
-     */
-    const getSite = (host, port, siteid) => {
-        console.log("getSite calling out to api")
-
-        return new Promise( async (resolve, reject) => {
-            const response = await fetch('http://'+host+':'+port+'/api/station/site/'+siteid);
-//            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
-            console.log("getSite response received")
-            if(response.ok) {
-                console.log("getSite awaiting site")
-                let x = await response.json();
-                console.log("getSite Got " + JSON.stringify(x));
-                resolve(x)
-            } else {
-                console.log("getSite error " + response.status)
-                reject( response.status )
-            }
-        })
-    }
-
-    /**
-     * Get the list of devices (Pi) attached to the specified user.
-     *
-     * @param host      hostname or ip of the controller API server
-     * @param port      port number of the controller API server
-     * @param userid    ID of the logged-in user
-     * @returns {Promise<unknown>}  Response status (200 ...) from the API call
-     * @todo this is redundant with getSite - eliminate
-     */
-    const getDeviceList = (host, port, userid) => {
-        console.log("getDeviceList calling out to api")
-
-        return new Promise( async (resolve, reject) => {
-            const response = await fetch('http://'+host+':'+port+'/api/device/'+userid);
-            if(response.ok) {
-                let x = await response.json();
-                console.log(JSON.stringify(x))
-                console.log("Got devices " + JSON.stringify(x));
-                resolve(x)
-            } else {
-                console.log("error " + response.status)
-                reject( response.status )
-            }
-        })
-    }
 
     //
     //
@@ -169,6 +183,19 @@ function AuthenticatedApp (props) {
      */
     const handleToClose = () => {
         setOpen(false);
+    }
+    /**
+     * Respond to the OK button in the new station dialog
+     */
+    const handleToAdd = async () => {
+        alert("Adding station named " + new_station_name )
+        setOpen(false);
+        let x = await utils.addStation(apiHost, apiPort, siteid, new_station_name )
+    }
+
+    const [new_station_name, setNewStationName] = useState("");
+    const updateNewName = (e) => {
+        setNewStationName(e.target.value)
     }
 
     /**
@@ -196,7 +223,7 @@ function AuthenticatedApp (props) {
      * @param message   A "measurement" message from one of the attached devices.
      */
     const processMeasurementMessage = (message) => {
-        console.log("processMeasurementMessage "+JSON.stringify(message))
+//        console.log("processMeasurementMessage "+JSON.stringify(message))
         applyMeasurementToState(message)
     }
 
@@ -208,7 +235,7 @@ function AuthenticatedApp (props) {
      */
     /// TODO this looks like a dupe of processMeasurement - get rid of one of them
     const applyMeasurementToState = (msg) => {
-        console.log("applyMeasurementToState "+JSON.stringify(msg))
+//        console.log("applyMeasurementToState "+JSON.stringify(msg))
         if( typeof msg.value === 'undefined' ) {
             console.log("BAD measurement message " + JSON.stringify(msg))
         } else {
@@ -309,7 +336,6 @@ function AuthenticatedApp (props) {
     //
     //
     //
-
     /**
      * Get a random int between 0 and specified max inclusive
      * @param max   the largest number that can be returned
@@ -347,39 +373,6 @@ function AuthenticatedApp (props) {
         setState(newstate)
     }
 
-
-    /**
-     * Save to persistent store an individual presence/absence setting for a single
-     * sensor/control item in the current station.
-     *
-     * @param thing_name    The unique name of the sensor/control item
-     * @param present       True/false - true present, false absent
-     * @returns {Promise<unknown>}  The response status (200,500 ...) from the save setting API call
-     * @memberOf AuthenticatedApp
-     */
-    const saveSetting = (thing_name, present ) => {
-        console.log("saveSetting calling out to api")
-
-        return new Promise( async (resolve, reject) => {
-            const url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/config/'+userid+'/'+'70000007'+'/sensor/'+thing_name+'/present/'+present;
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
-            if(response.ok) {
-                let x = await response.json();
-                console.log(JSON.stringify(x))
-                console.log("Got devices " + JSON.stringify(x));
-                resolve(x)
-            } else {
-                console.log("error " + response.status)
-                reject( response.status )
-            }
-        })
-    }
 
     /**
      * Set a state variable with the specified station_settings object and cause rerender
@@ -449,44 +442,6 @@ function AuthenticatedApp (props) {
         setCurrentFont(value)
     }
 
-    //
-    //
-    //
-    // STATE VARIABLES - CHANGING ANY OF THESE FROM SET FUNCTIONS WILL CAUSE RERENDER
-    //
-    //
-    //
-    /**
-     * The value of environment variable NODE_ENV which controls the hostname and port the API
-     * is listening on. Changing this causes a rerender
-     */
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
-    /**
-     * The siteid of the site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
-     * Changing this causes a rerender
-     */
-    const [siteid, setSiteid] = useState(1);
-    /**
-     * The site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
-     * Changing this causes a rerender
-     */
-    /// TODO why do we need this AND siteid?
-    const [site, setSite] = useState({stations: [{attached_devices: [{}]}]});
-
-
-    const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
-    const apiHost = "localhost"
-//    const [language, setLanguage] = useState("all");
-    const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
-    const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
-    const [lastpicture, setLastPicture] = useState(0)
-
-    initial_state.theme = bubbles_theme;
-    initial_state.current_font = bubbles_theme.global.font.family;
-
-    const [local_state, setState] = useState(initial_state);
-    const [local_settings, setSettings] = useState(initial_settings);
-
 
     /**
      * The effect hook that casues a refetch of the SITE and rerender if nodeEnv changes
@@ -495,8 +450,9 @@ function AuthenticatedApp (props) {
         const fetchData = async () => {
             let z = {}
             z.stations = await getSite('localhost', 3003, siteid)
-            console.log("site = " + JSON.stringify(z))
-            setSite(z)
+//            console.log("site = " + JSON.stringify(z))
+            setSiteName(z.stations[0].site_name)
+            setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
     }, [nodeEnv])
@@ -545,11 +501,16 @@ function AuthenticatedApp (props) {
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
     }
 
-
-    console.log("site.stations = " + JSON.stringify(site.stations))
+    /** TODO fix this - needed for sidebar
+     *
+     * @type {string}
+     */
+    site.site_name = siteName
+    site.siteid = siteid
+//    console.log("site = " + JSON.stringify(site))
     return (
         <div className="App">
-                <Header setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
+            <Header siteName={siteName} setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
             <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add a station</DialogTitle>
                 <DialogContent>
@@ -559,17 +520,17 @@ function AuthenticatedApp (props) {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="name"
+                        id="new_station_name"
                         label="Station Name"
-                        type="email"
                         fullWidth
+                        onChange = {updateNewName}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleToClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleToClose} color="primary">
+                    <Button onClick={handleToAdd} color="primary">
                         Add
                     </Button>
                 </DialogActions>
@@ -598,7 +559,7 @@ function AuthenticatedApp (props) {
                          } >
                     <Nav gap="small">
                         <Button icon={<Add />} onClick={handleOpen}/>
-                        {site.stations.map(getStationButton)}
+                        <RenderSiteStationMenu currentStationIndex={currentStationIndex} site={site} setCurrentStationIndex={setStation}/>
                         <Button icon={<Clock />} hoverIndicator />
                     </Nav>
                 </Sidebar>
@@ -606,33 +567,37 @@ function AuthenticatedApp (props) {
                 <Tabs gridArea="main" margin="medium" flex="shrink">
                     <Tab title="Station Control">
                         <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                          station={site.stations[currentStationIndex]}
                                           settings={local_settings}
                                           state={thestate} switch_state={thestate.switch_state}
                                           setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
                     <Tab title="Look Inside">
                         <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={site.stations[0].attached_devices}
+                                         station={site.stations[currentStationIndex]}
                                          lastpicture={lastpicture} onFontChange={applyFontChange} takeAPicture={takeAPicture}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>
                     <Tab title="Status">
                         <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                         station={site.stations[currentStationIndex]}
                                          settings={local_settings}  state={local_state}/>
                     </Tab>
                     <Tab title="Station Setup">
                         <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                        station={site.stations[currentStationIndex]}
                                         settings={local_settings} state={local_state}
                                         setStateFromChild={setStationSettingsStateFromChild}
                         />
                     </Tab>
                     <Tab title="Device Map">
                         <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={apiHost} theme={bubbles_theme}
-                                     onMapChange={applyMapChange}
-                                         station={site.stations[0]}
+                                     onMapChange={applyMapChange} station={site.stations[currentStationIndex]}
                                      state={local_state}/>
                     </Tab>
                     <Tab title="Automation">
                         <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                        station={site.stations[currentStationIndex]}
                                         settings={local_settings} state={local_state}
                                         setStateFromChild={setSwitchStateFromChild}/>
                     </Tab>
@@ -641,11 +606,13 @@ function AuthenticatedApp (props) {
                     </Tab>
                     <Tab title="Display Settings">
                         <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                               station={site.stations[currentStationIndex]}
                                                settings={local_settings} state={local_state} onApplyFontChange={applyFontChange}
                                                onLocalFontChange={localFontChange}/>
                     </Tab>
                     <Tab title="Server Settings">
                         <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                     station={site.stations[currentStationIndex]}
                                      onFontChange={applyFontChange}
                                      applicationSettings={local_state.application_settings}/>
                     </Tab>

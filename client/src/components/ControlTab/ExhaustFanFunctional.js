@@ -1,7 +1,7 @@
 import React from "react";
 
 function RenderExhaustFan (props) {
-    console.log("RenderExhaustFan " + props.on)
+//    console.log("RenderExhaustFan " + props.on)
     let ret
     if( props.on === false ) {
         ret =

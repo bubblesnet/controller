@@ -21,7 +21,7 @@ function RenderBarometer (props) {
         directionClassName="barometerarrowdown-icon"
     }
     let value = sprintf.sprintf("%.1f", props.value)
-    console.log("value rendering as " + value)
+//    console.log("value rendering as " + value)
     let ret = <>
         <div className={"value-holder"} >
             {value} {props.units}

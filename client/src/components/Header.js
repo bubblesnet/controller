@@ -6,10 +6,10 @@ import getReadyState from '../AuthenticatedApp'
 import {Table, TableRow, TableCell} from 'grommet'
 
 function Header (props) {
-    console.log("header render with props "+JSON.stringify(props) )
+    console.log("render Header with props "+JSON.stringify(props) )
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
-    console.log("after useState")
+//    console.log("after useState")
     let setEnvironment = (value) => {
         console.log("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value
@@ -37,13 +37,13 @@ function Header (props) {
         setApiPort(api_server_port);
         props.setNodeEnv(value)
     }
-    console.log("after setenv")
+//    console.log("after setenv")
     let webSocketLabel="Ping open WebSocket"
     if( props.readyState !== ReadyState.OPEN ) {
         webSocketLabel = "WebSocket server down"
     }
-    console.log("after websocket")
-    console.log("Rendering header with getReadyState = something")
+//    console.log("after websocket")
+//    console.log("Rendering header")
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
@@ -51,7 +51,7 @@ function Header (props) {
                     'width': '25%',
                     'alignItems': 'flex-start',
                     'marginLeft': '25px'
-                }}>Bubbles ({nodeEnv})</span>
+                }}>Bubbles - {props.siteName} - ({nodeEnv})</span>
                 <span style={{'width': '75%'}} >
                     <div id="animated-gif-container" />
                 </span>

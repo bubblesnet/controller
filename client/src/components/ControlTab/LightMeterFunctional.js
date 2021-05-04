@@ -11,7 +11,7 @@ function RenderLightMeter (props) {
         directionClassName="arrowdown-icon"
     }
     let value = sprintf.sprintf("%.1f", props.value)
-    console.log("value rendering as " + value)
+//    console.log("value rendering as " + value)
     let ret = <div className={props.className} >
         <div className={directionClassName} />
         <div className={props.iconClassName} />

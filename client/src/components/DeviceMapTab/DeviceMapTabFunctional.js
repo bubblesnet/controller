@@ -4,61 +4,25 @@ import './deviceMapTab.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 import {
-    Button,
     Grommet,
-    TextInput,
     Table,
     TableRow,
     TableCell,
-    Select
+    Text
 } from 'grommet'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-
-async function getContainerNames(host, port) {
-    console.log("getContainerNames calling out to api")
-
-    return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://'+host+':'+port+'/api/config/containers');
-        if(response.ok) {
-            let x = await response.json();
-            console.log("Got container_names " + JSON.stringify(x));
-            resolve(x)
-        } else {
-            console.log("error " + response.status)
-            reject( response.status )
-        }
-    })
-}
-
-async function getModuleTypes(host, port) {
-    console.log("getModuleTypes calling out to api")
-
-    return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://'+host+':'+port+'/api/config/modules');
-        if(response.ok) {
-            let x = await response.json();
-            console.log("Got module_types " + JSON.stringify(x));
-            resolve(x)
-        } else {
-            console.log("error " + response.status)
-            reject( response.status )
-        }
-    })
-}
+import {getModuleTypes, getContainerNames} from '../../api/utils'
 
 function RenderDeviceMapTab (props) {
-
-    let [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-    let [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
-    let [reset_button_state,setResetButtonState] = useState(false)
-    let [defaults_button_state,setDefaultsButtonState] = useState(true)
-    let [apply_button_state,setApplyButtonState] = useState(false)
-    let [container_names,setContainerNames] = useState()
-    let [module_types,setModuleTypes] = useState()
+    const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
+    const [reset_button_state,setResetButtonState] = useState(false)
+    const [defaults_button_state,setDefaultsButtonState] = useState(true)
+    const [apply_button_state,setApplyButtonState] = useState(false)
+    const [container_names,setContainerNames] = useState()
+    const [module_types,setModuleTypes] = useState()
     const [nodeEnv, setNodeEnv] = useState("DEV");
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,13 +36,8 @@ function RenderDeviceMapTab (props) {
         fetchData();
     }, [nodeEnv])
 
-    console.log("RenderServerSettingsTab")
+    console.log("RenderDeviceMapTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
-
-
-    let cntainer_names = ["sense-go","sense-python"]
-    let mdule_types = ["bme280","bmp280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]
-
 
     function getAddress( module ) {
         if( module.device_type === "GPIO" ) {
@@ -86,23 +45,6 @@ function RenderDeviceMapTab (props) {
         } else {
             return module.address + " "
         }
-    }
-
-    function getContainerSelector(module) {
-        if (!container_names) {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={container_names} value={module.container_name}/>
-        }
-    }
-
-    function getDeviceID(value,index,arr) {
-        return( value.deviceid )
-    }
-    let devices = station.attached_devices.map(getDeviceID)
-
-    function getDeviceSelector(attached_device) {
-        return <Select options={devices} value={attached_device.deviceid} />
     }
 
     function getIncludedSensor( sensor, index, arr ) {
@@ -119,9 +61,9 @@ function RenderDeviceMapTab (props) {
 
     function getModulerow( row, index, arr ) {
         return <TableRow>
-            <TableCell>{getDeviceSelector(row.device)}</TableCell>
-            <TableCell>{getContainerSelector(row.module)}</TableCell>
-            <TableCell>{getTypeSelector(row.module)}</TableCell>
+            <TableCell>{row.device.deviceid}</TableCell>
+            <TableCell>{row.module.container_name}</TableCell>
+            <TableCell>{row.module.module_type}</TableCell>
             <TableCell>{getAddress(row.module)}</TableCell>
             <TableCell>{row.sensors}</TableCell></TableRow>
     }
@@ -136,23 +78,13 @@ function RenderDeviceMapTab (props) {
             }
         }
         console.log("arr = " + JSON.stringify(arr))
-        let ret = <Table id="devicemap-table" >
-            <tbody>
-            <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
-            {arr.map(getModulerow)}
-            </tbody>
-        </Table>
-
+        let ret = arr.map(getModulerow)
         return ret
     }
 
     function getTypeSelector(module) {
-        if (typeof mdule_types === 'undefined') {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={mdule_types} value={module.module_type}/>
-        }
-    }
+            return <Text >{module.module_type} {module.module_name}</Text>
+     }
 
     function testDatabase(e) {
 
@@ -164,8 +96,11 @@ function RenderDeviceMapTab (props) {
     function resetChanges() {
 
     }
+    function defaultsAction() {
 
-    let modulerows = getModules()
+    }
+
+    let module_rows = getModules()
     console.log("rendering with font set to " + values.theme.global.font.family)
     console.log("station = " + JSON.stringify(station))
     let ret =
@@ -178,8 +113,20 @@ function RenderDeviceMapTab (props) {
                 ]}
             />
             <div className="global_container_">
-                        {modulerows}
-                <RenderFormActions state={local_state} applyAction={applyChanges} resetAction={resetChanges}
+                <Table id="settings-tab" >
+                    <tbody>
+                    <TableRow>
+                        <th >Device</th>
+                        <th >Container</th>
+                        <th >Module Type</th>
+                        <th >Address</th>
+                        <th >Attached Sensors</th>
+                    </TableRow>
+                    {module_rows}
+                    </tbody></Table>
+
+                <RenderFormActions station={station} applyAction={applyChanges} resetAction={resetChanges}
+                                   defaultsAction={defaultsAction}
                                    resetButtonState={reset_button_state}
                                    defaultsButtonState={defaults_button_state}
                                    applyButtonState={apply_button_state}
