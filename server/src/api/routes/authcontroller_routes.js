@@ -1,4 +1,4 @@
-const cors = require('cors')
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -8,7 +8,7 @@ const VerifyToken = require('../services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-router.use(cors());
+
 
 /**
  * Configure JWT

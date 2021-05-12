@@ -123,8 +123,12 @@ function RenderStationSettingsTab (props) {
         local_state.station_settings.air_pump = !local_state.station_settings.air_pump
         changeState(local_state)
     }
-    function toggleLightSensor() {
-        local_state.station_settings.light_sensor = !local_state.station_settings.light_sensor
+    function toggleLightSensorInternal() {
+        local_state.station_settings.light_sensor_internal = !local_state.station_settings.light_sensor_internal
+        changeState(local_state)
+    }
+    function toggleLightSensorExternal() {
+        local_state.station_settings.light_sensor_external = !local_state.station_settings.light_sensor_external
         changeState(local_state)
     }
     function toggleMovementSensor() {
@@ -170,6 +174,12 @@ function RenderStationSettingsTab (props) {
         <Table id={'settings-tab'} >
                         <tbody>
                         <TableRow >
+                            <TableCell border={'bottom'} >Station name</TableCell>
+                            <TableCell  border={'bottom'} colSpan={3}>
+                                <TextInput value= {props.station.station_name} onChange={event => setTubVolume(event.target.value)} />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow >
                             <TableCell border={'bottom'} >
                                 <Table id="light-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
@@ -177,7 +187,8 @@ function RenderStationSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_state.station_settings.light_germinate}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_state.station_settings.light_vegetative}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_state.station_settings.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={local_state.station_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor" onChange={toggleLightSensorInternal} checked={local_state.station_settings.light_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Light Sensor" onChange={toggleLightSensorExternal} checked={local_state.station_settings.light_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

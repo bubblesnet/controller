@@ -18,6 +18,7 @@ function RenderSiteStationMenu(props) {
 
     function setCurrentStation(ev) {
         let x = ev.target.nodeId
+        console.log("ev.target "+ev.target.nodeId)
         if( props.currentStationIndex === 1 ) {
             props.setCurrentStationIndex(1)
         } {
@@ -31,6 +32,7 @@ function RenderSiteStationMenu(props) {
             return <></>
         }
         let y = String(1000+station.stationid)
+        console.log("nodeId = " + y)
         return <TreeItem nodeId={y} label={station.station_name} onLabelClick={setCurrentStation}/>
     }
 

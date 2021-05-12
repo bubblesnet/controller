@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const cors = require('cors')
+
 
 const VerifyToken = require('../services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: true }));
 const DeviceModel = require('../models/device');
-
-/// TODO shouldn't need this once packaged
-router.use(cors());
 
 function getDevicesByStationId( req, res ) {
     DeviceModel.getDevicesByStationId(req.params.stationid).then( function ( devicelist) {

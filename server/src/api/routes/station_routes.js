@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const cors = require('cors')
+
 const station = require('../models/station')
 
-router.use(cors());
 router.use(bodyParser.urlencoded({ extended: true }));
 const DeviceModel = require('../models/device');
 
@@ -13,7 +12,7 @@ router.get('/site/:siteid', function (req, res) {
     let result = getStationsBySiteId(req,res)
 });
 
-// GETS A LIST of STATION FROM THE DATABASE BY SITEID - normal case
+// Add a new station
 router.put('/site/:siteid/:station', function (req, res) {
     let result = station.addStation(req.params.station,req.params.siteid).then(function (rows) {
         if (!rows)

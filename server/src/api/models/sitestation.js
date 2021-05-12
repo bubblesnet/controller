@@ -108,6 +108,12 @@ async function getConfigByStation(stationid, deviceid) {
                     ret.deviceid = Number(deviceid)
                     ret.userid = ret.userid_user
                     delete ret.userid_user
+
+                    ret.camera = { picamera: ret.picamera, resolutionX: ret.resolutionX, resolutionY: ret.resolutionY}
+                    delete ret.resolutionX
+                    delete ret.resolutionY
+                    delete ret.picamera
+
                     ret.tamper = {xmove: ret.tamper_xmove, ymove: ret.tamper_ymove, zmove: ret.tamper_zmove}
                     delete ret.tamper_xmove
                     delete ret.tamper_ymove
@@ -141,6 +147,7 @@ async function getConfigByStation(stationid, deviceid) {
                     delete ret.water_pump
                     delete ret.air_pump
                     delete ret.light_sensor_internal
+                    delete ret.light_sensor_external
                     delete ret.station_door_sensor
                     delete ret.outer_door_sensor
                     delete ret.movement_sensor
@@ -192,6 +199,7 @@ async function createStation(body) {
             "    water_pump," +
             "    air_pump," +
             "    light_sensor_internal," +
+            "    light_sensor_external," +
             "    station_door_sensor," +
             "    outer_door_sensor," +
             "    movement_sensor," +
@@ -207,7 +215,8 @@ async function createStation(body) {
             "    heating_pad," +
             "    light_bloom," +
             "    light_vegetative," +
-            "    light_germinate)" +
+            "    light_germinate," +
+            "    station_name)" +
             "values(" +
             "    $1," +
             "    '192.168.21.237'," +
@@ -239,6 +248,7 @@ async function createStation(body) {
             "    false," +
             "    false," +
             "    false," +
+            "    false," +
             "    'CABINET'," +
             "    false," +
             "    0.0," +
@@ -249,7 +259,8 @@ async function createStation(body) {
             "    false," +
             "    false," +
             "    false," +
-            "    false" +
+            "    false," +
+            "    'blah'" +
             ") RETURNING *",
             [body.userid], (error, results) => {
             if (error) {
@@ -264,7 +275,7 @@ async function createStation(body) {
 
 
 async function updateStation(body) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         pool.query("UPDATE station set " +
             "controller_hostname=$2, " +
             "controller_api_port=$3, " +
@@ -287,23 +298,24 @@ async function updateStation(body) {
             "water_pump=$20, " +
             "air_pump=$21, " +
             "light_sensor_internal=$22, " +
-            "station_door_sensor=$23, " +
-            "outer_door_sensor=$24, " +
-            "movement_sensor=$25, " +
-            "pressure_sensors=$26, " +
-            "root_ph_sensor=$27, " +
-            "enclosure_type=$28, " +
-            "water_level_sensor=$29, " +
-            "tub_depth=$30, " +
-            "tub_volume=$31, " +
-            "intake_fan=$32, " +
-            "exhaust_fan=$33, " +
-            "heat_lamp=$34, " +
-            "heating_pad=$35, " +
-            "light_bloom=$36, " +
-            "light_vegetative=$37, " +
-            "light_germinate=$38 " +
-        "where stationid=$1 RETURNING *",
+            "light_sensor_internal=$23, " +
+            "station_door_sensor=$24, " +
+            "outer_door_sensor=$25, " +
+            "movement_sensor=$26, " +
+            "pressure_sensors=$27, " +
+            "root_ph_sensor=$28, " +
+            "enclosure_type=$29, " +
+            "water_level_sensor=$30, " +
+            "tub_depth=$31, " +
+            "tub_volume=$32, " +
+            "intake_fan=$33, " +
+            "exhaust_fan=$34, " +
+            "heat_lamp=$35, " +
+            "heating_pad=$36, " +
+            "light_bloom=$37, " +
+            "light_vegetative=$38, " +
+            "light_germinate=$39 " +
+            "where stationid=$1 RETURNING *",
             [
                 body.stationid,
                 body.controller_hostname,
@@ -311,45 +323,50 @@ async function updateStation(body) {
                 body.stage,
                 body.light_on_hour,
                 body.tamper_xmove,
-            body.tamper_ymove,
-            body.tamper_zmove,
-            body.time_between_pictures_in_seconds,
-            body.time_between_sensor_polling_in_seconds,
-            body.humidifier,
-            body.humidity_sensor_internal,
-            body.humidity_sensor_external,
-            body.heater,
-            body.thermometer_top,
-            body.thermometer_middle,
-            body.thermometer_bottom,
-            body.thermometer_external,
-            body.thermometer_water,
-            body.water_pump,
-            body.air_pump,
-            body.light_sensor_internal,
-            body.station_door_sensor,
-            body.outer_door_sensor,
-            body.movement_sensor,
-            body.pressure_sensors,
-            body.root_ph_sensor,
-            body.enclosure_type,
-            body.water_level_sensor,
-            body.tub_depth,
-            body.tub_volume,
-            body.intake_fan,
-            body.exhaust_fan,
-            body.heat_lamp,
-            body.heating_pad,
-            body.light_bloom,
-            body.light_vegetative,
-            body.light_germinate
-        ], (error, results) => {
+                body.tamper_ymove,
+                body.tamper_zmove,
+                body.time_between_pictures_in_seconds,
+                body.time_between_sensor_polling_in_seconds,
+                body.humidifier,
+                body.humidity_sensor_internal,
+                body.humidity_sensor_external,
+                body.heater,
+                body.thermometer_top,
+                body.thermometer_middle,
+                body.thermometer_bottom,
+                body.thermometer_external,
+                body.thermometer_water,
+                body.water_pump,
+                body.air_pump,
+                body.light_sensor_internal,
+                body.light_sensor_external,
+                body.station_door_sensor,
+                body.outer_door_sensor,
+                body.movement_sensor,
+                body.pressure_sensors,
+                body.root_ph_sensor,
+                body.enclosure_type,
+                body.water_level_sensor,
+                body.tub_depth,
+                body.tub_volume,
+                body.intake_fan,
+                body.exhaust_fan,
+                body.heat_lamp,
+                body.heating_pad,
+                body.light_bloom,
+                body.light_vegetative,
+                body.light_germinate
+            ], (error, results) => {
                 if (error) {
                     console.log("update err " + error)
                     reject(error)
                 } else {
-                    console.log("updated "+results.rowCount+" rows of Station " + body.stationid)
-                    resolve({stationid: body.stationid, rowcount: results.rowCount, message: "station has been modified :" + results.rowCount})
+                    console.log("updated " + results.rowCount + " rows of Station " + body.stationid)
+                    resolve({
+                        stationid: body.stationid,
+                        rowcount: results.rowCount,
+                        message: "station has been modified :" + results.rowCount
+                    })
                 }
             })
     })

@@ -3,7 +3,7 @@ const router = express.Router();
 const util = require('../../util')
 const station = require('../models/station')
 const sitestation = require('../models/sitestation')
-const cors = require('cors')
+
 
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
@@ -158,6 +158,7 @@ const config = {
         water_pump: true,
         air_pump: true,
         light_sensor_internal: true,
+        light_sensor_external: true,
         station_door_sensor: true,
         outer_door_sensor: true,
         movement_sensor: true,
@@ -206,9 +207,6 @@ const config = {
 
 
 }
-
-/// TODO shouldn't need this once packaged
-router.use(cors());
 
 async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);

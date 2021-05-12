@@ -61,6 +61,7 @@ let sensor_names = [
     "thermometer_external",
     "thermometer_water",
     "light_sensor_internal",
+    "light_sensor_external",
     "station_door_sensor",
     "outer_door_sensor",
     "movement_sensor",

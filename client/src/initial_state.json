@@ -29,6 +29,7 @@
       "Tent"
     ],
     "light_sensor_internal": true,
+    "light_sensor_external": true,
     "light_bloom": true,
     "light_vegetative": true,
     "light_germinate": true

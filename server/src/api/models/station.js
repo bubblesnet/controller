@@ -1,7 +1,9 @@
 const {sql} = require('@databases/pg');
-const db = require('./database');
 const stage = require('./stage')
 const device = require('./device')
+const db = require('./database')
+const server_db = require('./bubbles_db')
+const pool = server_db.getPool()
 
 async function getConfigBySite(siteid) {
     const results = await db.query(sql`SELECT userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber FROM public.user join site s on s.userid_user = userid where s.siteid = ${siteid}`);
@@ -36,6 +38,7 @@ async function getConfigByUser(uid) {
         delete result.stations[i].tamper_zmove
 
         result.stations[i].stage_schedules = stage.getStageSchedules(-1)
+        result.siteid = 1
     }
     console.log("\n\n\n"+JSON.stringify(result))
     return( result )
@@ -47,15 +50,18 @@ async function getStationConfigsBySite(siteid) {
             SELECT sitename as site_name, station_name, location, stationid, current_stage, controller_hostname, controller_api_port, stage, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
-                   thermometer_water, water_pump, air_pump, light_sensor_internal, station_door_sensor, outer_door_sensor, movement_sensor,
+                   thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, 
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control,
                                    coalesce(
                                            (
                                                SELECT array_to_json(array_agg(row_to_json(x)))
                                                FROM (
                                                         SELECT c.stationid AS stationid,
                                                                d.deviceid  AS deviceid,
+                                                               d.picamera,
+                                                               d.picamera_resolutionx,
+                                                               d.picamera_resolutiony,
                                                                coalesce((
                                                                             SELECT array_to_json(array_agg(row_to_json(y)))
                                                                             FROM (
@@ -82,7 +88,7 @@ async function getStationConfigsBySite(siteid) {
                                                                             SELECT array_to_json(array_agg(row_to_json(o)))
                                                                             FROM (
                                                                                      SELECT outletid,
-                                                                                            
+
                                                                                             name,
                                                                                             index,
                                                                                             bcm_pin_number,
@@ -103,8 +109,7 @@ async function getStationConfigsBySite(siteid) {
             FROM public.user u
             JOIN site i ON i.userid_user = u.userid
             JOIN station c ON c.siteid_site=i.siteid
-            WHERE i.siteid = ${siteid}
-  `,
+            WHERE i.siteid = ${siteid}`
     );
     console.log("\n\n\n"+JSON.stringify(results))
     return( results )
@@ -116,7 +121,7 @@ async function getStationConfigsByUser(uid) {
             SELECT stationid, current_stage, controller_hostname, controller_api_port, stage, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
-                   thermometer_water, water_pump, air_pump, light_sensor_internal, station_door_sensor, outer_door_sensor, movement_sensor,
+                   thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external,station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
                    heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, 
                                    coalesce(
@@ -125,6 +130,9 @@ async function getStationConfigsByUser(uid) {
                                                FROM (
                                                         SELECT c.stationid AS stationid,
                                                                d.deviceid  AS deviceid,
+                                                               d.picamera,
+                                                               d.picamera_resolutionx,
+                                                               d.picamera_resolutiony,
                                                                coalesce((
                                                                             SELECT array_to_json(array_agg(row_to_json(y)))
                                                                             FROM (
@@ -168,7 +176,7 @@ async function getStationConfigsByUser(uid) {
                                                     ) x
                                            ),
                                            '[]'
-                                       ) AS attached_devices
+                                       ) AS edge_devices    
             FROM public.user u
             JOIN site ss ON ss.userid_user=u.userid
             JOIN station c ON c.siteid_site=ss.siteid
@@ -176,14 +184,19 @@ async function getStationConfigsByUser(uid) {
   `,
     );
     console.log("\n\n\n"+JSON.stringify(results))
+    for( let i = 0; i < results[0].edge_devices.length; i++ ) {
+        results[0].edge_devices[i].camera = { picamera: results[0].edge_devices[i].picamera, resolutionX: results[0].edge_devices[i].resolutionX, resolutionY: results[0].edge_devices[i].resolutionY}
+        delete results[0].edge_devices[i].resolutionX
+        delete results[0].edge_devices[i].resolutionY
+        delete results[0].edge_devices[i].picamera
+    }
     return( results )
 }
 
 async function addStation(name, siteid) {
     //    console.log(JSON.stringify(body))
-    return new Promise(function(resolve, reject) {
-        db.query("insert into station (station_name, siteid_site) values ($1,$2)" +
-            " RETURNING *",
+    return new Promise(async function(resolve, reject) {
+        await pool.query("insert into station (station_name, siteid_site) values ($1,$2) RETURNING *",
             [name,siteid], (error, results) => {
                 if (error) {
                     console.log("addStation error " + error)

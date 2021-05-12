@@ -123,6 +123,7 @@ function AuthenticatedApp (props) {
 
     function setStation( index ) {
         console.log("setStation " + index)
+
         setCurrentStationIndex(index)
     }
     initial_state.theme = bubbles_theme;
@@ -188,7 +189,7 @@ function AuthenticatedApp (props) {
      * Respond to the OK button in the new station dialog
      */
     const handleToAdd = async () => {
-        alert("Adding station named " + new_station_name )
+//        alert("Adding station named " + new_station_name )
         setOpen(false);
         let x = await utils.addStation(apiHost, apiPort, siteid, new_station_name )
     }
@@ -231,7 +232,7 @@ function AuthenticatedApp (props) {
      * Apply the values in a new measurement message to the state values that control
      * what is displayed in the UI taken from the WebSocket service.
      *
-     * @param message   A "measurement" message from one of the attached devices.
+     * @param msg   A "measurement" message from one of the attached devices.
      */
     /// TODO this looks like a dupe of processMeasurement - get rid of one of them
     const applyMeasurementToState = (msg) => {
@@ -552,7 +553,7 @@ function AuthenticatedApp (props) {
             >
                 <Sidebar gridArea="sidebar" background="#477CBC" round="small"
                          header={
-                             <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+                             <Avatar src="//s.gravatar.com/avatar/03e2a5b132702f8c65e793b743be4418?s=80" />
                          }
                          footer={
                              <Button icon={<Help />} hoverIndicator />

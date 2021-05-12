@@ -553,10 +553,10 @@ body {
 }
 
 #sun-moon-icon-holder {
-  top: 0;
+  top: 10px;
   right: 0;
-  width: 57px;
-  height: 57px;
+  width: 47px;
+  height: 47px;
   position: absolute;
   background: url(images/sunlight.png) no-repeat;
 }

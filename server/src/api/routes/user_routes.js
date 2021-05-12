@@ -52,7 +52,7 @@ function getUserByName( req, res ) {
     console.log("Get by name " + req.params.id)
     UserModel.findOneByUsername(req.params.id).then( function (user) {
         if (!user) return res.status(401).send("No user found.");
-        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3005")
+        res.setHeader("Access-Control-Allow-Origin", "*")
         res.status(200).send(user);
     }).catch(function(err){
         return res.status(500).send("There was a problem finding the user "+err);

@@ -12,6 +12,7 @@
     "water_pump": true,
     "air_pump": true,
     "light_sensor_internal": true,
+    "light_sensor_external": true,
     "station_door_sensor": true,
     "outer_door_sensor": true,
     "movement_sensor": true,

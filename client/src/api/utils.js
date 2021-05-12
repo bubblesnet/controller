@@ -116,7 +116,7 @@ const saveSetting = ( host, port, userid, thing_name, present ) => {
     })
 }
 
-const addStation = ( host, port, siteid, station_name ) => {
+const addStation = async ( host, port, siteid, station_name ) => {
     console.log("addStation calling out to api ")
 
     return new Promise( async (resolve, reject) => {
@@ -131,8 +131,8 @@ const addStation = ( host, port, siteid, station_name ) => {
         });
         if(response.ok) {
             let x = await response.json();
-//           console.log(JSON.stringify(x))
-//            console.log("Put station " + JSON.stringify(x));
+            console.log(JSON.stringify(x))
+            console.log("Put station " + JSON.stringify(x));
             resolve(x)
         } else {
             console.log("error " + response.status)
