@@ -17,7 +17,7 @@ const fileUpload = require('express-fileupload');
  */
 
 function getImage( req, res, next ) {
-    let userdirectory = locals.getLocals().usersdirectory + '/' + req.params.userid;
+    let userdirectory = locals.getLocals(false).usersdirectory + '/' + req.params.userid;
 
     let picturefile = userdirectory + '/bubblespictures/' + req.params.filename;
     console.log('filename is ' + picturefile);

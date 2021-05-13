@@ -40,8 +40,8 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
         text: shortmessage,
         html: "<html><body><h1>"+shortmessage+"</h1><p>" + longmessage + "</p></body></html>",
     }
-    if( typeof locals.getLocals().dontSendEmail === 'undefined' || locals.getLocals().dontSendEmail === true ) {
-        console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals().dontSendEmail )
+    if( typeof locals.getLocals(false).dontSendEmail === 'undefined' || locals.getLocals(false).dontSendEmail === true ) {
+        console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals(false).dontSendEmail )
         cb(null);
     } else {
         sgMail.send(msg)
@@ -60,7 +60,7 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
 
 function sendANotification (type, notification, alertcondition, cb) {
     console.log('sendANotification ' + notification.notificationid);
-    sendAMessage(notification.email_recipient,locals.getLocals().sendgridSenderEmailAddress,
+    sendAMessage(notification.email_recipient,locals.getLocals(false).sendgridSenderEmailAddress,
         type + ' notification from BubblesWeb',alertcondition.shortmessage,
         "Reference notification [" + notification.notificationid + "]", function(err) {
             console.log("callback from sendAMessage with err = " + err);

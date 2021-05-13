@@ -4,6 +4,24 @@
 
 const fs = require('fs')
 
+function get_config_file_for_environment(env) {
+    switch(env) {
+        case "DEV":
+            return("config_dev.json")
+            break;
+        case "TEST":
+            return("config_test.json")
+            break;
+        case "PRODUCTION":
+            return("config.json")
+            break;
+        case "CI":
+            return("config_ci.json")
+            break;
+    }
+    return( '' )
+}
+
 
 function get_server_ports_for_environment(env) {
     let ports = {
@@ -79,6 +97,7 @@ function readJsonFile(filepath) {
 }
 
 module.exports = {
+    get_config_file_for_environment,
     get_server_ports_for_environment,
     normalizePort: normalizePort,
     readJsonFile:readJsonFile,

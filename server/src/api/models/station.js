@@ -202,14 +202,42 @@ async function addStation(name, siteid) {
                     console.log("addStation error " + error)
                     reject(error)
                 } else {
-                    console.log("new station " + results.rows[0])
+                    console.log("new station " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, message: "A new stationid has been added :" + results.rows[0].stationid})
                 }
             })
     })
 }
 
+async function updateStation(stationid, name) {
+    //    console.log(JSON.stringify(body))
+    return new Promise(async function(resolve, reject) {
+        await pool.query("update station set station_name = $1 where stationid = $2 RETURNING *",
+            [name,stationid], (error, results) => {
+                if (error) {
+                    console.log("updateStation error " + error)
+                    reject(error)
+                } else {
+                    console.log("updateStation " + JSON.stringify(results.rows[0]))
+                    resolve({stationid: results.rows[0].stationid, message: "Station has been updated :" + results.rows[0].stationid})
+                }
+            })
+    })
+}
+
 async function deleteStation(stationid) {
+    return new Promise(async function(resolve, reject) {
+        await pool.query("delete from station where stationid = $1 RETURNING *",
+            [stationid], (error, results) => {
+                if (error) {
+                    console.log("deleteStation error " + error)
+                    reject(error)
+                } else {
+                    console.log("deleted station " + results.rows[0])
+                    resolve({stationid: results.rows[0].stationid, message: "Station has been deleted :" + results.rows[0].stationid})
+                }
+            })
+    })
 }
 
 async function getStationsForSite(siteid) {
@@ -226,6 +254,7 @@ async function getStationsForSite(siteid) {
 
 module.exports = {
     addStation,
+    updateStation,
     deleteStation,
     getStationsForSite,
     getConfigBySite,
