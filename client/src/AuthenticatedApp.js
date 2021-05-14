@@ -31,6 +31,7 @@ import './Palette.css'
 import util from './util'
 import {getSite,saveSetting} from './api/utils'
 
+const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
 
@@ -66,7 +67,7 @@ function AuthenticatedApp (props) {
     }
 
     function changeStation(ev) {
-//        alert("change station to "+ev.target.value)
+        alert("change station to "+ev.target.value)
     }
 
     /**
@@ -297,7 +298,7 @@ function AuthenticatedApp (props) {
     } = useWebSocket(socketUrl, {
         reconnectAttempts: 1000000,
         reconnectInterval: 30000,
-        onOpen: () => console.log('websocket opened'),
+        onOpen: () => { getDeviceStatus(); console.log('websocket opened'); },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
         onMessage: (event) => handleWebSocketMessage(event), // This relies on receiving a "state" object from the server
@@ -344,6 +345,15 @@ function AuthenticatedApp (props) {
      */
     function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    function getDeviceStatus() {
+        console.log("getDeviceStatus()")
+        let cmd = {
+            command: STATUS_COMMAND,
+        }
+        sendJsonMessage(cmd)
+
     }
 
     //
@@ -508,6 +518,7 @@ function AuthenticatedApp (props) {
      */
     site.site_name = siteName
     site.siteid = siteid
+
 //    console.log("site = " + JSON.stringify(site))
     return (
         <div className="App">
