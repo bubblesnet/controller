@@ -44,7 +44,7 @@ async function createOutlet(body) {
                     console.log("createOutlet error " + error)
                     reject(error)
                 } else {
-                    console.log("new outletid " + results.rows[0])
+                    console.log("new outlet " + JSON.stringify(results.rows[0]))
                     resolve({outletid: results.rows[0].outletid, message: "A new outletid has been added :" + results.rows[0].outletid})
                 }
             })
@@ -107,11 +107,31 @@ async function getOutletsByCabinetDevice(stationid, deviceid) {
     })
 }
 
+async function setStateByNameAndStation( name, stationid, onoff) {
+    return new Promise(function (resolve, reject) {
+        let ssql = "update outlet set onoff=$1 where name = $2 and stationid_station = $3 RETURNING *"
+        pool.query(ssql, [onoff,name,stationid], (error, results) => {
+            if (error) {
+                console.log("setStateByNameAndStation error " + error)
+                reject(error)
+            }
+            if (results) {
+                resolve(results);
+            } else {
+                resolve({results: []});
+            }
+        })
+    })
+
+
+}
+
 
 module.exports = {
     createOutlet,
     createDefaultSetOfOutlets,
     getOutletsByCabinetDevice,
+    setStateByNameAndStation,
     updateOutlet,
     deleteOutlet
 }
