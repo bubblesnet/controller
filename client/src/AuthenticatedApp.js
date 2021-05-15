@@ -24,17 +24,18 @@ import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActio
 import initial_state from './initial_state.json'
 import initial_settings from './initial_settings.json'
 
-import utils from './api/utils.js'
 import useWebSocket from 'react-use-websocket';
 import './Palette.css'
 
 import util from './util'
-import {getSite,saveSetting} from './api/utils'
+import {addStation,saveSetting, getSite} from './api/utils'
+
+import './logimplementation'
+import log from 'roarr';
 
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
-
 
 /**
  * @fileOverview Component containing the top-level of the application for a user who is logged in.
@@ -43,8 +44,8 @@ const PICTURE_COMMAND="picture"
  * @version: X.x
  */
 function AuthenticatedApp (props) {
-    console.log("render AuthenticatedApp " + JSON.stringify(props))
-
+//    log.trace("render AuthenticatedApp " + JSON.stringify(props))
+    log.debug("render AuthenticatedApp " + JSON.stringify(props));
 
     //
     //
@@ -62,7 +63,7 @@ function AuthenticatedApp (props) {
      * @returns {JSX.Element}   A React Button element
      */
     function getStationButton(value, index, arr ) {
-        console.log("getStationButton value " + JSON.stringify(value))
+        log.debug("getStationButton value " + JSON.stringify(value))
         return <Button onClick={changeStation} value={value.stationid} label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
     }
 
@@ -110,7 +111,7 @@ function AuthenticatedApp (props) {
      * Host the API server is running on - change it and rerender
      * @todo why is this here when we can derive it from nodeEnv
      */
-    const apiHost = "localhost"
+//    const apiHost = "localhost"
     /**
      * Deep object of the current theme - change it and rerender
      */
@@ -123,8 +124,7 @@ function AuthenticatedApp (props) {
     const [lastpicture, setLastPicture] = useState(0)
 
     function setStation( index ) {
-        console.log("setStation " + index)
-
+        log.debug("state: setCurrentStationIndex " + index)
         setCurrentStationIndex(index)
     }
     initial_state.theme = bubbles_theme;
@@ -192,7 +192,7 @@ function AuthenticatedApp (props) {
     const handleToAdd = async () => {
 //        alert("Adding station named " + new_station_name )
         setOpen(false);
-        let x = await utils.addStation(apiHost, apiPort, siteid, new_station_name )
+        let x = await addStation(servers.api_server_host, servers.api_server_port, siteid, new_station_name )
     }
 
     const [new_station_name, setNewStationName] = useState("");
@@ -204,7 +204,7 @@ function AuthenticatedApp (props) {
      * Send a "take picture" command to all the devices attached to this controller.
      */
     const takeAPicture = () => {
-        console.log("takeAPicture")
+        log.debug("button: takeAPicture")
         let cmd = {
             command: PICTURE_COMMAND,
         }
@@ -225,7 +225,7 @@ function AuthenticatedApp (props) {
      * @param message   A "measurement" message from one of the attached devices.
      */
     const processMeasurementMessage = (message) => {
-//        console.log("processMeasurementMessage "+JSON.stringify(message))
+//        log.trace("processMeasurementMessage "+JSON.stringify(message))
         applyMeasurementToState(message)
     }
 
@@ -237,14 +237,14 @@ function AuthenticatedApp (props) {
      */
     /// TODO this looks like a dupe of processMeasurement - get rid of one of them
     const applyMeasurementToState = (msg) => {
-//        console.log("applyMeasurementToState "+JSON.stringify(msg))
+//        log.debug("applyMeasurementToState "+JSON.stringify(msg))
         if( typeof msg.value === 'undefined' ) {
-            console.log("BAD measurement message " + JSON.stringify(msg))
+            log.error("msg: BAD measurement message " + JSON.stringify(msg))
         } else {
             local_state.status[msg.measurement_name] = msg.value
             local_state.status[msg.measurement_name + "_direction"] = msg.direction
-//        console.log( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
-            console.log("Applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+//        log.debug( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
+            log.debug("msg: applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
         }
     }
 
@@ -253,36 +253,36 @@ function AuthenticatedApp (props) {
      * @param event The formatted message
      */
     const handleWebSocketMessage = ( event ) => {
-        console.log("handling websocket message " + JSON.stringify(event.data))
+        log.debug("ws: handling websocket message " + JSON.stringify(event.data))
         let msg = JSON.parse(event.data)
         if( typeof(msg.status) === 'undefined' || msg.status === null ) {
             if( typeof(msg.message_type) === 'undefined' || msg.message_type === null ) {
-                console.log("Received invalid message " + event.data)
+                log.error("ws: received invalid message " + event.data)
             } else {
-                console.log("received message type "+msg.message_type);
+                log.trace("ws: received message type "+msg.message_type);
                 switch (msg.message_type) {
                     case "measurement":
-                        console.log("received measurement");
+                        log.debug("ws: received measurement");
                         applyMeasurementToState(msg)
                         break;
                     case "switch_event":
-                        console.log("received switch event " + JSON.stringify(msg));
+                        log.debug("ws: received switch event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
-                        console.log("received event");
+                        log.debug("ws: received event");
                         break;
                     case "picture_event":
-                        console.log("received picture event");
+                        log.debug("ws: received picture event");
                         setLastPicture(lastpicture+1)
                         break;
                     default:
-                        console.log("unknown message type " + msg.message_type)
+                        log.debug("ws: unknown message type " + msg.message_type)
                         break;
                 }
             }
         } else {
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
+            log.error("ws: AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
 //            setState(JSON.parse(event.data));
         }
     }
@@ -298,7 +298,7 @@ function AuthenticatedApp (props) {
     } = useWebSocket(socketUrl, {
         reconnectAttempts: 1000000,
         reconnectInterval: 30000,
-        onOpen: () => { getDeviceStatus(); console.log('websocket opened'); },
+        onOpen: () => { getDeviceStatus(); log.info('ws: websocket opened'); },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
         onMessage: (event) => handleWebSocketMessage(event), // This relies on receiving a "state" object from the server
@@ -348,7 +348,7 @@ function AuthenticatedApp (props) {
     }
 
     function getDeviceStatus() {
-        console.log("getDeviceStatus()")
+        log.info("aq: getDeviceStatus()")
         let cmd = {
             command: STATUS_COMMAND,
         }
@@ -371,13 +371,13 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function toggleSwitchTo(switch_name, on ) {
-        console.log("toggleSwitchTo " + switch_name + " to " + on)
+        log.info("button: toggleSwitchTo " + switch_name + " to " + on)
         if( typeof(switch_name) === 'undefined') {
             return
         }
         let newstate = JSON.parse(JSON.stringify(local_state))
         if( typeof newstate.switch_state[switch_name] === 'undefined') {
-            console.error( "bad switch_name " + switch_name)
+            console.error( "button: bad switch_name " + switch_name)
             return
         }
         newstate.switch_state[switch_name].on = on
@@ -390,10 +390,37 @@ function AuthenticatedApp (props) {
      *
      * @param x a complete station_settings object - overwrites ALL values
      */
-    function setStationSettingsStateFromChild(x) {
+    async function setStationSettingsStateFromChild(x) {
         let newstate = JSON.parse(JSON.stringify(local_state))
         newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
-        setState(newstate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.station_settings.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.station_settings.humidity_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.station_settings.humidity_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.station_settings.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", newstate.station_settings.heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", newstate.station_settings.thermometer_middle)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", newstate.station_settings.thermometer_bottom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", newstate.station_settings.thermometer_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", newstate.station_settings.thermometer_water)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", newstate.station_settings.water_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", newstate.station_settings.air_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", newstate.station_settings.light_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", newstate.station_settings.light_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", newstate.station_settings.station_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", newstate.station_settings.outer_door_sensor)
+//        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensors", newstate.station_settings.??)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", newstate.station_settings.pressure_sensors)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", newstate.station_settings.root_ph_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", newstate.station_settings.water_level_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", newstate.station_settings.intake_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", newstate.station_settings.exhaust_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", newstate.station_settings.heat_lamp)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", newstate.station_settings.heating_pad)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", newstate.station_settings.light_bloom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", newstate.station_settings.light_vegetative)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", newstate.station_settings.light_germinate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", newstate.station_settings.height_sensor)
+//        setState(newstate)
     }
 
     /**
@@ -419,15 +446,13 @@ function AuthenticatedApp (props) {
         sendJsonMessage(cmd)
     }
 
-    console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
-
     /**
      * wtf??
      * @param value
      */
     const applyMapChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-        console.log("AuthenticatedApp applyMapChange");
+        log.trace("button: AuthenticatedApp applyMapChange");
         /// TODO FINISH!
     }
 
@@ -438,9 +463,9 @@ function AuthenticatedApp (props) {
      */
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-        console.log("AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value )
+        log.info("button: AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value )
         x.global.font.family = current_font;
-        console.log("AuthenticatedApp should rerender to font " + x.global.font.family)
+        log.trace("button: AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
     }
 
@@ -449,7 +474,7 @@ function AuthenticatedApp (props) {
      * @param value The font object we need to change to??
      */
     const localFontChange = (value) => {
-        console.log("AuthenticatedApp localFontChange from " + current_font + " to " + value)
+        log.trace("button: AuthenticatedApp localFontChange from " + current_font + " to " + value)
         setCurrentFont(value)
     }
 
@@ -460,8 +485,8 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         const fetchData = async () => {
             let z = {}
-            z.stations = await getSite('localhost', 3003, siteid)
-//            console.log("site = " + JSON.stringify(z))
+            z.stations = await getSite(servers.api_server_host, servers.api_server_port, siteid)
+//            log.trace("site = " + JSON.stringify(z))
             setSiteName(z.stations[0].site_name)
             setSite(JSON.parse(JSON.stringify(z)))
         }
@@ -471,7 +496,7 @@ function AuthenticatedApp (props) {
 
 
     /*   let setLang = (value) => {
-           console.log("AuthenticatedApp setting language to " + value)
+           log.trace("AuthenticatedApp setting language to " + value)
            setLanguage(value)
        }
 
@@ -483,16 +508,16 @@ function AuthenticatedApp (props) {
      * @param value The value of NODE_ENV
      */
     let setEnvironment = (value) => {
-        console.log("AuthenticatedApp.setEnvironment(" + value + ")")
+        log.info("button: AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
         servers = util.get_server_ports_for_environment(props.nodeEnv)
-        console.log("setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
-        setSocketUrl('ws://localhost:'+servers.websocket_server_port)
+        log.trace("button: setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
+        setSocketUrl('ws://'+servers.websocket_server_host+':'+servers.websocket_server_port)
         setNodeEnv(theNodeEnvironment);
         setApiPort(servers.api_server_port);
     }
 
-    console.log("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
+    log.trace("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
@@ -500,10 +525,10 @@ function AuthenticatedApp (props) {
     } else {
         if( lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
         lastJsonMessage.message_type === 'measurement') {
-            console.log("Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
-            console.log("Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+            log.warn("msg: Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
     let thestate = JSON.parse(JSON.stringify(local_state))
@@ -519,7 +544,7 @@ function AuthenticatedApp (props) {
     site.site_name = siteName
     site.siteid = siteid
 
-//    console.log("site = " + JSON.stringify(site))
+//    log.trace("site = " + JSON.stringify(site))
     return (
         <div className="App">
             <Header siteName={siteName} setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
@@ -603,7 +628,7 @@ function AuthenticatedApp (props) {
                         />
                     </Tab>
                     <Tab title="Device Map">
-                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={apiHost} theme={bubbles_theme}
+                        <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={servers.api_server_host} theme={bubbles_theme}
                                      onMapChange={applyMapChange} station={site.stations[currentStationIndex]}
                                      state={local_state}/>
                     </Tab>

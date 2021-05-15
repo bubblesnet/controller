@@ -217,12 +217,12 @@ async function getDeviceConfig(req,res,next) {
     res.json(x);
 }
 
-async function setPresent(req,res,next) {
-    let x = await sitestation.setSensorPresent(req,res,next)
+async function setPresent(req) {
+    let x = await sitestation.setSensorPresent(req.params.stationid,req.params.sensor_name,req.params.present)
     return(x)
 }
-router.post("/:userid/:deviceid/sensor/:sensor_name/:present", function (req, res, next) {
-    let x = setPresent(req,res,next)
+router.post("/:userid/:stationid/sensor/:sensor_name/:present", function (req, res, next) {
+    let x = setPresent(req)
     res.json(x);
 });
 

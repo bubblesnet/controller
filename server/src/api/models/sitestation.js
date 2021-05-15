@@ -401,7 +401,7 @@ async function setSensorPresent(stationid,sensor_name,present) {
                 console.error("update stationid err3 " + error)
                 reject(error)
             } else {
-                console.log("setSensorPresent results " + JSON.stringify(results))
+//                console.log("setSensorPresent results " + JSON.stringify(results))
                 resolve({stationid: stationid, rowcount: results.rowCount, message: 'station updated ' + results.rowCount})
             }
         })

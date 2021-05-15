@@ -6,6 +6,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
 import RenderDeviceMapTab from "./DeviceMapTab/DeviceMapTabFunctional";
 
+import log from 'roarr';
+import '../logimplementation'
 
 function RenderSiteStationMenu(props) {
     const useStyles = makeStyles({
@@ -18,7 +20,7 @@ function RenderSiteStationMenu(props) {
 
     function setCurrentStation(ev) {
         let x = ev.target.nodeId
-        console.log("ev.target "+ev.target.nodeId)
+        log.trace("ev.target "+ev.target.nodeId)
         if( props.currentStationIndex === 1 ) {
             props.setCurrentStationIndex(1)
         } {
@@ -27,12 +29,12 @@ function RenderSiteStationMenu(props) {
 //        alert("setCurrentStationIndex " + x)
     }
     function getStation( station, index, arr ) {
-        console.log("getStation = " + station.stationid)
+        log.info("ssm: getStation = " + station.stationid)
         if( typeof station.stationid === 'undefined') {
             return <></>
         }
         let y = String(1000+station.stationid)
-        console.log("nodeId = " + y)
+        log.debug("ssm: nodeId = " + y)
         return <TreeItem nodeId={y} label={station.station_name} onLabelClick={setCurrentStation}/>
     }
 
@@ -43,7 +45,7 @@ function RenderSiteStationMenu(props) {
     if( typeof props.site.stations === 'undefined') {
         props.site.stations = []
     }
-//    console.log("RenderSiteStationMenu props.site = "+JSON.stringify(props.site))
+//    log.trace("RenderSiteStationMenu props.site = "+JSON.stringify(props.site))
     return (
         <TreeView
             defaultExpanded={['1']}

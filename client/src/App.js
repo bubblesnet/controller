@@ -3,7 +3,7 @@ import * as React from 'react'
 import AuthenticatedApp from './AuthenticatedApp'
 import UnauthenticatedApp from './UnauthenticatedApp'
 import SetupApp from './SetupApp'
-import {useState} from "react";
+
 import useToken from './useToken';
 
 /** Fake login function

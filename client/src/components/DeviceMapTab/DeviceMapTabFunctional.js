@@ -13,7 +13,7 @@ import {
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import {getModuleTypes, getContainerNames} from '../../api/utils'
+import {getContainerNames, getModuleTypes} from '../../api/utils';
 
 function RenderDeviceMapTab (props) {
     const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));

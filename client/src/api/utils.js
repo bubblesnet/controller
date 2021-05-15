@@ -1,4 +1,8 @@
-async function getContainerNames(host, port) {
+import '../logimplementation'
+import log from 'roarr';
+
+
+export async function getContainerNames(host, port) {
     console.log("getContainerNames calling out to api")
 
     return new Promise( async (resolve, reject) => {
@@ -14,7 +18,7 @@ async function getContainerNames(host, port) {
     })
 }
 
-async function getModuleTypes(host, port) {
+export async function getModuleTypes(host, port) {
     console.log("getModuleTypes calling out to api")
 
     return new Promise( async (resolve, reject) => {
@@ -38,7 +42,7 @@ async function getModuleTypes(host, port) {
  * @param siteid    ID of the site we want
  * @returns {Promise<unknown>}  Response status (200 ...) from the API call
  */
-async function getSite (host, port, siteid) {
+export async function getSite (host, port, siteid) {
     console.log("getSite calling out to api")
 
     return new Promise( async (resolve, reject) => {
@@ -66,7 +70,7 @@ async function getSite (host, port, siteid) {
  * @returns {Promise<unknown>}  Response status (200 ...) from the API call
  * @todo this is redundant with getSite - eliminate
  */
-const getDeviceList = (host, port, userid) => {
+export const getDeviceList = (host, port, userid) => {
     console.log("getDeviceList calling out to api")
 
     return new Promise( async (resolve, reject) => {
@@ -92,11 +96,11 @@ const getDeviceList = (host, port, userid) => {
  * @returns {Promise<unknown>}  The response status (200,500 ...) from the save setting API call
  * @memberOf AuthenticatedApp
  */
-const saveSetting = ( host, port, userid, thing_name, present ) => {
-    console.log("saveSetting calling out to api")
+export const saveSetting = ( host, port, userid, stationid, thing_name, present ) => {
 
     return new Promise( async (resolve, reject) => {
-        const url = 'http://'+host+':'+port+'/api/config/'+userid+'/'+'70000007'+'/sensor/'+thing_name+'/present/'+present;
+        const url = 'http://'+host+':'+port+'/api/config/'+userid+'/'+stationid+'/sensor/'+thing_name+'/'+present;
+        log.debug("saveSetting url = " + url)
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -116,7 +120,7 @@ const saveSetting = ( host, port, userid, thing_name, present ) => {
     })
 }
 
-const addStation = async ( host, port, siteid, station_name ) => {
+export const addStation = async ( host, port, siteid, station_name ) => {
     console.log("addStation calling out to api ")
 
     return new Promise( async (resolve, reject) => {
@@ -139,15 +143,4 @@ const addStation = async ( host, port, siteid, station_name ) => {
             reject( response.status )
         }
     })
-}
-
-
-
-module.exports = {
-    addStation,
-    getModuleTypes,
-    getContainerNames,
-    getDeviceList,
-    saveSetting,
-    getSite
 }

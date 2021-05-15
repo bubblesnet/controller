@@ -4,14 +4,16 @@ import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 import {ReadyState} from "react-use-websocket";
 import getReadyState from '../AuthenticatedApp'
 import {Table, TableRow, TableCell} from 'grommet'
+import log from 'roarr';
+import '../logimplementation'
 
 function Header (props) {
-    console.log("render Header with props "+JSON.stringify(props) )
+    log.trace("render Header with props "+JSON.stringify(props) )
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
-//    console.log("after useState")
+//    log.trace("after useState")
     let setEnvironment = (value) => {
-        console.log("Header.setEnvironment(" + value + ")")
+        log.trace("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value
         let api_server_port;
         let websocket_server_port;
@@ -37,13 +39,13 @@ function Header (props) {
         setApiPort(api_server_port);
         props.setNodeEnv(value)
     }
-//    console.log("after setenv")
+//    log.trace("after setenv")
     let webSocketLabel="Ping open WebSocket"
     if( props.readyState !== ReadyState.OPEN ) {
         webSocketLabel = "WebSocket server down"
     }
-//    console.log("after websocket")
-//    console.log("Rendering header")
+//    log.trace("after websocket")
+//    log.trace("Rendering header")
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
