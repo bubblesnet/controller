@@ -6,6 +6,8 @@ import RenderStateTextStatus from "./StateTextStatusFunctional";
 import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
+import RenderADCTextStatus from "./ADCTextStatusFunctional";
+
 
 function RenderTextStatus (props) {
     console.log("RenderTextStatus")
@@ -17,9 +19,10 @@ function RenderTextStatus (props) {
                   { name: 'state', start: [0, 1], end: [0, 1] },
                   { name: 'security', start: [0, 2], end: [0, 2] },
                   { name: 'interventions', start: [0, 3], end: [0, 3] },
+                  { name: 'adc', start: [0, 4], end: [0, 4] },
               ]}
               columns={['large']}
-              rows={['240px','small','small','small']}
+              rows={['240px','small','small','small','small']}
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >
@@ -33,6 +36,9 @@ function RenderTextStatus (props) {
             </Box>
             <Box gridArea={'interventions'} >
                 <RenderInterventionsTextStatus  settings={props.settings} state={props.state}/>
+            </Box>
+            <Box gridArea={'adc'} >
+                <RenderADCTextStatus  settings={props.settings} state={props.state}/>
             </Box>
         </Grid>
     return (ret)
