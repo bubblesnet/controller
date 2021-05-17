@@ -17,7 +17,10 @@ function RenderADCValueWithDirection (props) {
     if(props.direction === 'down') {
         className='zero-arrowdown-icon'
     }
-    let valuestr = sprintf.sprintf( "%.1f %s", props.value, props.units )
+    let valuestr = ""
+    if( typeof props.value !== 'undefined' ) {
+        valuestr = sprintf.sprintf( "%.3f %s", props.value, props.units )
+    }
     let ret =''
 
     if( props.exists === false ) {
