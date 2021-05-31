@@ -9,6 +9,7 @@ let z
 
 let __queueClient
 
+const STAGE_COMMAND="stage"
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
@@ -70,7 +71,7 @@ function runWebSocketServer(port) {
         })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
-            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND ) {
+            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND ) {
                 debug("Received command " + str)
                 let deviceid = x.deviceid
                     let sendHeaders = {

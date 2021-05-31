@@ -35,6 +35,7 @@ import log from 'roarr';
 
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
+const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
 
 /**
@@ -149,7 +150,7 @@ function AuthenticatedApp (props) {
     /**
      * If we change the web socket URL, rerender
      */
-    const [socketUrl, setSocketUrl] = useState('ws://localhost:'+servers.websocket_server_port);
+    const [socketUrl, setSocketUrl] = useState('ws://'+servers.websocket_server_host+':'+servers.websocket_server_port);
     /**
      * ????
      * @type {React.MutableRefObject<*[]>}
@@ -243,6 +244,7 @@ function AuthenticatedApp (props) {
         } else {
             local_state.status[msg.measurement_name] = msg.value
             local_state.status[msg.measurement_name + "_direction"] = msg.direction
+            local_state.status[msg.measurement_name + "_units"] = msg.units
 //        log.debug( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
             log.debug("msg: applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
         }
@@ -393,6 +395,7 @@ function AuthenticatedApp (props) {
     async function setStationSettingsStateFromChild(x) {
         let newstate = JSON.parse(JSON.stringify(local_state))
         newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", newstate.station_settings.automatic_control)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.station_settings.humidifier)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.station_settings.humidity_sensor_internal)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.station_settings.humidity_sensor_external)
@@ -421,6 +424,22 @@ function AuthenticatedApp (props) {
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", newstate.station_settings.light_germinate)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", newstate.station_settings.height_sensor)
 //        setState(newstate)
+    }
+
+    /**
+     * Function passed to child visual objects such that they can set the automation state of of the current station.
+     *
+     * @param x ???
+     * @param switch_name   The name of the switch we're changing the state of
+     * @param on    True/false on/off
+     */
+    function setAutomationStateFromChild(current_stage ) {
+        let cmd = {
+            command: STAGE_COMMAND,
+            stage: current_stage
+        }
+        site.stations[currentStationIndex].current_stage = current_stage
+        sendJsonMessage(cmd)
     }
 
     /**
@@ -547,7 +566,7 @@ function AuthenticatedApp (props) {
 //    log.trace("site = " + JSON.stringify(site))
     return (
         <div className="App">
-            <Header siteName={siteName} setNodeEnv={setEnvironment} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
+            <Header siteName={siteName} setNodeEnv={setEnvironment} station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
             <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add a station</DialogTitle>
                 <DialogContent>
@@ -636,7 +655,7 @@ function AuthenticatedApp (props) {
                         <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                         station={site.stations[currentStationIndex]}
                                         settings={local_settings} state={local_state}
-                                        setStateFromChild={setSwitchStateFromChild}/>
+                                        setStateFromChild={setAutomationStateFromChild}/>
                     </Tab>
                     <Tab title="Events">
                         <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>

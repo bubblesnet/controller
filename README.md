@@ -225,3 +225,14 @@ Add
 |  light_bloom |  The grow light used in bloom phase |
 
 
+
+## Stages and rules
+|  Stage  | Description  | 
+|---|---|
+| Idle | all outlets off at all times |
+| Germinate | Weeks 0-4, Pumps off. Airflow controlled.  seedling light (CFL) typically 15 on, 9 off
+| Vegetative | Weeks 5-13 Pumps on, airflow, light, heat, humidity controlled. Veg spectrum of light on once per day, off once per day|
+| Bloom | Weeks 13-26 Pumps on, airflow, light, heat, humidity controlled. Bloom spectrum of light on once per day, off once per day |
+| Harvest | Weeks 27 No light or pumps. Fans, heat and humidity controlled |
+| Dry | Weeks 28-32 No light or pumps. Fans, heat and humidity controlled |
+

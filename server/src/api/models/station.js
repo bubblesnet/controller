@@ -15,7 +15,7 @@ async function getConfigBySite(siteid) {
         result.controller_hostname = result.stations[i].controller_hostname
         delete result.stations[i].controller_api_port
         delete result.stations[i].controller_hostname
-        result.stations[i].stage_schedules = stage.getStageSchedules(-1)
+        result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
     }
     console.log("\n\n\n"+JSON.stringify(result))
     return( result )
@@ -37,7 +37,7 @@ async function getConfigByUser(uid) {
         delete result.stations[i].tamper_ymove
         delete result.stations[i].tamper_zmove
 
-        result.stations[i].stage_schedules = stage.getStageSchedules(-1)
+        result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
         result.siteid = 1
     }
     console.log("\n\n\n"+JSON.stringify(result))

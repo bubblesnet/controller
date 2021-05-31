@@ -4,17 +4,7 @@ const util = require('../../util')
 const station = require('../models/station')
 const sitestation = require('../models/sitestation')
 
-
-/**
- * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
- * @apiName GetStatus
- * @apiGroup Measurement
- *
- * @apiParam {Number} userid User's unique ID.
- * @apiParam {Number} deviceid Device's unique ID.
- *
- * @apiSuccess {XXXX} XXXX XXXX
- */
+/*
 const config = {
     automation_settings: {
         current_stage: "Germinate",
@@ -52,7 +42,6 @@ const config = {
             "Grow Light Bloom"
         ]
     },
-
     edge_devices: [
         {
             container_name: "sense-python",
@@ -204,9 +193,19 @@ const config = {
             on: true
         }
     }
-
-
 }
+ */
+/**
+ * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
+ * @apiName GetStatus
+ * @apiGroup Measurement
+ *
+ * @apiParam {Number} userid User's unique ID.
+ * @apiParam {Number} deviceid Device's unique ID.
+ *
+ * @apiSuccess {XXXX} XXXX XXXX
+ */
+
 
 async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
@@ -221,6 +220,7 @@ async function setPresent(req) {
     let x = await sitestation.setSensorPresent(req.params.stationid,req.params.sensor_name,req.params.present)
     return(x)
 }
+
 router.post("/:userid/:stationid/sensor/:sensor_name/:present", function (req, res, next) {
     let x = setPresent(req)
     res.json(x);

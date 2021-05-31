@@ -7,6 +7,7 @@ const outlet = require('./outlet')
 
 const server_db = require('./bubbles_db')
 const pool = server_db.getPool()
+const util = require('../../util')
 const endPool = () => {
     pool.end()
 }
@@ -172,6 +173,7 @@ async function getConfigByStation(stationid, deviceid) {
 
 
 async function createStation(body) {
+    const servers = util.get_server_ports_for_environment( process.env.NODE_ENV )
     return new Promise(function(resolve, reject) {
         pool.query("insert into station (" +
             "    userid_User," +
@@ -219,8 +221,8 @@ async function createStation(body) {
             "    station_name)" +
             "values(" +
             "    $1," +
-            "    '192.168.21.237'," +
-            "    3003," +
+            "    $2," +
+            "    $3," +
             "    'idle'," +
             "    0," +
             "    1.0," +
@@ -262,7 +264,7 @@ async function createStation(body) {
             "    false," +
             "    'blah'" +
             ") RETURNING *",
-            [body.userid], (error, results) => {
+            [body.userid, servers.api_server_host, servers.api_server_port], (error, results) => {
             if (error) {
                 reject(error)
             } else {

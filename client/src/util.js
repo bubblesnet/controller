@@ -18,27 +18,27 @@ function get_server_ports_for_environment(env) {
     switch(env) {
         case "DEV":
             ports.api_server_port = 3003;
-            ports.api_server_host = 'localhost';
-            ports.websocket_server_host = 'localhost';
+            ports.api_server_host = '192.168.21.237';
+            ports.websocket_server_host = '192.168.21.237';
             ports.websocket_server_port = 8001;
             ports.activemq_server_port = 61613;
-            ports.activemq_server_host = 'localhost';
+            ports.activemq_server_host = '192.168.21.237';
             break;
         case "TEST":
             ports.api_server_port = 3002;
-            ports.api_server_host = 'localhost';
-            ports.websocket_server_host = 'localhost';
+            ports.api_server_host = '192.168.21.237';
+            ports.websocket_server_host = '192.168.21.237';
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61613;
-            ports.activemq_server_host = 'localhost';
+            ports.activemq_server_host = '192.168.21.237';
             break;
         case "PRODUCTION":
             ports.api_server_port = 3001;
-            ports.api_server_host = 'localhost';
-            ports.websocket_server_host = 'localhost';
+            ports.api_server_host = '192.168.21.204';
+            ports.websocket_server_host = '192.168.21.204';
             ports.websocket_server_port = 8003;
             ports.activemq_server_port = 61613;
-            ports.activemq_server_host = 'localhost';
+            ports.activemq_server_host = '192.168.21.204';
             break;
         case "CI":
             ports.api_server_port = 3004;

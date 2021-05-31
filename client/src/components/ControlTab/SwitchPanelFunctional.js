@@ -4,7 +4,6 @@ import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
 
 
-
 function RenderSwitchPanel (props) {
     let automaticControlOn = props.switchControl.automaticControl.on
     let value_name = 'ON'

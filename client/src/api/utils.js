@@ -61,6 +61,22 @@ export async function getSite (host, port, siteid) {
     })
 }
 
+export async function saveStage (host, port, stationid, current_stage) {
+    console.log("saveStage calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        const response = await fetch('http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+current_stage);
+        console.log("saveStage response received")
+        if(response.ok) {
+            let x = await response.json();
+            resolve(x)
+        } else {
+            console.log("saveStage error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
 /**
  * Get the list of devices (Pi) attached to the specified user.
  *

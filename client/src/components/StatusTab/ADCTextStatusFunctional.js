@@ -26,14 +26,14 @@ function RenderADCTextStatus (props) {
               rows={['40px','20px','20px','20px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>ADC</Box>
-            <RenderADCValueWithDirection gridArea={'1_1'} label='1_1' value={props.state.status.adc_1_0_1_8} units={"Volts"} direction={props.state.status.adc_1_0_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'1_2'} label='1_2' value={props.state.status.adc_1_1_1_8} units={"Volts"} direction={props.state.status.adc_1_1_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'1_3'} label='1_3' value={props.state.status.adc_1_2_1_8} units={"Volts"} direction={props.state.status.adc_1_2_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'1_4'} label='1_4' value={props.state.status.adc_1_3_1_8} units={"Volts"} direction={props.state.status.adc_1_3_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'2_1'} label='2_1' value={props.state.status.adc_2_0_1_8} units={"Volts"} direction={props.state.status.adc_2_0_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'2_2'} label='2_2' value={props.state.status.adc_2_1_1_8} units={"Volts"} direction={props.state.status.adc_2_1_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'2_3'} label='2_3' value={props.state.status.adc_2_2_1_8} units={"Volts"} direction={props.state.status.adc_2_2_1_8_direction} />
-            <RenderADCValueWithDirection gridArea={'2_4'} label='2_4' value={props.state.status.adc_2_3_1_8} units={"Volts"} direction={props.state.status.adc_2_3_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'1_1'} label='Bd 1 ch 1' value={props.state.status.adc_1_0_1_8} units={props.state.status.adc_1_0_1_8_units} direction={props.state.status.adc_1_0_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'1_2'} label='Bd 1 ch 2' value={props.state.status.adc_1_1_1_8} units={props.state.status.adc_1_1_1_8_units} direction={props.state.status.adc_1_1_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'1_3'} label='Bd 1 ch 3' value={props.state.status.adc_1_2_1_8} units={props.state.status.adc_1_2_1_8_units} direction={props.state.status.adc_1_2_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'1_4'} label='Bd 1 ch 4' value={props.state.status.adc_1_3_1_8} units={props.state.status.adc_1_3_1_8_units} direction={props.state.status.adc_1_3_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'2_1'} label='Bd 2 ch 1' value={props.state.status.adc_2_0_1_8} units={props.state.status.adc_2_0_1_8_units} direction={props.state.status.adc_2_0_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'2_2'} label='Bd 2 ch 2' value={props.state.status.adc_2_1_1_8} units={props.state.status.adc_2_1_1_8_units} direction={props.state.status.adc_2_1_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'2_3'} label='Bd 2 ch 3' value={props.state.status.adc_2_2_1_8} units={props.state.status.adc_2_2_1_8_units} direction={props.state.status.adc_2_2_1_8_direction} />
+            <RenderADCValueWithDirection gridArea={'2_4'} label='Bd 2 ch 4' value={props.state.status.adc_2_3_1_8} units={props.state.status.adc_2_3_1_8_units} direction={props.state.status.adc_2_3_1_8_direction} />
         </Grid>
     return (ret)
 }

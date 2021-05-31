@@ -53,7 +53,7 @@ function Header (props) {
                     'width': '25%',
                     'alignItems': 'flex-start',
                     'marginLeft': '25px'
-                }}>Bubbles - {props.siteName} - ({nodeEnv})</span>
+                }}>Bubbles - {props.siteName} - ({nodeEnv}) - {props.station.current_stage}</span>
                 <span style={{'width': '75%'}} >
                     <div id="animated-gif-container" />
                 </span>

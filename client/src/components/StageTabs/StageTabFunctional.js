@@ -20,14 +20,17 @@ function RenderStageTab (props) {
         setresetButtonState(true)
         setState(JSON.parse(JSON.stringify(x)))
     }
+
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
-        props.setStateFromChild(JSON.parse(JSON.stringify(state)));
+        props.setStateFromChild("idle");
     }
+
     function resetAction() {
         setState(JSON.parse(JSON.stringify(props.state)));
-     }
+    }
+
     function defaultsAction() {
         setState(JSON.parse(JSON.stringify(props.state)));
     }

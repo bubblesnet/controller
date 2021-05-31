@@ -3,6 +3,7 @@ import React from 'react'
 import '../App.css';
 import {Button} from "rendition";
 import {Text, Box, TextInput, Markdown} from "grommet";
+import util from "../util";
 
 
 
@@ -14,31 +15,11 @@ Enter your username and password to start configuring and controlling your Bubbl
                         
 Click here to see first-time setup instructions.
 `;
-    let websocket_server_port
-    let api_port1
-    switch( props.nodeEnv) {
-        case "DEV":
-            api_port1 = 3003;
-            websocket_server_port = 8001;
-            break;
-        case "TEST":
-            api_port1 = 3002;
-            websocket_server_port = 8002;
-            break;
-        case "PRODUCTION":
-            api_port1 = 3001;
-            websocket_server_port = 8003;
-            break;
-        case "CI":
-            api_port1 = 3004;
-            websocket_server_port = 8004;
-            break;
-    }
-    const [api_server_port, setApiServerPort] = useState(api_port1);
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
-    async function loginUser(port, credentials) {
-        console.log("loginUser calling out to api on port "+port+" for token")
-        let url = 'http://localhost:'+port+'/api/auth/login'
+    async function loginUser(credentials) {
+        console.log("loginUser calling out to api on port "+servers.api_server_port+" for token")
+        let url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/auth/login'
         console.log("url = " + url)
         return new Promise( async (resolve, reject) => {
             const response = await fetch(url, {
@@ -69,7 +50,7 @@ Click here to see first-time setup instructions.
         */
         console.log("handleSubmit - calling out for token for user "+username)
         /// TODO this hardwired port number is because api_server_port is showing up undefined here!
-        await loginUser(3003, {
+        await loginUser( {
             username: username,
             password: password
         })
