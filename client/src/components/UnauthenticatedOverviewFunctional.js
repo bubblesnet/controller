@@ -18,7 +18,7 @@ Click here to see first-time setup instructions.
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
     async function loginUser(credentials) {
-        console.log("loginUser calling out to api on port "+servers.api_server_port+" for token")
+        console.log("loginUser env=("+props.nodeEnv+") calling out to api on port "+servers.api_server_port+" for token")
         let url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/auth/login'
         console.log("url = " + url)
         return new Promise( async (resolve, reject) => {
