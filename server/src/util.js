@@ -50,11 +50,16 @@ function get_server_ports_for_environment(env) {
             break;
         case "TEST":
             ports.api_server_port = 3002;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61613;
+            ports.api_server_host = '192.168.21.237';
+            ports.websocket_server_host = '192.168.21.237';
             ports.activemq_server_host = '192.168.21.237';
+            if( process.env.TEST_HOST !== "" ) {
+                ports.api_server_host = process.env.TEST_HOST;
+                ports.websocket_server_host = process.env.TEST_HOST;
+                ports.activemq_server_host = process.env.TEST_HOST;
+            }
             break;
         case "PRODUCTION":
             ports.api_server_port = 3001;

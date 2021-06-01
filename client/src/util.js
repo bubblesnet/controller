@@ -18,11 +18,16 @@ function get_server_ports_for_environment(env) {
     switch(env) {
         case "DEV":
             ports.api_server_port = 3003;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
             ports.websocket_server_port = 8001;
             ports.activemq_server_port = 61613;
+            ports.api_server_host = '192.168.21.237';
+            ports.websocket_server_host = '192.168.21.237';
             ports.activemq_server_host = '192.168.21.237';
+            if( process.env.DEV_HOST !== "" ) {
+                ports.api_server_host = process.env.DEV_HOST;
+                ports.websocket_server_host = process.env.DEV_HOST;
+                ports.activemq_server_host = process.env.DEV_HOST;
+            }
             break;
         case "TEST":
             ports.api_server_port = 3002;
@@ -31,10 +36,10 @@ function get_server_ports_for_environment(env) {
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = '192.168.21.237';
-            if( process.env.DEV_HOST !== "" ) {
-                ports.api_server_host = process.env.DEV_HOST;
-                ports.websocket_server_host = process.env.DEV_HOST;
-                ports.activemq_server_host = process.env.DEV_HOST;
+            if( process.env.TEST_HOST !== "" ) {
+                ports.api_server_host = process.env.TEST_HOST;
+                ports.websocket_server_host = process.env.TEST_HOST;
+                ports.activemq_server_host = process.env.TEST_HOST;
             }
             break;
         case "PRODUCTION":
