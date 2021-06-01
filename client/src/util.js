@@ -23,10 +23,10 @@ function get_server_ports_for_environment(env) {
             ports.api_server_host = '192.168.21.237';
             ports.websocket_server_host = '192.168.21.237';
             ports.activemq_server_host = '192.168.21.237';
-            if( process.env.DEV_HOST !== "" ) {
-                ports.api_server_host = process.env.DEV_HOST;
-                ports.websocket_server_host = process.env.DEV_HOST;
-                ports.activemq_server_host = process.env.DEV_HOST;
+            if( process.env.REACT_APP_DEV_HOST !== "" ) {
+                ports.api_server_host = process.env.REACT_APP_DEV_HOST;
+                ports.websocket_server_host = process.env.REACT_APP_DEV_HOST;
+                ports.activemq_server_host = process.env.REACT_APP_DEV_HOST;
             }
             break;
         case "TEST":
@@ -36,7 +36,7 @@ function get_server_ports_for_environment(env) {
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = '192.168.21.237';
-            if( process.env.TEST_HOST !== "" ) {
+            if( process.env.REACT_APP_TEST_HOST !== "" ) {
                 ports.api_server_host = process.env.TEST_HOST;
                 ports.websocket_server_host = process.env.TEST_HOST;
                 ports.activemq_server_host = process.env.TEST_HOST;
