@@ -59,9 +59,9 @@
   },
   "scripts": {
     "start": "export HOST=0.0.0.0&&export PORT=3000&&react-scripts start",
-    "start_dev": "export HOST=0.0.0.0&&export PORT=3005&&react-scripts start",
-    "start_test": "export HOST=0.0.0.0&&export PORT=3006&&react-scripts start",
-    "start_prod": "export HOST=0.0.0.0&&export PORT=3000&&react-scripts start",
+    "start_dev": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
+    "start_test": "set HOST=0.0.0.0&&set PORT=3006&&react-scripts start",
+    "start_prod": "set HOST=0.0.0.0&&set PORT=3000&&react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
