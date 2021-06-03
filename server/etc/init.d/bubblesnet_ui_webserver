@@ -7,15 +7,15 @@ export BUBBLESNET_HOME
 
 case $1 in
 start)
-cd BUBBLESNET_HOME
+cd $BUBBLESNET_HOME
 npm run start_dev&
 ;;
 stop)
-cd BUBBLESNET_HOME
+cd $BUBBLESNET_HOME
 # ./bubblesnet_ui.sh stop
 ;;
 restart)
-cd BUBBLESNET_HOME
+cd $BUBBLESNET_HOME
 npm run start_dev&
 ;;
 esac
