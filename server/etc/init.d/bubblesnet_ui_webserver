@@ -1,0 +1,22 @@
+#!/bin/bash
+# description: Bubblesnet React UI Start Stop Restart
+# processname: node
+# chkconfig: 234 20 80
+BUBBLESNET_HOME=/home/rodley/controller/client
+export BUBBLESNET_HOME
+
+case $1 in
+start)
+cd BUBBLESNET_HOME
+npm run start_dev&
+;;
+stop)
+cd BUBBLESNET_HOME
+# ./bubblesnet_ui.sh stop
+;;
+restart)
+cd BUBBLESNET_HOME
+npm run start_dev&
+;;
+esac
+exit 0
