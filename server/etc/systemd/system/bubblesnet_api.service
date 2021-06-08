@@ -2,7 +2,7 @@
 Description=Bubblesnet API Server
 
 [Service]
-ExecStart=/home/rodley/controller/server/src/api-server.js
+ExecStart=/usr/bin/node /home/rodley/controller/server/src/api-server.js
 Restart=always
 User=nobody
 # Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'

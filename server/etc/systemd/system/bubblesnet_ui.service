@@ -2,7 +2,7 @@
 Description=Bubblesnet UI Web Server
 
 [Service]
-ExecStart=/home/rodley/controller/client/node_modules/.bin/react-scripts start
+ExecStart=/usr/bin/node /home/rodley/controller/client/node_modules/.bin/react-scripts start
 Restart=always
 User=nobody
 # Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'

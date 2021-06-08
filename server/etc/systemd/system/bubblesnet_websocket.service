@@ -2,7 +2,7 @@
 Description=Bubblesnet Web Socket Server
 
 [Service]
-ExecStart=/home/rodley/controller/server/src/ws-server.js
+ExecStart=/usr/bin/node /home/rodley/controller/server/src/ws-server.js
 Restart=always
 User=nobody
 # Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'

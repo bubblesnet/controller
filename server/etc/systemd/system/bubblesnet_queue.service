@@ -2,7 +2,7 @@
 Description=Bubblesnet Queue Server
 
 [Service]
-ExecStart=/home/rodley/controller/server/src/queue-server.js
+ExecStart=/usr/bin/node /home/rodley/controller/server/src/queue-server.js
 Restart=always
 User=nobody
 # Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'
