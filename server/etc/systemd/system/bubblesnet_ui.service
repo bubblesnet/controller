@@ -11,6 +11,8 @@ Environment=PATH=/usr/bin:/usr/local/bin
 Environment=NODE_ENV=DEV
 Environment=DEBUG=api-server,edgemeasurement_routes
 Environment=LOG_LEVEL=silly
+Environment=PORT=3005
+Environment=HOST=0.0.0.0
 WorkingDirectory=/home/rodley/controller/client
 
 [Install]
