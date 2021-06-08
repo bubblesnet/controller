@@ -58,8 +58,11 @@
     "better-docs": "^2.3.2"
   },
   "scripts": {
-    "start": "export HOST=0.0.0.0&&export PORT=3000&&react-scripts start",
-    "start_dev": "HOST=0.0.0.0 PORT=3005 react-scripts start",
+    "start": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
+    "start_dev_windows":  "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
+    "start_test_windows": "set HOST=0.0.0.0&&set PORT=3006&&react-scripts start",
+    "start_prod_windows": "set HOST=0.0.0.0&&set PORT=3000&&react-scripts start",
+    "start_dev": "HOST=0.0.0.0 PORT=3005&&react-scripts start",
     "start_test": "HOST=0.0.0.0 PORT=3006 react-scripts start",
     "start_prod": "HOST=0.0.0.0 set PORT=3000 react-scripts start",
     "build": "react-scripts build",
