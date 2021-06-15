@@ -49,7 +49,7 @@ function App() {
         return <SetupApp readyState={true}/>
     }
 
-    return (token?.auth === true) ? <AuthenticatedApp nodeEnv={"DEV"}/> : <UnauthenticatedApp nodeEnv={"DEV"} processLoginResult={processLoginResult}/>
+    return (token?.auth === true) ? <AuthenticatedApp nodeEnv={process.env.NODE_ENV}/> : <UnauthenticatedApp nodeEnv={process.env.NODE_ENV} processLoginResult={processLoginResult}/>
 }
 
 export default App

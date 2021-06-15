@@ -22,7 +22,7 @@ function RenderDeviceMapTab (props) {
     const [apply_button_state,setApplyButtonState] = useState(false)
     const [container_names,setContainerNames] = useState()
     const [module_types,setModuleTypes] = useState()
-    const [nodeEnv, setNodeEnv] = useState("DEV");
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
 
     useEffect(() => {
         const fetchData = async () => {

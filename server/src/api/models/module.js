@@ -84,7 +84,7 @@ let defaultModules = [
         "container_name": "sense-python",
         "deviceid": 0,
         "module_type": "bh1750",
-        "module_name": "Accelerometer/Title-detector",
+        "module_name": "Accelerometer/Tilt-detector",
         "protocol": "i2c",
         "i2caddress": "0x23",
     },
