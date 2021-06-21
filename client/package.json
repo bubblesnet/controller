@@ -59,7 +59,7 @@
   },
   "scripts": {
     "start": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
-    "start_dev_windows": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
+    "start_dev_windows": "set NODE_ENV=DEV&&set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
     "start_test_windows": "set HOST=0.0.0.0&&set PORT=3006&&react-scripts start",
     "start_prod_windows": "set HOST=0.0.0.0&&set PORT=3000&&react-scripts start",
     "start_dev": "HOST=0.0.0.0 PORT=3005&&react-scripts start",

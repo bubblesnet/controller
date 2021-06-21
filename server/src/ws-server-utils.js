@@ -89,6 +89,12 @@ function runWebSocketServer(port) {
                     'content-type': 'text/json'
                 };
                 bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+                sendHeaders = {
+                    'destination': '/topic/90000009/70000005',
+                    'content-type': 'text/json'
+                };
+                bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+
             } else {
                 debug("NOT Echoing received state")
             }

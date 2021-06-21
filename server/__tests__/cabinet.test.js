@@ -98,7 +98,7 @@ describe("cab",   () => {
 });
 
 describe("station",   () => {
-    console.log("create/udpate/delete station")
+    console.log("create/update/delete station")
     it('Empty station with update/delete', async function () {
         let user_list = await user.getAllUsers()
         expect(user_list).not.undefined
