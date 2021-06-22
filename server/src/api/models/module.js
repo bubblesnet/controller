@@ -146,19 +146,22 @@ let defaultModules = [
     }
 ]
 
-async function createDefaultSetOfModules( body ) {
+async function createDefaultModules(deviceid) {
     let list = []
-    return new Promise( async function (resolve, reject) {
-        for (let i = 0; i < defaultModules.length; i++) {
-            defaultModules[i].deviceid = body.deviceid
+    for (let i = 0; i < defaultModules.length; i++) {
+        defaultModules[i].deviceid = deviceid
 //        console.log(JSON.stringify(defaultModules[i]))
 
-            let x = await createModule(defaultModules[i])
-            list.push(x)
-        }
-        console.log("returning list length " + list.length)
-        resolve (list)
-    });
+        let x = await createModule(defaultModules[i])
+        list.push(x)
+    }
+    console.log("returning list length " + list.length)
+    return (list)
+}
+
+async function createDefaultSetOfModules( body ) {
+    let list = await createDefaultModules(body.deviceid)
+    return (list);
 }
 
 async function getAllModulesByCabinet(stationid) {
