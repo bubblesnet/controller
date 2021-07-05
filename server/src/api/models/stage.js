@@ -12,7 +12,7 @@ stage_schedules =  [
     {
         "environmental_targets": {
             "humidity": 30,
-            "temperature": 77
+            "temperature": 81
         },
         "hours_of_light": 0,
         "name": "germination"

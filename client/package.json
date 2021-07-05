@@ -21,6 +21,7 @@
     "moment": "^2.27.0",
     "pg": "^8.3.0",
     "prop-types": "^15.7.2",
+    "@naisutech/react-tree": "^0.4.2",
     "react": "^16.13.1",
     "react-d3-speedometer": "^1.0.1",
     "react-dom": "^16.13.1",

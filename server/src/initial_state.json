@@ -53,7 +53,7 @@
       "24 off"
     ],
     "light_on_start_hour": 10,
-    "target_temperature": 75,
+    "target_temperature": 70,
     "temperature_min": 60,
     "temperature_max": 90,
     "humidity_min": 0,
