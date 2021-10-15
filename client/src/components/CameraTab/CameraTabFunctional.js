@@ -34,6 +34,7 @@ function RenderCameraTab(props) {
         indexes.push(i)
     }
 
+    
     function getDeviceRow(i) {
         let labelAreaIndex = i*2
 
