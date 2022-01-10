@@ -3,6 +3,11 @@ import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
 
+var slideclick_valid = new Audio("slideclick_valid.mp3");
+
+function goodbeep() {
+    slideclick_valid.play()
+}
 
 function RenderSwitchPanel (props) {
     let automaticControlOn = props.switchControl.automaticControl.on
@@ -35,6 +40,7 @@ function RenderSwitchPanel (props) {
     }
 
     function toggleAutomatic(e) {
+        goodbeep()
         props.switchControl.automaticControl.toggle(e)
     }
 

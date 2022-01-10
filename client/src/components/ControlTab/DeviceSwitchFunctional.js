@@ -3,11 +3,22 @@ import Switch from "react-input-switch";
 import {TableRow,TableCell} from "grommet";
 import './controlTab.css'
 
+var slideclick_valid = new Audio("slideclick_valid.mp3");
+var slideclick_invalid = new Audio("slideclick_invalid.mp3");
 
+function goodbeep() {
+    slideclick_valid.play()
+}
+function badbeep() {
+    slideclick_invalid.play()
+}
 function RenderDeviceSwitch (props) {
     function toggle(e) {
         if( props.automaticControl === props.off ) {
             props.toggle(e)
+            goodbeep();
+        } else {
+            badbeep();
         }
     }
 

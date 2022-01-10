@@ -90,7 +90,7 @@ Click here to see first-time setup instructions.
                               <Button alignSelf="center"
 
                                       width={'medium'} round={'large'}
-                                      active={"true"}
+                                      active={true}
                                       onClick={handleSubmit} label={"Log in"} />
                           </Box >
                           {login_status}
