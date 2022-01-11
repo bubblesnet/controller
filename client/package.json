@@ -21,6 +21,7 @@
     "grommet-icons": "^4.5.0",
     "jest-enzyme": "^7.1.2",
     "moment": "^2.27.0",
+    "@naisutech/react-tree": "^2.0.12",
     "pg": "^8.3.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
