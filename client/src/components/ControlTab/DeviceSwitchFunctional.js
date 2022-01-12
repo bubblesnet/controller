@@ -28,7 +28,7 @@ function RenderDeviceSwitch (props) {
     let buttonBackgroundColor = 'yellow'
     let buttonCheckedColor = 'yellow'
 
-    if( props.automaticControl === props.on ) {
+    if( props.automaticControl === props.on || props.changing === true ) {
         trackBackgroundColor = 'red'
         trackCheckedColor = 'green'
         buttonBackgroundColor = 'red'
