@@ -14,7 +14,8 @@ function badbeep() {
 }
 function RenderDeviceSwitch (props) {
     function toggle(e) {
-        if( props.automaticControl === props.off ) {
+        console.log("changing = " + props.changing)
+        if( props.automaticControl === props.off && props.changing === false) {
             props.toggle(e)
             goodbeep();
         } else {

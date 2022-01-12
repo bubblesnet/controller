@@ -21,23 +21,29 @@ function RenderControlTab(props) {
     let values = {
         switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
-            humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
-            heater: {on: props.switch_state.heater.on, toggle: toggleHeater},
-            heatLamp: {on: props.switch_state.heatLamp.on, toggle: toggleHeatLamp},
-            heatingPad: {on: props.switch_state.heatingPad.on, toggle: toggleHeatingPad},
-            lightBloom: {on: props.switch_state.lightBloom.on, toggle: toggleLightBloom},
-            lightVegetative: {on: props.switch_state.lightVegetative.on, toggle: toggleLightVegetative},
-            airPump: {on: props.switch_state.airPump.on, toggle: toggleAirPump},
-            waterPump: {on: props.switch_state.waterPump.on, toggle: toggleWaterPump},
-            intakeFan: {on: props.switch_state.intakeFan.on, toggle: toggleIntakeFan},
-            exhaustFan: {on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
-            currentGrowLight: {on: props.switch_state.currentGrowLight.on, toggle: toggleCurrentGrowLight}
+            humidifier: {on: props.switch_state.humidifier.on, changing: false, toggle: toggleHumidifier},
+            heater: {on: props.switch_state.heater.on, changing: false, toggle: toggleHeater},
+            heatLamp: {on: props.switch_state.heatLamp.on, changing: false, toggle: toggleHeatLamp},
+            heatingPad: {on: props.switch_state.heatingPad.on, changing: false, toggle: toggleHeatingPad},
+            lightBloom: {on: props.switch_state.lightBloom.on, changing: false, toggle: toggleLightBloom},
+            lightVegetative: {on: props.switch_state.lightVegetative.on, changing: false, toggle: toggleLightVegetative},
+            airPump: {on: props.switch_state.airPump.on, changing: false, toggle: toggleAirPump},
+            waterPump: {on: props.switch_state.waterPump.on, changing: false, toggle: toggleWaterPump},
+            intakeFan: {on: props.switch_state.intakeFan.on, changing: false, toggle: toggleIntakeFan},
+            exhaustFan: {on: props.switch_state.exhaustFan.on, changing: false, toggle: toggleExhaustFan},
+            currentGrowLight: {on: props.switch_state.currentGrowLight.on, changing: false, toggle: toggleCurrentGrowLight}
         }
     }
 
     /***
      *
      */
+    function toggleState() {
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.changingState.on = !values.switchControl.changingState.on;
+        props.setStateFromChild(x, "changingState", x.switch_state.changingState.on)
+    }
+
     function toggleAutomatic() {
         let x = JSON.parse(JSON.stringify(props.state));
         x.switch_state.automaticControl.on = !values.switchControl.automaticControl.on;

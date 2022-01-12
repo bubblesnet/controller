@@ -298,8 +298,8 @@ function AuthenticatedApp (props) {
         lastJsonMessage,
         readyState,
     } = useWebSocket(socketUrl, {
-        reconnectAttempts: 1000000,
-        reconnectInterval: 30000,
+        reconnectAttempts: 10000000, // Infinity - what's max value? Number.MAX_VALUE doesn't work.
+        reconnectInterval: 30000,   // Why 30 seconds?  Seems long. Trying 3.
         onOpen: () => { getDeviceStatus(); log.info('ws: websocket opened'); },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -383,6 +383,8 @@ function AuthenticatedApp (props) {
             return
         }
         newstate.switch_state[switch_name].on = on
+        console.log("Clearing changing newstate.switch_state["+switch_name+"] to false")
+        newstate.switch_state[switch_name].changing = false
         setState(newstate)
     }
 
@@ -456,6 +458,15 @@ function AuthenticatedApp (props) {
         if( switch_name === "growLight") {
             sw_name = "lightBloom"
         }
+
+        console.log("Setting local_state.switch_state["+switch_name+"].changing = true")
+        let newstate = JSON.parse(JSON.stringify(local_state))
+        if( typeof newstate.switch_state[switch_name] === 'undefined') {
+            console.error( "button: bad switch_name " + switch_name)
+            return
+        }
+        newstate.switch_state[switch_name].changing = true
+        setState(newstate)
 
         let cmd = {
             command: SWITCH_COMMAND,
@@ -551,6 +562,17 @@ function AuthenticatedApp (props) {
         }
     }
     let thestate = JSON.parse(JSON.stringify(local_state))
+    if( typeof(thestate.switch_state.humidifier.changing) === 'undefined' ) {
+        thestate.switch_state.heater.changing = false
+        thestate.switch_state.humidifier.changing = false
+        thestate.switch_state.heatLamp.changing = false
+        thestate.switch_state.intakeFan.changing = false
+        thestate.switch_state.exhaustFan.changing = false
+        thestate.switch_state.lightBloom.changing = false
+        thestate.switch_state.lightVegetative.changing = false
+        thestate.switch_state.currentGrowLight.changing = false
+//        thestate.switch_state.humidifier.changing = false
+    }
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
@@ -564,6 +586,8 @@ function AuthenticatedApp (props) {
     site.siteid = siteid
 
 //    log.trace("site = " + JSON.stringify(site))
+    console.log("thestate.changing = " + thestate.switch_state.humidifier.changing)
+
     return (
         <div className="App">
             <Header siteName={siteName} setNodeEnv={setEnvironment} station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
