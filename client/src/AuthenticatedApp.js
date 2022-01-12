@@ -570,8 +570,10 @@ function AuthenticatedApp (props) {
         thestate.switch_state.exhaustFan.changing = false
         thestate.switch_state.lightBloom.changing = false
         thestate.switch_state.lightVegetative.changing = false
+        thestate.switch_state.airPump.changing = false
+        thestate.switch_state.waterPump.changing = false
+        thestate.switch_state.heatingPad.changing = false
         thestate.switch_state.currentGrowLight.changing = false
-//        thestate.switch_state.humidifier.changing = false
     }
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {

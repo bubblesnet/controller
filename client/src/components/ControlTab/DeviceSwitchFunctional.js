@@ -15,7 +15,7 @@ function badbeep() {
 function RenderDeviceSwitch (props) {
     function toggle(e) {
         console.log("changing = " + props.changing)
-        if( props.automaticControl === props.off && props.changing === false) {
+        if (props.automaticControl === props.off && props.changing === false) {
             props.toggle(e)
             goodbeep();
         } else {
@@ -28,23 +28,24 @@ function RenderDeviceSwitch (props) {
     let buttonBackgroundColor = 'yellow'
     let buttonCheckedColor = 'yellow'
 
-    if( props.changing === true ) {
+    if (props.changing === true && props.automaticControl === props.off) {
         trackBackgroundColor = 'grey'
         trackCheckedColor = 'grey'
-        buttonBackgroundColor = 'grey'
-        buttonCheckedColor = 'grey'
-    } else if( props.automaticControl === props.on ) {
+        buttonBackgroundColor = 'yellow'
+        buttonCheckedColor = 'yellow'
+    } else if (props.automaticControl === props.on) {
         trackBackgroundColor = 'red'
         trackCheckedColor = 'green'
         buttonBackgroundColor = 'red'
         buttonCheckedColor = 'green'
     }
+
     let ret
 
-        if( props.exists === false ) {
-            ret = <></>
-        } else {
-            ret =
+    if (props.exists === false) {
+        ret = <></>
+    } else {
+        ret =
             <TableRow><TableCell>{props.label}</TableCell><TableCell>
                 <Switch on={props.on} off={props.off} value={props.onOff}
                         styles={{
@@ -62,7 +63,7 @@ function RenderDeviceSwitch (props) {
                             }
                         }} onChange={toggle}/>
             </TableCell></TableRow>
-        }
+    }
     return (ret)
 }
 
