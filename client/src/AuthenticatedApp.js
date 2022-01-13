@@ -563,17 +563,17 @@ function AuthenticatedApp (props) {
     }
     let thestate = JSON.parse(JSON.stringify(local_state))
     if( typeof(thestate.switch_state.humidifier.changing) === 'undefined' ) {
-        thestate.switch_state.heater.changing = false
-        thestate.switch_state.humidifier.changing = false
-        thestate.switch_state.heatLamp.changing = false
-        thestate.switch_state.intakeFan.changing = false
-        thestate.switch_state.exhaustFan.changing = false
-        thestate.switch_state.lightBloom.changing = false
-        thestate.switch_state.lightVegetative.changing = false
-        thestate.switch_state.airPump.changing = false
-        thestate.switch_state.waterPump.changing = false
-        thestate.switch_state.heatingPad.changing = false
-        thestate.switch_state.currentGrowLight.changing = false
+        thestate.switch_state.heater.changing = true
+        thestate.switch_state.humidifier.changing = true
+        thestate.switch_state.heatLamp.changing = true
+        thestate.switch_state.intakeFan.changing = true
+        thestate.switch_state.exhaustFan.changing = true
+        thestate.switch_state.lightBloom.changing = true
+        thestate.switch_state.lightVegetative.changing = true
+        thestate.switch_state.airPump.changing = true
+        thestate.switch_state.waterPump.changing = true
+        thestate.switch_state.heatingPad.changing = true
+        thestate.switch_state.currentGrowLight.changing = true
     }
 
     if (typeof(lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
