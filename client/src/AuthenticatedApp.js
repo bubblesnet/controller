@@ -23,6 +23,7 @@ import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActio
 
 import initial_state from './initial_state.json'
 import initial_settings from './initial_settings.json'
+import sprintf from 'sprintf-js';
 
 import useWebSocket from 'react-use-websocket';
 import './Palette.css'
@@ -32,6 +33,7 @@ import {addStation,saveSetting, getSite} from './api/utils'
 
 import './logimplementation'
 import log from 'roarr';
+import moment from "moment";
 
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
@@ -47,7 +49,11 @@ const PICTURE_COMMAND="picture"
 function AuthenticatedApp (props) {
 //    log.trace("render AuthenticatedApp " + JSON.stringify(props))
     log.debug("render AuthenticatedApp " + JSON.stringify(props));
+    var tilt_sound = new Audio("tilt.mp3");
 
+    function play_tilt() {
+        tilt_sound.play()
+    }
     //
     //
     //
@@ -130,6 +136,7 @@ function AuthenticatedApp (props) {
     }
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
+    initial_state.tilt = false;
 
     /**
      * Local copy of all data (temp ...) - change and rerender
@@ -231,6 +238,19 @@ function AuthenticatedApp (props) {
     }
 
     /**
+     */
+    const applyEventToState = (msg) => {
+            log.debug("msg: applying event " + JSON.stringify(msg))
+            if (msg.sensor_name === 'tamper_sensor') {
+                if(local_state.tilt === false ) {
+                    play_tilt()
+                }
+                local_state.tilt = true
+                local_state.last_tilt = moment().unix()
+            }
+        }
+
+    /**
      * Apply the values in a new measurement message to the state values that control
      * what is displayed in the UI taken from the WebSocket service.
      *
@@ -242,6 +262,9 @@ function AuthenticatedApp (props) {
         if( typeof msg.value === 'undefined' ) {
             log.error("msg: BAD measurement message " + JSON.stringify(msg))
         } else {
+            if( msg.measurement_name === 'water_level' ) {
+                local_state.status['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
+            }
             local_state.status[msg.measurement_name] = msg.value
             local_state.status[msg.measurement_name + "_direction"] = msg.direction
             local_state.status[msg.measurement_name + "_units"] = msg.units
@@ -272,7 +295,8 @@ function AuthenticatedApp (props) {
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
-                        log.debug("ws: received event");
+                        log.debug("ws: received event ");
+                        applyEventToState(msg)
                         break;
                     case "picture_event":
                         log.debug("ws: received picture event");
@@ -548,6 +572,15 @@ function AuthenticatedApp (props) {
     }
 
     log.trace("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
+    // reset tilt if older than 30 seconds
+    if( local_state.tilt ) {
+        let now = moment().unix()
+        if( now - local_state.last_tilt > 30 ) {
+            log.trace("turning tilt off because 30 seconds have expired")
+            local_state.tilt = false
+            local_state.last_tilt = 0
+        }
+    }
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
 //    setBubblesTheme(JSON.parse(JSON.stringify(merged_theme)))
     if( lastJsonMessage !== null && typeof (lastJsonMessage.status) !== 'undefined' && lastJsonMessage.status !== null ) {
@@ -592,7 +625,7 @@ function AuthenticatedApp (props) {
 
     return (
         <div className="App">
-            <Header siteName={siteName} setNodeEnv={setEnvironment} station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
+            <Header tilt={thestate.tilt} siteName={siteName} setNodeEnv={setEnvironment} station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState} handleClickSendMessage={handleClickSendMessage}/>
             <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add a station</DialogTitle>
                 <DialogContent>

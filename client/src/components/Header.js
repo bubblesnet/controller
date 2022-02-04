@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
+import RenderTiltFunctional from "./TiltFunctional"
 import {ReadyState} from "react-use-websocket";
 import getReadyState from '../AuthenticatedApp'
 import {Table, TableRow, TableCell} from 'grommet'
@@ -49,13 +50,15 @@ function Header (props) {
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
+                <span  >
+                    <div id="animated-gif-container" />
+                </span>
                 <span style={{
-                    'width': '25%',
                     'alignItems': 'flex-start',
                     'marginLeft': '25px'
                 }}>Bubbles - {props.siteName} - ({nodeEnv}) - {props.station.current_stage}</span>
-                <span style={{'width': '75%'}} >
-                    <div id="animated-gif-container" />
+                <span style={{'width': '50%'}} >
+                    <RenderTiltFunctional tilt={props.tilt}/>
                 </span>
             </header>
                 <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}

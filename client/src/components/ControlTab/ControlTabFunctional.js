@@ -133,6 +133,11 @@ function RenderControlTab(props) {
             {props.state.status.tub_water_level} {props.settings.display_settings.tub_volume_units}
         </div>
     }
+    let water_level_percent = props.state.status.tub_water_level/3.0
+    let water_level_max_pixels = 188
+    let water_level_height = water_level_max_pixels*water_level_percent
+    let water_level_top = (water_level_max_pixels-water_level_height) + 'px'
+    console.log("water_level pct " + water_level_percent+" hgt " + water_level_height + " top " + water_level_top)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
@@ -148,7 +153,9 @@ function RenderControlTab(props) {
                     <div id="tub">
                         <div id="tubedge-holder">
                         </div>
-                        <div id="water-level-holder"> {wl} {wlRuler}
+                        {wl}
+                        {wlRuler}
+                        <div id="water-level-holder" style={{'height': water_level_height,'top': water_level_top}}>
                         </div>
                         <div id={"root_ph_holder"}>
                             <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>

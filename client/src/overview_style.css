@@ -780,10 +780,8 @@ body {
 }
 
 #water-level-holder {
-  height: 145px;
   left: 0;
   position: absolute;
-  top: 43px;
   width: 560px;
   background-color: var(--color-tub-water-blue);
 }
