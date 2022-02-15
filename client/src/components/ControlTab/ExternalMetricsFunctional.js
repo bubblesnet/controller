@@ -1,8 +1,8 @@
-import React, { useState} from "react";
+import React from "react";
 import RenderThermometer from "./ThermometerFunctional";
 import RenderHygrometer from "./HygrometerFunctional";
 import RenderBarometer from "./BarometerFunctional";
-import {Text} from "grommet"
+// import {Text} from "grommet"
 import sprintf from 'sprintf-js';
 
 function RenderExternalMetrics (props) {

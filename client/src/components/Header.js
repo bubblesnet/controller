@@ -3,8 +3,8 @@ import React, {useState} from 'react';
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 import RenderTiltFunctional from "./TiltFunctional"
 import {ReadyState} from "react-use-websocket";
-import getReadyState from '../AuthenticatedApp'
-import {Table, TableRow, TableCell} from 'grommet'
+// import getReadyState from '../AuthenticatedApp'
+// import {Table, TableRow, TableCell} from 'grommet'
 import log from 'roarr';
 import '../logimplementation'
 
@@ -17,23 +17,22 @@ function Header (props) {
         log.trace("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value
         let api_server_port;
-        let websocket_server_port;
         switch( theNodeEnv) {
             case "DEV":
                 api_server_port = 3003;
-                websocket_server_port = 8001;
                 break;
             case "TEST":
                 api_server_port = 3002;
-                websocket_server_port = 8002;
                 break;
             case "PRODUCTION":
                 api_server_port = 3001;
-                websocket_server_port = 8003;
                 break;
             case "CI":
                 api_server_port = 3004;
-                websocket_server_port = 8004;
+                break;
+            default:
+                theNodeEnv = "DEV"
+                api_server_port = 3003;
                 break;
         }
         setNodeEnv(theNodeEnv);

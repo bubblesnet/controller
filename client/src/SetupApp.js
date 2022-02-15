@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+// import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {Tabs, Tab} from "rendition";
 import Header from "./components/Header"
@@ -9,7 +10,7 @@ import RenderUserSetupTab from "./components/ServerSettingsTab/UserSetupTabFunct
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-//import {useIntl} from 'react-intl'
+// import {useIntl} from 'react-intl'
 
 import initial_state from './initial_state.json'
 import util from "./util";
@@ -42,8 +43,8 @@ function SetupApp (props) {
         console.log("getAdminUser calling out to api for deets")
 
         return new Promise( async (resolve, reject) => {
-            console.log("getAdminUser calling out to " + 'http://'+servers.api_server_host+':'+servers.api_server_port+'/users/name/admin')
-            const response = fetch('http://'+servers.api_server_host+':'+servers.api_server_port+'/api/users/name/admin').then( async function(response) {
+            console.log(`getAdminUser calling out to http://${servers.api_server_host}:${servers.api_server_port}/users/name/admin`)
+            const response = fetch(`http://${servers.api_server_host}:${servers.api_server_port}/api/users/name/admin`).then( async function(response) {
                 if (response.ok) {
                     console.log("getAdminUser Got user response.ok");
                     let user = await response.json();
@@ -67,7 +68,6 @@ function SetupApp (props) {
     }
 
     console.log("SetupApp Rendering App with readyState = " )
-    let thestate = local_state
     return (
         <div className="App">
                 <Header setNodeEnv={setEnvironment}/>

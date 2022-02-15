@@ -3,7 +3,7 @@ import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 import {
-    Button,
+//    Button,
     Grommet,
     TextInput,
     Table,
@@ -18,7 +18,7 @@ import GoogleFontLoader from "react-google-font-loader";
 function RenderUserSetupTab (props) {
     let [applyButtonState, setApplyButtonState] = useState(false)
     let [resetButtonState, setResetButtonState] = useState(false)
-    let [defaultsButtonState, setDefaultsButtonState] = useState(false)
+//    let [defaultsButtonState, setDefaultsButtonState] = useState(false)
 
     let [username, setUsername] = useState(props.username)
     let [email, setEmail] = useState(props.email)
@@ -26,9 +26,9 @@ function RenderUserSetupTab (props) {
     let [firstName, setFirstName] = useState(props.firstName)
     let [lastName, setLastName] = useState(props.lastName)
 
-    function testDatabase(e) {
-
-    }
+//    function testDatabase(e) {
+//
+//    }
     function addUser() {
         console.log("addUser")
     }

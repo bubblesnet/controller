@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 //import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+//import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+//import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 //import TreeItem from '@material-ui/lab/TreeItem';
 // import RenderDeviceMapTab from "./DeviceMapTab/DeviceMapTabFunctional";
 
@@ -22,10 +22,10 @@ function RenderSiteStationMenu(props) {
 
     function setCurrentStation(ev) {
         let x = ev.target.nodeId
-        log.trace("ev.target "+ev.target.nodeId)
+        log.trace("ev.target.nodeId "+x)
         if( props.currentStationIndex === 1 ) {
             props.setCurrentStationIndex(1)
-        } {
+        } else {
             props.setCurrentStationIndex(0)
         }
 //        alert("setCurrentStationIndex " + x)
@@ -61,7 +61,7 @@ function RenderSiteStationMenu(props) {
 //       return <TreeItem nodeId={y} label={station.station_name} onLabelClick={setCurrentStation}/>
     }
 
-    const classes = useStyles();
+//    const classes = useStyles();
     if( typeof props.site === 'undefined') {
         props.site = {}
     }

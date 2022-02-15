@@ -17,7 +17,7 @@ import RenderSiteStationMenu from "./components/SiteStationMenu";
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-import {Add, Projects,Clock,Help} from 'grommet-icons'
+import {Add,Clock,Help} from 'grommet-icons'
 import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 // import {useIntl} from 'react-intl'
 
@@ -50,6 +50,7 @@ function AuthenticatedApp (props) {
 //    log.trace("render AuthenticatedApp " + JSON.stringify(props))
     log.debug("render AuthenticatedApp " + JSON.stringify(props));
     var tilt_sound = new Audio("tilt.mp3");
+//    var shutter_sound = new Audio("shutter_click.mp3");
 
     function play_tilt() {
         tilt_sound.play()
@@ -68,15 +69,15 @@ function AuthenticatedApp (props) {
      * @param index     not used
      * @param arr       not used
      * @returns {JSX.Element}   A React Button element
-     */
     function getStationButton(value, index, arr ) {
         log.debug("getStationButton value " + JSON.stringify(value))
         return <Button onClick={changeStation} value={value.stationid} label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
     }
-
     function changeStation(ev) {
         alert("change station to "+ev.target.value)
     }
+     */
+
 
     /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
@@ -153,7 +154,7 @@ function AuthenticatedApp (props) {
     /**
      * If we change the langauge, rerender
      */
-    const [language, setLanguage] = useState('');
+//    const [language, setLanguage] = useState('');
     /**
      * If we change the web socket URL, rerender
      */
@@ -201,6 +202,7 @@ function AuthenticatedApp (props) {
 //        alert("Adding station named " + new_station_name )
         setOpen(false);
         let x = await addStation(servers.api_server_host, servers.api_server_port, siteid, new_station_name )
+        console.log(`addStation returns ${x}`)
     }
 
     const [new_station_name, setNewStationName] = useState("");
@@ -300,6 +302,7 @@ function AuthenticatedApp (props) {
                         break;
                     case "picture_event":
                         log.debug("ws: received picture event");
+//                        shutter_sound.play()
                         setLastPicture(lastpicture+1)
                         break;
                     default:
@@ -353,8 +356,9 @@ function AuthenticatedApp (props) {
      * Respond to a test button by sending a random humidity message over the websocket
      * @type {function(): void}
      */
-    const handleClickSendMessage = useCallback(() =>
-        sendit(), []);
+    const handleClickSendMessage = useCallback(() => {
+        sendit()
+    }, []);
 
 
     //

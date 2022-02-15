@@ -7,8 +7,7 @@ import {
     Grommet,
     Table,
     TableRow,
-    TableCell,
-    Text
+    TableCell
 } from 'grommet'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
@@ -72,7 +71,6 @@ function RenderDeviceMapTab (props) {
         let arr = []
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
-                let row =
                arr.push({deviceid: station.attached_devices[device_index], module: station.attached_devices[device_index].modules[module_index],
                     sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
             }
@@ -82,13 +80,13 @@ function RenderDeviceMapTab (props) {
         return ret
     }
 
-    function getTypeSelector(module) {
-            return <Text >{module.module_type} {module.module_name}</Text>
-     }
+//    function getTypeSelector(module) {
+//            return <Text >{module.module_type} {module.module_name}</Text>
+//     }
 
-    function testDatabase(e) {
-
-    }
+//    function testDatabase(e) {
+//
+//    }
 
     function applyChanges() {
 

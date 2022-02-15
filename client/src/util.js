@@ -58,6 +58,14 @@ function get_server_ports_for_environment(env) {
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = 'localhost';
             break;
+        default:
+            ports.api_server_port = 3003;
+            ports.websocket_server_port = 8001;
+            ports.activemq_server_port = 61613;
+            ports.api_server_host = '192.168.21.237';
+            ports.websocket_server_host = '192.168.21.237';
+            ports.activemq_server_host = '192.168.21.237';
+            break;
     }
     return( ports)
 }

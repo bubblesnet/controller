@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css';
 import ReactImageZoom from 'react-image-zoom';
 
-import {Text, Button, Box, Image, Grommet, Grid} from "grommet";
+import {Text, Button, Box, Grommet, Grid} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
 

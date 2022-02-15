@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
