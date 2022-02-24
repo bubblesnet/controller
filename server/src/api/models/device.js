@@ -48,6 +48,32 @@ async function findAllByUserid(userid) {
     })
 }
 
+
+async function getDevicesByStationId(userid) {
+    return( findAllByStationid(userid))
+}
+
+
+async function findAllByStationid(stationid) {
+    console.log("findAllByStationid "+stationid)
+    return new Promise(function (resolve, reject) {
+        console.log("userid = " + stationid)
+        let ssql = 'select * from device where stationid_station = $1 order by deviceid'
+        console.log("ssql = "+ssql)
+        let values = [stationid]
+        pool.query(ssql, values, (err, results) => {
+//            console.log("callback from findAllByStationid with err " + err + " results " + results)
+            if (err) {
+                console.error("findAllByStationid error " + err)
+                reject(err)
+            }
+            else  {
+                resolve(results.rows);
+            }
+        })
+    })
+}
+
 /*
     deviceid                serial primary key,
     created                 timestamp NOT NULL,
@@ -113,5 +139,6 @@ module.exports = {
     updateDevice:updateDevice,
     endPool: endPool,
     getDevicesByUserId,
+    getDevicesByStationId,
 }
 

@@ -9,6 +9,8 @@ let z
 
 let __queueClient
 
+const STAGE_COMMAND="stage"
+const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
 
@@ -69,7 +71,7 @@ function runWebSocketServer(port) {
         })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
-            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND) {
+            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND ) {
                 debug("Received command " + str)
                 let deviceid = x.deviceid
                     let sendHeaders = {
@@ -87,6 +89,12 @@ function runWebSocketServer(port) {
                     'content-type': 'text/json'
                 };
                 bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+                sendHeaders = {
+                    'destination': '/topic/90000009/70000005',
+                    'content-type': 'text/json'
+                };
+                bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
+
             } else {
                 debug("NOT Echoing received state")
             }

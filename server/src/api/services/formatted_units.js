@@ -11,18 +11,18 @@
 
         if (temperatureMonitoredSensor) {
             if (temperatureMonitoredSensor.units === 'METRIC' &&
-                config.getLocals().units === 'IMPERIAL') {
+                config.getLocals(false).units === 'IMPERIAL') {
                 ret.value = sprintf("%.1f", (temperatureMonitoredSensor.value * 9 / 5) + 32);
             }
             else if (temperatureMonitoredSensor.units === 'IMPERIAL' &&
-                config.getLocals().units === 'METRIC') {
+                config.getLocals(false).units === 'METRIC') {
                 ret.value = sprintf("%.1f", (temperatureMonitoredSensor.value - 32) * 5 / 9);
             }
-            else if (temperatureMonitoredSensor.units === 'METRIC' && config.getLocals().units === 'METRIC') {
+            else if (temperatureMonitoredSensor.units === 'METRIC' && config.getLocals(false).units === 'METRIC') {
                 ret.value = sprintf("%.1f", temperatureMonitoredSensor.value);
                 ret.units = "C";
             }
-            else if (temperatureMonitoredSensor.units === 'IMPERIAL' && config.getLocals().units === 'IMPERIAL' ){
+            else if (temperatureMonitoredSensor.units === 'IMPERIAL' && config.getLocals(false).units === 'IMPERIAL' ){
                 ret.value = sprintf("%.1f", temperatureMonitoredSensor.value);
                 ret.units = 'F';
             }
@@ -38,8 +38,8 @@
         var sprintf = require("sprintf-js").sprintf,
             vsprintf = require("sprintf-js").vsprintf;
 
-        var gallons_per_inch = config.getLocals().tubvolume / config.getLocals().tubdepth;
-        var gallons = (config.getLocals().tubdepth - (waterLevelMonitoredSensor.value / 2.54)) * gallons_per_inch;
+        var gallons_per_inch = config.getLocals(false).tubvolume / config.getLocals(false).tubdepth;
+        var gallons = (config.getLocals(false).tubdepth - (waterLevelMonitoredSensor.value / 2.54)) * gallons_per_inch;
         if (gallons < 0)
             return ( 'EMPTY' );
         else

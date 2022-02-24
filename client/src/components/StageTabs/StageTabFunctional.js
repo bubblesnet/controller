@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
@@ -20,14 +20,17 @@ function RenderStageTab (props) {
         setresetButtonState(true)
         setState(JSON.parse(JSON.stringify(x)))
     }
+
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
-        props.setStateFromChild(JSON.parse(JSON.stringify(state)));
+        props.setStateFromChild("idle");
     }
+
     function resetAction() {
         setState(JSON.parse(JSON.stringify(props.state)));
-     }
+    }
+
     function defaultsAction() {
         setState(JSON.parse(JSON.stringify(props.state)));
     }
@@ -37,7 +40,7 @@ function RenderStageTab (props) {
 //    const RANGE_MIN = 60;
 //    const RANGE_MAX =90;
 
-    const label = 'Target Temperature Range'
+//    const label = 'Target Temperature Range'
 
     let [state, setState] = useState(props.state); //
     let [settings, setSettings] = useState(props.settings); //

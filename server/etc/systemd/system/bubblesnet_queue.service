@@ -1,0 +1,17 @@
+[Unit]
+Description=Bubblesnet Queue Server
+
+[Service]
+ExecStart=/usr/bin/node /home/rodley/controller/server/src/queue-server.js
+Restart=always
+User=nobody
+# Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'
+Group=nogroup
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=DEV
+Environment=DEBUG=api-server,edgemeasurement_routes
+Environment=LOG_LEVEL=silly
+WorkingDirectory=/home/rodley/controller/server
+
+[Install]
+WantedBy=multi-user.target

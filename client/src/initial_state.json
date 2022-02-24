@@ -29,6 +29,7 @@
       "Tent"
     ],
     "light_sensor_internal": true,
+    "light_sensor_external": true,
     "light_bloom": true,
     "light_vegetative": true,
     "light_germinate": true
@@ -106,37 +107,37 @@
   },
   "switch_state": {
     "automaticControl": {
-      "on": true
+      "on": false
     },
     "heatLamp": {
-      "on": true
+      "on": false
     },
     "heatingPad": {
-      "on": true
+      "on": false
     },
     "lightVegetative": {
-      "on": true
+      "on": false
     },
     "lightBloom": {
-      "on": true
+      "on": false
     },
     "humidifier": {
-      "on": true
+      "on": false
     },
     "heater": {
       "on": false
     },
     "airPump": {
-      "on": true
+      "on": false
     },
     "waterPump": {
-      "on": true
+      "on": false
     },
     "intakeFan": {
-      "on": true
+      "on": false
     },
     "exhaustFan": {
-      "on": true
+      "on": false
     },
     "currentGrowLight": {
       "on": false

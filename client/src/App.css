@@ -62,7 +62,15 @@
 #animated-gif-container {
   background-image:url(images/bubbles-gif.gif);
   background-repeat:no-repeat;
-  width:200px;
+  width:100px;
+  height:48px;
+  float: left;
+}
+
+#tilt-gif-container {
+  background-image:url(images/tilt.gif);
+  background-repeat:no-repeat;
+  width: 180px;
   height:48px;
   float: right;
 }

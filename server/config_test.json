@@ -22,7 +22,7 @@
     "host": "localhost",
     "user": "postgres",
     "password": "postgres",
-    "database": "bubbles_dev",
+    "database": "bubbles_test",
     "port": "5432"
   },
   "secret": "supersecret"

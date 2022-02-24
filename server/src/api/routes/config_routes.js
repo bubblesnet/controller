@@ -3,18 +3,8 @@ const router = express.Router();
 const util = require('../../util')
 const station = require('../models/station')
 const sitestation = require('../models/sitestation')
-const cors = require('cors')
 
-/**
- * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
- * @apiName GetStatus
- * @apiGroup Measurement
- *
- * @apiParam {Number} userid User's unique ID.
- * @apiParam {Number} deviceid Device's unique ID.
- *
- * @apiSuccess {XXXX} XXXX XXXX
- */
+/*
 const config = {
     automation_settings: {
         current_stage: "Germinate",
@@ -52,7 +42,6 @@ const config = {
             "Grow Light Bloom"
         ]
     },
-
     edge_devices: [
         {
             container_name: "sense-python",
@@ -158,6 +147,7 @@ const config = {
         water_pump: true,
         air_pump: true,
         light_sensor_internal: true,
+        light_sensor_external: true,
         station_door_sensor: true,
         outer_door_sensor: true,
         movement_sensor: true,
@@ -203,12 +193,19 @@ const config = {
             on: true
         }
     }
-
-
 }
+ */
+/**
+ * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
+ * @apiName GetStatus
+ * @apiGroup Measurement
+ *
+ * @apiParam {Number} userid User's unique ID.
+ * @apiParam {Number} deviceid Device's unique ID.
+ *
+ * @apiSuccess {XXXX} XXXX XXXX
+ */
 
-/// TODO shouldn't need this once packaged
-router.use(cors());
 
 async function getDeviceConfig(req,res,next) {
     console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
@@ -219,12 +216,13 @@ async function getDeviceConfig(req,res,next) {
     res.json(x);
 }
 
-async function setPresent(req,res,next) {
-    let x = await sitestation.setSensorPresent(req,res,next)
+async function setPresent(req) {
+    let x = await sitestation.setSensorPresent(req.params.stationid,req.params.sensor_name,req.params.present)
     return(x)
 }
-router.post("/:userid/:deviceid/sensor/:sensor_name/:present", function (req, res, next) {
-    let x = setPresent(req,res,next)
+
+router.post("/:userid/:stationid/sensor/:sensor_name/:present", function (req, res, next) {
+    let x = setPresent(req)
     res.json(x);
 });
 

@@ -1,4 +1,4 @@
-const cors = require('cors')
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -8,7 +8,7 @@ const VerifyToken = require('../services/verify_token');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-router.use(cors());
+
 
 /**
  * Configure JWT
@@ -59,7 +59,7 @@ async function findUser(req,res) {
 
         // if user is found and password is valid
         // create a token
-        let token = jwt.sign({ id: user._id }, config.getLocals().secret, {
+        let token = jwt.sign({ id: user._id }, config.getLocals(true).secret, {
             expiresIn: 86400 // expires in 24 hours
         });
 

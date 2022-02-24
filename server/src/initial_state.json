@@ -12,6 +12,7 @@
     "water_pump": true,
     "air_pump": true,
     "light_sensor_internal": true,
+    "light_sensor_external": true,
     "station_door_sensor": true,
     "outer_door_sensor": true,
     "movement_sensor": true,
@@ -52,7 +53,7 @@
       "24 off"
     ],
     "light_on_start_hour": 10,
-    "target_temperature": 75,
+    "target_temperature": 70,
     "temperature_min": 60,
     "temperature_max": 90,
     "humidity_min": 0,

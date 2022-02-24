@@ -11,7 +11,7 @@ function RenderThermometer (props) {
         className="arrowdown-icon"
     }
     let value = sprintf.sprintf("%.1f", props.currentTemperature)
-    console.log("temp rendering as " + value)
+//    console.log("temp rendering as " + value)
     let ret = <>
         <div className={className} />
         <div className="thermo-icon" />

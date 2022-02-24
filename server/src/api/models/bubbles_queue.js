@@ -84,12 +84,12 @@ MessageProducer.prototype.subscribeToTopic = function subscribeToTopic(__stompCl
         'ack': 'auto'
     };
     __stompClient.subscribe(subscribeHeaders, (error, message) => {
-        debug('received a message on topic '+subscribeHeaders.destination+' '+message);
+//        debug('received a message on topic '+subscribeHeaders.destination+' '+JSON.stringify(message));
         message.readString('utf-8', function (error, body) {
             if (error) {
                 return;
             }
-//            debug('read a message '+body);
+            debug('read a message '+body);
             cb(body, function() {
                 debug("topic callback?");
             })

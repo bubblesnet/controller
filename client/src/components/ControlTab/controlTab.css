@@ -46,6 +46,17 @@
     color: black;
 }
 
+.value-holder-light-external {
+    left: 90px;
+    top: 0;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    font-weight: bolder;
+    font-size: small;
+    color: black;
+}
+
 .light-text-holder {
     left: 10px;
     top: 200px;
@@ -106,6 +117,16 @@
     position: absolute;
     top: 200px;
     width: 80px;
+}
+
+.lightexternal-text-holder {
+    height: 10px;
+    left: 90px;
+    position: absolute;
+    top: 0;
+    width: 70px;
+    font-weight: bolder;
+    font-size: small;
 }
 
 #airtempexternal-holder {

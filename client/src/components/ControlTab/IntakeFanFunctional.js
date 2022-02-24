@@ -2,7 +2,7 @@ import React from 'react';
 import '../../App.css';
 
 function RenderIntakeFan (props) {
-    console.log("RenderIntakeFan intakeFanOn = " + props.on)
+//    console.log("RenderIntakeFan intakeFanOn = " + props.on)
 
     let ret
         if( props.on === false ) {

@@ -553,10 +553,10 @@ body {
 }
 
 #sun-moon-icon-holder {
-  top: 0;
+  top: 10px;
   right: 0;
-  width: 57px;
-  height: 57px;
+  width: 47px;
+  height: 47px;
   position: absolute;
   background: url(images/sunlight.png) no-repeat;
 }
@@ -780,10 +780,8 @@ body {
 }
 
 #water-level-holder {
-  height: 145px;
   left: 0;
   position: absolute;
-  top: 43px;
   width: 560px;
   background-color: var(--color-tub-water-blue);
 }
