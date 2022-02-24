@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 //import TreeItem from '@material-ui/lab/TreeItem';
 // import RenderDeviceMapTab from "./DeviceMapTab/DeviceMapTabFunctional";
 
-import Tree from '@naisutech/react-tree'
+// import Tree from '@naisutech/react-tree'
 
 import log from 'roarr';
 import '../logimplementation'
@@ -76,19 +76,20 @@ function RenderSiteStationMenu(props) {
     }
 //    log.trace("RenderSiteStationMenu props.site = "+JSON.stringify(props.site))
     return (
-        <Tree
-            nodes={stations}// see data format
-            onSelect={onSelect} // fired every click of node or leaf with selected item as argument
-            theme={'my-theme'} // defaults to 'dark'. Choose from ['light', 'dark']
-            customTheme={myTheme} // see `Theming`
-            size={'full'} // full (default), half, narrow
-            grow // in a flex box, the tree will grow to fill available space. Best used with `flex-direction: column`
-            showEmptyItems // show the empty items indicator in a folder
+        <></>
+//        <Tree
+//            nodes={stations}// see data format
+//            onSelect={onSelect} // fired every click of node or leaf with selected item as argument
+//            theme={'my-theme'} // defaults to 'dark'. Choose from ['light', 'dark']
+//            customTheme={myTheme} // see `Theming`
+//            size={'full'} // full (default), half, narrow
+//            grow // in a flex box, the tree will grow to fill available space. Best used with `flex-direction: column`
+//            showEmptyItems // show the empty items indicator in a folder
 //            isLoading //  show the loading spinner
 //            noIcons // hide the default icons
 //            iconSet={Object} // see `Icons`
 //            containerStyle={Object} // css properties object for styling tree container
-        />
+//        />
         /*
         <TreeView
             defaultExpanded={['1']}
