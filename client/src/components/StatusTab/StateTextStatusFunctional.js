@@ -7,8 +7,8 @@ import sprintf from 'sprintf-js'
 
 function RenderStateTextStatus (props) {
 
-    let [state, setState] = useState(props.state); //
-    let [settings, setSettings] = useState(props.settings); //
+    let [state, setState ] = useState(props.state); //
+    let [settings, setSettings ] = useState(props.settings); //
 
     console.log("RenderStateTextStatus")
     let plant_height = sprintf.sprintf("%.1f", state.status.plant_height)

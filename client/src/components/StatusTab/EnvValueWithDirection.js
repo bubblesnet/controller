@@ -6,9 +6,9 @@ import {Box} from "grommet";
 import sprintf from 'sprintf-js'
 
 function RenderEnvValueWithDirection (props) {
-    let label_area=props.gridArea+''+'-label'
-    let value_area=props.gridArea+''+'-value'
-    let direction_area=props.gridArea+''+'-direction'
+    let label_area= `${props.gridArea}-label`
+    let value_area= `${props.gridArea}-value`
+    let direction_area= `${props.gridArea}-direction`
 
     let className = ''
     if(props.direction === 'up') {

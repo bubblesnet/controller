@@ -84,7 +84,7 @@ let defaultModules = [
         "container_name": "sense-python",
         "deviceid": 0,
         "module_type": "bh1750",
-        "module_name": "Accelerometer/Title-detector",
+        "module_name": "Accelerometer/Tilt-detector",
         "protocol": "i2c",
         "i2caddress": "0x23",
     },
@@ -146,16 +146,22 @@ let defaultModules = [
     }
 ]
 
-async function createDefaultSetOfModules( body ) {
+async function createDefaultModules(deviceid) {
     let list = []
-    for( let i = 0; i < defaultModules.length; i++ ) {
-        defaultModules[i].deviceid = body.deviceid
+    for (let i = 0; i < defaultModules.length; i++) {
+        defaultModules[i].deviceid = deviceid
 //        console.log(JSON.stringify(defaultModules[i]))
 
         let x = await createModule(defaultModules[i])
         list.push(x)
     }
-    return(list)
+    console.log("returning list length " + list.length)
+    return (list)
+}
+
+async function createDefaultSetOfModules( body ) {
+    let list = await createDefaultModules(body.deviceid)
+    return (list);
 }
 
 async function getAllModulesByCabinet(stationid) {

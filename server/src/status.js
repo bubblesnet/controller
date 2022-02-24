@@ -1,5 +1,4 @@
 var express = require('express');
-var locals = require('./config/locals');
 var fs = require('fs');
 var db = require('../routes/db');
 const disk = require('diskspace');

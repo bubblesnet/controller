@@ -11,9 +11,9 @@ const pool = server_db.getPool()
 async function createSensor(body) {
 //    console.log(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
-        pool.query("insert into sensor (sensor_name, moduleid_module, sensor_name, measurement_name) values ($1,$2,$3,$4)" +
+        pool.query("insert into sensor (sensor_name, moduleid_module, measurement_name) values ($1,$2,$3)" +
             " RETURNING *",
-            [body.sensor_name, body.moduleid, body.sensor_name, body.measurement_name], (error, results) => {
+            [body.sensor_name, body.moduleid, body.measurement_name], (error, results) => {
                 if (error) {
                     console.log("createSensor error " + error)
                     reject(error)

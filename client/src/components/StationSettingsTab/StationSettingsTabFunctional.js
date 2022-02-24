@@ -7,8 +7,12 @@ import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-function RenderCabinetSettingsTab (props) {
-    console.log("RenderCabinetSettingsTab props hum = "+props.state.station_settings.humidifier)
+import '../../logimplementation'
+import log from 'roarr';
+
+
+function RenderStationSettingsTab (props) {
+    log.info("RenderStationSettingsTab props hum = "+props.state.station_settings.humidifier)
     let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.state.station_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
@@ -35,13 +39,13 @@ function RenderCabinetSettingsTab (props) {
     }
 
     function setEnclosureType(s) {
-        console.log("setEnclosureType to "+JSON.stringify(s))
+        log.info("setEnclosureType to "+JSON.stringify(s))
         local_state.station_settings.enclosure_type = s
         changeState(local_state)
     }
 
     function setTubDepth(s) {
-        console.log("setTubDepth to "+JSON.stringify(s))
+        log.info("setTubDepth to "+JSON.stringify(s))
         if( s === '' ) {
             local_state.station_settings.tub_depth = ''
         } else {
@@ -51,7 +55,7 @@ function RenderCabinetSettingsTab (props) {
     }
 
     function setTubVolume(s) {
-        console.log("setTubVolume to "+JSON.stringify(s))
+        log.info("setTubVolume to "+JSON.stringify(s))
         if( s === '' ) {
             local_state.station_settings.tub_volume = ''
         } else {
@@ -63,21 +67,24 @@ function RenderCabinetSettingsTab (props) {
 
     function toggleHumidifier() {
         local_state.station_settings.humidifier = !local_state.station_settings.humidifier
-        props.saveSetting(local_state.userid, local_state.deviceid, 'humidifier', local_state.station_settings.humidifier)
         changeState(local_state)
     }
+
     function toggleRootPhSensor() {
         local_state.station_settings.root_ph_sensor = !local_state.station_settings.root_ph_sensor
         changeState(local_state)
     }
+
     function toggleExhaustFan() {
         local_state.station_settings.exhaust_fan = !local_state.station_settings.exhaust_fan
         changeState(local_state)
     }
+
     function toggleIntakeFan() {
         local_state.station_settings.intake_fan = !local_state.station_settings.intake_fan
         changeState(local_state)
     }
+
     function toggleWaterLevelSensor() {
         local_state.station_settings.water_level_sensor = !local_state.station_settings.water_level_sensor
         changeState(local_state)
@@ -87,58 +94,77 @@ function RenderCabinetSettingsTab (props) {
         local_state.station_settings.humidity_sensor_internal = !local_state.station_settings.humidity_sensor_internal
         changeState(local_state)
     }
+
     function toggleExternalHumiditySensor() {
         local_state.station_settings.humidity_sensor_external = !local_state.station_settings.humidity_sensor_external
         changeState(local_state)
     }
+
     function toggleExternalThermometer() {
         local_state.station_settings.thermometer_external = !local_state.station_settings.thermometer_external
         changeState(local_state)
     }
+
     function toggleThermometerTop() {
         local_state.station_settings.thermometer_top = !local_state.station_settings.thermometer_top
         changeState(local_state)
     }
+
     function toggleThermometerMiddle() {
         local_state.station_settings.thermometer_middle = !local_state.station_settings.thermometer_middle
         changeState(local_state)
     }
+
     function toggleThermometerBottom() {
         local_state.station_settings.thermometer_bottom = !local_state.station_settings.thermometer_bottom
         changeState(local_state)
     }
+
     function toggleWaterThermometer() {
         local_state.station_settings.thermometer_water = !local_state.station_settings.thermometer_water
         changeState(local_state)
     }
+
     function toggleHeater() {
         local_state.station_settings.heater = !local_state.station_settings.heater
         changeState(local_state)
     }
+
     function toggleWaterPump() {
         local_state.station_settings.water_pump = !local_state.station_settings.water_pump
         changeState(local_state)
     }
+
     function toggleAirPump() {
         local_state.station_settings.air_pump = !local_state.station_settings.air_pump
         changeState(local_state)
     }
-    function toggleLightSensor() {
-        local_state.station_settings.light_sensor = !local_state.station_settings.light_sensor
+
+    function toggleLightSensorInternal() {
+        local_state.station_settings.light_sensor_internal = !local_state.station_settings.light_sensor_internal
         changeState(local_state)
     }
+
+    function toggleLightSensorExternal() {
+        local_state.station_settings.light_sensor_external = !local_state.station_settings.light_sensor_external
+        changeState(local_state)
+    }
+
     function toggleMovementSensor() {
         local_state.station_settings.movement_sensor = !local_state.station_settings.movement_sensor
         changeState(local_state)
     }
+
     function toggleOuterDoorSensor() {
         local_state.station_settings.outer_door_sensor = !local_state.station_settings.outer_door_sensor
         changeState(local_state)
     }
-    function toggleCabinetDoorSensor() {
+
+    function toggleStationDoorSensor() {
         local_state.station_settings.station_door_sensor = !local_state.station_settings.station_door_sensor
         changeState(local_state)
     }
+
     function togglePressureSensors() {
         local_state.station_settings.pressure_sensors = !local_state.station_settings.pressure_sensors
         changeState(local_state)
@@ -148,16 +174,18 @@ function RenderCabinetSettingsTab (props) {
         local_state.station_settings.light_germinate = !local_state.station_settings.light_germinate
         changeState(local_state)
     }
+
     function toggleVegetativeLight() {
         local_state.station_settings.light_vegetative = !local_state.station_settings.light_vegetative
         changeState(local_state)
     }
+
     function toggleBloomLight() {
         local_state.station_settings.light_bloom = !local_state.station_settings.light_bloom
         changeState(local_state)
     }
 
-    console.log("RenderCabinetSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
+    log.info("RenderStationSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -171,6 +199,12 @@ function RenderCabinetSettingsTab (props) {
         <Table id={'settings-tab'} >
                         <tbody>
                         <TableRow >
+                            <TableCell border={'bottom'} >Station name</TableCell>
+                            <TableCell  border={'bottom'} colSpan={3}>
+                                <TextInput value= {props.station.station_name} onChange={event => setTubVolume(event.target.value)} />
+                            </TableCell>
+                        </TableRow>
+                        <TableRow >
                             <TableCell border={'bottom'} >
                                 <Table id="light-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
@@ -178,7 +212,8 @@ function RenderCabinetSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_state.station_settings.light_germinate}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_state.station_settings.light_vegetative}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_state.station_settings.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Light Sensor" onChange={toggleLightSensor} checked={local_state.station_settings.light_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor" onChange={toggleLightSensorInternal} checked={local_state.station_settings.light_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Light Sensor" onChange={toggleLightSensorExternal} checked={local_state.station_settings.light_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -232,7 +267,7 @@ function RenderCabinetSettingsTab (props) {
                                 <Table  >
                                 <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleCabinetDoorSensor} checked= {local_state.station_settings.station_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked= {local_state.station_settings.station_door_sensor}/></TableCell></TableRow>
                                 <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_state.station_settings.outer_door_sensor}/></TableCell></TableRow>
                                 <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_state.station_settings.movement_sensor}/></TableCell></TableRow>
                                 </tbody>
@@ -272,4 +307,4 @@ function RenderCabinetSettingsTab (props) {
     return (ret)
 }
 
-export default RenderCabinetSettingsTab;
+export default RenderStationSettingsTab;

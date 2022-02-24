@@ -123,7 +123,7 @@ async function getNewAlertConditions() {
                         console.log("note = " + JSON.stringify(note))
                         console.log("note.email_required = "+(typeof note.email_required)+" " + note.email_required + " sendEmailNotification = " + locals.getLocals().sendEmailNotification )
                         if (note.email_required === "1") {
-                            if (locals.getLocals().sendEmailNotification === true) {
+                            if (locals.getLocals(false).sendEmailNotification === true) {
                                 console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
                                 email.sendANotification(event_class, note, alertcondition, function (err, response) {
                                     if (err) {

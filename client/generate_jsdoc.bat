@@ -1,0 +1,1 @@
+jsdoc src -r -c ./jsdoc_conf.json -d docs --debug

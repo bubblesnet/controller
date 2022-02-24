@@ -3,6 +3,7 @@ const event = require('./api/models/event')
 const debug = require('debug')('queue-server')
 
 const bubbles_queue = require('./api/models/bubbles_queue')
+const outlet = require('./api/models/outlet')
 let __queueClient
 
 function setClient(client) {
@@ -53,6 +54,10 @@ async function storeMessage(body) {
                 message.filename = '';
                 let ev = event.createEvent(message);
                 debug("storeMessage stored event " + JSON.stringify(ev))
+                break;
+            case 'switch_event':
+                let x = await outlet.setStateByNameAndStation(message.switch_name, message.stationid, message.on)
+                console.info( "setState returns "+JSON.stringify(x))
                 break;
             default:
                 console.error("Unhandled message type for storage " + JSON.stringify(message))

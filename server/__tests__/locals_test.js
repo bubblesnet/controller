@@ -34,7 +34,7 @@ describe("locals",   () => {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined
         try {
-            let x = config.getLocals();
+            let x = config.getLocals(true);
             expect(true)
         } catch (err) {
             console.log("config read "+err)

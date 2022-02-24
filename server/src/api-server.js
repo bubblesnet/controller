@@ -1,5 +1,10 @@
 const express = require('express');
 const apiServer = express()
+
+// Allow cross origin access.
+const cors = require('cors')
+apiServer.use(cors());
+
 const util = require("./util")
 const logger = require("./bubbles_logger").log
 const fileUpload = require('express-fileupload');
@@ -15,10 +20,12 @@ global.__root   = __dirname + '/';
 const config_routes = require('./api/routes/config_routes').router;
 const device_routes = require('./api/routes/device_routes').router;
 const video_routes = require('./api/routes/video_routes').router;
+const module_routes = require('./api/routes/module_routes').router;
 const edge_control_routes = require('./api/routes/edgecontrol_routes').router;
 const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').router;
 const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes').router;
+const station_routes = require('./api/routes/station_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
 
 logger.info("starting router")
@@ -33,14 +40,14 @@ apiServer.locals.units = require('./api/services/formatted_units.js');
 apiServer.set('views', path.join(__dirname, 'views'));
 apiServer.set('view engine', 'pug');
 
+ports = util.get_server_ports_for_environment( process.env.NODE_ENV )
+
 apiServer.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader("Access-Control-Allow-Origin", "*")
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
     next();
 });
-
-ports = util.get_server_ports_for_environment( process.env.NODE_ENV )
 
 apiServer.use(bodyParser.urlencoded({
     extended: true
@@ -65,12 +72,15 @@ apiServer.use(express.static(path.join(__dirname, 'public')));
 apiServer.use('/api/config', config_routes);
 apiServer.use('/api/healthcheck', health_check);
 apiServer.use('/api/users', user_routes);
+apiServer.options('/api/auth', cors()) // enable pre-flight requests
 apiServer.use('/api/auth', auth_routes);
 
 apiServer.use('/api/device', device_routes);
 apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edge_control_routes);
 apiServer.use("/api/measurement", edge_measurement_routes);
+apiServer.use("/api/station", station_routes);
+apiServer.use("/api/module", module_routes);
 
 // catch 404 and forward to error handler
 apiServer.use(function (req, res, next) {

@@ -21,19 +21,28 @@ function RenderControlTab(props) {
     let values = {
         switchControl: {
             automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
-            humidifier: {on: props.switch_state.humidifier.on, toggle: toggleHumidifier},
-            heater: {on: props.switch_state.heater.on, toggle: toggleHeater},
-            heatLamp: {on: props.switch_state.heatLamp.on, toggle: toggleHeatLamp},
-            heatingPad: {on: props.switch_state.heatingPad.on, toggle: toggleHeatingPad},
-            lightBloom: {on: props.switch_state.lightBloom.on, toggle: toggleLightBloom},
-            lightVegetative: {on: props.switch_state.lightVegetative.on, toggle: toggleLightVegetative},
-            airPump: {on: props.switch_state.airPump.on, toggle: toggleAirPump},
-            waterPump: {on: props.switch_state.waterPump.on, toggle: toggleWaterPump},
-            intakeFan: {on: props.switch_state.intakeFan.on, toggle: toggleIntakeFan},
-            exhaustFan: {on: props.switch_state.exhaustFan.on, toggle: toggleExhaustFan},
-            currentGrowLight: {on: props.switch_state.currentGrowLight.on, toggle: toggleCurrentGrowLight}
+            humidifier: {on: props.switch_state.humidifier.on, changing: false, toggle: toggleHumidifier},
+            heater: {on: props.switch_state.heater.on, changing: false, toggle: toggleHeater},
+            heatLamp: {on: props.switch_state.heatLamp.on, changing: false, toggle: toggleHeatLamp},
+            heatingPad: {on: props.switch_state.heatingPad.on, changing: false, toggle: toggleHeatingPad},
+            lightBloom: {on: props.switch_state.lightBloom.on, changing: false, toggle: toggleLightBloom},
+            lightVegetative: {on: props.switch_state.lightVegetative.on, changing: false, toggle: toggleLightVegetative},
+            airPump: {on: props.switch_state.airPump.on, changing: false, toggle: toggleAirPump},
+            waterPump: {on: props.switch_state.waterPump.on, changing: false, toggle: toggleWaterPump},
+            intakeFan: {on: props.switch_state.intakeFan.on, changing: false, toggle: toggleIntakeFan},
+            exhaustFan: {on: props.switch_state.exhaustFan.on, changing: false, toggle: toggleExhaustFan},
+            currentGrowLight: {on: props.switch_state.currentGrowLight.on, changing: false, toggle: toggleCurrentGrowLight}
         }
     }
+
+    /***
+     *
+    function toggleState() {
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.changingState.on = !values.switchControl.changingState.on;
+        props.setStateFromChild(x, "changingState", x.switch_state.changingState.on)
+    }
+     */
 
     function toggleAutomatic() {
         let x = JSON.parse(JSON.stringify(props.state));
@@ -46,11 +55,13 @@ function RenderControlTab(props) {
         x.switch_state.lightBloom.on = !values.switchControl.lightBloom.on;
         props.setStateFromChild(x,"lightBloom",x.switch_state.lightBloom.on)
     }
+
     function toggleLightVegetative() {
         let x = JSON.parse(JSON.stringify(props.state));
         x.switch_state.lightVegetative.on = !values.switchControl.lightVegetative.on;
         props.setStateFromChild(x,"lightVegetative",x.switch_state.lightVegetative.on)
     }
+
     function toggleHumidifier() {
         let x = JSON.parse(JSON.stringify(props.state));
         x.switch_state.humidifier.on = !values.switchControl.humidifier.on;
@@ -107,12 +118,12 @@ function RenderControlTab(props) {
 
     let wl
     let wlRuler
-    if (props.state.station_settings.water_level_sensor === false) {
+    if (props.station.water_level_sensor === false) {
         wl = <></>
         wlRuler = <></>
     } else {
         wlRuler = <div id="watertemp-holder">
-            <RenderThermometer exists={props.state.station_settings.thermometer_water}
+            <RenderThermometer exists={props.station.thermometer_water}
                                className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}
                                units={props.settings.display_settings.temperature_units}
                                direction={props.state.status.temp_water_direction}/>
@@ -122,6 +133,11 @@ function RenderControlTab(props) {
             {props.state.status.tub_water_level} {props.settings.display_settings.tub_volume_units}
         </div>
     }
+    let water_level_percent = props.state.status.tub_water_level/3.0
+    let water_level_max_pixels = 188
+    let water_level_height = water_level_max_pixels*water_level_percent
+    let water_level_top = (water_level_max_pixels-water_level_height) + 'px'
+    console.log("water_level pct " + water_level_percent+" hgt " + water_level_height + " top " + water_level_top)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
@@ -137,7 +153,9 @@ function RenderControlTab(props) {
                     <div id="tub">
                         <div id="tubedge-holder">
                         </div>
-                        <div id="water-level-holder"> {wl} {wlRuler}
+                        {wl}
+                        {wlRuler}
+                        <div id="water-level-holder" style={{'height': water_level_height,'top': water_level_top}}>
                         </div>
                         <div id={"root_ph_holder"}>
                             <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>
@@ -161,35 +179,35 @@ function RenderControlTab(props) {
                     </div>
                     <RenderGrowLight
                         settings={props.settings}
-                        exists={props.state.station_settings.light_vegetative || props.state.station_settings.light_bloom || props.state.station_settings.light_germinate}
-                        on={props.state.switch_state.currentGrowLight.on} state={props.state}/>
-                    <RenderHeater settings={props.settings} exists={props.state.station_settings.heater} on={props.state.switch_state.heater.on}/>
-                    <RenderHumidifier settings={props.settings} exists={props.state.station_settings.humidifier}
+                        exists={props.station.light_vegetative || props.station.light_bloom || props.station.light_germinate}
+                        on={props.state.switch_state.currentGrowLight.on}  station={props.station}  state={props.state}/>
+                    <RenderHeater settings={props.settings} exists={props.station.heater} on={props.state.switch_state.heater.on}/>
+                    <RenderHumidifier settings={props.settings} exists={props.station.humidifier}
                                       on={props.state.switch_state.humidifier.on}/>
                     <div className="exhaust">
                         <div className="filter-and-exhaust-fan-holder">
-                            <RenderExhaustFan exists={props.state.station_settings.exhaust_fan}
+                            <RenderExhaustFan exists={props.station.exhaust_fan}
                                               on={props.state.switch_state.exhaustFan.on}/>
                         </div>
                     </div>
                     <div className="fans">
                         <div className="input-fan-holder">
-                            <RenderIntakeFan settings={props.settings} exists={props.state.station_settings.intake_fan}
+                            <RenderIntakeFan settings={props.settings} exists={props.station.intake_fan}
                                              on={props.state.switch_state.intakeFan.on}/>
                         </div>
                     </div>
-                    <RenderWaterPump settings={props.settings} exists={props.state.station_settings.water_pump}
+                    <RenderWaterPump settings={props.settings} exists={props.station.water_pump}
                                      on={props.state.switch_state.waterPump.on}/>
-                    <RenderAirPump settings={props.settings} exists={props.state.station_settings.air_pump}
+                    <RenderAirPump settings={props.settings} exists={props.station.air_pump}
                                    on={props.state.switch_state.airPump.on}/>
                     <div id="water-level-ruler-holder"/>
 
                 </div>
                 <div id={"controltab-externalgroup"}>
-                    <RenderExternalMetrics settings={props.settings} state={props.state} />
+                    <RenderExternalMetrics settings={props.settings}  station={props.station} state={props.state} />
                 </div>
                 <div id="controltab-buttongroup">
-                    <RenderSwitchPanel settings={props.settings} state={props.state} switchControl={values.switchControl}/>
+                    <RenderSwitchPanel settings={props.settings} station={props.station} state={props.state} switchControl={values.switchControl}/>
                 </div>
             </div>
         </Grommet>

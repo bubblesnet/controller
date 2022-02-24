@@ -3,7 +3,7 @@ import * as React from 'react'
 import AuthenticatedApp from './AuthenticatedApp'
 import UnauthenticatedApp from './UnauthenticatedApp'
 import SetupApp from './SetupApp'
-import {useState} from "react";
+
 import useToken from './useToken';
 
 /** Fake login function
@@ -49,7 +49,7 @@ function App() {
         return <SetupApp readyState={true}/>
     }
 
-    return (token?.auth === true) ? <AuthenticatedApp nodeEnv={"DEV"}/> : <UnauthenticatedApp nodeEnv={"DEV"} processLoginResult={processLoginResult}/>
+    return (token?.auth === true) ? <AuthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV}/> : <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
 }
 
 export default App

@@ -29,7 +29,7 @@ switch( process.env.NODE_ENV ) {
 // not working in CI where no server running
 // UNIT test begin
 describe("Failed login test",function() {
-    const server = supertest.agent("http://localhost:"+api_server_port+"",{});
+    const server = supertest.agent("http://192.168.21.237:"+api_server_port+"",{});
     it("should fail login", function (done) {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
         expect( process.env.NODE_ENV ).not.to.be.undefined

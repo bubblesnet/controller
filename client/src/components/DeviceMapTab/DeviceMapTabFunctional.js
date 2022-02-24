@@ -4,62 +4,24 @@ import './deviceMapTab.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 import {
-    Button,
     Grommet,
-    TextInput,
     Table,
     TableRow,
-    TableCell,
-    Select
+    TableCell
 } from 'grommet'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import DeviceMap from "./devicemap.json"
-
-
-async function getContainerNames(host, port) {
-    console.log("getContainerNames calling out to api")
-
-    return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://'+host+':'+port+'/api/config/containers');
-        if(response.ok) {
-            let x = await response.json();
-            console.log("Got container_names " + JSON.stringify(x));
-            resolve(x)
-        } else {
-            console.log("error " + response.status)
-            reject( response.status )
-        }
-    })
-}
-
-async function getModuleTypes(host, port) {
-    console.log("getModuleTypes calling out to api")
-
-    return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://'+host+':'+port+'/api/config/modules');
-        if(response.ok) {
-            let x = await response.json();
-            console.log("Got module_types " + JSON.stringify(x));
-            resolve(x)
-        } else {
-            console.log("error " + response.status)
-            reject( response.status )
-        }
-    })
-}
+import {getContainerNames, getModuleTypes} from '../../api/utils';
 
 function RenderDeviceMapTab (props) {
-
-    let [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
-    let [reset_button_state,setResetButtonState] = useState(false)
-    let [defaults_button_state,setDefaultsButtonState] = useState(true)
-    let [apply_button_state,setApplyButtonState] = useState(false)
-    let [container_names,setContainerNames] = useState()
-    let [module_types,setModuleTypes] = useState()
-    const [nodeEnv, setNodeEnv] = useState("DEV");
-
+    const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
+    const [reset_button_state,setResetButtonState] = useState(false)
+    const [defaults_button_state,setDefaultsButtonState] = useState(true)
+    const [apply_button_state,setApplyButtonState] = useState(false)
+    const [container_names,setContainerNames] = useState()
+    const [module_types,setModuleTypes] = useState()
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,64 +35,58 @@ function RenderDeviceMapTab (props) {
         fetchData();
     }, [nodeEnv])
 
-    function testDatabase(e) {
-
-    }
-
-    console.log("RenderServerSettingsTab")
+    console.log("RenderDeviceMapTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
-
-    let cntainer_names = ["sense-go","sense-python"]
-    let mdule_types = ["bme280","bmp280","bh1750","ads1115","adxl345","ezoph","hcsr04","GPIO"]
-    let devices = [70000006,70000007,70000008]
-
-    function getRow(attached_device) {
-        console.log("getRow " + JSON.stringify(attached_device))
-        return(<TableRow>
-            <TableCell>{getDeviceSelector(attached_device)}</TableCell>
-            <TableCell>{getContainerSelector(attached_device)}</TableCell>
-            <TableCell>{getTypeSelector(attached_device)}</TableCell>
-            <TableCell>{getAddress(attached_device)}</TableCell>
-            <TableCell>{attached_device.included_sensors.map(getIncludedSensor)}</TableCell>
-        </TableRow>)
-    }
-
-    function getDeviceSelector(attached_device) {
-        return <Select options={devices} value={attached_device.deviceid} />
-    }
-
-    function getContainerSelector(attached_device) {
-        if (!container_names) {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={container_names} value={attached_device.container_name}/>
-        }
-    }
-
-    function getTypeSelector(attached_device) {
-        if (!module_types) {
-            return <Select options={[]}/>
-        } else {
-            return <Select options={module_types} value={attached_device.device_type}/>
-        }
-    }
-
-    function getAddress( attached_device ) {
-        if( attached_device.device_type === "GPIO" ) {
+    function getAddress( module ) {
+        if( module.device_type === "GPIO" ) {
             return ""
         } else {
-            return attached_device.address + " "
+            return module.address + " "
         }
     }
 
-    function getIncludedSensor( sensor ) {
+    function getIncludedSensor( sensor, index, arr ) {
         if( sensor.device_type === "GPIO" ) {
             return sensor.sensor_name + " "
         } else {
-            return sensor.sensor_name + ":" + sensor.address + " "
+            return sensor.sensor_name + ":" + sensor.measurement_name + " "
         }
     }
+
+    function getSensorsForModule(module) {
+        return( module.included_sensors.map(getIncludedSensor))
+    }
+
+    function getModulerow( row, index, arr ) {
+        return <TableRow>
+            <TableCell>{row.device.deviceid}</TableCell>
+            <TableCell>{row.module.container_name}</TableCell>
+            <TableCell>{row.module.module_type}</TableCell>
+            <TableCell>{getAddress(row.module)}</TableCell>
+            <TableCell>{row.sensors}</TableCell></TableRow>
+    }
+    function getModules() {
+        console.log("getModules " + JSON.stringify(station))
+        let arr = []
+        for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
+            for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
+               arr.push({deviceid: station.attached_devices[device_index], module: station.attached_devices[device_index].modules[module_index],
+                    sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
+            }
+        }
+        console.log("arr = " + JSON.stringify(arr))
+        let ret = arr.map(getModulerow)
+        return ret
+    }
+
+//    function getTypeSelector(module) {
+//            return <Text >{module.module_type} {module.module_name}</Text>
+//     }
+
+//    function testDatabase(e) {
+//
+//    }
 
     function applyChanges() {
 
@@ -138,8 +94,13 @@ function RenderDeviceMapTab (props) {
     function resetChanges() {
 
     }
+    function defaultsAction() {
 
+    }
+
+    let module_rows = getModules()
     console.log("rendering with font set to " + values.theme.global.font.family)
+    console.log("station = " + JSON.stringify(station))
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
@@ -150,13 +111,20 @@ function RenderDeviceMapTab (props) {
                 ]}
             />
             <div className="global_container_">
-                    <Table id="devicemap-table" >
-                        <tbody>
-                        <TableRow><th>Device ID</th><th>Container</th><th>Type</th><th>i2c Address</th><th>Attached sensors</th></TableRow>
-                        {DeviceMap.edge_devices.map(getRow)}
-                        </tbody>
-                    </Table>
-                <RenderFormActions state={local_state} applyAction={applyChanges} resetAction={resetChanges}
+                <Table id="settings-tab" >
+                    <tbody>
+                    <TableRow>
+                        <th >Device</th>
+                        <th >Container</th>
+                        <th >Module Type</th>
+                        <th >Address</th>
+                        <th >Attached Sensors</th>
+                    </TableRow>
+                    {module_rows}
+                    </tbody></Table>
+
+                <RenderFormActions station={station} applyAction={applyChanges} resetAction={resetChanges}
+                                   defaultsAction={defaultsAction}
                                    resetButtonState={reset_button_state}
                                    defaultsButtonState={defaults_button_state}
                                    applyButtonState={apply_button_state}
