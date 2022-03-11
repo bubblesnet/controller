@@ -124,6 +124,9 @@
     "humidifier": {
       "on": false
     },
+    "waterHeater": {
+      "on": false
+    },
     "heater": {
       "on": false
     },

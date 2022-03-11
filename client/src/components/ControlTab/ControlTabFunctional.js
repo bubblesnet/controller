@@ -3,6 +3,7 @@ import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
 
+import RenderWaterHeater from "./WaterHeaterFunctional";
 import RenderIntakeFan from "./IntakeFanFunctional";
 import RenderExhaustFan from "./ExhaustFanFunctional";
 import RenderAirPump from "./AirPumpFunctional";
@@ -25,6 +26,7 @@ function RenderControlTab(props) {
             heater: {on: props.switch_state.heater.on, changing: false, toggle: toggleHeater},
             heatLamp: {on: props.switch_state.heatLamp.on, changing: false, toggle: toggleHeatLamp},
             heatingPad: {on: props.switch_state.heatingPad.on, changing: false, toggle: toggleHeatingPad},
+            waterHeater: {on: props.switch_state.waterHeater.on, changing: false, toggle: toggleWaterHeater},
             lightBloom: {on: props.switch_state.lightBloom.on, changing: false, toggle: toggleLightBloom},
             lightVegetative: {on: props.switch_state.lightVegetative.on, changing: false, toggle: toggleLightVegetative},
             airPump: {on: props.switch_state.airPump.on, changing: false, toggle: toggleAirPump},
@@ -80,6 +82,12 @@ function RenderControlTab(props) {
         props.setStateFromChild(x,"heatingPad",x.switch_state.heatingPad.on)
     }
 
+    function toggleWaterHeater() {
+        let x = JSON.parse(JSON.stringify(props.state));
+        x.switch_state.waterHeater.on = !values.switchControl.waterHeater.on;
+        props.setStateFromChild(x,"waterHeater",x.switch_state.waterHeater.on)
+    }
+
     function toggleHeater() {
         let x = JSON.parse(JSON.stringify(props.state));
         x.switch_state.heater.on = !values.switchControl.heater.on;
@@ -133,11 +141,11 @@ function RenderControlTab(props) {
             {props.state.status.tub_water_level} {props.settings.display_settings.tub_volume_units}
         </div>
     }
-    let water_level_percent = props.state.status.tub_water_level/3.0
+    let water_level_percent = props.state.status.tub_water_level/20.0
     let water_level_max_pixels = 188
     let water_level_height = water_level_max_pixels*water_level_percent
     let water_level_top = (water_level_max_pixels-water_level_height) + 'px'
-    console.log("water_level pct " + water_level_percent+" hgt " + water_level_height + " top " + water_level_top)
+    console.log("rerender: "+props.because)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
@@ -153,13 +161,18 @@ function RenderControlTab(props) {
                     <div id="tub">
                         <div id="tubedge-holder">
                         </div>
-                        {wl}
-                        {wlRuler}
                         <div id="water-level-holder" style={{'height': water_level_height,'top': water_level_top}}>
                         </div>
+                        {wl}
+                        {wlRuler}
                         <div id={"root_ph_holder"}>
                             <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>
                         </div>
+                        <div className="waterheater">
+                            <RenderWaterHeater settings={props.settings} exists={props.station.water_heater}
+                                               on={props.state.switch_state.waterHeater.on} changing={false}/>
+                        </div>
+
                     </div>
                     <div id="station">
                     </div>
@@ -180,7 +193,7 @@ function RenderControlTab(props) {
                     <RenderGrowLight
                         settings={props.settings}
                         exists={props.station.light_vegetative || props.station.light_bloom || props.station.light_germinate}
-                        on={props.state.switch_state.currentGrowLight.on}  station={props.station}  state={props.state}/>
+                        on={props.state.switch_state.lightBloom.on || props.state.switch_state.lightVegetative.on}  station={props.station}  state={props.state}/>
                     <RenderHeater settings={props.settings} exists={props.station.heater} on={props.state.switch_state.heater.on}/>
                     <RenderHumidifier settings={props.settings} exists={props.station.humidifier}
                                       on={props.state.switch_state.humidifier.on}/>
@@ -196,6 +209,7 @@ function RenderControlTab(props) {
                                              on={props.state.switch_state.intakeFan.on}/>
                         </div>
                     </div>
+
                     <RenderWaterPump settings={props.settings} exists={props.station.water_pump}
                                      on={props.state.switch_state.waterPump.on}/>
                     <RenderAirPump settings={props.settings} exists={props.station.air_pump}

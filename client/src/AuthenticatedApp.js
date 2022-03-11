@@ -40,6 +40,8 @@ const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
 
+let because = "don't know"
+
 /**
  * @fileOverview Component containing the top-level of the application for a user who is logged in.
  * @component
@@ -289,24 +291,29 @@ function AuthenticatedApp (props) {
                 log.trace("ws: received message type "+msg.message_type);
                 switch (msg.message_type) {
                     case "measurement":
+                        because = "mmt "+msg.measurement_name+" "+msg.sample_timestamp
                         log.debug("ws: received measurement");
                         applyMeasurementToState(msg)
                         break;
                     case "switch_event":
+                        because = "switch_evt "+msg.switch_name
                         log.debug("ws: received switch event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
+                        because = "evt msg "+msg.sample_timestamp
                         log.debug("ws: received event ");
                         applyEventToState(msg)
                         break;
                     case "picture_event":
+                        because = "picture evt msg "+msg.sample_timestamp
                         log.debug("ws: received picture event");
 //                        shutter_sound.play()
                         setLastPicture(lastpicture+1)
                         break;
                     default:
-                        log.debug("ws: unknown message type " + msg.message_type)
+                        because = msg.message_type + " message "+msg.sample_timestamp
+                        log.debug("ws: unknown msg type " + msg.message_type)
                         break;
                 }
             }
@@ -430,6 +437,7 @@ function AuthenticatedApp (props) {
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.station_settings.humidity_sensor_internal)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.station_settings.humidity_sensor_external)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.station_settings.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.station_settings.water_heater)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", newstate.station_settings.heater)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", newstate.station_settings.thermometer_middle)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", newstate.station_settings.thermometer_bottom)
@@ -480,6 +488,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function setSwitchStateFromChild(x, switch_name, on ) {
+
         local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
         sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
         let sw_name = switch_name
@@ -610,6 +619,7 @@ function AuthenticatedApp (props) {
         thestate.switch_state.airPump.changing = true
         thestate.switch_state.waterPump.changing = true
         thestate.switch_state.heatingPad.changing = true
+        thestate.switch_state.waterHeater.changing = true
         thestate.switch_state.currentGrowLight.changing = true
     }
 
@@ -689,7 +699,8 @@ function AuthenticatedApp (props) {
                                           station={site.stations[currentStationIndex]}
                                           settings={local_settings}
                                           state={thestate} switch_state={thestate.switch_state}
-                                          setStateFromChild={setSwitchStateFromChild}/>
+                                          setStateFromChild={setSwitchStateFromChild}
+                                            because={because}/>
                     </Tab>
                     <Tab title="Look Inside">
                         <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme} devices={site.stations[0].attached_devices}
