@@ -130,6 +130,7 @@ function RenderControlTab(props) {
         wl = <></>
         wlRuler = <></>
     } else {
+        console.log("props.settings = " + JSON.stringify(props.settings))
         wlRuler = <div id="watertemp-holder">
             <RenderThermometer exists={props.station.thermometer_water}
                                className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}

@@ -26,7 +26,7 @@ function RenderPhMeter (props) {
                     className={props.className}
                     />
             </div>
-    if( state.station_settings.root_ph_sensor === false ) {
+    if( props.station_settings.root_ph_sensor === false ) {
         ret = <></>
     }
 

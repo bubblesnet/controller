@@ -5,6 +5,15 @@ import UnauthenticatedApp from './UnauthenticatedApp'
 import SetupApp from './SetupApp'
 
 import useToken from './useToken';
+import {useEffect, useState} from "react";
+import {getSite} from "./api/utils";
+import log from "roarr";
+import util from "./util";
+
+import initial_display_settings from './initial_display_settings.json'
+import initial_station_state from './initial_station_state.json'
+import initial_automation_settings from './initial_automation_settings.json'
+import initial_station_settings from './initial_station_settings.json'
 
 /** Fake login function
  *
@@ -30,26 +39,64 @@ function setToken(loginResult) {
 
  */
 
-function App() {
-    console.log("Starting App")
+function App(props) {
+    console.log("App: Starting App")
+
+    const [site, setSite] = useState({});
+
+
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
     let needs_setup = false
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        console.log("processLoginResult "+loginResult)
+        console.log("App: processLoginResult "+loginResult)
         if(loginResult.auth === true ) {
             console.log("Setting token to " + JSON.stringify(loginResult))
             setToken(loginResult)  // this inspires the rerender that gets us the authenticatedApp
+
 //            setLocalToken(loginResult.token)
         }
     }
 
-    console.log("Rendering App with token set to " + JSON.stringify(token))
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("App: initial fetchData")
+            let z = {}
+            z.stations = await getSite(servers.api_server_host, servers.api_server_port, 1)
+//            z.initial_state = imported_state
+
+            console.log("App: useEffect fetchData initial_data = " + JSON.stringify(z.stations))
+            console.log("App: setting site to " + JSON.stringify(z))
+            setSite(JSON.parse(JSON.stringify(z)))
+        }
+        fetchData();
+    }, [])
+
+    console.log("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
         return <SetupApp readyState={true}/>
     }
 
-    return (token?.auth === true) ? <AuthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV}/> : <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
+    let selectedStationIndex = 0
+
+    console.log("App: Rendering App with site set to " + JSON.stringify(site))
+    if( typeof site.stations === 'undefined') {
+        return <></>
+    }
+    initial_station_state.station_settings.display_settings = initial_display_settings
+    return (token?.auth === true) ? <AuthenticatedApp siteid={site.stations[selectedStationIndex].siteid}
+                                                      siteName={site.stations[selectedStationIndex].siteName}
+                                                      stationindex={selectedStationIndex}
+                                                      userid={site.userid}
+                                                      initial_settings={initial_station_state.station_settings}
+                                                      initial_state={initial_station_state}
+                                                      nodeEnv={process.env.REACT_APP_NODE_ENV}
+                                                      site={site}
+                                                      station_settings={initial_station_settings}
+                                                      automation_settings={initial_automation_settings}
+                                    /> :
+        <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
 }
 
 export default App

@@ -12,8 +12,8 @@ import log from 'roarr';
 
 
 function RenderStationSettingsTab (props) {
-    log.info("RenderStationSettingsTab props hum = "+props.state.station_settings.humidifier)
-    let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.state.station_settings))});
+    log.info("RenderStationSettingsTab props hum = "+props.station_settings.humidifier)
+    let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.station_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
@@ -28,7 +28,7 @@ function RenderStationSettingsTab (props) {
     function resetChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
-        let x = JSON.parse(JSON.stringify(props.state.station_settings))
+        let x = JSON.parse(JSON.stringify(props.station_settings))
         setState({station_settings: x});
     }
 
@@ -185,7 +185,7 @@ function RenderStationSettingsTab (props) {
         changeState(local_state)
     }
 
-    log.info("RenderStationSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
+    log.info("RenderStationSettingsTab station_settings rendering with props.state.humidifier set to "+ props.station_settings.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -278,20 +278,20 @@ function RenderStationSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options= {props.state.station_settings.enclosure_options} value= {props.state.station_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
+                                <RadioButtonGroup name="enclosure-type" options= {props.station_settings.enclosure_options} value= {props.station_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value= {props.state.station_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
+                                <TextInput value= {props.station_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                             </TableCell>
                             <TableCell>{props.settings.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value= {props.state.station_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
+                                <TextInput value= {props.station_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                             </TableCell>
                             <TableCell >{props.settings.display_settings.tub_volume_units}</TableCell>
                         </TableRow>

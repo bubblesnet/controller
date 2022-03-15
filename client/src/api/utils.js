@@ -46,6 +46,7 @@ export async function getSite (host, port, siteid) {
     console.log("getSite calling out to api")
 
     return new Promise( async (resolve, reject) => {
+        console.log("getSite calling "+'http://'+host+':'+port+'/api/station/site/'+siteid)
         const response = await fetch('http://'+host+':'+port+'/api/station/site/'+siteid);
 //            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
         console.log("getSite response received")

@@ -29,9 +29,9 @@ function RenderStateTextStatus (props) {
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
         <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {settings.display_settings.plant_height_units}</Box>
-        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{state.automation_settings.current_lighting_schedule}</Box>
+        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{props.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
-        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{state.automation_settings.current_stage}</Box>
+        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{props.automation_settings.current_stage}</Box>
         <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{state.status.start_date_current_stage}</Box>
         <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{state.status.start_date_next_stage}</Box>
      </Grid>

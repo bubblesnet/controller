@@ -107,43 +107,56 @@
   },
   "switch_state": {
     "automaticControl": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "heatLamp": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "heatingPad": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "lightVegetative": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "lightBloom": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "humidifier": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "waterHeater": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "heater": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "airPump": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "waterPump": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "intakeFan": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "exhaustFan": {
-      "on": false
+      "on": false,
+      "changing": true
     },
     "currentGrowLight": {
-      "on": false
+      "on": false,
+      "changing": true
     }
   }
 }

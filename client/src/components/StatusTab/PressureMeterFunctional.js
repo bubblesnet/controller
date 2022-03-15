@@ -27,7 +27,7 @@ function RenderPressureMeter (props) {
                 className={props.className}
                     />
             </div>
-    if( props.state.station_settings.pressure_sensors === false ) {
+    if( props.station_settings.pressure_sensors === false ) {
         ret = <></>
     }
 

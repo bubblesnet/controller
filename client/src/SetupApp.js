@@ -12,7 +12,7 @@ import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
 // import {useIntl} from 'react-intl'
 
-import initial_state from './initial_state.json'
+import initial_state from './initial_station_state.json'
 import util from "./util";
 
 function SetupApp (props) {

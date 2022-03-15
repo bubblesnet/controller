@@ -11,11 +11,11 @@ function RenderHumidityMeter (props) {
             <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={props.state.status.humidity_internal} maxValue={props.state.automation_settings.humidity_max}
+                    value={props.state.status.humidity_internal} maxValue={props.automation_settings.humidity_max}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['blue','green','red']}
-                    customSegmentStops={[props.state.automation_settings.humidity_min, props.state.automation_settings.humidity_target_range_low, props.state.automation_settings.humidity_target_range_high, props.state.automation_settings.humidity_max]}
+                    customSegmentStops={[props.automation_settings.humidity_min, props.automation_settings.humidity_target_range_low, props.automation_settings.humidity_target_range_high, props.automation_settings.humidity_max]}
                     customSegmentLabels={[
                         {text: 'TOO DRY', position: 'INSIDE', color: 'white'},
                         {text: 'OK', position: 'INSIDE', color: 'white'},
@@ -25,7 +25,7 @@ function RenderHumidityMeter (props) {
                 />
         </div>
 
-    if( props.state.station_settings.humidity_sensor_internal === false ) {
+    if( props.station_settings.humidity_sensor_internal === false ) {
         ret = <></>
     }
 
