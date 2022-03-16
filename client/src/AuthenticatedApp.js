@@ -105,7 +105,7 @@ function AuthenticatedApp (props) {
     console.log("setting site to " + JSON.stringify(props.site))
     const [site, setSite] = useState(props.site);
 
-    const [siteName, setSiteName] = useState(props.siteName);
+    const [siteName, setSiteName] = useState(props.site.stations[props.stationindex].site_name);
     /**
      * The value of environment variable NODE_ENV which controls the hostname and port the API
      * is listening on. Changing this causes a rerender
@@ -126,21 +126,21 @@ function AuthenticatedApp (props) {
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
     const [currentStationIndex, setCurrentStationIndex] = useState(props.stationindex)
     const [lastpicture, setLastPicture] = useState(0)
-    const [initial_state, setInitialState] = useState(props.initial_state)
-    const [initial_settings, setInitialSettings] = useState(props.initial_settings)
+    const [initial_station_state, setInitialState] = useState(props.initial_station_state)
+//    const [initial_settings, setInitialSettings] = useState(props.initial_settings)
 
     /**
      * Local copy of all data (temp ...) - change and rerender
      */
-    const [local_state, setState] = useState(initial_state);
+    const [local_state, setState] = useState(initial_station_state);
     /**
      * Local copy of all settings - change and rerender
      */
-    const [local_settings, setSettings] = useState(props.initial_settings);
+    const [local_settings, setSettings] = useState(props.site.stations[props.stationindex]);
     /**
      * If we login as a different user, rerender
      */
-    const [userid, setUserid] = useState(props.userid);
+    const [userid, setUserid] = useState(props.site.userid);
     /**
      * If we change the langauge, rerender
      */
@@ -161,9 +161,9 @@ function AuthenticatedApp (props) {
         setCurrentStationIndex(index)
     }
 
-    initial_state.theme = bubbles_theme;
-    initial_state.current_font = bubbles_theme.global.font.family;
-    initial_state.tilt = false;
+    initial_station_state.theme = bubbles_theme;
+    initial_station_state.current_font = bubbles_theme.global.font.family;
+    initial_station_state.tilt = false;
 
     /**
      * ????
@@ -657,8 +657,8 @@ function AuthenticatedApp (props) {
      *
      * @type {string}
      */
-    site.site_name = props.siteName
-    site.siteid = siteid
+    site.site_name = props.site.stations[props.stationindex].site_name
+    site.siteid = props.site.stations[props.stationindex].siteid
 
 //    log.trace("site = " + JSON.stringify(site))
     thestate.station_settings = local_settings
@@ -677,7 +677,7 @@ function AuthenticatedApp (props) {
 
 
     return <div className="App">
-        <Header tilt={thestate.tilt} siteName={props.siteName} setNodeEnv={setEnvironment}
+        <Header tilt={thestate.tilt} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
                 handleClickSendMessage={handleClickSendMessage}/>
         <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
@@ -742,6 +742,7 @@ function AuthenticatedApp (props) {
                                       state={thestate}
                                       switch_state={thestate.switch_state}
                                       setStateFromChild={setSwitchStateFromChild}
+                                      display_settings={props.display_settings}
                                       because={because}/>
                 </Tab>
                 <Tab title="Look Inside">
@@ -750,7 +751,8 @@ function AuthenticatedApp (props) {
                                      lastpicture={lastpicture}
                                      onFontChange={applyFontChange}
                                      takeAPicture={takeAPicture}
-                                     station_settings={props.station_settings}
+                                     display_settings={props.display_settings}
+                                     station_settings={props.site.stations[props.stationindex]}
                                      applicationSettings={local_state.application_settings}/>
                 </Tab>
                 <Tab title="Status">
@@ -759,7 +761,8 @@ function AuthenticatedApp (props) {
                                      station={site.stations[currentStationIndex]}
                                      settings={local_settings}
                                      state={local_state}
-                                     station_settings={props.station_settings}
+                                     display_settings={props.display_settings}
+                                     station_settings={props.site.stations[props.stationindex]}
                                      automation_settings={props.automation_settings}/>
                 </Tab>
                 <Tab title="Station Setup">
@@ -768,7 +771,8 @@ function AuthenticatedApp (props) {
                                     station={site.stations[currentStationIndex]}
                                     settings={local_settings}
                                     state={local_state}
-                                    station_settings={props.station_settings}
+                                    display_settings={props.display_settings}
+                                    station_settings={props.site.stations[props.stationindex]}
                                     setStateFromChild={setStationSettingsStateFromChild}
                     />
                 </Tab>

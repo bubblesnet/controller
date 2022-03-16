@@ -19,23 +19,26 @@ function RenderExternalMetrics (props) {
             </div>
             <div id="airtempexternal-holder">
                 <RenderThermometer exists={props.state.station_settings.thermometer_external}
+                                   display_settings={props.display_settings}
                                    currentTemperature={props.state.status.temp_air_external}
-                                   units={props.settings.display_settings.temperature_units}
+                                   units={props.display_settings.temperature_units}
                                    direction={props.state.status.temp_air_external_direction}/>
             </div>
             <div id="humidityexternal-text-holder">
                 <RenderHygrometer prefix={"external"} exists="true"
+                                  display_settings={props.display_settings}
                                   currentHumidity={props.state.status.humidity_external}
-                                  units={props.settings.display_settings.humidity_units}
+                                  units={props.display_settings.humidity_units}
                                   direction={props.state.status.humidity_external_direction}/>
             </div>
             <div className="externalpressure-holder">
                 <RenderBarometer exists={props.state.station_settings.pressure_sensors}
+                                 display_settings={props.display_settings}
                                  holderClassName={"pressure-holder"}
                                  textClassName={"pressure-text-holder"}
                     iconClassName={"pressure-icon-holder"}
                     value={props.state.status.pressure_external}
-                    units={props.settings.display_settings.pressure_units}
+                    units={props.display_settings.pressure_units}
                     direction={props.state.status.pressure_external_direction} />
             </div>
         </>

@@ -286,14 +286,14 @@ function RenderStationSettingsTab (props) {
                             <TableCell colSpan={2}>
                                 <TextInput value= {props.station_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                             </TableCell>
-                            <TableCell>{props.settings.display_settings.tub_depth_units}</TableCell>
+                            <TableCell>{props.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
                                 <TextInput value= {props.station_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                             </TableCell>
-                            <TableCell >{props.settings.display_settings.tub_volume_units}</TableCell>
+                            <TableCell >{props.display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                        </tbody>
                     </Table>

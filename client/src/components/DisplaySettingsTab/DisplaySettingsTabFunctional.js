@@ -14,7 +14,7 @@ import {FormattedMessage} from 'react-intl';
 function RenderDisplaySettingsTab (props) {
 
     console.log("RenderServerSettingsTab with font set to " + props.theme.global.font.family);
-    let [values, setValues] = useState({units: props.settings.display_settings.units, language: props.settings.display_settings.language, languageOptions: props.settings.display_settings.languageOptions, theme: props.theme, current_font: props.theme.global.font.family}); //
+    let [values, setValues] = useState({units: props.display_settings.units, language: props.display_settings.language, languageOptions: props.display_settings.languageOptions, theme: props.theme, current_font: props.theme.global.font.family}); //
     let [fonts, setFonts] = useState([])
     let [local_theme, setLocalTheme] = useState(JSON.parse(JSON.stringify(props.theme)));
     let [applyButtonState, setApplyButtonState] = useState(false)

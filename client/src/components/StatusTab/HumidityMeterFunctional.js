@@ -5,7 +5,7 @@ import sprintf from 'sprintf-js';
 import ReactSpeedometer from "react-d3-speedometer";
 
 function RenderHumidityMeter (props) {
-    let valueText = sprintf.sprintf("%.1f%s", props.state.status.humidity_internal, props.settings.display_settings.humidity_units)
+    let valueText = sprintf.sprintf("%.1f%s", props.state.status.humidity_internal, props.display_settings.humidity_units)
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>

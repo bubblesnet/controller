@@ -9,7 +9,7 @@ function RenderPressureMeter (props) {
 
     let diff_float = (props.state.status.pressure_external - props.state.status.pressure_internal)
     let diff_value =  sprintf.sprintf("%.1f", diff_float)
-    let valueText =  diff_value+" "+props.settings.display_settings.pressure_units
+    let valueText =  diff_value+" "+props.display_settings.pressure_units
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>

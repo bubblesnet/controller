@@ -85,16 +85,13 @@ function App(props) {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
-    return (token?.auth === true) ? <AuthenticatedApp siteid={site.stations[selectedStationIndex].siteid}
-                                                      siteName={site.stations[selectedStationIndex].siteName}
+    return (token?.auth === true) ? <AuthenticatedApp
                                                       stationindex={selectedStationIndex}
-                                                      userid={site.userid}
-                                                      initial_settings={initial_station_state.station_settings}
-                                                      initial_state={initial_station_state}
+                                                      initial_station_state={initial_station_state}
                                                       nodeEnv={process.env.REACT_APP_NODE_ENV}
                                                       site={site}
-                                                      station_settings={initial_station_settings}
                                                       automation_settings={initial_automation_settings}
+                                                      display_settings={initial_display_settings}
                                     /> :
         <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
 }
