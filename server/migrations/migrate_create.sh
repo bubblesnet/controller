@@ -1,0 +1,1 @@
+migrate create -ext sql -dir . bu

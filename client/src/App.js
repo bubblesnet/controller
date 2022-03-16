@@ -44,9 +44,9 @@ function App(props) {
 
     const [site, setSite] = useState({});
 
-
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
     let needs_setup = false
+
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
