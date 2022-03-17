@@ -12,7 +12,7 @@ import log from 'roarr';
 
 
 function RenderStationSettingsTab (props) {
-    log.info("RenderStationSettingsTab props hum = "+props.station_settings.humidifier)
+    log.info("RenderStationSettingsTab props display_settings = "+JSON.stringify(props.display_settings))
     let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.station_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
@@ -278,7 +278,10 @@ function RenderStationSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options= {props.station_settings.enclosure_options} value= {props.station_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
+                                <RadioButtonGroup name="enclosure-type"
+                                                  options={props.display_settings.enclosure_options}
+                                                  value={props.station_settings.enclosure_type}
+                                                  onChange={event => setEnclosureType(event.target.value)}/>
                             </TableCell>
                         </TableRow>
                         <TableRow>

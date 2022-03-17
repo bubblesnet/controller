@@ -26,19 +26,34 @@ function RenderTextStatus (props) {
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >
-                <RenderEnvironmentTextStatus station_settings={props.station_settings} automation_settings={props.automation_settings} settings={props.settings} state={props.state}/>
+                <RenderEnvironmentTextStatus station_settings={props.station_settings}
+                                             display_settings={props.display_settings}
+                                             automation_settings={props.automation_settings}
+                                             settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'state'} >
-                <RenderStateTextStatus station_settings={props.station_settings} automation_settings={props.automation_settings} settings={props.settings} state={props.state}/>
+                <RenderStateTextStatus station_settings={props.station_settings}
+                                       display_settings={props.display_settings}
+                                       automation_settings={props.automation_settings}
+                                       settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'security'} >
-                <RenderSecurityTextStatus station_settings={props.station_settings} automation_settings={props.automation_settings}  settings={props.settings} state={props.state}/>
+                <RenderSecurityTextStatus station_settings={props.station_settings}
+                                          display_settings={props.display_settings}
+                                          automation_settings={props.automation_settings}
+                                          settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'interventions'} >
-                <RenderInterventionsTextStatus station_settings={props.station_settings} automation_settings={props.automation_settings} settings={props.settings} state={props.state}/>
+                <RenderInterventionsTextStatus station_settings={props.station_settings}
+                                               display_settings={props.display_settings}
+                                               automation_settings={props.automation_settings}
+                                               settings={props.settings} state={props.state}/>
             </Box>
             <Box gridArea={'adc'} >
-                <RenderADCTextStatus station_settings={props.station_settings} automation_settings={props.automation_settings} settings={props.settings} state={props.state}/>
+                <RenderADCTextStatus station_settings={props.station_settings}
+                                     display_settings={props.display_settings}
+                                     automation_settings={props.automation_settings}
+                                     settings={props.settings} state={props.state}/>
             </Box>
         </Grid>
     return (ret)

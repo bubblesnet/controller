@@ -21,6 +21,7 @@ Click here to see first-time setup instructions.
         console.log("loginUser env=("+props.nodeEnv+") calling out to api on port "+servers.api_server_port+" for token")
         let url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/auth/login'
         console.log("url = " + url)
+        console.log("creds = " + JSON.stringify(credentials))
         return new Promise( async (resolve, reject) => {
             const response = await fetch(url, {
                 method: 'POST',

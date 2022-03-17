@@ -140,7 +140,7 @@ function AuthenticatedApp (props) {
     /**
      * If we login as a different user, rerender
      */
-    const [userid, setUserid] = useState(props.site.userid);
+    const [userid, setUserid] = useState(props.user.userid);
     /**
      * If we change the langauge, rerender
      */
@@ -666,7 +666,7 @@ function AuthenticatedApp (props) {
     console.log("STATION: site " + JSON.stringify(site))
     console.log("STATION: props.site " + JSON.stringify(props.site))
     console.log("xsite.stations = " + JSON.stringify(site.stations))
-    console.log("props.site.stations = " + JSON.stringify(props.site.stations))
+    console.log("display_settings = " + JSON.stringify(props.display_settings))
     console.log("site = " + JSON.stringify(site))
     console.log("props.site = " + JSON.stringify(props.site))
     console.log("xdevices = " + JSON.stringify(site.stations[0].attached_devices))

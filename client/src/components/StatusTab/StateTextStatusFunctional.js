@@ -28,7 +28,7 @@ function RenderStateTextStatus (props) {
         gap={"xxsmall"} >
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
-        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {settings.display_settings.plant_height_units}</Box>
+        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {props.display_settings.plant_height_units}</Box>
         <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{props.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
         <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{props.automation_settings.current_stage}</Box>

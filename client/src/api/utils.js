@@ -62,6 +62,25 @@ export async function getSite (host, port, siteid) {
     })
 }
 
+export async function getUser (host, port, userid) {
+    console.log("getSite calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        console.log("getSite calling "+'http://'+host+':'+port+'/api/user/'+userid)
+        const response = await fetch('http://'+host+':'+port+'/api/user/'+userid);
+        console.log("getSite response received")
+        if(response.ok) {
+//            console.log("getSite awaiting site")
+            let x = await response.json();
+//            console.log("getSite Got " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            console.log("getSite error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
 export async function saveStage (host, port, stationid, current_stage) {
     console.log("saveStage calling out to api")
 

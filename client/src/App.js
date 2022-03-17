@@ -6,7 +6,7 @@ import SetupApp from './SetupApp'
 
 import useToken from './useToken';
 import {useEffect, useState} from "react";
-import {getSite} from "./api/utils";
+import {getSite, getUser} from "./api/utils";
 import log from "roarr";
 import util from "./util";
 
@@ -43,6 +43,7 @@ function App(props) {
     console.log("App: Starting App")
 
     const [site, setSite] = useState({});
+    const [user, setUser] = useState({});
 
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
     let needs_setup = false
@@ -50,7 +51,7 @@ function App(props) {
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        console.log("App: processLoginResult "+loginResult)
+        console.log("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
             console.log("Setting token to " + JSON.stringify(loginResult))
             setToken(loginResult)  // this inspires the rerender that gets us the authenticatedApp
@@ -85,13 +86,34 @@ function App(props) {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
+    token.units_options = [
+        "IMPERIAL",
+        "METRIC"
+    ]
+    token.pressure_units_options = [
+        "hPa",
+        "mbar",
+        "mm Hg",
+        "psi"
+    ]
+    token.languageOptions = [
+        "en-us",
+        "fr"
+    ]
+    token.enclosure_options = [
+        "Cabinet",
+        "Tent"
+    ]
+
+
     return (token?.auth === true) ? <AuthenticatedApp
                                                       stationindex={selectedStationIndex}
                                                       initial_station_state={initial_station_state}
                                                       nodeEnv={process.env.REACT_APP_NODE_ENV}
                                                       site={site}
                                                       automation_settings={initial_automation_settings}
-                                                      display_settings={initial_display_settings}
+                                                      display_settings={token}
+                                                      user={token}
                                     /> :
         <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
 }

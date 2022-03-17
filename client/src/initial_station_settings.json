@@ -23,10 +23,6 @@
   "exhaust_fan": true,
   "heat_lamp": true,
   "heating_pad": true,
-  "enclosure_options": [
-  "Cabinet",
-  "Tent"
-  ],
   "light_sensor_internal": true,
   "light_sensor_external": true,
   "light_bloom": true,
