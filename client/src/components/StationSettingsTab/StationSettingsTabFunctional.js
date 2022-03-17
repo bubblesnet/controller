@@ -12,7 +12,7 @@ import log from 'roarr';
 
 
 function RenderStationSettingsTab (props) {
-    log.info("RenderStationSettingsTab props display_settings = "+JSON.stringify(props.display_settings))
+    log.info("RenderStationSettingsTab props display_settings = "+props.display_settings)
     let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.station_settings))});
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state,setDefaultsButtonState] = useState(true)
@@ -67,6 +67,14 @@ function RenderStationSettingsTab (props) {
 
     function toggleHumidifier() {
         local_state.station_settings.humidifier = !local_state.station_settings.humidifier
+        changeState(local_state)
+    }
+    function toggleHeightSensor() {
+        local_state.station_settings.height_sensor = !local_state.station_settings.height_sensor
+        changeState(local_state)
+    }
+    function toggleWaterHeater() {
+        local_state.station_settings.water_heater = !local_state.station_settings.water_heater
         changeState(local_state)
     }
 
@@ -236,6 +244,7 @@ function RenderStationSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_state.station_settings.thermometer_middle}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_state.station_settings.thermometer_bottom}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_state.station_settings.thermometer_external}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Heater" onChange={toggleWaterHeater} checked= {local_state.station_settings.water_heater}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_state.station_settings.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
@@ -248,6 +257,7 @@ function RenderStationSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked= {local_state.station_settings.air_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_state.station_settings.water_level_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_state.station_settings.root_ph_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Height Sensor" onChange={toggleHeightSensor} checked= {local_state.station_settings.height_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

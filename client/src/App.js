@@ -54,6 +54,24 @@ function App(props) {
         console.log("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
             console.log("Setting token to " + JSON.stringify(loginResult))
+            loginResult.units_options = [
+                    "IMPERIAL",
+                    "METRIC"
+                ]
+            loginResult.pressure_units_options = [
+                    "hPa",
+                    "mbar",
+                    "mm Hg",
+                    "psi"
+                ]
+            loginResult.languageOptions = [
+                    "en-us",
+                    "fr"
+                ]
+            loginResult.enclosure_options = [
+                    "Cabinet",
+                    "Tent"
+                ]
             setToken(loginResult)  // this inspires the rerender that gets us the authenticatedApp
 
 //            setLocalToken(loginResult.token)
@@ -63,16 +81,14 @@ function App(props) {
     useEffect(() => {
         const fetchData = async () => {
             console.log("App: initial fetchData")
-            let z = {}
-            z.stations = await getSite(servers.api_server_host, servers.api_server_port, 1)
+            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
 //            z.initial_state = imported_state
 
-            console.log("App: useEffect fetchData initial_data = " + JSON.stringify(z.stations))
-            console.log("App: setting site to " + JSON.stringify(z))
+            console.log("App: useEffect fecthData setting site to " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
-    }, [])
+    }, []);     // ONLY CALL ON MOUNT - empty array arg causes this
 
     console.log("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
@@ -86,24 +102,7 @@ function App(props) {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
-    token.units_options = [
-        "IMPERIAL",
-        "METRIC"
-    ]
-    token.pressure_units_options = [
-        "hPa",
-        "mbar",
-        "mm Hg",
-        "psi"
-    ]
-    token.languageOptions = [
-        "en-us",
-        "fr"
-    ]
-    token.enclosure_options = [
-        "Cabinet",
-        "Tent"
-    ]
+
 
 
     return (token?.auth === true) ? <AuthenticatedApp

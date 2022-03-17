@@ -111,8 +111,9 @@ async function getStationConfigsBySite(siteid) {
             JOIN station c ON c.siteid_site=i.siteid
             WHERE i.siteid = ${siteid}`
     );
-    console.log("\n\n\n"+JSON.stringify(results))
-    return( results )
+    let site = { siteid: siteid, sitename: "blah", stations: results }
+    console.log("\n\n\n"+JSON.stringify(site))
+    return( site )
 }
 
 async function getStationConfigsByUser(uid) {

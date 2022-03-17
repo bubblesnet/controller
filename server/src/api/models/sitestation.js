@@ -378,7 +378,7 @@ async function updateStation(body) {
 async function deleteStation(stationid) {
     console.log("deleteStation "+stationid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM station WHERE stationid "+stationid)
+        console.log("DELETE FROM station WHERE stationid = "+stationid)
 
         pool.query('DELETE FROM station WHERE stationid = $1', [stationid], (error, results) => {
             if (error) {

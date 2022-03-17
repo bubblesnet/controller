@@ -105,7 +105,7 @@ function AuthenticatedApp (props) {
     console.log("setting site to " + JSON.stringify(props.site))
     const [site, setSite] = useState(props.site);
 
-    const [siteName, setSiteName] = useState(props.site.stations[props.stationindex].site_name);
+//    const [siteName, setSiteName] = useState(props.site.stations[props.stationindex].site_name);
     /**
      * The value of environment variable NODE_ENV which controls the hostname and port the API
      * is listening on. Changing this causes a rerender
@@ -136,7 +136,7 @@ function AuthenticatedApp (props) {
     /**
      * Local copy of all settings - change and rerender
      */
-    const [local_settings, setSettings] = useState(props.site.stations[props.stationindex]);
+    const [current_station, setSettings] = useState(props.site.stations[props.stationindex]);
     /**
      * If we login as a different user, rerender
      */
@@ -476,39 +476,43 @@ function AuthenticatedApp (props) {
      * @param x a complete station_settings object - overwrites ALL values
      */
     async function setStationSettingsStateFromChild(x) {
-        let newstate = JSON.parse(JSON.stringify(local_state))
-        newstate.station_settings = JSON.parse(JSON.stringify(x.station_settings))
-        console.log("savesettings userid = " + userid )
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", newstate.station_settings.automatic_control)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.station_settings.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.station_settings.humidity_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.station_settings.humidity_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.station_settings.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.station_settings.water_heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", newstate.station_settings.heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", newstate.station_settings.thermometer_middle)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", newstate.station_settings.thermometer_bottom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", newstate.station_settings.thermometer_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", newstate.station_settings.thermometer_water)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", newstate.station_settings.water_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", newstate.station_settings.air_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", newstate.station_settings.light_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", newstate.station_settings.light_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", newstate.station_settings.station_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", newstate.station_settings.outer_door_sensor)
-//        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensors", newstate.station_settings.??)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", newstate.station_settings.pressure_sensors)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", newstate.station_settings.root_ph_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", newstate.station_settings.water_level_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", newstate.station_settings.intake_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", newstate.station_settings.exhaust_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", newstate.station_settings.heat_lamp)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", newstate.station_settings.heating_pad)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", newstate.station_settings.light_bloom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", newstate.station_settings.light_vegetative)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", newstate.station_settings.light_germinate)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", newstate.station_settings.height_sensor)
+        let newsettings = JSON.parse(JSON.stringify(x.station_settings))
+        let newstate = { ...local_state, ...newsettings};
+        console.log("savesettings userid = " + userid + " currentStationIndex = " + currentStationIndex + " stationid = " + site.stations[currentStationIndex].stationid)
+        console.log("savesettings site = " + JSON.stringify(site))
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", newstate.automatic_control)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.humidity_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.humidity_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_heater", newstate.water_heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", newstate.thermometer_top)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", newstate.thermometer_middle)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", newstate.thermometer_bottom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", newstate.thermometer_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", newstate.thermometer_water)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", newstate.water_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", newstate.air_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", newstate.light_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", newstate.light_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", newstate.station_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", newstate.outer_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensor", newstate.movement_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", newstate.pressure_sensors)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", newstate.root_ph_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", newstate.water_level_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", newstate.intake_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", newstate.exhaust_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", newstate.heat_lamp)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", newstate.heating_pad)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", newstate.light_bloom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", newstate.light_vegetative)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", newstate.light_germinate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", newstate.height_sensor)
 //        setState(newstate)
+//        setSiteid(siteid)
+        setNodeEnv(nodeEnv+"x")
     }
 
     /**
@@ -598,14 +602,12 @@ function AuthenticatedApp (props) {
      */
     useEffect(() => {
         const fetchData = async () => {
-            let z = { stations:[1]}
-            z.stations[0] = await getSite(servers.api_server_host, servers.api_server_port, siteid)
-            log.trace("useEffect fetchData site = " + JSON.stringify(z))
-            setSiteName(z.stations[0].site_name)
+            let z = await getSite(servers.api_server_host, servers.api_server_port, siteid)
+            log.info("xxxuseEffect stationid = " + z.stations[0].stationid)
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
-    }, [nodeEnv])
+    }, [nodeEnv])     // ONLY CALL ON MOUNT - empty array arg causes this
 
 
     /**
@@ -661,7 +663,7 @@ function AuthenticatedApp (props) {
     site.siteid = props.site.stations[props.stationindex].siteid
 
 //    log.trace("site = " + JSON.stringify(site))
-    thestate.station_settings = local_settings
+    thestate.station_settings = current_station
 //    console.log("STATION: stations " + JSON.stringify(site.stations[currentStationIndex]))
     console.log("STATION: site " + JSON.stringify(site))
     console.log("STATION: props.site " + JSON.stringify(props.site))
@@ -738,7 +740,7 @@ function AuthenticatedApp (props) {
                 <Tab title="Station Control">
                     <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                       station={site.stations[currentStationIndex]}
-                                      settings={local_settings}
+                                      current_station={current_station}
                                       state={thestate}
                                       switch_state={thestate.switch_state}
                                       setStateFromChild={setSwitchStateFromChild}
@@ -759,7 +761,7 @@ function AuthenticatedApp (props) {
                     <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort}
                                      theme={bubbles_theme}
                                      station={site.stations[currentStationIndex]}
-                                     settings={local_settings}
+                                     settings={current_station}
                                      state={local_state}
                                      display_settings={props.display_settings}
                                      station_settings={props.site.stations[props.stationindex]}
@@ -769,10 +771,10 @@ function AuthenticatedApp (props) {
                     <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort}
                                     theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
-                                    settings={local_settings}
+                                    settings={current_station}
                                     state={local_state}
                                     display_settings={props.display_settings}
-                                    station_settings={props.site.stations[props.stationindex]}
+                                    station_settings={site.stations[currentStationIndex]}
                                     setStateFromChild={setStationSettingsStateFromChild}
                     />
                 </Tab>
@@ -785,7 +787,7 @@ function AuthenticatedApp (props) {
                 <Tab title="Automation">
                     <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
-                                    settings={local_settings} state={local_state}
+                                    settings={current_station} state={local_state}
                                     setStateFromChild={setAutomationStateFromChild}/>
                 </Tab>
                 <Tab title="Events">
@@ -794,7 +796,7 @@ function AuthenticatedApp (props) {
                 <Tab title="Display Settings">
                     <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
                                            station={site.stations[currentStationIndex]}
-                                           settings={local_settings} state={local_state}
+                                           settings={current_station} state={local_state}
                                            onApplyFontChange={applyFontChange}
                                            onLocalFontChange={localFontChange}/>
                 </Tab>

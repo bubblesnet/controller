@@ -130,7 +130,7 @@ function RenderControlTab(props) {
         wl = <></>
         wlRuler = <></>
     } else {
-        console.log("props.settings = " + JSON.stringify(props.settings))
+        console.log("props.current_station = " + JSON.stringify(props.current_station))
         wlRuler = <div id="watertemp-holder">
             <RenderThermometer exists={props.station.thermometer_water}
                                className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}
@@ -167,10 +167,10 @@ function RenderControlTab(props) {
                         {wl}
                         {wlRuler}
                         <div id={"root_ph_holder"}>
-                            <RenderPhmeter state={props.state.status} direction={props.state.status.root_ph_direction}/>
+                            <RenderPhmeter state={props.state.status} exists={props.station.root_ph_sensor} direction={props.state.status.root_ph_direction}/>
                         </div>
                         <div className="waterheater">
-                            <RenderWaterHeater settings={props.settings} exists={props.station.water_heater}
+                            <RenderWaterHeater settings={props.current_station} exists={props.station.water_heater}
                                                on={props.state.switch_state.waterHeater.on} changing={false}/>
                         </div>
 
@@ -192,14 +192,14 @@ function RenderControlTab(props) {
                         </div>
                     </div>
                     <RenderGrowLight
-                        settings={props.settings}
+                        settings={props.current_station}
                         display_settings={props.display_settings}
                         exists={props.station.light_vegetative || props.station.light_bloom || props.station.light_germinate}
                         on={props.state.switch_state.lightBloom.on || props.state.switch_state.lightVegetative.on}  station={props.station}  state={props.state}/>
-                    <RenderHeater settings={props.settings}
+                    <RenderHeater settings={props.current_station}
                                   display_settings={props.display_settings}
                                   exists={props.station.heater} on={props.state.switch_state.heater.on}/>
-                    <RenderHumidifier settings={props.settings}
+                    <RenderHumidifier settings={props.current_station}
                                       display_settings={props.display_settings}
                                       exists={props.station.humidifier}
                                       on={props.state.switch_state.humidifier.on}/>
@@ -211,25 +211,25 @@ function RenderControlTab(props) {
                     </div>
                     <div className="fans">
                         <div className="input-fan-holder">
-                            <RenderIntakeFan settings={props.settings} exists={props.station.intake_fan}
+                            <RenderIntakeFan settings={props.current_station} exists={props.station.intake_fan}
                                              on={props.state.switch_state.intakeFan.on}/>
                         </div>
                     </div>
 
-                    <RenderWaterPump settings={props.settings} exists={props.station.water_pump}
+                    <RenderWaterPump settings={props.current_station} exists={props.station.water_pump}
                                      on={props.state.switch_state.waterPump.on}/>
-                    <RenderAirPump settings={props.settings} exists={props.station.air_pump}
+                    <RenderAirPump settings={props.current_station} exists={props.station.air_pump}
                                    on={props.state.switch_state.airPump.on}/>
                     <div id="water-level-ruler-holder"/>
 
                 </div>
                 <div id={"controltab-externalgroup"}>
-                    <RenderExternalMetrics settings={props.settings}
+                    <RenderExternalMetrics settings={props.current_station}
                                            display_settings={props.display_settings}
                                            station={props.station} state={props.state} />
                 </div>
                 <div id="controltab-buttongroup">
-                    <RenderSwitchPanel settings={props.settings}
+                    <RenderSwitchPanel settings={props.current_station}
                                        display_settings={props.display_settings}
                                        station={props.station} state={props.state} switchControl={values.switchControl}/>
                 </div>

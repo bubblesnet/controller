@@ -26,6 +26,7 @@ const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').r
 const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes').router;
 const station_routes = require('./api/routes/station_routes').router;
+const site_routes = require('./api/routes/site_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
 
 logger.info("starting router")
@@ -80,6 +81,7 @@ apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edge_control_routes);
 apiServer.use("/api/measurement", edge_measurement_routes);
 apiServer.use("/api/station", station_routes);
+apiServer.use("/api/site", site_routes);
 apiServer.use("/api/module", module_routes);
 
 // catch 404 and forward to error handler
