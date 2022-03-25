@@ -226,6 +226,23 @@ async function updateStation(stationid, name) {
     })
 }
 
+async function changeStage(stationid, oldstage, newstage) {
+    //    console.log(JSON.stringify(body))
+    return new Promise(async function(resolve, reject) {
+        await pool.query("update automationsettings set current_stage = $1 where stationid_Station = $2 RETURNING *",
+            [newstage,stationid], (error, results) => {
+                if (error) {
+                    console.log("changeStage error " + error)
+                    reject(error)
+                } else {
+                    console.log("changeStage " + JSON.stringify(results.rows[0]))
+                    resolve({stationid: results.rows[0].stationid, stage: newstage, message: "Station "+results.rows[0].stationid+" stage has been updated to " + newstage})
+                }
+            })
+    })
+}
+
+
 async function deleteStation(stationid) {
     return new Promise(async function(resolve, reject) {
         await pool.query("delete from station where stationid = $1 RETURNING *",
@@ -255,6 +272,7 @@ async function getStationsForSite(siteid) {
 
 module.exports = {
     addStation,
+    changeStage,
     updateStation,
     deleteStation,
     getStationsForSite,

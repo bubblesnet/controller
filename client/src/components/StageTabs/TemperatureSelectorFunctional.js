@@ -8,19 +8,21 @@ import '../../Palette.css';
 
 function RenderTemperatureSelector(props) {
     function setValue(value) {
-        let x = local_state;
+        let x = local_station;
         x.automation_settings.target_temperature=value;
-        props.setStateFromChild(local_state)
-        setState(x)
+        props.setStateFromChild(local_station)
+        setStation(x)
     }
 
-    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
     const [local_settings, setSettings] = useState(JSON.parse(JSON.stringify(props.settings)));
 
     const onChange = event => setValue(event.target.value);
-    const min = local_state.automation_settings.temperature_min;
-    const max = local_state.automation_settings.temperature_max;
-    const units = local_settings.display_settings.temperature_units;
+    const units = props.display_settings.temperature_units;
+    const min = props.station.automation_settings.temperature_min;
+    const max = props.station.automation_settings.temperature_max;
+
+    const target_temperature = local_station.automation_settings.target_temperature
 
     return (
             <Grid
@@ -52,13 +54,13 @@ function RenderTemperatureSelector(props) {
                             min={min}
                             max={max}
                             step={1}
-                            value={local_state.automation_settings.target_temperature}
+                            value={target_temperature}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {local_state.automation_settings.target_temperature}{units}
+                    {target_temperature}{units}
                 </Box>
             </Grid>
    );

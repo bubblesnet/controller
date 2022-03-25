@@ -7,8 +7,8 @@ import sprintf from 'sprintf-js';
 
 function RenderExternalMetrics (props) {
     let value = ""
-    if( typeof(props.state.status.light_external) != 'undefined' ) {
-        value = sprintf.sprintf("%.1f", props.state.status.light_external)
+    if( typeof(props.state.sensor_readings.light_external) != 'undefined' ) {
+        value = sprintf.sprintf("%.1f", props.state.sensor_readings.light_external)
     }
 
     let ret =
@@ -20,16 +20,16 @@ function RenderExternalMetrics (props) {
             <div id="airtempexternal-holder">
                 <RenderThermometer exists={props.state.station_settings.thermometer_external}
                                    display_settings={props.display_settings}
-                                   currentTemperature={props.state.status.temp_air_external}
+                                   currentTemperature={props.state.sensor_readings.temp_air_external}
                                    units={props.display_settings.temperature_units}
-                                   direction={props.state.status.temp_air_external_direction}/>
+                                   direction={props.state.sensor_readings.temp_air_external_direction}/>
             </div>
             <div id="humidityexternal-text-holder">
                 <RenderHygrometer prefix={"external"} exists="true"
                                   display_settings={props.display_settings}
-                                  currentHumidity={props.state.status.humidity_external}
+                                  currentHumidity={props.state.sensor_readings.humidity_external}
                                   units={props.display_settings.humidity_units}
-                                  direction={props.state.status.humidity_external_direction}/>
+                                  direction={props.state.sensor_readings.humidity_external_direction}/>
             </div>
             <div className="externalpressure-holder">
                 <RenderBarometer exists={props.state.station_settings.pressure_sensors}
@@ -37,9 +37,9 @@ function RenderExternalMetrics (props) {
                                  holderClassName={"pressure-holder"}
                                  textClassName={"pressure-text-holder"}
                     iconClassName={"pressure-icon-holder"}
-                    value={props.state.status.pressure_external}
+                    value={props.state.sensor_readings.pressure_external}
                     units={props.display_settings.pressure_units}
-                    direction={props.state.status.pressure_external_direction} />
+                    direction={props.state.sensor_readings.pressure_external_direction} />
             </div>
         </>
     return (ret)

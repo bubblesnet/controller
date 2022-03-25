@@ -19,10 +19,10 @@ function RenderCameraTab(props) {
     let ImageProps = []
     let indexes = []
     let rowcount = 0
-    console.log("props.station[0].attached_devices = " + JSON.stringify(props.station[0].attached_devices))
-    for( let i = 0; i < props.station[0].attached_devices.length; i++ ) {
+    console.log("props.station.attached_devices = " + JSON.stringify(props.station.attached_devices))
+    for( let i = 0; i < props.station.attached_devices.length; i++ ) {
         let picture_url = 'http://' + servers.api_server_host + ':' + servers.api_server_port +
-            '/' + userid + '_' + props.station[0].attached_devices[i].deviceid + '.jpg?' + props.lastpicture
+            '/' + userid + '_' + props.station.attached_devices[i].deviceid + '.jpg?' + props.lastpicture
 
         console.log("picture_url = "+picture_url)
         ImageProps.push( {width: 800,  zoomWidth: 1600, img: picture_url});
@@ -40,8 +40,8 @@ function RenderCameraTab(props) {
     function getDeviceRow(i) {
         let labelAreaIndex = i*2
 
-        console.log("getRow " + i +' labelAreaIndex '+labelAreaIndex + ' label '+props.station[0].attached_devices[i]);
-        return( <><Text gridArea={"label"+i}>{props.station[0].attached_devices[i].deviceid}</Text><Box gridArea={Areas[labelAreaIndex+1].name}><ReactImageZoom {...ImageProps[i]} /></Box></>);
+        console.log("getRow " + i +' labelAreaIndex '+labelAreaIndex + ' label '+props.station.attached_devices[i]);
+        return( <><Text gridArea={"label"+i}>{props.station.attached_devices[i].deviceid}</Text><Box gridArea={Areas[labelAreaIndex+1].name}><ReactImageZoom {...ImageProps[i]} /></Box></>);
     }
 
     console.log(JSON.stringify(Areas))

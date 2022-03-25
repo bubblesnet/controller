@@ -28,33 +28,34 @@ function RenderStatusTab (props) {
                         <RenderTemperatureMeter settings={props.settings}
                                                 station_settings={props.station_settings}
                                                 display_settings={props.display_settings}
-                                                automation_settings={props.automation_settings}
+                                                automation_settings={props.station.automation_settings}
                                                 exists={props.settings.temp_air_middle}
                                                 className="temp-top" label="Air Temperature" state={props.state}/>
                         <RenderHumidityMeter settings={props.settings}
                                              station_settings={props.station_settings}
                                              display_settings={props.display_settings}
-                                             automation_settings={props.automation_settings}
+                                             automation_settings={props.station.automation_settings}
                                              exists={props.settings.humidity_sensor_internal}
                                              className="temp-middle" label="Humidity"  state={props.state}/>
                         <RenderPressureMeter settings={props.settings}
                                              station_settings={props.station_settings}
                                              display_settings={props.display_settings}
-                                             automation_settings={props.automation_settings}
+                                             automation_settings={props.station.automation_settings}
                                              exists={props.settings.pressure_sensors}
                                              className="temp-bottom" label="Odor Control (pressure)"  state={props.state}/>
                         <RenderPhMeter settings={props.settings}
                                        station_settings={props.station_settings}
                                        display_settings={props.display_settings}
-                                       automation_settings={props.automation_settings}
+                                       automation_settings={props.station.automation_settings}
                                        exists={props.settings.root_ph_sensor} className="temp-middle" label="Root pH"  state={props.state}/>
                     </div>
                     <div className="detail-group" >
                         <RenderTextStatus
                             station_settings={props.station_settings}
-                            automation_settings={props.automation_settings}
+                            automation_settings={props.station.automation_settings}
                             display_settings={props.display_settings}
-                            settings={props.settings} state={props.state}/>
+                            settings={props.settings} state={props.state}
+                            various_dates={props.various_dates}/>
                     </div>
                 </div>
             </Grommet>

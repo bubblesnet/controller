@@ -32,6 +32,8 @@ import './logimplementation'
 import log from 'roarr';
 import moment from "moment";
 
+import {changeStage} from './api/utils';
+
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
@@ -48,8 +50,6 @@ let because = "don't know"
 function AuthenticatedApp (props) {
     log.debug("render AuthenticatedApp " + JSON.stringify(props));
     var tilt_sound = new Audio("tilt.mp3");
-
-//    var shutter_sound = new Audio("shutter_click.mp3");
 
     function play_tilt() {
         tilt_sound.play()
@@ -93,56 +93,63 @@ function AuthenticatedApp (props) {
     //
     //
     /**
-     * The siteid of the site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
-     * Changing this causes a rerender
+     * The user who has logged in.  If we login as a different user, rerender
+     * TABLE: user
      */
-    const [siteid, setSiteid] = useState(1);
+    const [userid, setUserid] = useState(props.user.userid);
     /**
      * The site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
      * Changing this causes a rerender
+     * TABLE: site
      */
-        /// TODO why do we need this AND siteid?
     console.log("setting site to " + JSON.stringify(props.site))
     const [site, setSite] = useState(props.site);
 
-//    const [siteName, setSiteName] = useState(props.site.stations[props.stationindex].site_name);
+    /**
+     * The index of the station we're currently controlling.  Index into site.stations[]
+     * TABLE: station
+     */
+    const [currentStationIndex, setCurrentStationIndex] = useState(props.stationindex)
+
+    /**
+     * Local copy of all data (temp ...) - change and rerender
+     */
+    const [local_state, setState] = useState(props.initial_station_state);
+
+    /**
+     * Local copy of current station settings - change and rerender
+     */
+    const [current_station, setSettings] = useState(props.site.stations[props.stationindex]);
+
     /**
      * The value of environment variable NODE_ENV which controls the hostname and port the API
      * is listening on. Changing this causes a rerender
      */
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+
     /**
      * Port the API server is listening on - change it and rerender
      * @todo why is this here when we can derive it from nodeEnv
      */
     const [apiPort, setApiPort] = useState(servers.api_server_port);  // The port we should send queries to - depends on dev/test/prod
+
     /**
      * Deep object of the current theme - change it and rerender
      */
     const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
+
     /**
      * Name of the current font family - change it and rerender
      */
     const [current_font, setCurrentFont] = useState(initial_theme.global.font.family)
-    const [currentStationIndex, setCurrentStationIndex] = useState(props.stationindex)
+    /**
+     * ????
+     */
     const [lastpicture, setLastPicture] = useState(0)
-    const [initial_station_state, setInitialState] = useState(props.initial_station_state)
 //    const [initial_settings, setInitialSettings] = useState(props.initial_settings)
 
     /**
-     * Local copy of all data (temp ...) - change and rerender
-     */
-    const [local_state, setState] = useState(initial_station_state);
-    /**
-     * Local copy of all settings - change and rerender
-     */
-    const [current_station, setSettings] = useState(props.site.stations[props.stationindex]);
-    /**
-     * If we login as a different user, rerender
-     */
-    const [userid, setUserid] = useState(props.user.userid);
-    /**
-     * If we change the langauge, rerender
+     * If we change the language, rerender
      */
 //    const [language, setLanguage] = useState('');
     /**
@@ -161,10 +168,6 @@ function AuthenticatedApp (props) {
         setCurrentStationIndex(index)
     }
 
-    initial_station_state.theme = bubbles_theme;
-    initial_station_state.current_font = bubbles_theme.global.font.family;
-    initial_station_state.tilt = false;
-
     /**
      * ????
      * @type {React.MutableRefObject<*[]>}
@@ -174,7 +177,6 @@ function AuthenticatedApp (props) {
      * The last complete status message received from outside.  Is this still used?
      */
     let lastCompleteStatusMessage
-
 
     //
     //
@@ -207,7 +209,7 @@ function AuthenticatedApp (props) {
     const handleToAdd = async () => {
 //        alert("Adding station named " + new_station_name )
         setOpen(false);
-        let x = await addStation(servers.api_server_host, servers.api_server_port, siteid, new_station_name)
+        let x = await addStation(servers.api_server_host, servers.api_server_port, site.siteid, new_station_name)
         console.log(`addStation returns ${x}`)
     }
 
@@ -227,7 +229,7 @@ function AuthenticatedApp (props) {
         sendJsonMessage(cmd)
     }
 
-    let initial_status = {
+    let initial_sensor_readings = {
         units: "IMPERIAL",
         temp_air_external: 0.0,
         temp_air_external_direction: "",
@@ -248,17 +250,20 @@ function AuthenticatedApp (props) {
         humidity_external: 0.0,
         humidity_external_direction: "",
         plant_height: 0.0,
-        start_date_current_stage: "25 days ago",
-        start_date_next_stage: "10 days from now",
         outer_door_open: false,
         station_door_open: false,
         pressure_external: 0.0,
         pressure_internal: 0.0,
         pressure_external_direction: "",
         pressure_internal_direction: "",
-        date_last_training: "never",
-        date_last_filter_change: "never",
         tub_water_level: 0.0
+    }
+
+    let various_dates = {
+        start_date_current_stage: "25 days ago",
+        start_date_next_stage: "10 days from now",
+        date_last_training: "never",
+        date_last_filter_change: "never"
     }
 
     //
@@ -305,17 +310,17 @@ function AuthenticatedApp (props) {
                 log.error("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
                 if (msg.measurement_name === 'water_level') {
-                    local_state.status['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
+                    local_state.sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
                 }
-                if( typeof local_state.status === 'undefined') {
+                if( typeof local_state.sensor_readings === 'undefined') {
                     console.log("WTF")
                 }
                 console.log("local_state = " + JSON.stringify(local_state))
-                local_state.status[msg.measurement_name] = msg.value
-                local_state.status[msg.measurement_name + "_direction"] = msg.direction
-                local_state.status[msg.measurement_name + "_units"] = msg.units
-//        log.debug( "direction!!! local_state.status["+msg.measurement_name+"_direction"+"] = " + msg.direction )
-                log.debug("msg: applying " + msg.value + " " + local_state.status[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+                local_state.sensor_readings[msg.measurement_name] = msg.value
+                local_state.sensor_readings[msg.measurement_name + "_direction"] = msg.direction
+                local_state.sensor_readings[msg.measurement_name + "_units"] = msg.units
+//        log.debug( "direction!!! local_state.sensor_readings["+msg.measurement_name+"_direction"+"] = " + msg.direction )
+                log.debug("msg: applying " + msg.value + " " + local_state.sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
             }
         }
 
@@ -400,7 +405,7 @@ function AuthenticatedApp (props) {
         if (lastJsonMessage) {
             x = JSON.parse(JSON.stringify(lastJsonMessage))
         }
-        x.status.humidity_internal = 69 + getRandomInt(10)
+        x.sensor_readings.humidity_internal = 69 + getRandomInt(10)
         sendJsonMessage(x);
     }
 
@@ -523,10 +528,12 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function setAutomationStateFromChild(current_stage) {
+        console.log("setAutomationStateFromChild current_stage "+current_stage)
         let cmd = {
             command: STAGE_COMMAND,
-            stage: current_stage
+            stage_name: current_stage
         }
+        changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].current_stage, current_stage )
         site.stations[currentStationIndex].current_stage = current_stage
         sendJsonMessage(cmd)
     }
@@ -602,8 +609,10 @@ function AuthenticatedApp (props) {
      */
     useEffect(() => {
         const fetchData = async () => {
-            let z = await getSite(servers.api_server_host, servers.api_server_port, siteid)
+            let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
             log.info("xxxuseEffect stationid = " + z.stations[0].stationid)
+            z.stations[0].automation_settings = z.stations[0].automation_settings[0] // returned as array from server
+
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
@@ -669,14 +678,14 @@ function AuthenticatedApp (props) {
     console.log("STATION: props.site " + JSON.stringify(props.site))
     console.log("xsite.stations = " + JSON.stringify(site.stations))
     console.log("display_settings = " + JSON.stringify(props.display_settings))
+//    console.log("automation_settings = " + JSON.stringify(site.stations[0].automation_settings))
     console.log("site = " + JSON.stringify(site))
     console.log("props.site = " + JSON.stringify(props.site))
     console.log("xdevices = " + JSON.stringify(site.stations[0].attached_devices))
 
-    if( typeof thestate.status === 'undefined') {
-        thestate.status = initial_status
+    if( typeof thestate.sensor_readings === 'undefined') {
+        thestate.sensor_readings = initial_sensor_readings
     }
-
 
     return <div className="App">
         <Header tilt={thestate.tilt} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
@@ -742,7 +751,7 @@ function AuthenticatedApp (props) {
                                       station={site.stations[currentStationIndex]}
                                       current_station={current_station}
                                       state={thestate}
-                                      switch_state={thestate.switch_state}
+//                                      switch_state={thestate.switch_state}
                                       setStateFromChild={setSwitchStateFromChild}
                                       display_settings={props.display_settings}
                                       because={because}/>
@@ -765,7 +774,9 @@ function AuthenticatedApp (props) {
                                      state={local_state}
                                      display_settings={props.display_settings}
                                      station_settings={props.site.stations[props.stationindex]}
-                                     automation_settings={props.automation_settings}/>
+                                     automation_settings={props.automation_settings}
+                                     various_dates={various_dates}
+                    />
                 </Tab>
                 <Tab title="Station Setup">
                     <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort}
@@ -786,8 +797,11 @@ function AuthenticatedApp (props) {
                 </Tab>
                 <Tab title="Automation">
                     <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                                    site={site}
                                     station={site.stations[currentStationIndex]}
-                                    settings={current_station} state={local_state}
+                                    settings={current_station}
+                                    state={local_state}
+                                    display_settings={props.display_settings}
                                     setStateFromChild={setAutomationStateFromChild}/>
                 </Tab>
                 <Tab title="Events">

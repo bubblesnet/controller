@@ -35,12 +35,12 @@
   "automation_settings": {
     "current_stage": "Germinate",
     "stage_options": [
-      "Germinate",
-      "Vegetative",
-      "Bloom",
-      "Harvest",
-      "Dry",
-      "Idle"
+      "germinate",
+      "vegetative",
+      "bloom",
+      "harvest",
+      "dry",
+      "idle"
     ],
     "current_lighting_schedule": "12 on/12 off",
     "lighting_schedule_options": [

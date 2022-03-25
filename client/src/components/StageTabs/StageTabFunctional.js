@@ -13,7 +13,7 @@ import GoogleFontLoader from "react-google-font-loader";
 
 function RenderStageTab (props) {
 
-    console.log("RenderStageTab")
+    console.log("RenderStageTab props.station.automation_settings = " + JSON.stringify(props.station.automation_settings))
 
     function setStateFromChild(x) {
         setapplyButtonState(true)
@@ -24,7 +24,8 @@ function RenderStageTab (props) {
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
-        props.setStateFromChild("idle");
+        console.log("StageTabsettingstage " + state.automation_settings.current_stage)
+        props.setStateFromChild(state.automation_settings.current_stage);
     }
 
     function resetAction() {
@@ -76,16 +77,24 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector settings={settings} state={state} setStateFromChild={setStateFromChild}/>
+                            <RenderStageSelector station={props.station}
+                                                 display_settings={props.display_settings}
+                                                 settings={settings} state={state} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector settings={settings} state={state} setStateFromChild={setStateFromChild} />
+                            <RenderLightSelector station={props.station}
+                                                 display_settings={props.display_settings}
+                                                 settings={settings} state={state} setStateFromChild={setStateFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector settings={settings} state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
+                            <RenderTemperatureSelector station={props.station}
+                                                       display_settings={props.display_settings}
+                                                       settings={settings} state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector settings={settings} state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
+                            <RenderHumiditySelector station={props.station}
+                                                    display_settings={props.display_settings}
+                                                    settings={settings} state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
                             <RenderFormActions settings={settings} applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>

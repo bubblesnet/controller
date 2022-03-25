@@ -21,19 +21,19 @@ import RenderPhmeter from "./PhmeterFunctional";
 function RenderControlTab(props) {
     let values = {
         switchControl: {
-            automaticControl: {on: props.switch_state.automaticControl.on, toggle: toggleAutomatic},
-            humidifier: {on: props.switch_state.humidifier.on, changing: false, toggle: toggleHumidifier},
-            heater: {on: props.switch_state.heater.on, changing: false, toggle: toggleHeater},
-            heatLamp: {on: props.switch_state.heatLamp.on, changing: false, toggle: toggleHeatLamp},
-            heatingPad: {on: props.switch_state.heatingPad.on, changing: false, toggle: toggleHeatingPad},
-            waterHeater: {on: props.switch_state.waterHeater.on, changing: false, toggle: toggleWaterHeater},
-            lightBloom: {on: props.switch_state.lightBloom.on, changing: false, toggle: toggleLightBloom},
-            lightVegetative: {on: props.switch_state.lightVegetative.on, changing: false, toggle: toggleLightVegetative},
-            airPump: {on: props.switch_state.airPump.on, changing: false, toggle: toggleAirPump},
-            waterPump: {on: props.switch_state.waterPump.on, changing: false, toggle: toggleWaterPump},
-            intakeFan: {on: props.switch_state.intakeFan.on, changing: false, toggle: toggleIntakeFan},
-            exhaustFan: {on: props.switch_state.exhaustFan.on, changing: false, toggle: toggleExhaustFan},
-            currentGrowLight: {on: props.switch_state.currentGrowLight.on, changing: false, toggle: toggleCurrentGrowLight}
+            automaticControl: {on: props.state.switch_state.automaticControl.on, toggle: toggleAutomatic},
+            humidifier: {on: props.state.switch_state.humidifier.on, changing: false, toggle: toggleHumidifier},
+            heater: {on: props.state.switch_state.heater.on, changing: false, toggle: toggleHeater},
+            heatLamp: {on: props.state.switch_state.heatLamp.on, changing: false, toggle: toggleHeatLamp},
+            heatingPad: {on: props.state.switch_state.heatingPad.on, changing: false, toggle: toggleHeatingPad},
+            waterHeater: {on: props.state.switch_state.waterHeater.on, changing: false, toggle: toggleWaterHeater},
+            lightBloom: {on: props.state.switch_state.lightBloom.on, changing: false, toggle: toggleLightBloom},
+            lightVegetative: {on: props.state.switch_state.lightVegetative.on, changing: false, toggle: toggleLightVegetative},
+            airPump: {on: props.state.switch_state.airPump.on, changing: false, toggle: toggleAirPump},
+            waterPump: {on: props.state.switch_state.waterPump.on, changing: false, toggle: toggleWaterPump},
+            intakeFan: {on: props.state.switch_state.intakeFan.on, changing: false, toggle: toggleIntakeFan},
+            exhaustFan: {on: props.state.switch_state.exhaustFan.on, changing: false, toggle: toggleExhaustFan},
+            currentGrowLight: {on: props.state.switch_state.currentGrowLight.on, changing: false, toggle: toggleCurrentGrowLight}
         }
     }
 
@@ -133,16 +133,16 @@ function RenderControlTab(props) {
         console.log("props.current_station = " + JSON.stringify(props.current_station))
         wlRuler = <div id="watertemp-holder">
             <RenderThermometer exists={props.station.thermometer_water}
-                               className="airtemptop-text-holder" currentTemperature={props.state.status.temp_water}
+                               className="airtemptop-text-holder" currentTemperature={props.state.sensor_readings.temp_water}
                                units={props.display_settings.temperature_units}
-                               direction={props.state.status.temp_water_direction}/>
+                               direction={props.state.sensor_readings.temp_water_direction}/>
         </div>
 
         wl = <div id="water-level-text-holder">
-            {props.state.status.tub_water_level} {props.display_settings.tub_volume_units}
+            {props.state.sensor_readings.tub_water_level} {props.display_settings.tub_volume_units}
         </div>
     }
-    let water_level_percent = props.state.status.tub_water_level/20.0
+    let water_level_percent = props.state.sensor_readings.tub_water_level/20.0
     let water_level_max_pixels = 188
     let water_level_height = water_level_max_pixels*water_level_percent
     let water_level_top = (water_level_max_pixels-water_level_height) + 'px'
@@ -167,7 +167,7 @@ function RenderControlTab(props) {
                         {wl}
                         {wlRuler}
                         <div id={"root_ph_holder"}>
-                            <RenderPhmeter state={props.state.status} exists={props.station.root_ph_sensor} direction={props.state.status.root_ph_direction}/>
+                            <RenderPhmeter state={props.state.sensor_readings} exists={props.station.root_ph_sensor} direction={props.state.sensor_readings.root_ph_direction}/>
                         </div>
                         <div className="waterheater">
                             <RenderWaterHeater settings={props.current_station} exists={props.station.water_heater}

@@ -11,7 +11,7 @@ function RenderStateTextStatus (props) {
     let [settings, setSettings ] = useState(props.settings); //
 
     console.log("RenderStateTextStatus")
-    let plant_height = sprintf.sprintf("%.1f", state.status.plant_height)
+    let plant_height = sprintf.sprintf("%.1f", state.sensor_readings.plant_height)
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[
@@ -32,8 +32,8 @@ function RenderStateTextStatus (props) {
         <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{props.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
         <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{props.automation_settings.current_stage}</Box>
-        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{state.status.start_date_current_stage}</Box>
-        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{state.status.start_date_next_stage}</Box>
+        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{props.various_dates.start_date_current_stage}</Box>
+        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{props.various_dates.start_date_next_stage}</Box>
      </Grid>
     return( ret );
 }

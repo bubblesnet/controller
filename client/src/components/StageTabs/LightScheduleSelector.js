@@ -1,20 +1,23 @@
 import {Box, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
+import lighting_schedule_options from "../../options_lighting_schedule.json"
+import light_type_options from "../../options_light_type.json"
+
 function RenderLightSelector (props) {
 
     function setLightTypeValue(value) {
-        let x = local_state;
+        let x = local_station;
         x.automation_settings.current_light_type = value;
-        setState(JSON.parse(JSON.stringify(x)))
+        setStation(JSON.parse(JSON.stringify(x)))
     }
     function setLightScheduleValue(value) {
-        let x = local_state;
+        let x = local_station;
         x.automation_settings.current_lighting_schedule = value;
-        setState(JSON.parse(JSON.stringify(x)))
+        setStation(JSON.parse(JSON.stringify(x)))
     }
 
-    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
     const changeLightType = event => setLightTypeValue(event.target.value);
     const changeLightSchedule = event => setLightScheduleValue(event.target.value);
@@ -35,11 +38,11 @@ function RenderLightSelector (props) {
 
             <Box width={'small'} round={'xsmall'} >
             Light Schedule
-            <Select options={local_state.automation_settings.lighting_schedule_options} value={local_state.automation_settings.current_lighting_schedule} onChange={changeLightSchedule}/>
+            <Select options={lighting_schedule_options} value={local_station.automation_settings.current_lighting_schedule} onChange={changeLightSchedule}/>
             </Box>
             <Box width={'small'} round={'small'} >
             Light Type
-            <Select options={local_state.automation_settings.light_type_options} value={local_state.automation_settings.current_light_type} onChange={changeLightType}/>
+            <Select options={light_type_options} value={local_station.automation_settings.current_light_type} onChange={changeLightType}/>
             </Box>
             </Grid>
    </>

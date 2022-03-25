@@ -11,9 +11,13 @@ import log from "roarr";
 import util from "./util";
 
 import initial_display_settings from './initial_display_settings.json'
-import initial_station_state from './initial_station_state.json'
+import options_units from './options_units.json'
+import options_pressure_units from './options_pressure_units.json'
+import options_enclosure from './options_enclosure.json'
+import options_language from './options_languages.json'
+
 import initial_automation_settings from './initial_automation_settings.json'
-import initial_station_settings from './initial_station_settings.json'
+
 
 /** Fake login function
  *
@@ -42,6 +46,162 @@ function setToken(loginResult) {
 function App(props) {
     console.log("App: Starting App")
 
+    let initial_station = {
+        tilt: false,
+        station_settings: {
+            humidifier: true,
+            humidity_sensor_internal: true,
+            humidity_sensor_external: true,
+            heater: true,
+            thermometer_top: true,
+            thermometer_middle: true,
+            thermometer_bottom: true,
+            thermometer_external: true,
+            thermometer_water: true,
+            water_pump: true,
+            air_pump: true,
+            station_door_sensor: true,
+            outer_door_sensor: true,
+            movement_sensor: true,
+            pressure_sensors: true,
+            root_ph_sensor: true,
+            enclosure_type: "Cabinet",
+            water_level_sensor: true,
+            tub_depth: 18.0,
+            tub_volume: 20.0,
+            intake_fan: true,
+            exhaust_fan: true,
+            heat_lamp: true,
+            heating_pad: true,
+            light_sensor_internal: true,
+            light_sensor_external: true,
+            light_bloom: true,
+            light_vegetative: true,
+            light_germinate: true
+        }
+    }
+
+        let initial_station_state = {
+        tilt: false,
+        station_settings: {
+            humidifier: true,
+            humidity_sensor_internal: true,
+            humidity_sensor_external: true,
+            heater: true,
+            thermometer_top: true,
+            thermometer_middle: true,
+            thermometer_bottom: true,
+            thermometer_external: true,
+            thermometer_water: true,
+            water_pump: true,
+            air_pump: true,
+            station_door_sensor: true,
+            outer_door_sensor: true,
+            movement_sensor: true,
+            pressure_sensors: true,
+            root_ph_sensor: true,
+            enclosure_type: "Cabinet",
+            water_level_sensor: true,
+            tub_depth: 18.0,
+            tub_volume: 20.0,
+            intake_fan: true,
+            exhaust_fan: true,
+            heat_lamp: true,
+            heating_pad: true,
+            light_sensor_internal: true,
+            light_sensor_external: true,
+            light_bloom: true,
+            light_vegetative: true,
+            light_germinate: true
+        },
+        sensor_readings: {
+            temp_air_external: 0.0,
+            temp_air_external_direction: "",
+            temp_air_top: 0.0,
+            temp_air_top_direction: "",
+            temp_air_middle: 0.0,
+            temp_air_middle_direction: "",
+            temp_air_bottom: 0.0,
+            temp_air_bottom_direction: "",
+            temp_water: 0.0,
+            temp_water_direction: "",
+            root_ph: 0.0,
+            root_ph_direction: "",
+            humidity_internal: 0.0,
+            humidity_internal_direction: "",
+            light_internal: 0.0,
+            light_internal_direction: "",
+            humidity_external: 0.0,
+            humidity_external_direction: "",
+            plant_height: 0.0,
+            start_date_current_stage: "25 days ago",
+            start_date_next_stage: "10 days from now",
+            outer_door_open: false,
+            station_door_open: false,
+            pressure_external: 0.0,
+            pressure_internal: 0.0,
+            pressure_external_direction: "",
+            pressure_internal_direction: "",
+            date_last_training: "never",
+            date_last_filter_change: "never",
+            tub_water_level: 0.0
+        },
+        switch_state: {
+            automaticControl: {
+                on: false,
+                changing: true
+            },
+            heatLamp: {
+                on: false,
+                changing: true
+            },
+            heatingPad: {
+                on: false,
+                changing: true
+            },
+            lightVegetative: {
+                on: false,
+                changing: true
+            },
+            lightBloom: {
+                on: false,
+                changing: true
+            },
+            humidifier: {
+                on: false,
+                changing: true
+            },
+            waterHeater: {
+                on: false,
+                changing: true
+            },
+            heater: {
+                on: false,
+                changing: true
+            },
+            airPump: {
+                on: false,
+                changing: true
+            },
+            waterPump: {
+                on: false,
+                changing: true
+            },
+            intakeFan: {
+                on: false,
+                changing: true
+            },
+            exhaustFan: {
+                on: false,
+                changing: true
+            },
+            currentGrowLight: {
+                on: false,
+                changing: true
+            }
+        }
+    }
+
     const [site, setSite] = useState({});
     const [user, setUser] = useState({});
 
@@ -54,24 +214,10 @@ function App(props) {
         console.log("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
             console.log("Setting token to " + JSON.stringify(loginResult))
-            loginResult.units_options = [
-                    "IMPERIAL",
-                    "METRIC"
-                ]
-            loginResult.pressure_units_options = [
-                    "hPa",
-                    "mbar",
-                    "mm Hg",
-                    "psi"
-                ]
-            loginResult.languageOptions = [
-                    "en-us",
-                    "fr"
-                ]
-            loginResult.enclosure_options = [
-                    "Cabinet",
-                    "Tent"
-                ]
+            loginResult.units_options = options_units
+            loginResult.pressure_units_options = options_pressure_units
+            loginResult.languageOptions = options_language
+            loginResult.enclosure_options = options_enclosure
             setToken(loginResult)  // this inspires the rerender that gets us the authenticatedApp
 
 //            setLocalToken(loginResult.token)
@@ -102,7 +248,11 @@ function App(props) {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
-
+    if(typeof site.automation_settings != 'undefined') {
+        site.automation_settings = site.automation_settings[0] // returned as array from server
+    } else {
+        site.automation_settings = {}
+    }
 
 
     return (token?.auth === true) ? <AuthenticatedApp
@@ -110,7 +260,7 @@ function App(props) {
                                                       initial_station_state={initial_station_state}
                                                       nodeEnv={process.env.REACT_APP_NODE_ENV}
                                                       site={site}
-                                                      automation_settings={initial_automation_settings}
+                                                      automation_settings={site.automation_settings}
                                                       display_settings={token}
                                                       user={token}
                                     /> :

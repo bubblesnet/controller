@@ -37,12 +37,12 @@
   "automation_settings": {
     "current_stage": "Germinate",
     "stage_options": [
-      "Germinate",
-      "Vegetative",
-      "Bloom",
-      "Harvest",
-      "Dry",
-      "Idle"
+      "germinate",
+      "vegetative",
+      "bloom",
+      "harvest",
+      "dry",
+      "idle"
     ],
     "current_lighting_schedule": "12 on/12 off",
     "lighting_schedule_options": [
@@ -58,6 +58,9 @@
     "target_temperature": 75,
     "temperature_min": 20,
     "temperature_max": 90,
+    "water_target_temperature": 70,
+    "water_temperature_min": 62,
+    "water_temperature_max": 77,
     "humidity_min": 0,
     "humidity_max": 90,
     "target_humidity": 70,

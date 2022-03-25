@@ -4,13 +4,13 @@ import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
 
 function RenderTemperatureMeter (props) {
-    let valueText = sprintf.sprintf("%.1f%s", props.state.status.temp_air_middle, props.display_settings.temperature_units)
+    let valueText = sprintf.sprintf("%.1f%s", props.state.sensor_readings.temp_air_middle, props.display_settings.temperature_units)
     let ret =
             <div className={props.className}>
                 <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={props.state.status.temp_air_middle} minValue={props.automation_settings.temperature_min} maxValue={props.automation_settings.temperature_max}
+                    value={props.state.sensor_readings.temp_air_middle} minValue={props.automation_settings.temperature_min} maxValue={props.automation_settings.temperature_max}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['blue','green','red']}

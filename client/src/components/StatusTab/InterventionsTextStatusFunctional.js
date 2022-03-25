@@ -6,7 +6,7 @@ import {Box} from "grommet";
 
 function RenderStateTextStatus (props) {
     let initValues = {
-        stage: "Vegetative",
+        stage: "vegetative",
         lightSchedule: "12/12",
         lastWaterChange: "10 days ago",
         powerConsumption: "40W",

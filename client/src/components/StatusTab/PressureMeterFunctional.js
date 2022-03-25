@@ -7,7 +7,7 @@ function RenderPressureMeter (props) {
 //    let [state, setState] = useState(props.state); //
 //    let [settings, setSettings] = useState(props.settings); //
 
-    let diff_float = (props.state.status.pressure_external - props.state.status.pressure_internal)
+    let diff_float = (props.state.sensor_readings.pressure_external - props.state.sensor_readings.pressure_internal)
     let diff_value =  sprintf.sprintf("%.1f", diff_float)
     let valueText =  diff_value+" "+props.display_settings.pressure_units
     let ret =

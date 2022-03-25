@@ -8,18 +8,21 @@ import '../../Palette.css';
 
 function RenderHumiditySelector(props) {
     function setValue(value) {
-        let x = JSON.parse(JSON.stringify(local_state));
+        let x = JSON.parse(JSON.stringify(local_station));
+        console.log("RenderHumiditySelector = " + JSON.stringify(x))
         x.automation_settings.target_humidity = value
         props.setStateFromChild(x)
-        setState(JSON.parse(JSON.stringify(x)))
+        setStation(JSON.parse(JSON.stringify(x)))
     }
 
-    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
     const onChange = event => setValue(event.target.value);
-    const min = props.state.automation_settings.humidity_min;
-    const max = props.state.automation_settings.humidity_max;
-    const units = props.display_settings.humidity_units;
+    const min = props.station.automation_settings.humidity_min;
+    const max = props.station.automation_settings.humidity_max;
+    const units = props.display_settings.humidity_units
+    const target_humidity = local_station.automation_settings.target_humidity
+    console.log("RenderHumiditySelector 1 = " + JSON.stringify(local_station))
 
     return (
             <Grid
@@ -51,13 +54,13 @@ function RenderHumiditySelector(props) {
                             min={min}
                             max={max}
                             step={1}
-                            value={local_state.automation_settings.target_humidity}
+                            value={target_humidity}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {local_state.automation_settings.target_humidity}{units}
+                    {target_humidity}{units}
                 </Box>
             </Grid>
    );

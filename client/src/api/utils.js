@@ -156,6 +156,31 @@ export const saveSetting = ( host, port, userid, stationid, thing_name, present 
     })
 }
 
+export const changeStage = ( host, port, stationid, oldstage, newstage ) => {
+
+    return new Promise( async (resolve, reject) => {
+        const url = 'http://'+host+':'+port+'/api/station/'+stationid+'/stage/';
+        log.debug("changeStage url = " + url)
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ oldstage: oldstage, newstage: newstage })
+        });
+        if(response.ok) {
+            let x = await response.json();
+//            console.log(JSON.stringify(x))
+//            console.log("Got devices " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            console.log("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+
 export const addStation = async ( host, port, siteid, station_name ) => {
     console.log("addStation calling out to api ")
 

@@ -7,7 +7,7 @@ import RenderEnvValueWithDirection from './EnvValueWithDirection'
 
 function RenderStateTextStatus (props) {
 
-    console.log('RenderStateTextStatus temp='+props.state.status.temp_air_middle)
+    console.log('RenderStateTextStatus temp='+props.state.sensor_readings.temp_air_middle)
     let ret =
         <Grid className={'status-table-holder'}
               round={'small'}
@@ -27,14 +27,14 @@ function RenderStateTextStatus (props) {
               rows={['40px','20px','20px','20px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>Environment</Box>
-            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_external} gridArea={'external-air-temp'} label='External Air Temp' value={props.state.status.temp_air_external} units={props.display_settings.temperature_units} direction={props.state.status.temp_air_external_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_top} gridArea={'air-temp-top'} label='Air Temp Top' value={props.state.status.temp_air_top} units={props.display_settings.temperature_units} direction={props.state.status.temp_air_top_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_middle} gridArea={'air-temp-middle'} label='Air Temp Middle' value={props.state.status.temp_air_middle} units={props.display_settings.temperature_units} direction={props.state.status.temp_air_middle_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_bottom} gridArea={'air-temp-bottom'} label='Air Temp Bottom' value={props.state.status.temp_air_bottom} units={props.display_settings.temperature_units} direction={props.state.status.temp_air_bottom_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_water} gridArea={'water-temp'} label='Water Temp' value={props.state.status.temp_water} units={props.display_settings.temperature_units} direction={props.state.status.temp_water_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.root_ph_sensor} gridArea={'root-ph'} label='Root pH' value={props.state.status.root_ph} units={''} direction={props.state.status.root_ph_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.humidity_sensor_internal} gridArea={'humidity'} label='Humidity' value={props.state.status.humidity_internal} units={props.display_settings.humidity_units} direction={props.state.status.humidity_internal_direction} />
-            <RenderEnvValueWithDirection exists={props.station_settings.humidity_sensor_external} gridArea={'external-humidity'} label='External Humidity' value={props.state.status.humidity_external} units={props.display_settings.humidity_units} direction={props.state.status.humidity_external_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_external} gridArea={'external-air-temp'} label='External Air Temp' value={props.state.sensor_readings.temp_air_external} units={props.display_settings.temperature_units} direction={props.state.sensor_readings.temp_air_external_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_top} gridArea={'air-temp-top'} label='Air Temp Top' value={props.state.sensor_readings.temp_air_top} units={props.display_settings.temperature_units} direction={props.state.sensor_readings.temp_air_top_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_middle} gridArea={'air-temp-middle'} label='Air Temp Middle' value={props.state.sensor_readings.temp_air_middle} units={props.display_settings.temperature_units} direction={props.state.sensor_readings.temp_air_middle_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_bottom} gridArea={'air-temp-bottom'} label='Air Temp Bottom' value={props.state.sensor_readings.temp_air_bottom} units={props.display_settings.temperature_units} direction={props.state.sensor_readings.temp_air_bottom_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.thermometer_water} gridArea={'water-temp'} label='Water Temp' value={props.state.sensor_readings.temp_water} units={props.display_settings.temperature_units} direction={props.state.sensor_readings.temp_water_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.root_ph_sensor} gridArea={'root-ph'} label='Root pH' value={props.state.sensor_readings.root_ph} units={''} direction={props.state.sensor_readings.root_ph_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.humidity_sensor_internal} gridArea={'humidity'} label='Humidity' value={props.state.sensor_readings.humidity_internal} units={props.display_settings.humidity_units} direction={props.state.sensor_readings.humidity_internal_direction} />
+            <RenderEnvValueWithDirection exists={props.station_settings.humidity_sensor_external} gridArea={'external-humidity'} label='External Humidity' value={props.state.sensor_readings.humidity_external} units={props.display_settings.humidity_units} direction={props.state.sensor_readings.humidity_external_direction} />
         </Grid>
     return (ret)
 }

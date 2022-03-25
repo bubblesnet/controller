@@ -5,13 +5,13 @@ import sprintf from 'sprintf-js';
 import ReactSpeedometer from "react-d3-speedometer";
 
 function RenderHumidityMeter (props) {
-    let valueText = sprintf.sprintf("%.1f%s", props.state.status.humidity_internal, props.display_settings.humidity_units)
+    let valueText = sprintf.sprintf("%.1f%s", props.state.sensor_readings.humidity_internal, props.display_settings.humidity_units)
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={props.state.status.humidity_internal} maxValue={props.automation_settings.humidity_max}
+                    value={props.state.sensor_readings.humidity_internal} maxValue={props.automation_settings.humidity_max}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['blue','green','red']}
