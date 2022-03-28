@@ -3,32 +3,32 @@ import log from 'roarr';
 
 
 export async function getContainerNames(host, port) {
-    console.log("getContainerNames calling out to api")
+    log.trace("getContainerNames calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/config/containers');
         if(response.ok) {
             let x = await response.json();
-            console.log("Got container_names " + JSON.stringify(x));
+            log.trace("Got container_names " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
 }
 
 export async function getModuleTypes(host, port) {
-    console.log("getModuleTypes calling out to api")
+    log.trace("getModuleTypes calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/config/modules');
         if(response.ok) {
             let x = await response.json();
-            console.log("Got module_types " + JSON.stringify(x));
+            log.trace("Got module_types " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -43,55 +43,55 @@ export async function getModuleTypes(host, port) {
  * @returns {Promise<unknown>}  Response status (200 ...) from the API call
  */
 export async function getSite (host, port, siteid) {
-    console.log("getSite calling out to api")
+    log.trace("getSite calling out to api")
 
     return new Promise( async (resolve, reject) => {
-        console.log("getSite calling "+'http://'+host+':'+port+'/api/site/'+siteid)
+        log.trace("getSite calling "+'http://'+host+':'+port+'/api/site/'+siteid)
         const response = await fetch('http://'+host+':'+port+'/api/site/'+siteid);
 //            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
-        console.log("getSite response received")
+        log.trace("getSite response received")
         if(response.ok) {
-//            console.log("getSite awaiting site")
+//            log.trace("getSite awaiting site")
             let x = await response.json();
-//            console.log("getSite Got " + JSON.stringify(x));
+//            log.trace("getSite Got " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("getSite error " + response.status)
+            log.trace("getSite error " + response.status)
             reject( response.status )
         }
     })
 }
 
 export async function getUser (host, port, userid) {
-    console.log("getSite calling out to api")
+    log.trace("getSite calling out to api")
 
     return new Promise( async (resolve, reject) => {
-        console.log("getSite calling "+'http://'+host+':'+port+'/api/user/'+userid)
+        log.trace("getSite calling "+'http://'+host+':'+port+'/api/user/'+userid)
         const response = await fetch('http://'+host+':'+port+'/api/user/'+userid);
-        console.log("getSite response received")
+        log.trace("getSite response received")
         if(response.ok) {
-//            console.log("getSite awaiting site")
+//            log.trace("getSite awaiting site")
             let x = await response.json();
-//            console.log("getSite Got " + JSON.stringify(x));
+//            log.trace("getSite Got " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("getSite error " + response.status)
+            log.trace("getSite error " + response.status)
             reject( response.status )
         }
     })
 }
 
 export async function saveStage (host, port, stationid, current_stage) {
-    console.log("saveStage calling out to api")
+    log.trace("saveStage calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+current_stage);
-        console.log("saveStage response received")
+        log.trace("saveStage response received")
         if(response.ok) {
             let x = await response.json();
             resolve(x)
         } else {
-            console.log("saveStage error " + response.status)
+            log.trace("saveStage error " + response.status)
             reject( response.status )
         }
     })
@@ -107,17 +107,17 @@ export async function saveStage (host, port, stationid, current_stage) {
  * @todo this is redundant with getSite - eliminate
  */
 export const getDeviceList = (host, port, userid) => {
-    console.log("getDeviceList calling out to api")
+    log.trace("getDeviceList calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/device/'+userid);
         if(response.ok) {
             let x = await response.json();
-//            console.log(JSON.stringify(x))
-//            console.log("Got devices " + JSON.stringify(x));
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -146,11 +146,11 @@ export const saveSetting = ( host, port, userid, stationid, thing_name, present 
         });
         if(response.ok) {
             let x = await response.json();
-//            console.log(JSON.stringify(x))
-//            console.log("Got devices " + JSON.stringify(x));
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -170,11 +170,11 @@ export const changeStage = ( host, port, stationid, oldstage, newstage ) => {
         });
         if(response.ok) {
             let x = await response.json();
-//            console.log(JSON.stringify(x))
-//            console.log("Got devices " + JSON.stringify(x));
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -182,11 +182,11 @@ export const changeStage = ( host, port, stationid, oldstage, newstage ) => {
 
 
 export const addStation = async ( host, port, siteid, station_name ) => {
-    console.log("addStation calling out to api ")
+    log.trace("addStation calling out to api ")
 
     return new Promise( async (resolve, reject) => {
         const url = 'http://'+host+':'+port+'/api/station/site/'+siteid+'/'+station_name;
-        console.log("fetching " + url )
+        log.trace("fetching " + url )
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -196,11 +196,11 @@ export const addStation = async ( host, port, siteid, station_name ) => {
         });
         if(response.ok) {
             let x = await response.json();
-            console.log(JSON.stringify(x))
-            console.log("Put station " + JSON.stringify(x));
+            log.trace(JSON.stringify(x))
+            log.trace("Put station " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })

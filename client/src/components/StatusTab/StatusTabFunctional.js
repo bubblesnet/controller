@@ -25,36 +25,41 @@ function RenderStatusTab (props) {
                 />
                 <div className="global_container_">
                     <div className="meter-group">
-                        <RenderTemperatureMeter settings={props.settings}
-                                                station_settings={props.station_settings}
+                        <RenderTemperatureMeter
+                                                sensor_readings={props.sensor_readings}
+                                                station_settings={props.station}
                                                 display_settings={props.display_settings}
                                                 automation_settings={props.station.automation_settings}
-                                                exists={props.settings.temp_air_middle}
-                                                className="temp-top" label="Air Temperature" state={props.state}/>
-                        <RenderHumidityMeter settings={props.settings}
-                                             station_settings={props.station_settings}
+                                                exists={props.station.temp_air_middle}
+                                                className="temp-top" label="Air Temperature"
+                                                />
+                        <RenderHumidityMeter
+                                             sensor_readings={props.sensor_readings}
                                              display_settings={props.display_settings}
                                              automation_settings={props.station.automation_settings}
-                                             exists={props.settings.humidity_sensor_internal}
-                                             className="temp-middle" label="Humidity"  state={props.state}/>
-                        <RenderPressureMeter settings={props.settings}
-                                             station_settings={props.station_settings}
+                                             exists={props.station.humidity_sensor_internal}
+                                             className="temp-middle" label="Humidity"
+                                             />
+                        <RenderPressureMeter
+                                             sensor_readings={props.sensor_readings}
                                              display_settings={props.display_settings}
-                                             automation_settings={props.station.automation_settings}
-                                             exists={props.settings.pressure_sensors}
-                                             className="temp-bottom" label="Odor Control (pressure)"  state={props.state}/>
-                        <RenderPhMeter settings={props.settings}
-                                       station_settings={props.station_settings}
-                                       display_settings={props.display_settings}
-                                       automation_settings={props.station.automation_settings}
-                                       exists={props.settings.root_ph_sensor} className="temp-middle" label="Root pH"  state={props.state}/>
+                                             exists={props.station.pressure_sensors}
+                                             className="temp-bottom" label="Odor Control (pressure)"
+                                             />
+                        <RenderPhMeter
+                                       sensor_readings={props.sensor_readings}
+                                       exists={props.station.root_ph_sensor}
+                                       className="temp-middle" label="Root pH"
+                                       />
                     </div>
                     <div className="detail-group" >
                         <RenderTextStatus
-                            station_settings={props.station_settings}
+                            sensor_readings={props.sensor_readings}
+                            station={props.station}
                             automation_settings={props.station.automation_settings}
                             display_settings={props.display_settings}
-                            settings={props.settings} state={props.state}
+                            settings={props.station}
+                            state={props.state}
                             various_dates={props.various_dates}/>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs')
+const log = require("roarr");
 
 
 function get_server_ports_for_environment(env) {
@@ -90,7 +91,7 @@ function getRandomInt(max) {
 }
 
 function readJsonFile(filepath) {
-    console.log("Reading config from " + filepath)
+    log.trace("Reading config from " + filepath)
     const data = fs.readFileSync(filepath, 'utf8');
     // parse JSON string to JSON object
     return(JSON.parse(data));

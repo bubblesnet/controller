@@ -44,77 +44,43 @@ function setToken(loginResult) {
  */
 
 function App(props) {
-    console.log("App: Starting App")
-
-    let initial_station = {
-        tilt: false,
-        station_settings: {
-            humidifier: true,
-            humidity_sensor_internal: true,
-            humidity_sensor_external: true,
-            heater: true,
-            thermometer_top: true,
-            thermometer_middle: true,
-            thermometer_bottom: true,
-            thermometer_external: true,
-            thermometer_water: true,
-            water_pump: true,
-            air_pump: true,
-            station_door_sensor: true,
-            outer_door_sensor: true,
-            movement_sensor: true,
-            pressure_sensors: true,
-            root_ph_sensor: true,
-            enclosure_type: "Cabinet",
-            water_level_sensor: true,
-            tub_depth: 18.0,
-            tub_volume: 20.0,
-            intake_fan: true,
-            exhaust_fan: true,
-            heat_lamp: true,
-            heating_pad: true,
-            light_sensor_internal: true,
-            light_sensor_external: true,
-            light_bloom: true,
-            light_vegetative: true,
-            light_germinate: true
-        }
-    }
 
         let initial_station_state = {
-        tilt: false,
-        station_settings: {
-            humidifier: true,
-            humidity_sensor_internal: true,
-            humidity_sensor_external: true,
-            heater: true,
-            thermometer_top: true,
-            thermometer_middle: true,
-            thermometer_bottom: true,
-            thermometer_external: true,
-            thermometer_water: true,
-            water_pump: true,
-            air_pump: true,
-            station_door_sensor: true,
-            outer_door_sensor: true,
-            movement_sensor: true,
-            pressure_sensors: true,
-            root_ph_sensor: true,
-            enclosure_type: "Cabinet",
-            water_level_sensor: true,
-            tub_depth: 18.0,
-            tub_volume: 20.0,
-            intake_fan: true,
-            exhaust_fan: true,
-            heat_lamp: true,
-            heating_pad: true,
-            light_sensor_internal: true,
-            light_sensor_external: true,
-            light_bloom: true,
-            light_vegetative: true,
-            light_germinate: true
-        },
-        sensor_readings: {
+//            tilt: false,
+            station_settings: {
+                humidifier: true,
+                humidity_sensor_internal: true,
+                humidity_sensor_external: true,
+                heater: true,
+                thermometer_top: true,
+                thermometer_middle: true,
+                thermometer_bottom: true,
+                thermometer_external: true,
+                thermometer_water: true,
+                water_pump: true,
+                air_pump: true,
+                station_door_sensor: true,
+                outer_door_sensor: true,
+                movement_sensor: true,
+                pressure_sensors: true,
+                root_ph_sensor: true,
+                enclosure_type: "Cabinet",
+                water_level_sensor: true,
+                tub_depth: 18.0,
+                tub_volume: 20.0,
+                intake_fan: true,
+                exhaust_fan: true,
+                heat_lamp: true,
+                heating_pad: true,
+                light_sensor_internal: true,
+                light_sensor_external: true,
+                light_bloom: true,
+                light_vegetative: true,
+                light_germinate: true
+            }
+        }
+
+        let initial_sensor_readings = {
             temp_air_external: 0.0,
             temp_air_external_direction: "",
             temp_air_top: 0.0,
@@ -145,8 +111,9 @@ function App(props) {
             date_last_training: "never",
             date_last_filter_change: "never",
             tub_water_level: 0.0
-        },
-        switch_state: {
+        }
+
+        let initial_switch_state = {
             automaticControl: {
                 on: false,
                 changing: true
@@ -200,7 +167,6 @@ function App(props) {
                 changing: true
             }
         }
-    }
 
     const [site, setSite] = useState({});
     const [user, setUser] = useState({});
@@ -211,9 +177,9 @@ function App(props) {
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        console.log("App: processLoginResult "+JSON.stringify(loginResult))
+        log.trace("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
-            console.log("Setting token to " + JSON.stringify(loginResult))
+            log.trace("Setting token to " + JSON.stringify(loginResult))
             loginResult.units_options = options_units
             loginResult.pressure_units_options = options_pressure_units
             loginResult.languageOptions = options_language
@@ -226,24 +192,24 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("App: initial fetchData")
+//            console.log("App: initial fetchData")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
 //            z.initial_state = imported_state
 
-            console.log("App: useEffect fecthData setting site to " + JSON.stringify(z))
+//            console.log("App: useEffect fecthData setting site to " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
     }, []);     // ONLY CALL ON MOUNT - empty array arg causes this
 
-    console.log("App: Rendering App with token set to " + JSON.stringify(token))
+//    console.log("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
         return <SetupApp readyState={true}/>
     }
 
     let selectedStationIndex = 0
 
-    console.log("App: Rendering App with site set to " + JSON.stringify(site))
+//    console.log("App: Rendering App with site set to " + JSON.stringify(site))
     if( typeof site.stations === 'undefined') {
         return <></>
     }
@@ -258,6 +224,8 @@ function App(props) {
     return (token?.auth === true) ? <AuthenticatedApp
                                                       stationindex={selectedStationIndex}
                                                       initial_station_state={initial_station_state}
+                                                      initial_switch_state = {initial_switch_state}
+                                                      initial_sensor_readings = {initial_sensor_readings}
                                                       nodeEnv={process.env.REACT_APP_NODE_ENV}
                                                       site={site}
                                                       automation_settings={site.automation_settings}

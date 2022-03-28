@@ -48,7 +48,7 @@ let because = "don't know"
  * @version: X.x
  */
 function AuthenticatedApp (props) {
-    log.debug("render AuthenticatedApp " + JSON.stringify(props));
+//    log.debug("render AuthenticatedApp " + JSON.stringify(props));
     var tilt_sound = new Audio("tilt.mp3");
 
     function play_tilt() {
@@ -78,6 +78,35 @@ function AuthenticatedApp (props) {
     }
      */
 
+    let initial_sensor_readings = {
+        units: "IMPERIAL",
+        temp_air_external: 0.0,
+        temp_air_external_direction: "",
+        temp_air_top: 0.0,
+        temp_air_top_direction: "",
+        temp_air_middle: 0.0,
+        temp_air_middle_direction: "",
+        temp_air_bottom: 0.0,
+        temp_air_bottom_direction: "",
+        temp_water: 0.0,
+        temp_water_direction: "",
+        root_ph: 0.0,
+        root_ph_direction: "",
+        humidity_internal: 0.0,
+        humidity_internal_direction: "",
+        light_internal: 0.0,
+        light_internal_direction: "",
+        humidity_external: 0.0,
+        humidity_external_direction: "",
+        plant_height: 0.0,
+        outer_door_open: false,
+        station_door_open: false,
+        pressure_external: 0.0,
+        pressure_internal: 0.0,
+        pressure_external_direction: "",
+        pressure_internal_direction: "",
+        tub_water_level: 0.0
+    }
 
     /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
@@ -102,7 +131,7 @@ function AuthenticatedApp (props) {
      * Changing this causes a rerender
      * TABLE: site
      */
-    console.log("setting site to " + JSON.stringify(props.site))
+//    console.log("setting site to " + JSON.stringify(props.site))
     const [site, setSite] = useState(props.site);
 
     /**
@@ -115,11 +144,9 @@ function AuthenticatedApp (props) {
      * Local copy of all data (temp ...) - change and rerender
      */
     const [local_state, setState] = useState(props.initial_station_state);
-
-    /**
-     * Local copy of current station settings - change and rerender
-     */
-    const [current_station, setSettings] = useState(props.site.stations[props.stationindex]);
+    const [switch_state, setSwitchState] = useState(props.initial_switch_state);
+    const [sensor_readings, setSensorReadings] = useState(initial_sensor_readings);
+    const [tilt,setTilt] = useState({ currently_tilted: false, last_tilt: 0} )
 
     /**
      * The value of environment variable NODE_ENV which controls the hostname and port the API
@@ -145,7 +172,7 @@ function AuthenticatedApp (props) {
     /**
      * ????
      */
-    const [lastpicture, setLastPicture] = useState(0)
+    const [last_picture, setLastPicture] = useState(0)
 //    const [initial_settings, setInitialSettings] = useState(props.initial_settings)
 
     /**
@@ -229,35 +256,6 @@ function AuthenticatedApp (props) {
         sendJsonMessage(cmd)
     }
 
-    let initial_sensor_readings = {
-        units: "IMPERIAL",
-        temp_air_external: 0.0,
-        temp_air_external_direction: "",
-        temp_air_top: 0.0,
-        temp_air_top_direction: "",
-        temp_air_middle: 0.0,
-        temp_air_middle_direction: "",
-        temp_air_bottom: 0.0,
-        temp_air_bottom_direction: "",
-        temp_water: 0.0,
-        temp_water_direction: "",
-        root_ph: 0.0,
-        root_ph_direction: "",
-        humidity_internal: 0.0,
-        humidity_internal_direction: "",
-        light_internal: 0.0,
-        light_internal_direction: "",
-        humidity_external: 0.0,
-        humidity_external_direction: "",
-        plant_height: 0.0,
-        outer_door_open: false,
-        station_door_open: false,
-        pressure_external: 0.0,
-        pressure_internal: 0.0,
-        pressure_external_direction: "",
-        pressure_internal_direction: "",
-        tub_water_level: 0.0
-    }
 
     let various_dates = {
         start_date_current_stage: "25 days ago",
@@ -287,13 +285,13 @@ function AuthenticatedApp (props) {
     /**
      */
     const applyEventToState = (msg) => {
-        log.debug("msg: applying event " + JSON.stringify(msg))
+//        log.debug("msg: applying event " + JSON.stringify(msg))
         if (msg.sensor_name === 'tamper_sensor') {
-            if (local_state.tilt === false) {
+            if (tilt.currently_tilted === false) {
                 play_tilt()
             }
-            local_state.tilt = true
-            local_state.last_tilt = moment().unix()
+            let x = { currently_tilted: true, last_tilt: moment().unix()}
+            setTilt(x)
         }
     }
 
@@ -310,17 +308,15 @@ function AuthenticatedApp (props) {
                 log.error("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
                 if (msg.measurement_name === 'water_level') {
-                    local_state.sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
+                    sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
                 }
-                if( typeof local_state.sensor_readings === 'undefined') {
+                if( typeof sensor_readings === 'undefined') {
                     console.log("WTF")
                 }
-                console.log("local_state = " + JSON.stringify(local_state))
-                local_state.sensor_readings[msg.measurement_name] = msg.value
-                local_state.sensor_readings[msg.measurement_name + "_direction"] = msg.direction
-                local_state.sensor_readings[msg.measurement_name + "_units"] = msg.units
-//        log.debug( "direction!!! local_state.sensor_readings["+msg.measurement_name+"_direction"+"] = " + msg.direction )
-                log.debug("msg: applying " + msg.value + " " + local_state.sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+                sensor_readings[msg.measurement_name] = msg.value
+                sensor_readings[msg.measurement_name + "_direction"] = msg.direction
+                sensor_readings[msg.measurement_name + "_units"] = msg.units
+//                log.debug("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
             }
         }
 
@@ -329,7 +325,7 @@ function AuthenticatedApp (props) {
      * @param event The formatted message
      */
     const handleWebSocketMessage = (event) => {
-        log.debug("ws: handling websocket message " + JSON.stringify(event.data))
+        log.trace("ws: handling websocket message " + JSON.stringify(event.data))
         let msg = JSON.parse(event.data)
         if (typeof (msg.status) === 'undefined' || msg.status === null) {
             if (typeof (msg.message_type) === 'undefined' || msg.message_type === null) {
@@ -339,24 +335,24 @@ function AuthenticatedApp (props) {
                 switch (msg.message_type) {
                     case "measurement":
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
-                        log.debug("ws: received measurement");
+                        log.trace("ws: received measurement");
                         applyMeasurementToState(msg)
                         break;
                     case "switch_event":
                         because = "switch_evt " + msg.switch_name
-                        log.debug("ws: received switch event " + JSON.stringify(msg));
+                        log.debug("ws: received switch_event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
                         because = "evt msg " + msg.sample_timestamp
-                        log.debug("ws: received event ");
+                        log.trace("ws: received event ");
                         applyEventToState(msg)
                         break;
                     case "picture_event":
                         because = "picture evt msg " + msg.sample_timestamp
-                        log.debug("ws: received picture event");
+                        log.trace("ws: received picture event");
 //                        shutter_sound.play()
-                        setLastPicture(lastpicture + 1)
+                        setLastPicture(last_picture + 1)
                         break;
                     default:
                         because = msg.message_type + " message " + msg.sample_timestamp
@@ -366,7 +362,6 @@ function AuthenticatedApp (props) {
             }
         } else {
             log.error("ws: AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
-//            setState(JSON.parse(event.data));
         }
     }
 
@@ -462,16 +457,16 @@ function AuthenticatedApp (props) {
         if (typeof (switch_name) === 'undefined') {
             return
         }
-        let newstate = JSON.parse(JSON.stringify(local_state))
-        console.log("local_state = " + JSON.stringify(local_state))
-        if (typeof newstate.switch_state === 'undefined' || typeof newstate.switch_state[switch_name] === 'undefined') {
-            console.error("button: bad switch_name " + switch_name)
-            return
+        let new_switch_state = JSON.parse(JSON.stringify(switch_state))
+//        console.log("switch_state = " + JSON.stringify(switch_state))
+
+        if( typeof(new_switch_state[switch_name] === 'undefined')) {
+            new_switch_state[switch_name] = { on: on, changing: false}
         }
-        newstate.switch_state[switch_name].on = on
-        console.log("Clearing changing newstate.switch_state[" + switch_name + "] to false")
-        newstate.switch_state[switch_name].changing = false
-        setState(newstate)
+        new_switch_state[switch_name].on = on
+//        console.log("Clearing changing new_switch_state[" + switch_name + "] to false")
+        new_switch_state[switch_name].changing = false
+        setSwitchState(new_switch_state)
     }
 
 
@@ -481,61 +476,61 @@ function AuthenticatedApp (props) {
      * @param x a complete station_settings object - overwrites ALL values
      */
     async function setStationSettingsStateFromChild(x) {
-        let newsettings = JSON.parse(JSON.stringify(x.station_settings))
-        let newstate = { ...local_state, ...newsettings};
-        console.log("savesettings userid = " + userid + " currentStationIndex = " + currentStationIndex + " stationid = " + site.stations[currentStationIndex].stationid)
-        console.log("savesettings site = " + JSON.stringify(site))
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", newstate.automatic_control)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", newstate.humidity_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", newstate.humidity_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", newstate.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_heater", newstate.water_heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", newstate.heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", newstate.thermometer_top)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", newstate.thermometer_middle)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", newstate.thermometer_bottom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", newstate.thermometer_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", newstate.thermometer_water)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", newstate.water_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", newstate.air_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", newstate.light_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", newstate.light_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", newstate.station_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", newstate.outer_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensor", newstate.movement_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", newstate.pressure_sensors)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", newstate.root_ph_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", newstate.water_level_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", newstate.intake_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", newstate.exhaust_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", newstate.heat_lamp)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", newstate.heating_pad)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", newstate.light_bloom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", newstate.light_vegetative)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", newstate.light_germinate)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", newstate.height_sensor)
-//        setState(newstate)
-//        setSiteid(siteid)
-        setNodeEnv(nodeEnv+"x")
+
+        let changed_station = JSON.parse(JSON.stringify(x))
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", changed_station.automatic_control)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", changed_station.humidity_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", changed_station.humidity_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_heater", changed_station.water_heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", changed_station.heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", changed_station.thermometer_top)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", changed_station.thermometer_middle)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", changed_station.thermometer_bottom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", changed_station.thermometer_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", changed_station.thermometer_water)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", changed_station.water_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", changed_station.air_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", changed_station.light_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", changed_station.light_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", changed_station.station_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", changed_station.outer_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensor", changed_station.movement_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", changed_station.pressure_sensors)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", changed_station.root_ph_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", changed_station.water_level_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", changed_station.intake_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", changed_station.exhaust_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", changed_station.heat_lamp)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", changed_station.heating_pad)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", changed_station.light_bloom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", changed_station.light_vegetative)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", changed_station.light_germinate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", changed_station.height_sensor)
+
+        let changed_site = { stations: [JSON.parse(JSON.stringify(x))] }
+        let new_site = { ...site, ...changed_site};
+        setSite(new_site)
     }
 
     /**
-     * Function passed to child visual objects such that they can set the automation state of of the current station.
+     * Function passed to child visual objects such that they can set the automation state of the current station.
      *
      * @param x ???
      * @param switch_name   The name of the switch we're changing the state of
      * @param on    True/false on/off
      */
     function setAutomationStateFromChild(current_stage) {
-        console.log("setAutomationStateFromChild current_stage "+current_stage)
+//        console.log("setAutomationStateFromChild current_stage "+current_stage)
         let cmd = {
             command: STAGE_COMMAND,
             stage_name: current_stage
         }
-        changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].current_stage, current_stage )
-        site.stations[currentStationIndex].current_stage = current_stage
+        changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].automation_settings.current_stage, current_stage )
+        site.stations[currentStationIndex].automation_settings.current_stage = current_stage
         sendJsonMessage(cmd)
+        setSite(JSON.parse(JSON.stringify(site)))
     }
 
     /**
@@ -547,28 +542,37 @@ function AuthenticatedApp (props) {
      */
     function setSwitchStateFromChild(x, switch_name, on) {
 
-        local_state.switch_state = JSON.parse(JSON.stringify(x.switch_state))
-        sendJsonMessage(local_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
+//        console.log("setSwitchStateFromChild "+JSON.stringify(x))
+        log.info("setSwitchStateFromChild "+switch_name +","+on)
+        let new_state = {switch_state: JSON.parse(JSON.stringify(switch_state))}
+        let new_switch_state = JSON.parse(JSON.stringify(switch_state))
+//        log.info("Setting local_state.switch_state sending json message "+JSON.stringify(new_state))
+//        sendJsonMessage(new_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
         let sw_name = switch_name
         if (switch_name === "growLight") {
             sw_name = "lightBloom"
         }
 
-        console.log("Setting local_state.switch_state[" + switch_name + "].changing = true")
-        let newstate = JSON.parse(JSON.stringify(local_state))
-        if (typeof newstate.switch_state[switch_name] === 'undefined') {
+//        console.log("Setting local_state.switch_state[" + switch_name + "].changing = true")
+        if (typeof new_switch_state[switch_name] === 'undefined') {
             console.error("button: bad switch_name " + switch_name)
             return
         }
-        newstate.switch_state[switch_name].changing = true
-        setState(newstate)
+        new_switch_state[switch_name].changing = true
+        new_switch_state[switch_name].on = on
+        setSwitchState(new_switch_state)
 
         let cmd = {
             command: SWITCH_COMMAND,
             switch_name: sw_name,
             on: on
         }
+//        console.log("Setting local_state.switch_state sending json message "+JSON.stringify(cmd))
         sendJsonMessage(cmd)
+//        cmd = {command: STATUS_COMMAND }
+//        console.log("Setting local_state.switch_state sending json message "+JSON.stringify(cmd))
+//        sendJsonMessage(cmd)
+
     }
 
     /**
@@ -636,12 +640,11 @@ function AuthenticatedApp (props) {
 
     log.trace("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
     // reset tilt if older than 30 seconds
-    if (local_state.tilt) {
+    if (tilt.currently_tilted) {
         let now = moment().unix()
-        if (now - local_state.last_tilt > 30) {
-            log.trace("turning tilt off because 30 seconds have expired")
-            local_state.tilt = false
-            local_state.last_tilt = 0
+        if (now - tilt.last_tilt > 30) {
+            log.trace("turning currently_tilted off because 30 seconds have expired")
+            setTilt({ currently_tilted: false, last_tilt: 0 })
         }
     }
 //    let merged_theme = deepMerge(grommet, bubbles_theme)
@@ -651,14 +654,15 @@ function AuthenticatedApp (props) {
     } else {
         if (lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
             lastJsonMessage.message_type === 'measurement') {
-            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+//            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
-            log.warn("msg: Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+//            log.warn("msg: Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
         }
     }
+
     let thestate = JSON.parse(JSON.stringify(local_state))
-    console.log("thestate = " + JSON.stringify(thestate))
+//    console.log("thestate = " + JSON.stringify(thestate))
 
     if (typeof (lastCompleteStatusMessage) !== 'undefined' && lastCompleteStatusMessage !== null) {
         thestate = JSON.parse(JSON.stringify(lastCompleteStatusMessage))
@@ -671,24 +675,11 @@ function AuthenticatedApp (props) {
     site.site_name = props.site.stations[props.stationindex].site_name
     site.siteid = props.site.stations[props.stationindex].siteid
 
-//    log.trace("site = " + JSON.stringify(site))
-    thestate.station_settings = current_station
-//    console.log("STATION: stations " + JSON.stringify(site.stations[currentStationIndex]))
-    console.log("STATION: site " + JSON.stringify(site))
-    console.log("STATION: props.site " + JSON.stringify(props.site))
-    console.log("xsite.stations = " + JSON.stringify(site.stations))
-    console.log("display_settings = " + JSON.stringify(props.display_settings))
-//    console.log("automation_settings = " + JSON.stringify(site.stations[0].automation_settings))
-    console.log("site = " + JSON.stringify(site))
-    console.log("props.site = " + JSON.stringify(props.site))
-    console.log("xdevices = " + JSON.stringify(site.stations[0].attached_devices))
-
-    if( typeof thestate.sensor_readings === 'undefined') {
-        thestate.sensor_readings = initial_sensor_readings
-    }
+//    thestate.station_settings = props.site.stations[props.stationindex]
+//    console.log("STATION: site " + JSON.stringify(site))
 
     return <div className="App">
-        <Header tilt={thestate.tilt} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
+        <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
                 handleClickSendMessage={handleClickSendMessage}/>
         <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
@@ -739,7 +730,8 @@ function AuthenticatedApp (props) {
                      }>
                 <Nav gap="small">
                     <Button icon={<Add/>} onClick={handleOpen}/>
-                    <RenderSiteStationMenu currentStationIndex={currentStationIndex} site={site}
+                    <RenderSiteStationMenu currentStationIndex={currentStationIndex}
+                                           site={site}
                                            setCurrentStationIndex={setStation}/>
                     <Button icon={<Clock/>} hoverIndicator/>
                 </Nav>
@@ -747,78 +739,91 @@ function AuthenticatedApp (props) {
 
             <Tabs gridArea="main" margin="medium" flex="shrink">
                 <Tab title="Station Control">
-                    <RenderControlTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                    <RenderControlTab nodeEnv={nodeEnv}
+                                      apiPort={apiPort}
+                                      theme={bubbles_theme}
                                       station={site.stations[currentStationIndex]}
-                                      current_station={current_station}
                                       state={thestate}
-//                                      switch_state={thestate.switch_state}
+                                      switch_state={switch_state}
+                                      sensor_readings = {sensor_readings}
                                       setStateFromChild={setSwitchStateFromChild}
                                       display_settings={props.display_settings}
-                                      because={because}/>
+                                      because={because}
+                    />
                 </Tab>
                 <Tab title="Look Inside">
-                    <RenderCameraTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                     station={site.stations[currentStationIndex]}
-                                     lastpicture={lastpicture}
-                                     onFontChange={applyFontChange}
-                                     takeAPicture={takeAPicture}
-                                     display_settings={props.display_settings}
-                                     station_settings={props.site.stations[props.stationindex]}
-                                     applicationSettings={local_state.application_settings}/>
-                </Tab>
-                <Tab title="Status">
-                    <RenderStatusTab nodeEnv={nodeEnv} apiPort={apiPort}
+                    <RenderCameraTab nodeEnv={nodeEnv}
+                                     apiPort={apiPort}
                                      theme={bubbles_theme}
                                      station={site.stations[currentStationIndex]}
-                                     settings={current_station}
-                                     state={local_state}
+                                     lastpicture={last_picture}
+                                     onFontChange={applyFontChange}
+                                     takeAPicture={takeAPicture}
+                    />
+                </Tab>
+                <Tab title="Status">
+                    <RenderStatusTab nodeEnv={nodeEnv}
+                                     apiPort={apiPort}
+                                     theme={bubbles_theme}
+                                     sensor_readings = {sensor_readings}
+                                     station={site.stations[currentStationIndex]}
                                      display_settings={props.display_settings}
-                                     station_settings={props.site.stations[props.stationindex]}
                                      automation_settings={props.automation_settings}
                                      various_dates={various_dates}
                     />
                 </Tab>
                 <Tab title="Station Setup">
-                    <RenderSettings saveSetting={saveSetting} nodeEnv={nodeEnv} apiPort={apiPort}
+                    <RenderSettings saveSetting={saveSetting}
+                                    nodeEnv={nodeEnv}
+                                    apiPort={apiPort}
                                     theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
-                                    settings={current_station}
-                                    state={local_state}
                                     display_settings={props.display_settings}
-                                    station_settings={site.stations[currentStationIndex]}
                                     setStateFromChild={setStationSettingsStateFromChild}
                     />
                 </Tab>
                 <Tab title="Device Map">
-                    <RenderDeviceMap nodeEnv={nodeEnv} apiPort={apiPort} apiHost={servers.api_server_host}
+                    <RenderDeviceMap nodeEnv={nodeEnv}
+                                     apiPort={apiPort}
+                                     apiHost={servers.api_server_host}
                                      theme={bubbles_theme}
-                                     onMapChange={applyMapChange} station={site.stations[currentStationIndex]}
-                                     state={local_state}/>
+                                     onMapChange={applyMapChange}
+                                     station={site.stations[currentStationIndex]}
+                    />
                 </Tab>
                 <Tab title="Automation">
-                    <RenderStageTab nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
-                                    site={site}
+                    <RenderStageTab nodeEnv={nodeEnv}
+                                    apiPort={apiPort}
+                                    theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
-                                    settings={current_station}
-                                    state={local_state}
                                     display_settings={props.display_settings}
-                                    setStateFromChild={setAutomationStateFromChild}/>
+                                    setStateFromChild={setAutomationStateFromChild}
+                    />
                 </Tab>
                 <Tab title="Events">
-                    <RenderEvents nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}/>
+                    <RenderEvents
+                        nodeEnv={nodeEnv}
+                        apiPort={apiPort}
+                        theme={bubbles_theme}
+                    />
                 </Tab>
                 <Tab title="Display Settings">
-                    <RenderDisplaySettings nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                    <RenderDisplaySettings nodeEnv={nodeEnv}
+                                           apiPort={apiPort}
+                                           theme={bubbles_theme}
                                            station={site.stations[currentStationIndex]}
-                                           settings={current_station} state={local_state}
+                                           display_settings={props.display_settings}
                                            onApplyFontChange={applyFontChange}
-                                           onLocalFontChange={localFontChange}/>
+                                           onLocalFontChange={localFontChange}
+                    />
                 </Tab>
                 <Tab title="Server Settings">
-                    <RenderSetup nodeEnv={nodeEnv} apiPort={apiPort} theme={bubbles_theme}
+                    <RenderSetup nodeEnv={nodeEnv}
+                                 apiPort={apiPort}
+                                 theme={bubbles_theme}
                                  station={site.stations[currentStationIndex]}
                                  onFontChange={applyFontChange}
-                                 applicationSettings={local_state.application_settings}/>
+                    />
                 </Tab>
             </Tabs>
         </Grid>

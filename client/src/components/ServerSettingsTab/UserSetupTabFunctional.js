@@ -13,6 +13,7 @@ import {
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import log from "roarr";
 
 
 function RenderUserSetupTab (props) {
@@ -30,7 +31,7 @@ function RenderUserSetupTab (props) {
 //
 //    }
     function addUser() {
-        console.log("addUser")
+        log.trace("addUser")
     }
     function resetForm() {
         setEmail(props.email)
@@ -58,11 +59,11 @@ function RenderUserSetupTab (props) {
         setApplyButtonState(true)
         setResetButtonState(true)
     }
-    console.log("RenderUserSetupTab")
+    log.trace("RenderUserSetupTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
 
-    console.log("rendering with font set to " + values.theme.global.font.family)
+    log.trace("rendering with font set to " + values.theme.global.font.family)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

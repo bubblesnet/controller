@@ -132,7 +132,6 @@ async function getConfigByStation(stationid, deviceid) {
                     delete ret.device_settings.userid
                     delete ret.device_settings.controller_hostname
                     delete ret.device_settings.controller_api_port
-                    delete ret.device_settings.stage
                     delete ret.device_settings.light_on_hour
                     delete ret.device_settings.time_between_pictures_in_seconds
                     delete ret.device_settings.time_between_sensor_polling_in_seconds
@@ -179,7 +178,6 @@ async function createStation(body) {
             "    userid_User," +
             "    controller_hostname," +
             "    controller_api_port," +
-            "    stage," +
             "    light_on_hour," +
             "    tamper_xmove," +
             "    tamper_ymove," +
@@ -223,7 +221,6 @@ async function createStation(body) {
             "    $1," +
             "    $2," +
             "    $3," +
-            "    'idle'," +
             "    0," +
             "    1.0," +
             "    1.0," +
@@ -281,48 +278,46 @@ async function updateStation(body) {
         pool.query("UPDATE station set " +
             "controller_hostname=$2, " +
             "controller_api_port=$3, " +
-            "stage=$4, " +
-            "light_on_hour=$5, " +
-            "tamper_xmove=$6, " +
-            "tamper_ymove=$7, " +
-            "tamper_zmove=$8, " +
-            "time_between_pictures_in_seconds=$9, " +
-            "time_between_sensor_polling_in_seconds=$10, " +
-            "humidifier=$11, " +
-            "humidity_sensor_internal=$12, " +
-            "humidity_sensor_external=$13, " +
-            "heater=$14, " +
-            "thermometer_top=$15, " +
-            "thermometer_middle=$16, " +
-            "thermometer_bottom=$17, " +
-            "thermometer_external=$18, " +
-            "thermometer_water=$19, " +
-            "water_pump=$20, " +
-            "air_pump=$21, " +
+            "light_on_hour=$4, " +
+            "tamper_xmove=$5, " +
+            "tamper_ymove=$6, " +
+            "tamper_zmove=$7, " +
+            "time_between_pictures_in_seconds=$8, " +
+            "time_between_sensor_polling_in_seconds=$9, " +
+            "humidifier=$10, " +
+            "humidity_sensor_internal=$11, " +
+            "humidity_sensor_external=$12, " +
+            "heater=$13, " +
+            "thermometer_top=$14, " +
+            "thermometer_middle=$15, " +
+            "thermometer_bottom=$16, " +
+            "thermometer_external=$17, " +
+            "thermometer_water=$18, " +
+            "water_pump=$19, " +
+            "air_pump=$20, " +
+            "light_sensor_internal=$21, " +
             "light_sensor_internal=$22, " +
-            "light_sensor_internal=$23, " +
-            "station_door_sensor=$24, " +
-            "outer_door_sensor=$25, " +
-            "movement_sensor=$26, " +
-            "pressure_sensors=$27, " +
-            "root_ph_sensor=$28, " +
-            "enclosure_type=$29, " +
-            "water_level_sensor=$30, " +
-            "tub_depth=$31, " +
-            "tub_volume=$32, " +
-            "intake_fan=$33, " +
-            "exhaust_fan=$34, " +
-            "heat_lamp=$35, " +
-            "heating_pad=$36, " +
-            "light_bloom=$37, " +
-            "light_vegetative=$38, " +
-            "light_germinate=$39 " +
+            "station_door_sensor=$23, " +
+            "outer_door_sensor=$24, " +
+            "movement_sensor=$25, " +
+            "pressure_sensors=$26, " +
+            "root_ph_sensor=$27, " +
+            "enclosure_type=$28, " +
+            "water_level_sensor=$29, " +
+            "tub_depth=$30, " +
+            "tub_volume=$31, " +
+            "intake_fan=$32, " +
+            "exhaust_fan=$33, " +
+            "heat_lamp=$34, " +
+            "heating_pad=$35, " +
+            "light_bloom=$36, " +
+            "light_vegetative=$37, " +
+            "light_germinate=$38 " +
             "where stationid=$1 RETURNING *",
             [
                 body.stationid,
                 body.controller_hostname,
                 body.controller_api_port,
-                body.stage,
                 body.light_on_hour,
                 body.tamper_xmove,
                 body.tamper_ymove,

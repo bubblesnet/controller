@@ -2,67 +2,67 @@
 
 stage_schedules =  [
     {
+        "name": "idle",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 0,
             "temperature": 0,
             "water_temperature": 0
-        },
-        "hours_of_light": 0,
-        "name": "idle"
+        }
     },
     {
+        "name": "germination",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 30,
             "temperature": 81,
             "water_temperature": 68
-        },
-        "hours_of_light": 0,
-        "name": "germination"
+        }
     },
     {
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 68
-       },
+        "name": "seedling",
         "hours_of_light": 18,
-        "name": "seedling"
-    },
-    {
         "environmental_targets": {
             "humidity": 60,
             "temperature": 80,
-            "water_temperature": 68
-        },
-        "hours_of_light": 12,
-        "name": "vegetative"
+            "water_temperature": 61
+       }
     },
     {
+        "name": "vegetative",
+        "hours_of_light": 12,
         "environmental_targets": {
             "humidity": 60,
             "temperature": 80,
-            "water_temperature": 65
-        },
-        "hours_of_light": 12,
-        "name": "flowering"
+            "water_temperature": 61
+        }
     },
     {
+        "name": "bloom",
+        "hours_of_light": 12,
+        "environmental_targets": {
+            "humidity": 60,
+            "temperature": 80,
+            "water_temperature": 61
+        }
+    },
+    {
+        "name": "drying",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 60,
             "temperature": 80,
             "water_temperature": 0
-        },
-        "hours_of_light": 0,
-        "name": "drying"
+        }
     },
     {
+        "name": "curing",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 60,
             "temperature": 80,
             "water_temperature": 0
-        },
-        "hours_of_light": 0,
-        "name": "curing"
+        }
     }
 ];
 

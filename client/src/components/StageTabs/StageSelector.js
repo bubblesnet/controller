@@ -2,13 +2,15 @@ import {Box, Button, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
 import stage_options from "../../stage_options.json"
+import log from "roarr";
 
 function RenderStageSelector (props) {
 
     function setCurrentStageValue(option) {
         let x = local_station;
-        console.log("current stage value " +x.automation_settings.current_stage + " new stage value " + option)
+        log.trace("current stage value " +x.automation_settings.current_stage + " new stage value " + option)
         x.automation_settings.current_stage = option
+        x.current_stage = option
         props.setStateFromChild(JSON.parse(JSON.stringify(x)))
         setStation(x)
     }

@@ -3,13 +3,14 @@ import { Grid,Image, Box, RangeInput } from 'grommet';
 import humidity from '../../images/humidityicon.png'
 import './stagesTab.css';
 import '../../Palette.css';
+import log from "roarr";
 
 
 
 function RenderHumiditySelector(props) {
     function setValue(value) {
         let x = JSON.parse(JSON.stringify(local_station));
-        console.log("RenderHumiditySelector = " + JSON.stringify(x))
+        log.trace("RenderHumiditySelector = " + JSON.stringify(x))
         x.automation_settings.target_humidity = value
         props.setStateFromChild(x)
         setStation(JSON.parse(JSON.stringify(x)))
@@ -22,7 +23,7 @@ function RenderHumiditySelector(props) {
     const max = props.station.automation_settings.humidity_max;
     const units = props.display_settings.humidity_units
     const target_humidity = local_station.automation_settings.target_humidity
-    console.log("RenderHumiditySelector 1 = " + JSON.stringify(local_station))
+    log.trace("RenderHumiditySelector 1 = " + JSON.stringify(local_station))
 
     return (
             <Grid

@@ -22,7 +22,7 @@ function RenderSiteStationMenu(props) {
 
     function setCurrentStation(ev) {
         let x = ev.target.nodeId
-        log.trace("ev.target.nodeId "+x)
+//        log.trace("ev.target.nodeId "+x)
         if( props.currentStationIndex === 1 ) {
             props.setCurrentStationIndex(1)
         } else {
@@ -47,7 +47,7 @@ function RenderSiteStationMenu(props) {
             return <></>
         }
         let y = String(1000 + station.stationid)
-        log.debug("ssm: nodeId = " + y)
+//        log.debug("ssm: nodeId = " + y)
         let items = []
         for (let i = 0; i < props.site.stations.length; i++) {
             let item = {
@@ -70,7 +70,7 @@ function RenderSiteStationMenu(props) {
     }
 //    let stations = props.site.stations.map(getStation)
     let stations = getStation(props.site.stations[0], 0)
-    console.log("stations = " + JSON.stringify(stations[0]))
+//    console.log("stations = " + JSON.stringify(stations[0]))
     const onSelect = selectedNode => {
         // do something with selected node
     }

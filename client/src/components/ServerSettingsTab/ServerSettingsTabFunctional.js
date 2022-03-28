@@ -13,6 +13,7 @@ import {
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import log from "roarr";
 
 
 function RenderServerSettingsTab (props) {
@@ -21,11 +22,11 @@ function RenderServerSettingsTab (props) {
 
     }
 
-    console.log("RenderServerSettingsTab")
+    log.trace("RenderServerSettingsTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
 
-    console.log("rendering with font set to " + values.theme.global.font.family)
+    log.trace("rendering with font set to " + values.theme.global.font.family)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

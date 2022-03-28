@@ -45,7 +45,7 @@ function Header (props) {
         webSocketLabel = "WebSocket server down"
     }
 //    log.trace("after websocket")
-//    log.trace("Rendering header")
+//    console.log("Rendering header with station "+JSON.stringify(props.station))
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
@@ -55,7 +55,7 @@ function Header (props) {
                 <span style={{
                     'alignItems': 'flex-start',
                     'marginLeft': '25px'
-                }}>Bubbles - {props.siteName} - ({nodeEnv}) - {props.station.current_stage}</span>
+                }}>Bubbles - {props.siteName} - ({nodeEnv}) - {props.station.automation_settings.current_stage}</span>
                 <span style={{'width': '50%'}} >
                     <RenderTiltFunctional tilt={props.tilt}/>
                 </span>

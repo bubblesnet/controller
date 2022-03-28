@@ -10,41 +10,34 @@ import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
+import log from "roarr";
 
 function RenderStageTab (props) {
 
-    console.log("RenderStageTab props.station.automation_settings = " + JSON.stringify(props.station.automation_settings))
+    log.trace("RenderStageTab props.station.automation_settings = " + JSON.stringify(props.station.automation_settings))
 
     function setStateFromChild(x) {
         setapplyButtonState(true)
         setresetButtonState(true)
-        setState(JSON.parse(JSON.stringify(x)))
+        setStation(JSON.parse(JSON.stringify(x)))
     }
 
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
-        console.log("StageTabsettingstage " + state.automation_settings.current_stage)
-        props.setStateFromChild(state.automation_settings.current_stage);
+        log.trace("StageTabsettingstage " + station.automation_settings.current_stage)
+        props.setStateFromChild(station.automation_settings.current_stage);
     }
 
     function resetAction() {
-        setState(JSON.parse(JSON.stringify(props.state)));
+        setStation(JSON.parse(JSON.stringify(props.station)));
     }
 
     function defaultsAction() {
-        setState(JSON.parse(JSON.stringify(props.state)));
+        setStation(JSON.parse(JSON.stringify(props.station)));
     }
 
-//    const initialRange = [77, 81]
-//    const [range, setRange] = useState(initialRange);
-//    const RANGE_MIN = 60;
-//    const RANGE_MAX =90;
-
-//    const label = 'Target Temperature Range'
-
-    let [state, setState] = useState(props.state); //
-    let [settings, setSettings] = useState(props.settings); //
+    let [station, setStation] = useState(props.station); //
     let [applyButtonState, setapplyButtonState] = useState(false); //
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState, setdefaultsButtonState] = useState(true ); //
@@ -77,27 +70,28 @@ function RenderStageTab (props) {
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
-                            <RenderStageSelector station={props.station}
+                            <RenderStageSelector station={station}
                                                  display_settings={props.display_settings}
-                                                 settings={settings} state={state} setStateFromChild={setStateFromChild}/>
+                                                 settings={station}
+                                                 setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'light'}  >
-                            <RenderLightSelector station={props.station}
+                            <RenderLightSelector station={station}
                                                  display_settings={props.display_settings}
-                                                 settings={settings} state={state} setStateFromChild={setStateFromChild} />
+                                                 settings={station} setStateFromChild={setStateFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector station={props.station}
+                            <RenderTemperatureSelector station={station}
                                                        display_settings={props.display_settings}
-                                                       settings={settings} state={state} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
+                                                       settings={station} label={"Target Temperature"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
-                            <RenderHumiditySelector station={props.station}
+                            <RenderHumiditySelector station={station}
                                                     display_settings={props.display_settings}
-                                                    settings={settings} state={state} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
+                                                    settings={station} label={"Target Humidity"} setStateFromChild={setStateFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
-                            <RenderFormActions settings={settings} applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>
+                            <RenderFormActions settings={station} applyAction={applyAction} applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} resetAction={resetAction} defaultsAction={defaultsAction}/>
                         </Box>
                     </Grid>
                     </div>

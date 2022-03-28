@@ -13,6 +13,7 @@ import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
 import {getContainerNames, getModuleTypes} from '../../api/utils';
+import log from "roarr";
 
 function RenderDeviceMapTab (props) {
     const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
@@ -26,16 +27,16 @@ function RenderDeviceMapTab (props) {
     useEffect(() => {
         const fetchData = async () => {
             let x = await getContainerNames(props.apiHost, props.apiPort)
-            console.log("containers " + JSON.stringify(x))
+//            console.log("containers " + JSON.stringify(x))
             setContainerNames(x.container_names)
             x = await getModuleTypes(props.apiHost, props.apiPort)
-            console.log("modules " + JSON.stringify(x))
+//            console.log("modules " + JSON.stringify(x))
             setModuleTypes(x.module_types)
         }
         fetchData();
     }, [nodeEnv])
 
-    console.log("RenderDeviceMapTab")
+    log.trace("RenderDeviceMapTab")
     let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
@@ -67,7 +68,7 @@ function RenderDeviceMapTab (props) {
             <TableCell>{row.sensors}</TableCell></TableRow>
     }
     function getModules() {
-        console.log("getModules " + JSON.stringify(station))
+//        console.log("getModules " + JSON.stringify(station))
         let arr = []
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
@@ -75,7 +76,7 @@ function RenderDeviceMapTab (props) {
                     sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
             }
         }
-        console.log("arr = " + JSON.stringify(arr))
+        log.trace("arr = " + JSON.stringify(arr))
         let ret = arr.map(getModulerow)
         return ret
     }
@@ -99,8 +100,8 @@ function RenderDeviceMapTab (props) {
     }
 
     let module_rows = getModules()
-    console.log("rendering with font set to " + values.theme.global.font.family)
-    console.log("station = " + JSON.stringify(station))
+//    console.log("rendering with font set to " + values.theme.global.font.family)
+//    console.log("station = " + JSON.stringify(station))
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

@@ -107,59 +107,5 @@
     "tub_water_level": 0.0
   },
   "application_settings": {
-  },
-  "switch_state": {
-    "automaticControl": {
-      "on": false,
-      "changing": true
-    },
-    "heatLamp": {
-      "on": false,
-      "changing": true
-    },
-    "heatingPad": {
-      "on": false,
-      "changing": true
-    },
-    "lightVegetative": {
-      "on": false,
-      "changing": true
-    },
-    "lightBloom": {
-      "on": false,
-      "changing": true
-    },
-    "humidifier": {
-      "on": false,
-      "changing": true
-    },
-    "waterHeater": {
-      "on": false,
-      "changing": true
-    },
-    "heater": {
-      "on": false,
-      "changing": true
-    },
-    "airPump": {
-      "on": false,
-      "changing": true
-    },
-    "waterPump": {
-      "on": false,
-      "changing": true
-    },
-    "intakeFan": {
-      "on": false,
-      "changing": true
-    },
-    "exhaustFan": {
-      "on": false,
-      "changing": true
-    },
-    "currentGrowLight": {
-      "on": false,
-      "changing": true
-    }
   }
 }

@@ -6,7 +6,6 @@ import {Box} from "grommet";
 import RenderADCValueWithDirection from './ADCValueWithDirection'
 
 function RenderADCTextStatus (props) {
-//    console.log(`RenderADCTextStatus status=${JSON.stringify(props.state.status)}`)
     let ret =
         <Grid className={'status-table-holder'}
               round={'small'}
@@ -26,14 +25,14 @@ function RenderADCTextStatus (props) {
               rows={['40px','20px','20px','20px','20px','20px','20px','20px','20px']}
               gap={"xxsmall"} >
             <Box gridArea={'table-label'}>ADC</Box>
-            <RenderADCValueWithDirection gridArea={'0_0'} label='Bd 0 ch 0' value={props.state.sensor_readings.adc_0_0_1_860} units={props.state.sensor_readings.adc_0_0_1_860_units} direction={props.state.sensor_readings.adc_0_0_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'0_1'} label='Bd 0 ch 1' value={props.state.sensor_readings.adc_0_1_1_860} units={props.state.sensor_readings.adc_0_1_1_860_units} direction={props.state.sensor_readings.adc_0_1_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'0_2'} label='Bd 0 ch 2' value={props.state.sensor_readings.adc_0_2_1_860} units={props.state.sensor_readings.adc_0_2_1_860_units} direction={props.state.sensor_readings.adc_0_2_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'0_3'} label='Bd 0 ch 3' value={props.state.sensor_readings.adc_0_3_1_860} units={props.state.sensor_readings.adc_0_3_1_860_units} direction={props.state.sensor_readings.adc_0_3_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'1_0'} label='Bd 1 ch 0' value={props.state.sensor_readings.adc_1_0_1_860} units={props.state.sensor_readings.adc_1_0_1_860_units} direction={props.state.sensor_readings.adc_1_0_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'1_1'} label='Bd 1 ch 1' value={props.state.sensor_readings.adc_1_1_1_860} units={props.state.sensor_readings.adc_1_1_1_860_units} direction={props.state.sensor_readings.adc_1_1_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'1_2'} label='Bd 1 ch 2' value={props.state.sensor_readings.adc_1_2_1_860} units={props.state.sensor_readings.adc_1_2_1_860_units} direction={props.state.sensor_readings.adc_1_2_1_860_direction} />
-            <RenderADCValueWithDirection gridArea={'1_3'} label='Bd 1 ch 3' value={props.state.sensor_readings.adc_1_3_1_860} units={props.state.sensor_readings.adc_1_3_1_860_units} direction={props.state.sensor_readings.adc_1_3_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'0_0'} label='Bd 0 ch 0' value={props.sensor_readings.adc_0_0_1_860} units={props.sensor_readings.adc_0_0_1_860_units} direction={props.sensor_readings.adc_0_0_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'0_1'} label='Bd 0 ch 1' value={props.sensor_readings.adc_0_1_1_860} units={props.sensor_readings.adc_0_1_1_860_units} direction={props.sensor_readings.adc_0_1_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'0_2'} label='Bd 0 ch 2' value={props.sensor_readings.adc_0_2_1_860} units={props.sensor_readings.adc_0_2_1_860_units} direction={props.sensor_readings.adc_0_2_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'0_3'} label='Bd 0 ch 3' value={props.sensor_readings.adc_0_3_1_860} units={props.sensor_readings.adc_0_3_1_860_units} direction={props.sensor_readings.adc_0_3_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'1_0'} label='Bd 1 ch 0' value={props.sensor_readings.adc_1_0_1_860} units={props.sensor_readings.adc_1_0_1_860_units} direction={props.sensor_readings.adc_1_0_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'1_1'} label='Bd 1 ch 1' value={props.sensor_readings.adc_1_1_1_860} units={props.sensor_readings.adc_1_1_1_860_units} direction={props.sensor_readings.adc_1_1_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'1_2'} label='Bd 1 ch 2' value={props.sensor_readings.adc_1_2_1_860} units={props.sensor_readings.adc_1_2_1_860_units} direction={props.sensor_readings.adc_1_2_1_860_direction} />
+            <RenderADCValueWithDirection gridArea={'1_3'} label='Bd 1 ch 3' value={props.sensor_readings.adc_1_3_1_860} units={props.sensor_readings.adc_1_3_1_860_units} direction={props.sensor_readings.adc_1_3_1_860_direction} />
         </Grid>
     return (ret)
 }

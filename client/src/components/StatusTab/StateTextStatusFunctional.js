@@ -4,14 +4,12 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
+import log from "roarr";
 
 function RenderStateTextStatus (props) {
 
-    let [state, setState ] = useState(props.state); //
-    let [settings, setSettings ] = useState(props.settings); //
-
-    console.log("RenderStateTextStatus")
-    let plant_height = sprintf.sprintf("%.1f", state.sensor_readings.plant_height)
+    log.trace("RenderStateTextStatus")
+    let plant_height = sprintf.sprintf("%.1f", props.sensor_readings.plant_height)
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[

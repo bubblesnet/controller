@@ -1,15 +1,16 @@
 import { useState } from 'react';
+import log from "roarr";
 
 export default function useToken() {
     const getToken = () => {
         try {
             const tokenString = sessionStorage.getItem('token');
             const userToken = JSON.parse(tokenString);
-            console.log("Returning saved token " + JSON.stringify(userToken))
+            log.trace("Returning saved token " + JSON.stringify(userToken))
 
             return userToken
         } catch( err ) {
-            console.log("auth token err " + err)
+            log.trace("auth token err " + err)
             return({auth: false})
         }
     };
@@ -20,7 +21,7 @@ export default function useToken() {
         setToken(userToken);    // Forces a rerender
     };
 
-    console.log("Returning token " + JSON.stringify(token))
+    log.trace("Returning token " + JSON.stringify(token))
     return {
         setToken: saveToken,
         token

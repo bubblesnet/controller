@@ -1,7 +1,8 @@
 import React from 'react';
+import log from "roarr";
 
 function UnauthenticatedHeader (props) {
-    console.log("BubblesApp render props = " + JSON.stringify(props))
+    log.trace("BubblesApp render props = " + JSON.stringify(props))
 
     return (
         <div>

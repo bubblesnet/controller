@@ -5,15 +5,13 @@ import sprintf from 'sprintf-js';
 
 function RenderPhMeter (props) {
 
-    let [state, setState] = useState(props.state); //
-
-    let valueText = sprintf.sprintf( "%.1f", state.sensor_readings.root_ph )
+    let valueText = sprintf.sprintf( "%.1f", props.sensor_readings.root_ph )
     let ret =
         <div className={props.className}>
             <p className="meter-text">{props.label}</p>
                 <ReactSpeedometer
                     width={250} height={150}
-                    value={state.sensor_readings.root_ph} minValue={4} maxValue={8}
+                    value={props.sensor_readings.root_ph} minValue={4} maxValue={8}
                     currentValueText={valueText}
                     segments={3}
                     segmentColors={['red','green','yellow']}
@@ -26,7 +24,7 @@ function RenderPhMeter (props) {
                     className={props.className}
                     />
             </div>
-    if( props.station_settings.root_ph_sensor === false ) {
+    if( props.exists === false ) {
         ret = <></>
     }
 

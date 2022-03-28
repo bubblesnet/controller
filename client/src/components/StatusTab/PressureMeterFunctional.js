@@ -4,10 +4,8 @@ import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
 
 function RenderPressureMeter (props) {
-//    let [state, setState] = useState(props.state); //
-//    let [settings, setSettings] = useState(props.settings); //
 
-    let diff_float = (props.state.sensor_readings.pressure_external - props.state.sensor_readings.pressure_internal)
+    let diff_float = (props.sensor_readings.pressure_external - props.sensor_readings.pressure_internal)
     let diff_value =  sprintf.sprintf("%.1f", diff_float)
     let valueText =  diff_value+" "+props.display_settings.pressure_units
     let ret =
@@ -27,7 +25,7 @@ function RenderPressureMeter (props) {
                 className={props.className}
                     />
             </div>
-    if( props.station_settings.pressure_sensors === false ) {
+    if( props.exists === false ) {
         ret = <></>
     }
 
