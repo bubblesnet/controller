@@ -6,12 +6,11 @@ import './stagesTab.css';
 import '../../Palette.css';
 
 
-function RenderTemperatureSelector(props) {
+function RenderWaterTemperatureSelector(props) {
     function setValue(value) {
-        console.log("setValue " + value)
         let x = local_station;
         x.automation_settings.target_temperature=value;
-        props.setStateFromChild(x)
+        props.setStateFromChild(local_station)
         setStation(x)
     }
 
@@ -66,4 +65,4 @@ function RenderTemperatureSelector(props) {
             </Grid>
    );
 }
-export default RenderTemperatureSelector;
+export default RenderWaterTemperatureSelector;

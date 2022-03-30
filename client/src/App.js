@@ -6,7 +6,7 @@ import SetupApp from './SetupApp'
 
 import useToken from './useToken';
 import {useEffect, useState} from "react";
-import {getSite, getUser} from "./api/utils";
+import {getSite} from "./api/utils";
 import log from "roarr";
 import util from "./util";
 
@@ -16,37 +16,10 @@ import options_pressure_units from './options_pressure_units.json'
 import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
-import initial_automation_settings from './initial_automation_settings.json'
-
-
-/** Fake login function
- *
- * @param e not used
- */
-/*
-function setSuccessfulLogin(e) {
-    console.log("successfulLogin");
-    login(e)
-}
-
- */
-/*
-function getToken() {
-    const tokenString = sessionStorage.getItem('token')
-    const userToken = JSON.parse(tokenString);
-    return userToken?.token
-}
-
-function setToken(loginResult) {
-        sessionStorage.setItem('token', JSON.stringify(loginResult.token));
-}
-
- */
 
 function App(props) {
 
         let initial_station_state = {
-//            tilt: false,
             station_settings: {
                 humidifier: true,
                 humidity_sensor_internal: true,
@@ -169,7 +142,6 @@ function App(props) {
         }
 
     const [site, setSite] = useState({});
-    const [user, setUser] = useState({});
 
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
     let needs_setup = false
@@ -189,18 +161,18 @@ function App(props) {
 //            setLocalToken(loginResult.token)
         }
     }
+    function doLogout() {
+        setToken({auth:false})
+    }
 
     useEffect(() => {
         const fetchData = async () => {
-//            console.log("App: initial fetchData")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
-//            z.initial_state = imported_state
-
-//            console.log("App: useEffect fecthData setting site to " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
-    }, []);     // ONLY CALL ON MOUNT - empty array arg causes this
+    },[]);    // eslint-disable-line react-hooks/exhaustive-deps
+    // ONLY CALL ON MOUNT - empty array arg causes this
 
 //    console.log("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
@@ -231,6 +203,7 @@ function App(props) {
                                                       automation_settings={site.automation_settings}
                                                       display_settings={token}
                                                       user={token}
+                                                      logout={doLogout}
                                     /> :
         <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
 }

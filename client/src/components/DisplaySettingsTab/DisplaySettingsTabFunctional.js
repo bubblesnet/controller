@@ -20,7 +20,7 @@ function RenderDisplaySettingsTab (props) {
     let [local_theme, setLocalTheme] = useState(JSON.parse(JSON.stringify(props.theme)));
     let [applyButtonState, setApplyButtonState] = useState(false)
     let [resetButtonState, setResetButtonState] = useState(false)
-    let [defaultsButtonState, setDefaultsButtonState] = useState(true)
+    let [defaultsButtonState] = useState(true)
 
     let x = [];
     if(fonts.length === 0 ) {

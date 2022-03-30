@@ -22,6 +22,11 @@
   "target_temperature": 75,
   "temperature_min": 20,
   "temperature_max": 90,
+
+  "target_water_temperature": 68,
+  "water_temperature_min": 60,
+  "water_temperature_max": 85,
+
   "humidity_min": 0,
   "humidity_max": 90,
   "target_humidity": 70,

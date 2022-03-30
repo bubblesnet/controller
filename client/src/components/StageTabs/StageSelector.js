@@ -1,4 +1,4 @@
-import {Box, Button, Grid, Select} from "grommet";
+import {Box, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
 import stage_options from "../../stage_options.json"
@@ -8,8 +8,7 @@ function RenderStageSelector (props) {
 
     function setCurrentStageValue(option) {
         let x = local_station;
-        log.trace("current stage value " +x.automation_settings.current_stage + " new stage value " + option)
-        x.automation_settings.current_stage = option
+        log.trace("current stage value " +x.current_stage + " new stage value " + option)
         x.current_stage = option
         props.setStateFromChild(JSON.parse(JSON.stringify(x)))
         setStation(x)
@@ -17,6 +16,7 @@ function RenderStageSelector (props) {
 
     const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
+    console.log("rendering with value={"+local_station.current_stage+"}")
     let ret = <>
             <Grid
                 justify={'center'}
@@ -37,7 +37,7 @@ function RenderStageSelector (props) {
                     Select Stage
                 </Box>
                 <Box justify={'center'} gridArea={'stage'} width={'small'} round={'xsmall'} >
-                    <Select options={stage_options} value={local_station.automation_settings.current_stage}
+                    <Select options={stage_options} value={local_station.current_stage}
                             onChange={({ option }) => setCurrentStageValue(option)} />
                 </Box>
           </Grid>

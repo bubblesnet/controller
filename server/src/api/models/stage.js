@@ -47,7 +47,7 @@ stage_schedules =  [
         }
     },
     {
-        "name": "drying",
+        "name": "dry",
         "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 60,
@@ -56,7 +56,7 @@ stage_schedules =  [
         }
     },
     {
-        "name": "curing",
+        "name": "cure",
         "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 60,

@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
-import {Avatar, Button, Sidebar, Nav, Grid} from 'grommet'
+import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
 import Header from "./components/Header"
 
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
@@ -26,7 +26,7 @@ import useWebSocket from 'react-use-websocket';
 import './Palette.css'
 
 import util from './util'
-import {addStation,saveSetting, getSite} from './api/utils'
+import {addStation, saveSetting, getSite, saveAutomationSettings} from './api/utils'
 
 import './logimplementation'
 import log from 'roarr';
@@ -125,13 +125,12 @@ function AuthenticatedApp (props) {
      * The user who has logged in.  If we login as a different user, rerender
      * TABLE: user
      */
-    const [userid, setUserid] = useState(props.user.userid);
+    const [userid] = useState(props.user.userid);
     /**
      * The site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
      * Changing this causes a rerender
      * TABLE: site
      */
-//    console.log("setting site to " + JSON.stringify(props.site))
     const [site, setSite] = useState(props.site);
 
     /**
@@ -143,9 +142,9 @@ function AuthenticatedApp (props) {
     /**
      * Local copy of all data (temp ...) - change and rerender
      */
-    const [local_state, setState] = useState(props.initial_station_state);
+    const [local_state] = useState(props.initial_station_state);
     const [switch_state, setSwitchState] = useState(props.initial_switch_state);
-    const [sensor_readings, setSensorReadings] = useState(initial_sensor_readings);
+    const [sensor_readings] = useState(initial_sensor_readings);
     const [tilt,setTilt] = useState({ currently_tilted: false, last_tilt: 0} )
 
     /**
@@ -378,7 +377,7 @@ function AuthenticatedApp (props) {
         reconnectInterval: 30000,   // Why 30 seconds?  Seems long. Trying 3.
         onOpen: () => {
             getDeviceStatus();
-            log.info('ws: websocket opened');
+            log.trace('ws: websocket opened');
         },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -391,27 +390,13 @@ function AuthenticatedApp (props) {
     messageHistory.current = useMemo(() =>
         messageHistory.current.concat(lastJsonMessage), [lastJsonMessage]);
 
-
     /**
-     * Send a random humidity message over the websocket
-     */
-    const sendit = () => {
-        let x = JSON.parse(JSON.stringify(local_state))
-        if (lastJsonMessage) {
-            x = JSON.parse(JSON.stringify(lastJsonMessage))
-        }
-        x.sensor_readings.humidity_internal = 69 + getRandomInt(10)
-        sendJsonMessage(x);
-    }
-
-    /**
-     * Respond to a test button by sending a random humidity message over the websocket
+     * Respond to a test button by sending a random status request message over the websocket
      * @type {function(): void}
      */
     const handleClickSendMessage = useCallback(() => {
-        sendit()
-    }, []);
-
+        getDeviceStatus()
+    });
 
     //
     //
@@ -420,22 +405,12 @@ function AuthenticatedApp (props) {
     //
     //
     //
-    /**
-     * Get a random int between 0 and specified max inclusive
-     * @param max   the largest number that can be returned
-     * @returns {number}    the random number
-     */
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
     function getDeviceStatus() {
-        log.info("aq: getDeviceStatus()")
+        log.trace("aq: getDeviceStatus()")
         let cmd = {
             command: STATUS_COMMAND,
         }
         sendJsonMessage(cmd)
-
     }
 
     //
@@ -521,17 +496,37 @@ function AuthenticatedApp (props) {
      * @param switch_name   The name of the switch we're changing the state of
      * @param on    True/false on/off
      */
-    function setAutomationStateFromChild(current_stage) {
-//        console.log("setAutomationStateFromChild current_stage "+current_stage)
+    function setCurrentAutomationStageFromChild(current_stage) {
+//        console.log("setCurrentAutomationStageFromChild current_stage "+current_stage)
         let cmd = {
             command: STAGE_COMMAND,
             stage_name: current_stage
         }
-        changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].automation_settings.current_stage, current_stage )
-        site.stations[currentStationIndex].automation_settings.current_stage = current_stage
+        changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].current_stage, current_stage )
+        site.stations[currentStationIndex].current_stage = current_stage
         sendJsonMessage(cmd)
         setSite(JSON.parse(JSON.stringify(site)))
     }
+
+    /**
+     * Function passed to child visual objects such that they can set the automation state of the current station.
+     *
+     * @param x ???
+     * @param switch_name   The name of the switch we're changing the state of
+     * @param on    True/false on/off
+     */
+    /// TODO this many API calls obviously not ideal - fix
+    function setAutomationSettingsFromChild(new_automation_settings) {
+        console.log("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
+        let x = JSON.parse(JSON.stringify(site))
+        x.stations[currentStationIndex].automation_settings = new_automation_settings
+        saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
+            site.stations[currentStationIndex].stationid,
+            new_automation_settings.stage_name,
+            x.stations[currentStationIndex].automation_settings )
+            setSite(x)
+    }
+
 
     /**
      * Function passed to child visual objects such that they can set the state of a controllable switch on a device.
@@ -541,19 +536,12 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function setSwitchStateFromChild(x, switch_name, on) {
-
-//        console.log("setSwitchStateFromChild "+JSON.stringify(x))
         log.info("setSwitchStateFromChild "+switch_name +","+on)
-        let new_state = {switch_state: JSON.parse(JSON.stringify(switch_state))}
         let new_switch_state = JSON.parse(JSON.stringify(switch_state))
-//        log.info("Setting local_state.switch_state sending json message "+JSON.stringify(new_state))
-//        sendJsonMessage(new_state); // This call causes a message to get reflected back to us that tells us the switch state has changed and rerender.
         let sw_name = switch_name
         if (switch_name === "growLight") {
             sw_name = "lightBloom"
         }
-
-//        console.log("Setting local_state.switch_state[" + switch_name + "].changing = true")
         if (typeof new_switch_state[switch_name] === 'undefined') {
             console.error("button: bad switch_name " + switch_name)
             return
@@ -567,21 +555,11 @@ function AuthenticatedApp (props) {
             switch_name: sw_name,
             on: on
         }
-//        console.log("Setting local_state.switch_state sending json message "+JSON.stringify(cmd))
         sendJsonMessage(cmd)
-//        cmd = {command: STATUS_COMMAND }
-//        console.log("Setting local_state.switch_state sending json message "+JSON.stringify(cmd))
-//        sendJsonMessage(cmd)
-
     }
 
-    /**
-     * wtf??
-     * @param value
-     */
     const applyMapChange = (value) => {
-        let x = JSON.parse(JSON.stringify(bubbles_theme));
-        log.trace("button: AuthenticatedApp applyMapChange");
+        log.trace("button: AuthenticatedApp applyMapChange "+JSON.stringify(value));
         /// TODO FINISH!
     }
 
@@ -607,7 +585,6 @@ function AuthenticatedApp (props) {
         setCurrentFont(value)
     }
 
-
     /**
      * The effect hook that casues a refetch of the SITE and rerender if nodeEnv changes
      */
@@ -620,7 +597,8 @@ function AuthenticatedApp (props) {
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
-    }, [nodeEnv])     // ONLY CALL ON MOUNT - empty array arg causes this
+    }, [nodeEnv])     // eslint-disable-line react-hooks/exhaustive-deps
+    // ONLY CALL ON MOUNT - empty array arg causes this
 
 
     /**
@@ -677,11 +655,29 @@ function AuthenticatedApp (props) {
 
 //    thestate.station_settings = props.site.stations[props.stationindex]
 //    console.log("STATION: site " + JSON.stringify(site))
-
+/*
+            <Sidebar gridArea="sidebar" background="#477CBC" round="small"
+                     header={
+                         <Avatar src="//s.gravatar.com/avatar/03e2a5b132702f8c65e793b743be4418?s=80"/>
+                     }
+                     footer={
+                         <Button icon={<Help/>} hoverIndicator/>
+                     }>
+                <Nav gap="small">
+                    <Text >{site.stations[currentStationIndex].station_name}</Text>
+                    <RenderSiteStationMenu currentStationIndex={currentStationIndex}
+                                           site={site}
+                                           setCurrentStationIndex={setStation}/>
+                </Nav>
+            </Sidebar>
+ */
+    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
     return <div className="App">
         <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
-                handleClickSendMessage={handleClickSendMessage}/>
+                handleClickSendMessage={handleClickSendMessage}
+                logout={props.logout}
+                    />
         <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Add a station</DialogTitle>
             <DialogContent>
@@ -714,28 +710,12 @@ function AuthenticatedApp (props) {
             direction={'horizontal'}
             fill
             areas={[
-                {name: 'sidebar', start: [0, 0], end: [0, 0]},
-                {name: 'main', start: [1, 0], end: [1, 0]},
+                {name: 'main', start: [0, 0], end: [0, 0]},
             ]}
-            columns={['small', 'xlarge']}
+            columns={['xlarge']}
             rows={['800px']}
             gap={"small"}
         >
-            <Sidebar gridArea="sidebar" background="#477CBC" round="small"
-                     header={
-                         <Avatar src="//s.gravatar.com/avatar/03e2a5b132702f8c65e793b743be4418?s=80"/>
-                     }
-                     footer={
-                         <Button icon={<Help/>} hoverIndicator/>
-                     }>
-                <Nav gap="small">
-                    <Button icon={<Add/>} onClick={handleOpen}/>
-                    <RenderSiteStationMenu currentStationIndex={currentStationIndex}
-                                           site={site}
-                                           setCurrentStationIndex={setStation}/>
-                    <Button icon={<Clock/>} hoverIndicator/>
-                </Nav>
-            </Sidebar>
 
             <Tabs gridArea="main" margin="medium" flex="shrink">
                 <Tab title="Station Control">
@@ -797,7 +777,8 @@ function AuthenticatedApp (props) {
                                     theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
                                     display_settings={props.display_settings}
-                                    setStateFromChild={setAutomationStateFromChild}
+                                    setStageFromChild={setCurrentAutomationStageFromChild}
+                                    setAutomationSettingsFromChild={setAutomationSettingsFromChild}
                     />
                 </Tab>
                 <Tab title="Events">

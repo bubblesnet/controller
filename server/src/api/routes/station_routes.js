@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 
 const station = require('../models/station')
+const automation_settings = require('../models/automation_settings')
 
 router.use(bodyParser.urlencoded({ extended: true }));
 const DeviceModel = require('../models/device');
@@ -31,8 +32,8 @@ function getStationsBySiteId( req, res ) {
 
 // Add a new station
 router.post('/:station/stage', function (req, res) {
-    x = req.body
-    let result = station.changeStage(req.params.station,x.oldstage,x.newstage ).then(function (rows) {
+    let x = req.body
+    let result = automation_settings.changeStage(req.params.station,x.oldstage,x.newstage ).then(function (rows) {
         if (!rows) {
             return res.status(200).json({});
         }

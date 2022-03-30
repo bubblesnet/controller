@@ -58,7 +58,7 @@ async function getAutomationSettings(stationid) {
 async function getStationConfigsBySite(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, station_name, location, stationid, controller_hostname, controller_api_port, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, station_name, location, stationid, controller_hostname, controller_api_port, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
@@ -130,7 +130,7 @@ async function getStationConfigsBySite(siteid) {
 async function getStationConfigsByUser(uid) {
     const results = await db.query(
         sql`
-            SELECT stationid, controller_hostname, controller_api_port, light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove, current_stage,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external,station_door_sensor, outer_door_sensor, movement_sensor,
@@ -237,22 +237,6 @@ async function updateStation(stationid, name) {
     })
 }
 
-async function changeStage(stationid, oldstage, newstage) {
-    //    console.log(JSON.stringify(body))
-    return new Promise(async function(resolve, reject) {
-        await pool.query("update automationsettings set current_stage = $1 where stationid_Station = $2 RETURNING *",
-            [newstage,stationid], (error, results) => {
-                if (error) {
-                    console.log("changeStage error " + error)
-                    reject(error)
-                } else {
-                    console.log("changeStage " + JSON.stringify(results.rows[0]))
-                    resolve({stationid: results.rows[0].stationid, stage: newstage, message: "Station "+results.rows[0].stationid+" stage has been updated to " + newstage})
-                }
-            })
-    })
-}
-
 
 async function deleteStation(stationid) {
     return new Promise(async function(resolve, reject) {
@@ -283,7 +267,6 @@ async function getStationsForSite(siteid) {
 
 module.exports = {
     addStation,
-    changeStage,
     updateStation,
     deleteStation,
     getStationsForSite,

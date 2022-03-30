@@ -10,8 +10,8 @@ const endPool = () => {
 async function getSiteById(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid, controller_hostname, controller_api_port,light_on_hour, tamper_xmove, tamper_ymove, tamper_zmove,
-                   time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
+            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove,
+                   current_stage, time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
@@ -20,12 +20,15 @@ async function getSiteById(siteid) {
                                  SELECT array_to_json(array_agg(row_to_json(q)))
                                  FROM (
                                           SELECT
-                                              current_stage,
+                                              stage_name,
                                               current_lighting_schedule,
                                               light_on_start_hour,
                                               target_temperature,
                                               temperature_min,
                                               temperature_max,
+                                              target_water_temperature,
+                                              water_temperature_min,
+                                              water_temperature_max,
                                               humidity_min,
                                               humidity_max,
                                               target_humidity,

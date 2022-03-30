@@ -15,7 +15,7 @@ function RenderStationSettingsTab (props) {
     log.info("RenderStationSettingsTab props display_settings = "+props.display_settings)
     let [local_station, setStation] = useState(props.station);
     let [reset_button_state,setResetButtonState] = useState(false)
-    let [defaults_button_state,setDefaultsButtonState] = useState(true)
+    let [defaults_button_state] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
 
 

@@ -16,28 +16,30 @@ import {getContainerNames, getModuleTypes} from '../../api/utils';
 import log from "roarr";
 
 function RenderDeviceMapTab (props) {
-    const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-    const [reset_button_state,setResetButtonState] = useState(false)
-    const [defaults_button_state,setDefaultsButtonState] = useState(true)
-    const [apply_button_state,setApplyButtonState] = useState(false)
+    const [station] = useState(JSON.parse(JSON.stringify(props.station)));
+    const [reset_button_state] = useState(false)
+    const [defaults_button_state] = useState(true)
+    const [apply_button_state] = useState(false)
     const [container_names,setContainerNames] = useState()
     const [module_types,setModuleTypes] = useState()
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+    const [nodeEnv] = useState(props.nodeEnv);
+    const [apiHost] = useState(props.apiHost)
+    const [apiPort] = useState(props.apiPort)
 
     useEffect(() => {
         const fetchData = async () => {
-            let x = await getContainerNames(props.apiHost, props.apiPort)
-//            console.log("containers " + JSON.stringify(x))
+            let x = await getContainerNames(apiHost, apiPort)
+            console.log("containers " + JSON.stringify(container_names))
             setContainerNames(x.container_names)
-            x = await getModuleTypes(props.apiHost, props.apiPort)
-//            console.log("modules " + JSON.stringify(x))
+            x = await getModuleTypes(apiHost, apiPort)
+            console.log("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
         fetchData();
-    }, [nodeEnv])
+    }, [nodeEnv])  // eslint-disable-line react-hooks/exhaustive-deps
 
     log.trace("RenderDeviceMapTab")
-    let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
+    let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
         if( module.device_type === "GPIO" ) {
@@ -60,7 +62,7 @@ function RenderDeviceMapTab (props) {
     }
 
     function getModulerow( row, index, arr ) {
-        return <TableRow>
+        return <TableRow  key={row.module.moduleid}>
             <TableCell>{row.device.deviceid}</TableCell>
             <TableCell>{row.module.container_name}</TableCell>
             <TableCell>{row.module.module_type}</TableCell>
@@ -107,7 +109,7 @@ function RenderDeviceMapTab (props) {
             <GoogleFontLoader
                 fonts={[
                     {
-                        font: values.theme.global.font.family
+                        font: displaySettings.theme.global.font.family
                     },
                 ]}
             />

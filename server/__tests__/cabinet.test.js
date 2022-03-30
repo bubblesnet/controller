@@ -16,7 +16,6 @@ let good_update = {
     controller_hostname: "localhost",
     controller_api_port: 9999,
         stage: "updatedstage",
-        light_on_hour: 14,
         tamper_xmove: 0.99,
         tamper_ymove: 0.99,
         tamper_zmove: 0.99,

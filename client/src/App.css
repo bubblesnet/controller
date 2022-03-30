@@ -38,6 +38,10 @@
   color: white;
 }
 
+.Logout-Button {
+  float: right
+}
+
 .App-link {
   color: #61dafb;
 }

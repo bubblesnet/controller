@@ -23,7 +23,7 @@ function RenderStateTextStatus (props) {
         plantHeight: "37in"
     };
 
-    let [values, setValues] = useState(initValues); //
+    let [values] = useState(initValues); //
 
     let ret =
         <Grid className={"status-table-holder"}

@@ -18,6 +18,7 @@ const path = require('path');
 global.__root   = __dirname + '/';
 
 const config_routes = require('./api/routes/config_routes').router;
+const automation_routes = require('./api/routes/automation_routes').router;
 const device_routes = require('./api/routes/device_routes').router;
 const video_routes = require('./api/routes/video_routes').router;
 const module_routes = require('./api/routes/module_routes').router;
@@ -83,6 +84,7 @@ apiServer.use("/api/measurement", edge_measurement_routes);
 apiServer.use("/api/station", station_routes);
 apiServer.use("/api/site", site_routes);
 apiServer.use("/api/module", module_routes);
+apiServer.use("/api/automation", automation_routes);
 
 // catch 404 and forward to error handler
 apiServer.use(function (req, res, next) {

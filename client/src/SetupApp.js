@@ -21,16 +21,13 @@ function SetupApp (props) {
     //Public API that will echo messages sent to it back to the client
     log.trace("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
-    const [bubbles_theme, setBubblesTheme] = useState(deepMerge(grommet, initial_theme));
+    const [bubbles_theme] = useState(deepMerge(grommet, initial_theme));
     const [adminUser, setAdminUser] = useState({})
 
     let servers = util.get_server_ports_for_environment(nodeEnv)
 
-
     initial_state.theme = bubbles_theme;
     initial_state.current_font = bubbles_theme.global.font.family;
-
-    const [local_state, setState] = useState(initial_state);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -38,7 +35,7 @@ function SetupApp (props) {
             setAdminUser(x)
         }
         fetchData();
-    }, [nodeEnv])
+    },[])  // eslint-disable-line react-hooks/exhaustive-deps
 
     async function getAdminUser() {
         log.trace("getAdminUser calling out to api for deets")
@@ -58,6 +55,7 @@ function SetupApp (props) {
             }).catch( function(err) {
                 log.trace(err)
             });
+            log.trace("fetch response " + response)
         })
     }
 
