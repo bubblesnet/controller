@@ -174,7 +174,7 @@ async function createStation(body) {
     const servers = util.get_server_ports_for_environment( process.env.NODE_ENV )
     return new Promise(function(resolve, reject) {
         pool.query("insert into station (" +
-            "    userid_User," +
+//            "    userid_User," +
             "    controller_hostname," +
             "    controller_api_port," +
             "    tamper_xmove," +
@@ -216,9 +216,9 @@ async function createStation(body) {
             "    light_germinate," +
             "    station_name)" +
             "values(" +
+//            "    $1," +
             "    $1," +
             "    $2," +
-            "    $3," +
             "    1.0," +
             "    1.0," +
             "    1.0," +
@@ -258,7 +258,7 @@ async function createStation(body) {
             "    false," +
             "    'blah'" +
             ") RETURNING *",
-            [body.userid, servers.api_server_host, servers.api_server_port], (error, results) => {
+            [servers.api_server_host, servers.api_server_port], (error, results) => {
             if (error) {
                 reject(error)
             } else {
