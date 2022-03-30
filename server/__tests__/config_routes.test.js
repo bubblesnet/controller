@@ -26,11 +26,11 @@ describe("config_routes routes",   () => {
         await cfroutes.getContainers(req, res, function() {
             expect(false).to.be.true
         });
-        await cfroutes.getDeviceConfig(req, res, function() {
-            expect(false).to.be.true
-        });
-        await cfroutes.getDeviceConfig(req, res, function() {
-            expect(false).to.be.true
-        });
+//        await cfroutes.getDeviceConfig(req, res, function() {
+//            expect(false).to.be.true
+//        });
+//        await cfroutes.getDeviceConfig(req, res, function() {
+//            expect(false).to.be.true
+//        });
     });
 });

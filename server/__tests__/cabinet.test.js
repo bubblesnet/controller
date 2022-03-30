@@ -84,6 +84,7 @@ let controllable_devices = [
     "light_vegetative",
     "light_germinate"
 ]
+/*
 describe("cab",   () => {
     console.log("cab")
     it('postgres sqljson', async function () {
@@ -96,7 +97,7 @@ describe("cab",   () => {
         expect(station_list).not.undefined
     });
 });
-
+*/
 describe("station",   () => {
     console.log("create/update/delete station")
     it('Empty station with update/delete', async function () {
