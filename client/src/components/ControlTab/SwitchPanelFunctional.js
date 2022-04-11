@@ -3,6 +3,7 @@ import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
 import log from 'roarr';
+import RenderStageSelector from "../StageTabs/StageSelector";
 
 var slideclick_valid = new Audio("slideclick_valid.mp3");
 
@@ -32,6 +33,11 @@ function RenderSwitchPanel (props) {
         }
     }
 
+    function setSelectedStage(x) {
+        console.log("setSelectedStage " + JSON.stringify(x))
+        props.setCurrentStage(x)
+    }
+
     function toggleAutomatic(e) {
         log.info("toggleAutomatic ")
         goodbeep()
@@ -41,7 +47,7 @@ function RenderSwitchPanel (props) {
     if(!automaticControlOn)
         value_name = 'OFF'
 
-    let ret =
+    let ret = <>
             <Table ><tbody>
         <TableRow ><TableCell >Automatic Control</TableCell>
             <TableCell>
@@ -59,7 +65,15 @@ function RenderSwitchPanel (props) {
         <RenderDeviceSwitch exists={props.switch_state.water_heater} toggle={props.switchControl.waterHeater.toggle} on="ON" off="OFF" onOff={props.switch_state.waterHeater.on?"ON":"OFF"} label='Water Heater'  automaticControl={value_name} changing={props.switch_state.waterHeater.changing}/>
 
     </tbody></Table>
+        <RenderStageSelector station={props.station}
+                             display_settings={props.display_settings}
+                             setSelectedStageFromChild={setSelectedStage}
+                             automation_setting={{stage_name: props.station.current_stage}}
+                              />
+    </>
+
     return (ret)
 }
+
 
 export default RenderSwitchPanel;

@@ -22,9 +22,11 @@ async function getConfigBySite(siteid) {
 }
 
 async function getConfigByUser(uid) {
+    console.log("getConfigByUser "+uid)
     const results = await db.query(sql`SELECT userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber FROM public.user where userid=${uid}`);
     let result = results[0]
     result.stations = await getStationConfigsByUser(uid)
+    console.log("results = " + JSON.stringify(results))
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
         result.controller_api_port = result.stations[i].controller_api_port
@@ -38,8 +40,8 @@ async function getConfigByUser(uid) {
         delete result.stations[i].tamper_zmove
 
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
-        result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
         result.siteid = 1
+        result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
     }
     console.log("\n\n\n"+JSON.stringify(result))
     return( result )
@@ -49,6 +51,16 @@ async function getAutomationSettings(stationid) {
     const results = await db.query(
         sql`
             SELECT * from automationsettings where stationid_station = ${stationid}
+            `)
+    console.log("\n\n\n"+JSON.stringify(results[0]))
+    return( results[0] )
+
+}
+
+async function getEvents(stationid, count) {
+    const results = await db.query(
+        sql`
+            SELECT * from events where stationid_station = ${stationid}
             `)
     console.log("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )
@@ -196,11 +208,17 @@ async function getStationConfigsByUser(uid) {
   `,
     );
     console.log("\n\n\n"+JSON.stringify(results))
-    for( let i = 0; i < results[0].edge_devices.length; i++ ) {
-        results[0].edge_devices[i].camera = { picamera: results[0].edge_devices[i].picamera, resolutionX: results[0].edge_devices[i].resolutionX, resolutionY: results[0].edge_devices[i].resolutionY}
-        delete results[0].edge_devices[i].resolutionX
-        delete results[0].edge_devices[i].resolutionY
-        delete results[0].edge_devices[i].picamera
+    if( results.length > 0 && typeof results[0].edge_devices !== 'undefined') {
+        for (let i = 0; i < results[0].edge_devices.length; i++) {
+            results[0].edge_devices[i].camera = {
+                picamera: results[0].edge_devices[i].picamera,
+                resolutionX: results[0].edge_devices[i].resolutionX,
+                resolutionY: results[0].edge_devices[i].resolutionY
+            }
+            delete results[0].edge_devices[i].resolutionX
+            delete results[0].edge_devices[i].resolutionY
+            delete results[0].edge_devices[i].picamera
+        }
     }
     return( results )
 }

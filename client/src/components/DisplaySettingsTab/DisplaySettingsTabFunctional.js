@@ -64,13 +64,13 @@ function RenderDisplaySettingsTab (props) {
     }
 
     function applyFontChangeGlobally() {
-
         props.onApplyFontChange(values.current_font)
         setResetButtonState(false);
         setApplyButtonState(false);
     }
 
-    log.trace("RenderServerSettingsTab with theme font set to " + local_theme.global.font.family);
+    log.info("RenderDisplaySettingsTab with theme font set to " + local_theme.global.font.family);
+    log.info("RenderDisplaySettingsTab with props.theme.global.font.family set to " + props.theme.global.font.family);
     let ret =
         <Grommet theme={local_theme}>
             <GoogleFontLoader
@@ -91,13 +91,13 @@ function RenderDisplaySettingsTab (props) {
                                               onChange={event => applyUnitChangeLocally(event.target.value)}/></TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={"table-cell"}>Language </TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
+                            <TableCell className={"table-cell"}>Language</TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell >Font Family</TableCell><TableCell className={"table-cell"}><Select options={fonts} value={values.current_font} onChange={({ option }) => applyFontChangeLocally(option)}/></TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell colSpan={'2'}><RenderFormActions applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} applyAction={applyFontChangeGlobally} resetAction={resetAction}/></TableCell>
+                            <TableCell colSpan={2}><RenderFormActions applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} applyAction={applyFontChangeGlobally} resetAction={resetAction}/></TableCell>
                         </TableRow>
                         </tbody>
                     </Table>

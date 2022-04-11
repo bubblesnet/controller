@@ -5,7 +5,7 @@ import stage_options from "../../stage_options.json"
 import log from "roarr";
 
 function RenderStageSelector (props) {
-
+/*
     function setCurrentStageValue(option) {
         let x = local_station;
         log.trace("current stage value " +x.current_stage + " new stage value " + option)
@@ -13,10 +13,18 @@ function RenderStageSelector (props) {
         props.setStateFromChild(JSON.parse(JSON.stringify(x)))
         setStation(x)
     }
+*/
+    function setSelectedStageValue(option) {
+        let x = local_station;
+        log.info("selected stage value " +x.current_stage + " new stage value " + option)
+        x.current_stage = option
+        props.setSelectedStageFromChild(option)
+        setStation(x)
+    }
 
     const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
-    console.log("rendering with value={"+local_station.current_stage+"}")
+    console.log("rendering with value={"+props.automation_setting.stage_name+"}")
     let ret = <>
             <Grid
                 justify={'center'}
@@ -37,8 +45,8 @@ function RenderStageSelector (props) {
                     Select Stage
                 </Box>
                 <Box justify={'center'} gridArea={'stage'} width={'small'} round={'xsmall'} >
-                    <Select options={stage_options} value={local_station.current_stage}
-                            onChange={({ option }) => setCurrentStageValue(option)} />
+                    <Select options={stage_options} value={props.automation_setting.stage_name}
+                            onChange={({ option }) => setSelectedStageValue(option)} />
                 </Box>
           </Grid>
    </>

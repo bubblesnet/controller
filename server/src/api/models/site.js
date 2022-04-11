@@ -23,6 +23,7 @@ async function getSiteById(siteid) {
                                               stage_name,
                                               current_lighting_schedule,
                                               light_on_start_hour,
+                                              hours_of_light,
                                               target_temperature,
                                               temperature_min,
                                               temperature_max,
@@ -97,7 +98,6 @@ async function getSiteById(siteid) {
             `
     );
     let site = { siteid: siteid, sitename: "blah", stations: results }
-    console.log("\n\n\n"+JSON.stringify(site))
     return( site )
 }
 

@@ -1,23 +1,24 @@
-import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react';
+import React, {useState, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
-import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
+// import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
+import { Button, Grid} from 'grommet'
 import Header from "./components/Header"
 
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
 import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
-import RenderEvents from "./components/EventsFunctional";
+import RenderEvents from "./components/EventsTab/EventsFunctional";
 import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
 import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
 import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
-import RenderSiteStationMenu from "./components/SiteStationMenu";
+// import RenderSiteStationMenu from "./components/SiteStationMenu";
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-import {Add,Clock,Help} from 'grommet-icons'
+// import {Add,Clock,Help} from 'grommet-icons'
 import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 
 import sprintf from 'sprintf-js';
@@ -126,6 +127,7 @@ function AuthenticatedApp (props) {
      * TABLE: user
      */
     const [userid] = useState(props.user.userid);
+
     /**
      * The site we're controlling.  This is the top level object in the hierarchy - site/station/device/module/sensor
      * Changing this causes a rerender
@@ -137,7 +139,10 @@ function AuthenticatedApp (props) {
      * The index of the station we're currently controlling.  Index into site.stations[]
      * TABLE: station
      */
-    const [currentStationIndex, setCurrentStationIndex] = useState(props.stationindex)
+    const [currentStationIndex] = useState(props.stationindex)
+
+    const [selected_stage, setSelectedStage] = useState(site.stations[currentStationIndex].current_stage)
+    const [selected_automation_settings,setSelectedAutomationSettings] = useState(props.automation_settings)
 
     /**
      * Local copy of all data (temp ...) - change and rerender
@@ -188,12 +193,12 @@ function AuthenticatedApp (props) {
     // END STATE VARIABLES
     //
     //
-
+/*
     function setStation(index) {
         log.debug("state: setCurrentStationIndex " + index)
         setCurrentStationIndex(index)
     }
-
+*/
     /**
      * ????
      * @type {React.MutableRefObject<*[]>}
@@ -219,9 +224,11 @@ function AuthenticatedApp (props) {
     /**
      * Respond to the "new station" button by opening the new station dialog
      */
+    /*
     const handleOpen = () => {
         setOpen(true);
     }
+*/
 
     /**
      * Respond to the OK button in the new station dialog
@@ -249,10 +256,14 @@ function AuthenticatedApp (props) {
      */
     const takeAPicture = () => {
         log.debug("button: takeAPicture")
-        let cmd = {
-            command: PICTURE_COMMAND,
+        for (let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++) {
+            let cmd = {
+                command: PICTURE_COMMAND,
+                userid: userid,
+                deviceid: site.stations[currentStationIndex].attached_devices[i].deviceid
+            }
+            sendJsonMessage(cmd)
         }
-        sendJsonMessage(cmd)
     }
 
 
@@ -377,7 +388,7 @@ function AuthenticatedApp (props) {
         reconnectInterval: 30000,   // Why 30 seconds?  Seems long. Trying 3.
         onOpen: () => {
             getDeviceStatus();
-            log.trace('ws: websocket opened');
+            log.info('ws: websocket opened');
         },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -394,10 +405,14 @@ function AuthenticatedApp (props) {
      * Respond to a test button by sending a random status request message over the websocket
      * @type {function(): void}
      */
-    const handleClickSendMessage = useCallback(() => {
-        getDeviceStatus()
-    });
+//    const handleClickSendMessage = useCallback(() => {
+//        getDeviceStatus()
+//    },[]);
 
+    const handleClickSendMessage = () => {
+        console.log("ws: handleClickSendMessage")
+        getDeviceStatus()
+    }
     //
     //
     //
@@ -406,11 +421,15 @@ function AuthenticatedApp (props) {
     //
     //
     function getDeviceStatus() {
-        log.trace("aq: getDeviceStatus()")
-        let cmd = {
-            command: STATUS_COMMAND,
+        log.info("aq: getDeviceStatus()")
+        for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
+            let cmd = {
+                command: STATUS_COMMAND,
+                userid: userid,
+                deviceid: site.stations[currentStationIndex].attached_devices[i].deviceid
+            }
+            sendJsonMessage(cmd)
         }
-        sendJsonMessage(cmd)
     }
 
     //
@@ -499,13 +518,23 @@ function AuthenticatedApp (props) {
     function setCurrentAutomationStageFromChild(current_stage) {
 //        console.log("setCurrentAutomationStageFromChild current_stage "+current_stage)
         let cmd = {
+            userid: userid,
             command: STAGE_COMMAND,
             stage_name: current_stage
         }
         changeStage(servers.api_server_host, servers.api_server_port, site.stations[currentStationIndex].stationid,site.stations[currentStationIndex].current_stage, current_stage )
         site.stations[currentStationIndex].current_stage = current_stage
-        sendJsonMessage(cmd)
+
+        for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
+            cmd.deviceid = site.stations[currentStationIndex].attached_devices[i].deviceid
+            sendJsonMessage(cmd)
+        }
         setSite(JSON.parse(JSON.stringify(site)))
+    }
+
+    function setSelectedAutomationStageFromChild(new_selected_stage) {
+        console.log("selected stage value AthenticateApp selected_stage from "+selected_stage+" to "+new_selected_stage)
+        setSelectedStage(new_selected_stage)
     }
 
     /**
@@ -516,15 +545,34 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     /// TODO this many API calls obviously not ideal - fix
-    function setAutomationSettingsFromChild(new_automation_settings) {
+    function setSelectedStageSettingsFromChild(new_automation_settings) {
         console.log("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
         let x = JSON.parse(JSON.stringify(site))
-        x.stations[currentStationIndex].automation_settings = new_automation_settings
+        alert(new_automation_settings.stage_name)
         saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
             site.stations[currentStationIndex].stationid,
             new_automation_settings.stage_name,
-            x.stations[currentStationIndex].automation_settings )
-            setSite(x)
+            new_automation_settings)
+        setSelectedAutomationSettings(new_automation_settings )
+    }
+
+    /**
+     * Function passed to child visual objects such that they can set the automation state of the current station.
+     *
+     * @param x ???
+     * @param switch_name   The name of the switch we're changing the state of
+     * @param on    True/false on/off
+     */
+    /// TODO this many API calls obviously not ideal - fix
+    function updateStageFromChild(stagename, new_automation_settings) {
+        console.log("updateStageFromChild "+JSON.stringify(new_automation_settings))
+        let x = JSON.parse(JSON.stringify(site))
+        x.stations[currentStationIndex].automation_settings = new_automation_settings
+//        saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
+//            site.stations[currentStationIndex].stationid,
+//            new_automation_settings.stage_name,
+//            x.stations[currentStationIndex].automation_settings )
+        setSite(x)
     }
 
 
@@ -551,11 +599,17 @@ function AuthenticatedApp (props) {
         setSwitchState(new_switch_state)
 
         let cmd = {
+            userid: userid,
             command: SWITCH_COMMAND,
             switch_name: sw_name,
             on: on
         }
-        sendJsonMessage(cmd)
+        console.log("sendJsonMessage ???? "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+        for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
+            cmd.deviceid = site.stations[currentStationIndex].attached_devices[i].deviceid
+            console.log("sendJsonMessage "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+            sendJsonMessage(cmd)
+        }
     }
 
     const applyMapChange = (value) => {
@@ -671,7 +725,8 @@ function AuthenticatedApp (props) {
                 </Nav>
             </Sidebar>
  */
-    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
+//    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
+    console.log("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
     return <div className="App">
         <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
@@ -727,6 +782,7 @@ function AuthenticatedApp (props) {
                                       switch_state={switch_state}
                                       sensor_readings = {sensor_readings}
                                       setStateFromChild={setSwitchStateFromChild}
+                                      setCurrentStage={setCurrentAutomationStageFromChild}
                                       display_settings={props.display_settings}
                                       because={because}
                     />
@@ -777,15 +833,20 @@ function AuthenticatedApp (props) {
                                     theme={bubbles_theme}
                                     station={site.stations[currentStationIndex]}
                                     display_settings={props.display_settings}
-                                    setStageFromChild={setCurrentAutomationStageFromChild}
-                                    setAutomationSettingsFromChild={setAutomationSettingsFromChild}
+                                    updateStageFromChild={updateStageFromChild}
+                                    setSelectedStageFromChild={setSelectedAutomationStageFromChild}
+                                    setSelectedStageSettingsFromChild={setSelectedStageSettingsFromChild}
+                                    automation_settings={selected_automation_settings}
+                                    selected_stage={selected_stage}
                     />
                 </Tab>
                 <Tab title="Events">
                     <RenderEvents
                         nodeEnv={nodeEnv}
+                        apiHost={servers.api_server_host}
                         apiPort={apiPort}
                         theme={bubbles_theme}
+                        station={site.stations[currentStationIndex]}
                     />
                 </Tab>
                 <Tab title="Display Settings">

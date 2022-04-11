@@ -167,6 +167,7 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
+            console.log("selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
             setSite(JSON.parse(JSON.stringify(z)))
         }
@@ -200,7 +201,7 @@ function App(props) {
                                                       initial_sensor_readings = {initial_sensor_readings}
                                                       nodeEnv={process.env.REACT_APP_NODE_ENV}
                                                       site={site}
-                                                      automation_settings={site.automation_settings}
+                                                      automation_settings={site.stations[selectedStationIndex].automation_settings}
                                                       display_settings={token}
                                                       user={token}
                                                       logout={doLogout}

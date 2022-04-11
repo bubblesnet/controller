@@ -22,6 +22,9 @@ function RenderCameraTab(props) {
     let rowcount = 0
 //    console.log("props.station.attached_devices = " + JSON.stringify(props.station.attached_devices))
     for( let i = 0; i < props.station.attached_devices.length; i++ ) {
+        if( props.station.attached_devices[i].picamera === false ) {
+            continue
+        }
         let picture_url = 'http://' + servers.api_server_host + ':' + servers.api_server_port +
             '/' + userid + '_' + props.station.attached_devices[i].deviceid + '.jpg?' + props.lastpicture
 

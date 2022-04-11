@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet,Box, Grid} from 'grommet'
+import {Grommet, Box, Grid, CheckBox} from 'grommet'
 import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderWaterTemperatureSelector from './WaterTemperatureSelectorFunctional'
@@ -12,24 +12,55 @@ import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
 import log from "roarr";
+import {getStage,getAutomationSetting, getSite} from "../../api/utils";
+import util from "../../util";
 
 function RenderStageTab (props) {
 
-    log.trace("RenderStageTab props.station.automation_settings = " + JSON.stringify(props.station.automation_settings))
+    log.trace("RenderStageTab props.automation_setting = " + JSON.stringify(getAutomationSetting(props.automation_settings, props.selected_stage)))
 
-    function setAutomationSettingsFromChild(x) {
+    let [checked, setChecked] = useState(false);
+    let [selected_stage, setSelectedStage] = useState(props.selected_stage);
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log("selected StageTab stage value fetching")
+            let z = await getStage(servers.api_server_host, servers.api_server_port, props.station.stationid, selected_stage)
+            console.log("setting automation setting after fetch to " + JSON.stringify(z))
+            setAutomationSetting(JSON.parse(JSON.stringify(z)))
+        }
+        fetchData();
+    },[selected_stage]);    // eslint-disable-line react-hooks/exhaustive-deps
+    // ONLY CALL ON MOUNT - empty array arg causes this
+
+    function setAutomationSettingFromChild(x) {
         setapplyButtonState(true)
         setresetButtonState(true)
-//        log.info("setAutomationSettingsFromChild "+JSON.stringify(x))
-        setStation(JSON.parse(JSON.stringify(x)))
+        log.info("setAutomationSettingFromChild "+JSON.stringify(x))
+        setAutomationSetting(JSON.parse(JSON.stringify(x)))
     }
+
+//    function setSelectedStage(value) {
+//        log.info("selected stage value stageTab new stage value " + value)
+//    }
 
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
         log.trace("StageTab automation_settings " + station.current_stage)
-        props.setStageFromChild(station.current_stage);
-        props.setAutomationSettingsFromChild(station.automation_settings)
+        if( checked ) {
+            props.setStageFromChild(station.current_stage);
+            props.setAutomationSettingsFromChild(station.automation_settings)
+        }
+        props.updateStageFromChild(station.current_stage,station.automation_settings)
+    }
+
+    function setCurrent( e ) {
+        console.log("e.getchecked = " + e.target.checked)
+        setapplyButtonState(true)
+        setresetButtonState(true)
+        setChecked(e.target.checked)
     }
 
     function resetAction() {
@@ -41,11 +72,12 @@ function RenderStageTab (props) {
     }
 
     let [station, setStation] = useState(props.station); //
+    let [automation_setting, setAutomationSetting] = useState(getAutomationSetting(props.automation_settings, selected_stage))
     let [applyButtonState, setapplyButtonState] = useState(false); //
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState] = useState(true ); //
 
-    console.log("rendering with stage={"+station.current_stage+"}")
+    console.log("rendering with automation_setting="+JSON.stringify(automation_setting))
     let ret =
             <Grommet theme={props.theme}>
                 <GoogleFontLoader
@@ -71,40 +103,45 @@ function RenderStageTab (props) {
                             { name: 'actions', start: [0, 5], end: [0, 5] },
                         ]}
                         columns={['large']}
-                        rows={['60px','xsmall','130px','130px','130px','130px']}
+                        rows={['xsmall','xsmall','130px','130px','130px','130px']}
                         gap={"xxsmall"}
                     >
                         <Box gridArea={'stage'} >
+                            <table><tbody><tr><td>
                             <RenderStageSelector station={station}
                                                  display_settings={props.display_settings}
-                                                 settings={station}
-                                                 setStateFromChild={setAutomationSettingsFromChild}/>
-                        </Box>
+                                                 automation_setting={automation_setting}
+                                                 setSelectedStageFromChild={setSelectedStage}
+                                                 selectedStage={automation_setting.stage_name} />
+                            </td></tr></tbody></table>
+                            </Box>
                         <Box gridArea={'light'}  >
                             <RenderLightSelector station={station}
                                                  display_settings={props.display_settings}
                                                  settings={station}
-                                                 setStateFromChild={setAutomationSettingsFromChild} />
+                                                 automation_setting={automation_setting}
+                                                 setAutomationSettingFromChild={setAutomationSettingFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
                             <RenderTemperatureSelector station={station}
                                                        display_settings={props.display_settings}
-                                                       settings={station}
+                                                       automation_setting={automation_setting}
                                                        label={"Target Temperature"}
-                                                       setStateFromChild={setAutomationSettingsFromChild}/>
+                                                       setStateFromChild={setAutomationSettingFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
                             <RenderHumiditySelector station={station}
                                                     display_settings={props.display_settings}
-                                                    settings={station} label={"Target Humidity"}
-                                                    setStateFromChild={setAutomationSettingsFromChild}/>
+                                                    automation_setting={automation_setting}
+                                                    label={"Target Humidity"}
+                                                    setAutomationSettingFromChild={setAutomationSettingFromChild}/>
                         </Box>
                         <Box gridArea={'watertemp'} >
                             <RenderWaterTemperatureSelector station={station}
                                                             display_settings={props.display_settings}
-                                                            settings={station}
+                                                            automation_setting={automation_setting}
                                                             label={"Water Temperature"}
-                                                            setStateFromChild={setAutomationSettingsFromChild}/>
+                                                            setAutomationSettingFromChild={setAutomationSettingFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
                             <RenderFormActions settings={station}

@@ -8,21 +8,16 @@ import '../../Palette.css';
 
 function RenderWaterTemperatureSelector(props) {
     function setValue(value) {
-        let x = local_station;
-        x.automation_settings.target_temperature=value;
-        props.setStateFromChild(local_station)
-        setStation(x)
+        let x = props.automation_setting;
+        x.target_temperature=value;
+        props.setAutomationSettingFromChild(x)
     }
-
-    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-
-
     const onChange = event => setValue(event.target.value);
     const units = props.display_settings.temperature_units;
-    const min = props.station.automation_settings.temperature_min;
-    const max = props.station.automation_settings.temperature_max;
+    const min = props.automation_setting.temperature_min;
+    const max = props.automation_setting.temperature_max;
 
-    const target_temperature = local_station.automation_settings.target_temperature
+    const target_temperature = props.automation_setting.target_temperature
 
     return (
             <Grid

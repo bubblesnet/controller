@@ -35,7 +35,7 @@ function RenderTextStatus (props) {
                                              />
             </Box>
             <Box gridArea={'state'} >
-                <RenderStateTextStatus station_settings={props.station}
+                <RenderStateTextStatus station={props.station}
                                        sensor_readings={props.sensor_readings}
                                        display_settings={props.display_settings}
                                        automation_settings={props.automation_settings}

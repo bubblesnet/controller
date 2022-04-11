@@ -228,6 +228,8 @@ function RenderControlTab(props) {
                                        station={props.station}
                                        switch_state={props.switch_state}
                                        switchControl={switchControl}
+                                       automation_setting={props.station}
+                                       setCurrentStage={props.setCurrentStage}
                     />
                 </div>
             </div>

@@ -18,6 +18,33 @@ export async function getContainerNames(host, port) {
     })
 }
 
+export function getAutomationSetting( automation_settings, stage_name ) {
+    for( let i = 0; i < automation_settings.length; i++ ) {
+        if( automation_settings[i].stage_name === stage_name ) {
+            return( automation_settings[i])
+        }
+    }
+    return({})
+}
+
+export async function getStage(host, port, stationid, stage) {
+
+    return new Promise( async (resolve, reject) => {
+        let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+stage
+        log.info("getStage calling out to api "+url )
+        const response = await fetch(url);
+        if(response.ok) {
+            let x = await response.json();
+            log.trace("getStage got stage " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+
 export async function getModuleTypes(host, port) {
     log.trace("getModuleTypes calling out to api")
 
@@ -58,6 +85,27 @@ export async function getSite (host, port, siteid) {
             resolve(x)
         } else {
             log.trace("getSite error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+// http://192.168.21.237:3003/api/station/1/events/
+// http://192.168.21.237:3003/api/station/1/events
+export async function getLastNEvents (host, port, stationid, count) {
+    log.trace("getLastNEvents calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/events/'
+        console.log(url)
+        const response = await fetch(url);
+        console.log("returned response = " + JSON.stringify(response))
+        if(response.ok) {
+            let x = await response.json();
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })

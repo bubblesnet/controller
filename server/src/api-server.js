@@ -29,6 +29,7 @@ const auth_routes = require('./api/routes/authcontroller_routes').router;
 const station_routes = require('./api/routes/station_routes').router;
 const site_routes = require('./api/routes/site_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
+const event_routes = require('./api/routes/event_routes').router;
 
 logger.info("starting router")
 const router = express.Router();
@@ -85,6 +86,7 @@ apiServer.use("/api/station", station_routes);
 apiServer.use("/api/site", site_routes);
 apiServer.use("/api/module", module_routes);
 apiServer.use("/api/automation", automation_routes);
+apiServer.use("/api/events", event_routes);
 
 // catch 404 and forward to error handler
 apiServer.use(function (req, res, next) {

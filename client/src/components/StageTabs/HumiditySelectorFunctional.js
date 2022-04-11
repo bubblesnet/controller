@@ -9,21 +9,18 @@ import log from "roarr";
 
 function RenderHumiditySelector(props) {
     function setValue(value) {
-        let x = JSON.parse(JSON.stringify(local_station));
+        let x = JSON.parse(JSON.stringify(props.automation_setting));
         log.trace("RenderHumiditySelector = " + JSON.stringify(x))
-        x.automation_settings.target_humidity = value
-        props.setStateFromChild(x)
-        setStation(JSON.parse(JSON.stringify(x)))
+        x.target_humidity = value
+        props.setAutomationSettingFromChild(x)
     }
 
-    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-
     const onChange = event => setValue(event.target.value);
-    const min = props.station.automation_settings.humidity_min;
-    const max = props.station.automation_settings.humidity_max;
+    const min = props.automation_setting.humidity_min;
+    const max = props.automation_setting.humidity_max;
     const units = props.display_settings.humidity_units
-    const target_humidity = local_station.automation_settings.target_humidity
-    log.trace("RenderHumiditySelector 1 = " + JSON.stringify(local_station))
+    const target_humidity = props.automation_setting.target_humidity
+    log.trace("RenderHumiditySelector 1 = " + JSON.stringify(props.automation_setting))
 
     return (
             <Grid

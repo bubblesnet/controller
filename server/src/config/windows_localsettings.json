@@ -79,6 +79,7 @@
       "24 off"
     ],
     "light_on_start_hour": 10,
+    "hours_of_light": 12,
     "target_temperature": 75,
     "temperature_min": 60,
     "temperature_max": 90,

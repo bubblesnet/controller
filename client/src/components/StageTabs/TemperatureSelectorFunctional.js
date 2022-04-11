@@ -4,26 +4,25 @@ import { Grid,Image, Box, RangeInput } from 'grommet';
 import thermometer from '../../images/thermometer-icon.png'
 import './stagesTab.css';
 import '../../Palette.css';
+import {getAutomationSetting} from "../../api/utils";
 
 
 function RenderTemperatureSelector(props) {
     function setValue(value) {
         console.log("setValue " + value)
-        let x = local_station;
-        x.automation_settings.target_temperature=value;
-        props.setStateFromChild(x)
-        setStation(x)
+//        let x = local_station;
+//        x.automation_settings.target_temperature=value;
+//        props.setStateFromChild(x)
+//        setStation(x)
     }
 
-    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-
-
+    console.log("TemperatureSelector automation_setting = " + JSON.stringify(props.automation_setting))
     const onChange = event => setValue(event.target.value);
     const units = props.display_settings.temperature_units;
-    const min = props.station.automation_settings.temperature_min;
-    const max = props.station.automation_settings.temperature_max;
+    const min = props.automation_setting.temperature_min;
+    const max = props.automation_setting.temperature_max;
 
-    const target_temperature = local_station.automation_settings.target_temperature
+    const target_temperature = props.automation_setting.target_temperature
 
     return (
             <Grid

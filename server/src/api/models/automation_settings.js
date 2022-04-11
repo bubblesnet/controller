@@ -9,7 +9,7 @@ const pool = server_db.getPool()
 async function changeStage(stationid, oldstage, newstage) {
     //    console.log(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
-        await pool.query("update station set current_stage = $1 where stationid = $2 RETURNING *",
+        await pool.query("update station SET current_stage = $1 where stationid = $2 RETURNING *",
             [newstage,stationid], (error, results) => {
                 if (error) {
                     console.log("changeStage error " + error)
@@ -22,31 +22,34 @@ async function changeStage(stationid, oldstage, newstage) {
     })
 }
 
-async function updateAutomationSettings(station_id, stage_name, new_automation_settings) {
-    console.log("updateAutomationSettings ("+station_id+") (" + stage_name + ") " + JSON.stringify(new_automation_settings))
+async function updateStageSettings(station_id, stage_name, new_automation_settings) {
 
     return new Promise(async function(resolve, reject) {
-        await pool.query("update automationsettings set " +
-            "stage_name = $1, " +
+        let query = "UPDATE automationsettings "+
+           " SET stage_name = $1, "+
             "current_lighting_schedule = $2,"+
             "light_on_start_hour = $3,"+
-            "target_temperature = $4,"+
-            "temperature_min=$5,"+
-            "temperature_max=$6,"+
-            "target_water_temperature = $7,"+
-            "water_temperature_min=$8,"+
-            "water_temperature_max=$9,"+
-            "humidity_min=$10,"+
-            "humidity_max=$11,"+
-            "target_humidity=$12,"+
-            "humidity_target_range_low=$13,"+
-            "humidity_target_range_high=$14,"+
-            "current_light_type=$15 " +
-            "where stationid_Station = $16 and stage_name = $17 RETURNING *",
+            "hours_of_light = $4,"+
+            "target_temperature = $5,"+
+            "temperature_min=$6,"+
+            "temperature_max=$7,"+
+            "target_water_temperature = $8,"+
+            "water_temperature_min=$9,"+
+            "water_temperature_max=$10,"+
+            "humidity_min=$11,"+
+            "humidity_max=$12,"+
+            "target_humidity=$13,"+
+            "humidity_target_range_low=$14,"+
+            "humidity_target_range_high=$15,"+
+            "current_light_type=$16"+
+            "where stationid_Station = $17 and stage_name = $18 RETURNING *"
+
+        await pool.query( query,
             [
                 new_automation_settings.stage_name,
                 new_automation_settings.current_lighting_schedule,
                 new_automation_settings.light_on_start_hour,
+                new_automation_settings.hours_of_light,
                 new_automation_settings.target_temperature,
                 new_automation_settings.temperature_min,
                 new_automation_settings.temperature_max,
@@ -73,5 +76,5 @@ async function updateAutomationSettings(station_id, stage_name, new_automation_s
 
 module.exports = {
     changeStage,
-    updateAutomationSettings
+    updateStageSettings
 }

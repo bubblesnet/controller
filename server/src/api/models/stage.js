@@ -1,3 +1,6 @@
+const db = require("./database");
+const {sql} = require("@databases/pg");
+const device = require("./device");
 
 
 stage_schedules =  [
@@ -66,10 +69,20 @@ stage_schedules =  [
     }
 ];
 
+async function getAutomationStage( stationid, stage) {
+        console.log("getAutomationStage "+stationid+"/"+stage)
+        return new Promise(async function (resolve, reject) {
+            const results = await db.query(sql`SELECT * from automationsettings where stationid_Station=${stationid} and stage_name=${stage}`);
+            console.log("getAutomationStage returning "+JSON.stringify(results))
+            resolve( results[0] )
+        })
+}
+
 function getStageSchedules(stationid) {
     return stage_schedules
 }
 
 module.exports = {
     getStageSchedules,
+    getAutomationStage
 }

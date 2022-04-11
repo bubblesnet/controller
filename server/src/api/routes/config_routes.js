@@ -213,6 +213,7 @@ async function getDeviceConfig(req,res,next) {
 //    let x = await station.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
     let x = await station.getConfigByUser(req.params.userid).catch((err) =>
     { console.log("caught err "+err)})
+    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
 
@@ -236,7 +237,7 @@ router.get("/site/:userid/:deviceid", function (req, res, next) {
 
 function getModules( req, res, next ) {
     // read config from file
-    let filepath = "src" + "/" + "./module_types.json"
+    let filepath = "jsondata/module_types.json"
     res.json(util.readJsonFile(filepath));
 }
 
