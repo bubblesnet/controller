@@ -12,7 +12,7 @@ import log from 'roarr';
 
 
 function RenderStationSettingsTab (props) {
-    log.info("RenderStationSettingsTab props display_settings = "+props.display_settings)
+    log.trace("RenderStationSettingsTab props display_settings = "+props.display_settings)
     let [local_station, setStation] = useState(props.station);
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state] = useState(true)
@@ -39,14 +39,14 @@ function RenderStationSettingsTab (props) {
     }
 
     function setEnclosureType(s) {
-        log.info("setEnclosureType to "+JSON.stringify(s))
+        log.trace("setEnclosureType to "+JSON.stringify(s))
         let x = JSON.parse(JSON.stringify(props.station))
         x.enclosure_type = s
         changeState(x)
     }
 
     function setTubDepth(s) {
-        log.info("setTubDepth to "+JSON.stringify(s))
+        log.trace("setTubDepth to "+JSON.stringify(s))
         let x = JSON.parse(JSON.stringify(local_station))
         if( s === '' ) {
             x.tub_depth = ''
@@ -57,7 +57,7 @@ function RenderStationSettingsTab (props) {
     }
 
     function setTubVolume(s) {
-        log.info("setTubVolume to "+JSON.stringify(s))
+        log.trace("setTubVolume to "+JSON.stringify(s))
         let x = JSON.parse(JSON.stringify(local_station))
         if( s === '' ) {
             x.tub_volume = ''
@@ -222,7 +222,7 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
 
-    log.info("RenderStationSettingsTab station_settings rendering with props.station.humidifier set to "+ props.station.humidifier)
+    log.trace("RenderStationSettingsTab station_settings rendering with props.station.humidifier set to "+ props.station.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader

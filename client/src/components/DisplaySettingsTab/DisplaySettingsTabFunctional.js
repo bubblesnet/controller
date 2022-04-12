@@ -2,13 +2,12 @@ import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, Table, TableRow, TableCell, Select, RadioButtonGroup} from 'grommet'
+import {Grommet, Table, TableRow, TableCell, Select} from 'grommet'
 import './displaySettingsTab.css'
 import RenderFormActions from "../FormActions";
 import fontlist from "./fontlist.json"
 
 import GoogleFontLoader from "react-google-font-loader";
-import {FormattedMessage} from 'react-intl';
 import log from "roarr";
 
 
@@ -41,12 +40,6 @@ function RenderDisplaySettingsTab (props) {
         setApplyButtonState(b);
     }
 
-    function applyUnitChangeLocally(value) {
-        x = JSON.parse(JSON.stringify(values))
-        x.units = value
-        applyLocally(x,true)
-    }
-
     function applyLanguageChangeLocally(value) {
         x = values
         values.language = value
@@ -72,7 +65,7 @@ function RenderDisplaySettingsTab (props) {
     log.info("RenderDisplaySettingsTab with theme font set to " + local_theme.global.font.family);
     log.info("RenderDisplaySettingsTab with props.theme.global.font.family set to " + props.theme.global.font.family);
     let ret =
-        <Grommet theme={local_theme}>
+        <Grommet theme={props.theme}>
             <GoogleFontLoader
                 fonts={[
                     {
@@ -83,21 +76,14 @@ function RenderDisplaySettingsTab (props) {
             <div className="global_container_">
                     <Table id="settings-tab" >
                         <tbody>
-                        <TableRow>
-                            <TableCell className={"table-cell"}>
-                                <FormattedMessage id={"measurement_units"}
-                                                  defaultMessage={"Measurement Units"} /> </TableCell><TableCell className={"table-cell"}>
-                            <RadioButtonGroup name="units" options={["IMPERIAL","METRIC"]} value={values.units}
-                                              onChange={event => applyUnitChangeLocally(event.target.value)}/></TableCell>
-                        </TableRow>
-                        <TableRow>
+                         <TableRow>
                             <TableCell className={"table-cell"}>Language</TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell >Font Family</TableCell><TableCell className={"table-cell"}><Select options={fonts} value={values.current_font} onChange={({ option }) => applyFontChangeLocally(option)}/></TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell colSpan={2}><RenderFormActions applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} applyAction={applyFontChangeGlobally} resetAction={resetAction}/></TableCell>
+                            <TableCell colSpan={2}><RenderFormActions applyButtonState={applyButtonState} resetButtonState={resetButtonState} defaultsButtonState={defaultsButtonState} applyAction={applyFontChangeGlobally} defaultsAction={resetAction} resetAction={resetAction}/></TableCell>
                         </TableRow>
                         </tbody>
                     </Table>

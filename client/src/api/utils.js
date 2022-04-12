@@ -31,7 +31,7 @@ export async function getStage(host, port, stationid, stage) {
 
     return new Promise( async (resolve, reject) => {
         let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+stage
-        log.info("getStage calling out to api "+url )
+        log.trace("getStage calling out to api "+url )
         const response = await fetch(url);
         if(response.ok) {
             let x = await response.json();
@@ -96,9 +96,9 @@ export async function getLastNEvents (host, port, stationid, count) {
 
     return new Promise( async (resolve, reject) => {
         let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/events/'
-        console.log(url)
+        log.trace(url)
         const response = await fetch(url);
-        console.log("returned response = " + JSON.stringify(response))
+        log.trace("returned response = " + JSON.stringify(response))
         if(response.ok) {
             let x = await response.json();
 //            log.trace(JSON.stringify(x))
@@ -227,7 +227,7 @@ export const saveAutomationSettings = ( host, port, userid, stationid, stage_nam
         });
         if(response.ok) {
             let x = await response.json();
-            log.info(JSON.stringify(x))
+            log.trace(JSON.stringify(x))
 //            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {

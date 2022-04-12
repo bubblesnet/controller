@@ -34,12 +34,12 @@ function RenderSwitchPanel (props) {
     }
 
     function setSelectedStage(x) {
-        console.log("setSelectedStage " + JSON.stringify(x))
+        log.trace("setSelectedStage " + JSON.stringify(x))
         props.setCurrentStage(x)
     }
 
     function toggleAutomatic(e) {
-        log.info("toggleAutomatic ")
+        log.trace("toggleAutomatic ")
         goodbeep()
         props.switchControl.automaticControl.toggle(e)
     }

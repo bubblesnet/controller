@@ -29,10 +29,10 @@ function RenderDeviceMapTab (props) {
     useEffect(() => {
         const fetchData = async () => {
             let x = await getContainerNames(apiHost, apiPort)
-            console.log("containers " + JSON.stringify(container_names))
+            log.trace("containers " + JSON.stringify(container_names))
             setContainerNames(x.container_names)
             x = await getModuleTypes(apiHost, apiPort)
-            console.log("modules " + JSON.stringify(module_types))
+            log.trace("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
         fetchData();

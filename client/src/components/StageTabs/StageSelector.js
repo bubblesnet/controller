@@ -16,7 +16,7 @@ function RenderStageSelector (props) {
 */
     function setSelectedStageValue(option) {
         let x = local_station;
-        log.info("selected stage value " +x.current_stage + " new stage value " + option)
+        log.trace("selected stage value " +x.current_stage + " new stage value " + option)
         x.current_stage = option
         props.setSelectedStageFromChild(option)
         setStation(x)
@@ -24,7 +24,7 @@ function RenderStageSelector (props) {
 
     const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
-    console.log("rendering with value={"+props.automation_setting.stage_name+"}")
+    log.trace("rendering with value={"+props.automation_setting.stage_name+"}")
     let ret = <>
             <Grid
                 justify={'center'}

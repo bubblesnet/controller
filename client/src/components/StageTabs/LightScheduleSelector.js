@@ -3,6 +3,7 @@ import React, {useState} from "react";
 
 import lighting_schedule_options from "../../options_lighting_schedule.json"
 import light_type_options from "../../options_light_type.json"
+import log from "roarr";
 
 function RenderLightSelector (props) {
 
@@ -54,7 +55,7 @@ function RenderLightSelector (props) {
     const changeLightSchedule = event => setLightScheduleValue(event.target.value);
     const changeLightOnHour = event => setLightOnHourValue(event.target.value);
 
-    console.log("automation_setting = " + JSON.stringify(props.automation_setting))
+    log.trace("automation_setting = " + JSON.stringify(props.automation_setting))
     let ret = <>
         <Grid
             round={'xxsmall'}

@@ -26,13 +26,13 @@ function RenderOverview (props) {
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     */
     useEffect(() => {
-        console.log("useEffect getLastN")
+        log.trace("useEffect getLastN")
         const fetchData = async () => {
-            console.log("fetchData")
+            log.trace("fetchData")
 //            let x = await getSite(apiHost, apiPort, 1)
 
             let x = await getLastNEvents(apiHost, apiPort, station.stationid, 100)
-            console.log("events " + JSON.stringify(x))
+            log.trace("events " + JSON.stringify(x))
             setEvents(x)
         }
         fetchData();
@@ -47,7 +47,7 @@ function RenderOverview (props) {
         let value = row.stringvalue
         if( row.type !== 'measurement') {
             let x = JSON.parse(row.rawjson)
-            console.log("eventrow rawjson " + JSON.stringify(x))
+            log.trace("eventrow rawjson " + JSON.stringify(x))
             name = x.switch_name
             value = (x.on === true) ? "on":"off"
         }

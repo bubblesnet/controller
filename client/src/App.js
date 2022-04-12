@@ -167,7 +167,7 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("selected stage value fetching")
+            log.trace("selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
             setSite(JSON.parse(JSON.stringify(z)))
         }

@@ -5,18 +5,19 @@ import thermometer from '../../images/thermometer-icon.png'
 import './stagesTab.css';
 import '../../Palette.css';
 import {getAutomationSetting} from "../../api/utils";
+import log from "roarr";
 
 
 function RenderTemperatureSelector(props) {
     function setValue(value) {
-        console.log("setValue " + value)
+        log.trace("setValue " + value)
 //        let x = local_station;
 //        x.automation_settings.target_temperature=value;
 //        props.setStateFromChild(x)
 //        setStation(x)
     }
 
-    console.log("TemperatureSelector automation_setting = " + JSON.stringify(props.automation_setting))
+    log.trace("TemperatureSelector automation_setting = " + JSON.stringify(props.automation_setting))
     const onChange = event => setValue(event.target.value);
     const units = props.display_settings.temperature_units;
     const min = props.automation_setting.temperature_min;

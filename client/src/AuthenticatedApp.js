@@ -243,7 +243,7 @@ function AuthenticatedApp (props) {
 //        alert("Adding station named " + new_station_name )
         setOpen(false);
         let x = await addStation(servers.api_server_host, servers.api_server_port, site.siteid, new_station_name)
-        console.log(`addStation returns ${x}`)
+        log.trace(`addStation returns ${x}`)
     }
 
     const [new_station_name, setNewStationName] = useState("");
@@ -321,12 +321,12 @@ function AuthenticatedApp (props) {
                     sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
                 }
                 if( typeof sensor_readings === 'undefined') {
-                    console.log("WTF")
+                    log.error("WTF")
                 }
                 sensor_readings[msg.measurement_name] = msg.value
                 sensor_readings[msg.measurement_name + "_direction"] = msg.direction
                 sensor_readings[msg.measurement_name + "_units"] = msg.units
-//                log.debug("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+                log.trace("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
             }
         }
 
@@ -388,7 +388,7 @@ function AuthenticatedApp (props) {
         reconnectInterval: 30000,   // Why 30 seconds?  Seems long. Trying 3.
         onOpen: () => {
             getDeviceStatus();
-            log.info('ws: websocket opened');
+            log.trace('ws: websocket opened');
         },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -410,7 +410,7 @@ function AuthenticatedApp (props) {
 //    },[]);
 
     const handleClickSendMessage = () => {
-        console.log("ws: handleClickSendMessage")
+        log.trace("ws: handleClickSendMessage")
         getDeviceStatus()
     }
     //
@@ -421,7 +421,7 @@ function AuthenticatedApp (props) {
     //
     //
     function getDeviceStatus() {
-        log.info("aq: getDeviceStatus()")
+        log.trace("aq: getDeviceStatus()")
         for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
             let cmd = {
                 command: STATUS_COMMAND,
@@ -447,7 +447,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function toggleSwitchTo(switch_name, on) {
-        log.info("button: toggleSwitchTo " + switch_name + " to " + on)
+        log.trace("button: toggleSwitchTo " + switch_name + " to " + on)
         if (typeof (switch_name) === 'undefined') {
             return
         }
@@ -511,9 +511,7 @@ function AuthenticatedApp (props) {
     /**
      * Function passed to child visual objects such that they can set the automation state of the current station.
      *
-     * @param x ???
-     * @param switch_name   The name of the switch we're changing the state of
-     * @param on    True/false on/off
+     * @param current_stage   The name of the stage we're changing to
      */
     function setCurrentAutomationStageFromChild(current_stage) {
 //        console.log("setCurrentAutomationStageFromChild current_stage "+current_stage)
@@ -533,22 +531,19 @@ function AuthenticatedApp (props) {
     }
 
     function setSelectedAutomationStageFromChild(new_selected_stage) {
-        console.log("selected stage value AthenticateApp selected_stage from "+selected_stage+" to "+new_selected_stage)
+        log.trace("selected stage value AthenticateApp selected_stage from "+selected_stage+" to "+new_selected_stage)
         setSelectedStage(new_selected_stage)
     }
 
     /**
      * Function passed to child visual objects such that they can set the automation state of the current station.
      *
-     * @param x ???
-     * @param switch_name   The name of the switch we're changing the state of
-     * @param on    True/false on/off
+     * @param new_automation_settings   An entire automation_settings to replace the current one
+     *
      */
     /// TODO this many API calls obviously not ideal - fix
     function setSelectedStageSettingsFromChild(new_automation_settings) {
-        console.log("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
-        let x = JSON.parse(JSON.stringify(site))
-        alert(new_automation_settings.stage_name)
+        log.trace("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
         saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
             site.stations[currentStationIndex].stationid,
             new_automation_settings.stage_name,
@@ -559,19 +554,14 @@ function AuthenticatedApp (props) {
     /**
      * Function passed to child visual objects such that they can set the automation state of the current station.
      *
-     * @param x ???
-     * @param switch_name   The name of the switch we're changing the state of
-     * @param on    True/false on/off
+     * @param stagename The name of the stage we're updating
+     * @param new_automation_settings   The entire stage
      */
     /// TODO this many API calls obviously not ideal - fix
     function updateStageFromChild(stagename, new_automation_settings) {
-        console.log("updateStageFromChild "+JSON.stringify(new_automation_settings))
+        log.trace("updateStageFromChild "+JSON.stringify(new_automation_settings))
         let x = JSON.parse(JSON.stringify(site))
         x.stations[currentStationIndex].automation_settings = new_automation_settings
-//        saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
-//            site.stations[currentStationIndex].stationid,
-//            new_automation_settings.stage_name,
-//            x.stations[currentStationIndex].automation_settings )
         setSite(x)
     }
 
@@ -584,7 +574,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function setSwitchStateFromChild(x, switch_name, on) {
-        log.info("setSwitchStateFromChild "+switch_name +","+on)
+        log.trace("setSwitchStateFromChild "+switch_name +","+on)
         let new_switch_state = JSON.parse(JSON.stringify(switch_state))
         let sw_name = switch_name
         if (switch_name === "growLight") {
@@ -604,10 +594,10 @@ function AuthenticatedApp (props) {
             switch_name: sw_name,
             on: on
         }
-        console.log("sendJsonMessage ???? "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+        log.trace("sendJsonMessage ???? "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
         for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
             cmd.deviceid = site.stations[currentStationIndex].attached_devices[i].deviceid
-            console.log("sendJsonMessage "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+            log.trace("sendJsonMessage "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
             sendJsonMessage(cmd)
         }
     }
@@ -624,7 +614,7 @@ function AuthenticatedApp (props) {
      */
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-        log.info("button: AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value)
+        log.trace("button: AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value)
         x.global.font.family = current_font;
         log.trace("button: AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
@@ -645,7 +635,7 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         const fetchData = async () => {
             let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
-            log.info("xxxuseEffect stationid = " + z.stations[0].stationid)
+            log.trace("useEffect stationid = " + z.stations[0].stationid)
             z.stations[0].automation_settings = z.stations[0].automation_settings[0] // returned as array from server
 
             setSite(JSON.parse(JSON.stringify(z)))
@@ -661,7 +651,7 @@ function AuthenticatedApp (props) {
      * @param value The value of NODE_ENV
      */
     let setEnvironment = (value) => {
-        log.info("button: AuthenticatedApp.setEnvironment(" + value + ")")
+        log.trace("button: AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
         servers = util.get_server_ports_for_environment(props.nodeEnv)
         log.trace("button: setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
@@ -726,7 +716,7 @@ function AuthenticatedApp (props) {
             </Sidebar>
  */
 //    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
-    console.log("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
+    log.trace("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
     return <div className="App">
         <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
@@ -857,14 +847,6 @@ function AuthenticatedApp (props) {
                                            display_settings={props.display_settings}
                                            onApplyFontChange={applyFontChange}
                                            onLocalFontChange={localFontChange}
-                    />
-                </Tab>
-                <Tab title="Server Settings">
-                    <RenderSetup nodeEnv={nodeEnv}
-                                 apiPort={apiPort}
-                                 theme={bubbles_theme}
-                                 station={site.stations[currentStationIndex]}
-                                 onFontChange={applyFontChange}
                     />
                 </Tab>
             </Tabs>
