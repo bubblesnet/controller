@@ -1,0 +1,176 @@
+@charset "UTF-8";
+
+@import '../../Palette.css';
+
+.font-change {
+}
+
+.automatic-track-backgroundcolor {
+    backgroundColor: red;
+}
+.automatic-track-checkedcolor {
+    backgroundColor: green;
+}
+.automatic-button-backgroundcolor {
+    backgroundColor: yellow;
+}
+.automatic-button-checkedcolor {
+    backgroundColor: yellow;
+}
+
+.automatic-track {
+    track: automatic-track-backgroundcolor;
+}
+
+#automatic-button {
+    track: automatic-track-backgroundcolor;
+    trackChecked: automatic-track-checkedcolor;
+    button: automatic-button-backgroundcolor;
+    buttonChecked: automatic-button-checkedcolor;
+}
+
+.centered-thead-text {
+    font-weight: bolder;
+    font-size: large;
+    text-align: center;
+}
+
+.value-holder {
+    left: 0;
+    top: 2px;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    font-weight: bolder;
+    font-size: small;
+    color: black;
+}
+
+.value-holder-light-external {
+    left: 90px;
+    top: 0;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    font-weight: bolder;
+    font-size: small;
+    color: black;
+}
+
+.light-text-holder {
+    left: 10px;
+    top: 200px;
+    position: absolute;
+    height: 40px;
+    width: 70px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+.externalpressure-holder {
+    height: 60px;
+    left: 10px;
+    position: absolute;
+    top: 70px;
+    width: 80px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+.pressure-text-holder {
+    height: 40px;
+    left: 10px;
+    position: absolute;
+    top: 60px;
+    width: 70px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+.pressure-holder {
+    height: 60px;
+    left: 10px;
+    position: absolute;
+    top: 120px;
+    width: 80px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+#airtemptop-text-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 0;
+    width: 80px;
+}
+#airtempmiddle-text-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 80px;
+    width: 80px;
+}
+#airtempbottom-text-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 200px;
+    width: 80px;
+}
+
+.lightexternal-text-holder {
+    height: 10px;
+    left: 90px;
+    position: absolute;
+    top: 0;
+    width: 70px;
+    font-weight: bolder;
+    font-size: small;
+}
+
+#airtempexternal-holder {
+    height: 0px;
+    left: 10px;
+    position: absolute;
+    top: 0;
+    width: 80px;
+    background-color: green;
+}
+
+.airtempexternal-text-holder {
+    top: 10px;
+    left: 0;
+    height: 50px;
+    width: 40px;
+}
+
+
+#xxexternalhumiditytext-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 60px;
+    width: 82px;
+    font-weight: bold;
+    font-size: xx-small;
+    background-color: blue;
+}
+
+#controltab-externalgroup {
+    height: 160px;
+    left: 700px;
+    position: absolute;
+    top: 40px;
+    width: 175px;
+    font-size: large;
+}
+
+#controltab-buttongroup {
+    height: 600px;
+    left: 700px;
+    position: absolute;
+    top: 180px;
+    width: 175px;
+    font-size: large;
+}

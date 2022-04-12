@@ -1,0 +1,107 @@
+name: BubblesNetCI
+on: push
+
+jobs:
+  # Label of the runner job
+  runner-job:
+    # You must use a Linux environment when using service containers or container jobs
+    runs-on: ubuntu-latest
+
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    strategy:
+      matrix:
+        node-version: [15.x, 10.x, 12.x, 14.x]
+        activemq-version: [5.16.4, 5.17.0]
+
+    steps:
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # Performs a clean installation of ActiveMQ
+      - name: "Install ActiveMQ ${{matrix.activemq-version}}"
+        run: |
+          sudo apt update -y -q > /dev/null 2> /dev/null
+          sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
+          npm install >/dev/null 2> /dev/null
+          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+        working-directory: server
+
+      - name: Setup PostgreSQL
+        # Creates the DB schema and loads initial table data
+        run: |
+          sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_ci" "user=postgres dbname=postgres password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210205154039_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210211101505_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210226211054_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210227212026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210302130129_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210305151120_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210312202057_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210331183354_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210401151451_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210408094508_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210415164803_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210509114508_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20210512122951_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220307183422_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220315223802_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220324154619_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220325135908_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220328155726_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220328175326_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220329154913_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220402154014_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          NODE_ENV: CI
+        working-directory: server
+
+
+      - name: Run tests with coverage AND running servers
+        # Runs a script that creates a PostgreSQL client, populates
+        # the client with data, and retrieves data
+        # run: node client.js
+        run: |
+          cp config_ci.json config.json
+          npm run coverage_without_servers
+          node src/queue-server.js&
+          node src/ws-server.js&
+          node src/api-server.js&
+          npm run coverage
+          bash <(curl -s https://codecov.io/bash) -t 74df7017-8e3b-462c-bb26-f99316613466 -v
+        # Environment variables used by the app script to create
+        # a new PostgreSQL client.
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          NODE_ENV: CI
+        working-directory: server
+

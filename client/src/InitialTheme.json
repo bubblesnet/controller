@@ -1,0 +1,55 @@
+{
+  "name": "bubblesnet",
+  "rounding": 4,
+  "spacing": 24,
+  "defaultMode": "light",
+  "global": {
+    "active": {
+      "background": {
+        "color": "#477CBC"
+      }
+    },
+    "colors": {
+      "focus": {
+        "light": "#ffffff"
+      },
+      "brand": {
+        "dark": "477CBC",
+        "light": "linear-gradient(90deg, var(--color-primary-0) 0%, rgba(34,68,94,1) 49%, rgba(255,255,255,1) 100%)"
+      },
+      "background": {
+        "dark": "#111111",
+        "light": "rgba(71, 124, 188, 0.0)"
+      }
+    },
+    "font": {
+      "family": "Abel"
+    }
+  },
+  "checkBox": {
+    "color": "#477CBC",
+    "border": {
+      "color": {
+        "dark": "red",
+        "light": "blue"
+      }
+    }
+  },
+  "button": {
+    "active": {
+      "border": {
+        "color": {
+          "dark": "green",
+          "light": "blue"
+        }
+      }
+    },
+
+    "disabled": {
+      "border": {
+        "color": "#000000"
+      }
+    }
+  }
+}
+

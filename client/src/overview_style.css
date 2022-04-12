@@ -1,0 +1,1119 @@
+@charset "UTF-8";
+
+@import 'Palette.css';
+
+/**
+* Eric Meyer's Reset CSS v2.0
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input, textarea {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section, time {
+  display: block;
+}
+
+body {
+  line-height: 1;
+  color: black;
+}
+
+body_old {
+  line-height: 1;
+  color: black;
+  background-image: linear-gradient(90deg, var(--color-primary-0) 0%, var(--color-primary-1) 49%, rgba(255,255,255,1) 100%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* meyerweb css reset end */
+
+textarea:focus, input:focus {
+  outline: 0;
+}
+
+input {
+  border-width: 0;
+}
+
+em {
+  font-style: italic;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.group:before,
+.group:after {
+  content: " ";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  zoom: 1; /* ie 6/7 */
+}
+
+embed,
+img,
+object,
+video {
+  max-width: 100%;
+}
+sup {
+  font-size: 58.3%;
+  vertical-align: text-top;
+}
+sub {
+  font-size: 58.3%;
+  vertical-align: text-bottom;
+}
+.no-space-between-inline-blocks {
+  *letter-spacing: normal; /*reset IE < 8*/
+  letter-spacing: -0.31em; /*webkit*/
+  word-spacing: -0.43em; /*IE < 8 && gecko*/
+}
+/*restore spacing on inner elements*/
+.no-space-between-inline-blocks > * {
+  letter-spacing: normal;
+  word-spacing: normal;
+}
+.displace {
+  left: -5000px;
+  position: absolute;
+}
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*,
+*:after,
+*:before {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+html {
+  font-size: 16px;
+}
+body {
+  color: #363636;
+  font-size: 9.33333px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.global_container_ {
+  float: none;
+  height: 1000px;
+  margin: 0 auto;
+  min-height: 1000px;
+  position: relative;
+  width: 1280px;
+  font-weight: bold;
+}
+
+.transparent_background_ {
+  background: rgba(128, 0, 0, 0.1);
+}
+
+.airpump {
+  height: 244px;
+  left: 0;
+  position: absolute;
+  top: 445px;
+  width: 260px;
+}
+.air-pump-holder-on {
+  height: 32px;
+  left: 120px;
+  position: absolute;
+  top: 0;
+  width: 57px;
+  background: url(images/airpump-on.gif) no-repeat;
+}
+.air-pump-holder-off {
+  height: 32px;
+  left: 120px;
+  position: absolute;
+  top: 0;
+  width: 57px;
+  background: url(images/airpump-off.png) no-repeat;
+}
+
+.bubble-holder-on {
+  height: 57px;
+  left: 104px;
+  position: absolute;
+  top: 103px;
+  width: 162px;
+  background: url(images/bubbles-animated.gif) no-repeat;
+}
+
+.bubble-rock-holder-on {
+  height: 57px;
+  left: 118px;
+  position: absolute;
+  top: 170px;
+  width: 162px;
+  background: url(images/bubble_rock-on.png) no-repeat;
+}
+.bubble-rock-holder-off {
+  height: 57px;
+  left: 118px;
+  position: absolute;
+  top: 170px;
+  width: 162px;
+  background: url(images/bubble_rock-off.png) no-repeat;
+}
+
+#waterpump-on {
+  height: 280px;
+  left: 264px;
+  position: absolute;
+  top: 385px;
+  width: 167px;
+  background-image:url(images/waterpump_running.gif);
+  background-repeat:no-repeat;
+}
+#waterpump-off {
+  height: 280px;
+  left: 264px;
+  position: absolute;
+  top: 385px;
+  width: 167px;
+  background-image:url(images/waterpump_not_running.gif);
+  background-repeat:no-repeat;
+}
+
+#waterpump-animated {
+  right: 20px;
+  bottom: 0;
+  position: absolute;
+  height: 88px;
+  width: 84px;
+  background-image:url(images/rightangleinternalgearpump1.gif);
+  background-repeat:no-repeat;
+}
+
+#drippingwater {
+  height: 50px;
+  left: 15px;
+  position: absolute;
+  top: 40px;
+  width: 80px;
+  background-image:url(images/dripping-water.gif);
+  background-repeat:no-repeat;
+}
+
+.meter-group {
+  margin-top: 30px;
+  height: 700px;
+  left: 0;
+  top: 0;
+  width: 250px;
+  grid: 250px / auto;
+  background-color: var(--color-primary-2);
+}
+.meter-text {
+  left: 3px;
+  font-weight: bold;
+  font-size: small;
+}
+.temp-top {
+  left: 0;
+  background-color: var(--color-primary-2);
+}
+
+.temp-middle {
+  left: 0;
+  background-color: var(--color-primary-1);
+}
+.temp-bottom {
+  left: 0;
+  background-color: var(--color-primary-2);
+}
+
+#heater-holder-on {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 220px;
+  background: url("images/heater-on.gif")
+}
+
+#heater-holder-off {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 220px;
+  background: url("images/heater-off.gif")
+}
+
+#waterheater-holder-on {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 0px;
+  background: url("images/waterheater-on.gif")
+}
+
+#waterheater-holder-off {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 0px;
+  background: url("images/waterheater-off.gif")
+}
+
+#humidifier-holder-on {
+  right: 230px;
+  width: 100px;
+  height: 150px;
+  position: absolute;
+  top:325px;
+  background: url("images/humidifier-on.gif")
+}
+
+#humidifier-holder-off {
+  right: 230px;
+  width: 100px;
+  height: 150px;
+  position: absolute;
+  top: 325px;
+  background: url("images/humidifier-off.gif")
+}
+
+.input-fan-holder {
+  height: 76px;
+  left: 0;
+  position: absolute;
+  top: 374px;
+  width: 242px;
+}
+#intake-animated-fan-container {
+  background-image:url(images/slow-spinning-fan.gif);
+  background-repeat:no-repeat;
+  width:76px;
+  height:76px;
+  top: 0;
+  left: 140px;
+  position: absolute;
+  float: right;
+  margin-right: 10px
+}
+#intake-fan-container {
+  background-image:url(images/stopped-fan.gif);
+  background-repeat:no-repeat;
+  width:76px;
+  height:76px;
+  top: 0;
+  left: 140px;
+  position: absolute;
+  float: right;
+  margin-right: 10px
+}
+
+#intake-animated-wind-container {
+  background-image:url(images/windlines-left-animated.gif);
+  background-repeat:no-repeat;
+  width: 158px;
+  height:76px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  float: right;
+  margin-right: 10px
+}
+#exhaust-animated-wind-container {
+  background-image:url(images/windlines-right-animated.gif);
+  background-repeat:no-repeat;
+  width: 158px;
+  height:76px;
+  top: 0;
+  left: 460px;
+  position: absolute;
+  float: right;
+  margin-right: 10px
+}
+
+#exhaust-stopped-fan-container {
+  background-image:url(images/stopped-fan.gif);
+  background-repeat:no-repeat;
+  width:76px;
+  height:76px;
+  top: 0;
+  left: 410px;
+  position: absolute;
+}
+
+#exhaust-animated-fan-container {
+  background-image:url(images/fast-spinning-fan.gif);
+  background-repeat:no-repeat;
+  width:76px;
+  height:76px;
+  top: 0;
+  left: 410px;
+  position: absolute;
+}
+
+#exhaust-fan-filter {
+  background-image:url(images/filter-and-hose.png);
+  background-repeat:no-repeat;
+  position: absolute;
+  left: 22px;
+  width: 435px;
+  height:76px;
+}
+
+.filter-and-exhaust-fan-holder {
+  height: 76px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 320px;
+}
+.humiditygroup {
+  height: 83px;
+  position: absolute;
+  right: 3px;
+  top: 39px;
+  width: 240px;
+}
+.internalhumidity {
+  height: 83px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 117px;
+}
+
+.internal-humidity {
+  left: 0;
+  position: absolute;
+  top: 16px;
+  background: url(images/fakemeter.png) no-repeat;
+}
+
+.humiditylabel {
+  left: 3px;
+  top: 0;
+  font-weight: bold;
+}
+.humidity {
+  left: 0;
+}
+.externalhumidity {
+  height: 83px;
+  left: 123px;
+  position: absolute;
+  top: 0;
+  width: 117px;
+}
+.text {
+  left: 2px;
+  position: absolute;
+  top: 0;
+  font-weight: bold;
+}
+.external-humidity {
+  left: 0;
+  position: absolute;
+  top: 16px;
+  background: url(images/fakemeter.png) no-repeat;
+}
+.row-2 {
+  height: 289px;
+  left: 4px;
+  position: absolute;
+  top: 255px;
+  width: 241px;
+}
+.col-5 {
+  height: 289px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 118px;
+}
+.water-temp {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  background: url(images/fakemeter.png) no-repeat;
+}
+
+
+.col-6 {
+  height: 287px;
+  left: 124px;
+  position: absolute;
+  top: 0;
+  width: 117px;
+}
+.pressuregroup {
+  height: 88px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 117px;
+}
+.text-5 {
+  left: 2px;
+  position: absolute;
+  top: 0;
+  font-weight: bold;
+}
+.pressurediff {
+  left: 0;
+  position: absolute;
+  top: 20px;
+  background: url(images/fakemeter.png) no-repeat;
+}
+.text-6 {
+  left: 3px;
+  position: absolute;
+  top: 202px;
+  font-weight: bold;
+}
+.externaltemp {
+  left: 0;
+  position: absolute;
+  top: 220px;
+  background: url(images/fakemeter.png) no-repeat;
+}
+.text-7 {
+  left: 7px;
+  position: absolute;
+  top: 566px;
+  font-weight: bold;
+}
+#growboxgroup {
+  height: 669px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 704px;
+}
+
+#watertemp-holder {
+  top: 40px;
+  right: 60px;
+  width: 80px;
+  height: 600px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+#humidity-holder {
+  top: 120px;
+  left: 270px;
+  width: 82px;
+  height: 60px;
+  position: absolute;
+  color: white;
+}
+
+#sun-moon-icon-holder {
+  top: 10px;
+  right: 0;
+  width: 47px;
+  height: 47px;
+  position: absolute;
+  background: url(images/sunlight.png) no-repeat;
+}
+
+#xxhumidityicon-holder {
+  top: 0;
+  left: 0;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+
+#humidityicon-holder {
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+
+#humiditytext-holder {
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 50px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+#externalhumiditytext-holder {
+  top: 2px;
+  left: 0;
+  width: 20px;
+  height: 50px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: small;
+}
+
+.pressure-icon-holder {
+  top: 10px;
+  left: 40px;
+  height: 60px;
+  width: 20px;
+  position: absolute;
+  background: url(images/barometer.png) no-repeat;
+}
+
+.light-icon-holder {
+  top: 10px;
+  left: 40px;
+  height: 60px;
+  width: 20px;
+  position: absolute;
+  background: url(images/internal_light.png) no-repeat;
+}
+
+#externalhumidityicon-holder {
+  top: 10px;
+  right: 10px;
+  width: 42px;
+  height: 60px;
+  position: absolute;
+  background: url(images/humidityicon.png) no-repeat;
+}
+
+#externalhumidity-holder {
+  bottom: 30px;
+  right: 0;
+  width: 80px;
+  height: 60px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+
+#airtemp-holder-day {
+  top: 40px;
+  right: 80px;
+  width: 80px;
+  height: 280px;
+  position: absolute;
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+#airtemp-holder-night {
+  top: 40px;
+  right: 80px;
+  width: 100px;
+  height: 280px;
+  position: absolute;
+  color: white;
+}
+
+.thermo-icon {
+  top:0;
+  right: 20px;
+  height: 60px;
+  width: 18px;
+  position: absolute;
+  background: url(images/thermometer-icon.png) no-repeat;
+}
+.zero-arrowup-icon {
+  left: 0;
+  height: 20px;
+  width: 13px;
+  background: url(images/arrow-up-small.png) no-repeat;
+}
+
+.zero-arrowdown-icon {
+  left: 0;
+  height: 20px;
+  width: 13px;
+  background: url(images/arrow-down-small.png) no-repeat;
+}
+
+.arrowup-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+
+.arrowdown-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
+}
+
+.barometerarrowup-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+
+.barometerarrowdown-icon {
+  top: 10px;
+  right: 10px;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
+}
+
+
+.externalarrowup-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-up.png) no-repeat;
+}
+
+.externalarrowdown-icon {
+  top: 10px;
+  right: 0;
+  height: 30px;
+  width: 13px;
+  position: absolute;
+  background: url(images/arrow-down.png) no-repeat;
+}
+
+#water-level-text-holder {
+  height: 40px;
+  right: 165px;
+  position: absolute;
+  top: 0;
+  width: 100px;
+}
+
+#root_ph_holder {
+  height: 40px;
+  right: 165px;
+  position: absolute;
+  bottom: 0;
+  width: 100px;
+}
+
+#water-level-ruler-holder {
+  height: 180px;
+  left: 630px;
+  position: absolute;
+  top: 490px;
+  width: 51px;
+  background: url(images/water-level-ruler.png) no-repeat;
+}
+
+#tubedge-holder {
+  height: 25px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 618px;
+}
+
+#tub {
+  height: 188px;
+  left: 113px;
+  position: absolute;
+  top: 481px;
+  width: 560px;
+  background: var(--color-ceramic-white);
+}
+
+#water-level-holder {
+  left: 0;
+  position: absolute;
+  width: 560px;
+  background-color: var(--color-tub-water-blue);
+}
+.text-8 {
+  left: 421px;
+  position: absolute;
+  top: 34px;
+  font-weight: bold;
+  text-align: right;
+}
+#cabinet {
+  height: 482px;
+  left: 57px;
+  position: absolute;
+  top: 0;
+  width: 617px;
+}
+.cabinet-top {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+.backwall {
+  left: 0;
+  position: absolute;
+  top: 104px;
+}
+.plant {
+  height: 412px;
+  left: 62px;
+  position: absolute;
+  top: 109px;
+  width: 294px;
+}
+.plant-height-holder {
+  height: 370px;
+  left: 92px;
+  position: absolute;
+  top: 0;
+  width: 51px;
+  background: url(images/yardstick.png) no-repeat;
+}
+.yardstick {
+  position: absolute;
+  right: 2px;
+  top: 66px;
+  color: #030000;
+  font-weight: bold;
+  text-align: right;
+}
+
+.col-2 {
+  height: 409px;
+  left: 51px;
+  width: 243px;
+  position: absolute;
+  top: 3px;
+}
+
+.plant-holder {
+  height: 367px;
+  left: 93px;
+  position: absolute;
+  top: 0;
+  width: 127px;
+  background: url(images/plant.png) no-repeat;
+}
+.plant-2 {
+  left: 19px;
+  position: absolute;
+  top: 68px;
+  color: #030000;
+  font-weight: bold;
+}
+.pot-holder-top {
+  height: 20px;
+  position: absolute;
+  right: 0;
+  top: 361px;
+  width: 164px;
+  background: var(--color-pot-green);
+}
+.pot-holder-body {
+  height: 68px;
+  position: absolute;
+  right: 5px;
+  top: 381px;
+  width: 154px;
+  background: var(--color-pot-green);
+}
+.text-9 {
+  left: 32px;
+  position: absolute;
+  top: 8px;
+  color: #ffffff;
+  font-weight: bold;
+  line-height: 28px;
+}
+.growlight-container-on {
+  left: 113px;
+  width: 560px;
+  height: 370px;
+  position: absolute;
+  top: 107px;
+  background-image: var(--gradient-light-as-day);
+}
+
+.growlight-container-off {
+  height: 370px;
+  left: 113px;
+  width: 560px;
+  position: absolute;
+  top: 107px;
+  background-image: var(--gradient-dark-as-night);
+}
+
+.growlight-on {
+  height: 60px;
+  left: 130px;
+  position: absolute;
+  top: 0;
+  width: 247px;
+  background: url(images/growlight-on.png) no-repeat;
+}
+.growlight-off {
+  height: 60px;
+  left: 130px;
+  position: absolute;
+  top: 0;
+  width: 247px;
+  background: url(images/growlight-off.png) no-repeat;
+}
+
+.text-10 {
+  left: 49px;
+  position: absolute;
+  top: 25px;
+  font-weight: bold;
+  line-height: 60px;
+}
+.exhaust {
+  height: 450px;
+  left: 158px;
+  position: absolute;
+  top: 27px;
+  width: 246px;
+}
+
+.waterheater {
+  height: 100px;
+  right: 40px;
+  position: absolute;
+  top: 100px;
+  width: 100px;
+}
+
+.fans {
+  height: 450px;
+  left: 458px;
+  position: absolute;
+  top: 27px;
+  width: 246px;
+}
+.text-11 {
+  left: 35px;
+  position: absolute;
+  top: 34px;
+  color: #030000;
+  font-weight: bold;
+  line-height: 76px;
+}
+.row {
+  height: 120px;
+  left: 0;
+  position: absolute;
+  top: 200px;
+  width: 200px;
+}
+
+.heater {
+  left: 113px;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  background: url(images/heater.png) no-repeat;
+}
+
+.heater-2 {
+  left: 9px;
+  position: absolute;
+  top: 22px;
+  font-weight: bold;
+}
+.humidifier {
+  height: 100px;
+  left: 100px;
+  position: absolute;
+  top: 0;
+  width: 100px;
+  background: url(images/humidifier.png) no-repeat;
+}
+.humidifier-2 {
+  left: 16px;
+  position: absolute;
+  top: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+.text-12 {
+  left: 41px;
+  position: absolute;
+  top: 26px;
+  font-weight: bold;
+}
+.dribbler-manifold-holder {
+  height: 31px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 167px;
+}
+.text-13 {
+  left: 31px;
+  position: absolute;
+  top: 5px;
+}
+.text-13 > * {
+  font-weight: bold;
+}
+.manifold-spray {
+  left: 0;
+  position: absolute;
+  top: 29px;
+}
+.water-pump-holder {
+  height: 190px;
+  left: 20px;
+  position: absolute;
+  top: 30px;
+  width: 114px;
+  background: url(images/water_pump.png) no-repeat;
+}
+.text-14 {
+  left: 47px;
+  position: absolute;
+  top: 152px;
+  color: #000000;
+  font-weight: bold;
+  text-align: right;
+}
+.text-15 {
+  left: 13px;
+  position: absolute;
+  top: 24px;
+  color: #030000;
+  font-weight: bold;
+  text-align: right;
+}
+.text-16 {
+  left: 30px;
+  position: absolute;
+  top: 32px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.detail-group {
+  height: 654px;
+  left: 250px;
+  position: absolute;
+  top: 0;
+  width: 351px;
+}
+
+
+
+#current-status-holder {
+  font-weight: bold;
+  font-size: large;
+}
+.text-17 {
+  left: 93px;
+  position: absolute;
+  top: 59px;
+  font-weight: bold;
+}
+.selected-detail-holder {
+  height: 218px;
+  right: 0;
+  position: absolute;
+  top: 147px;
+  width: 322px;
+  background: url(images/interior_view.jpg) no-repeat;
+  background-color: var(--color-secondary-2-2);
+
+}
+.text-18 {
+  left: 52px;
+  position: absolute;
+  top: 45px;
+  color: #030000;
+  font-weight: bold;
+}
+.events-holder {
+  height: 289px;
+  position: absolute;
+  right: 0;
+  top: 365px;
+  width: 322px;
+  background: var(--color-secondary-2-2);
+}
+.events {
+  left: 85px;
+  position: absolute;
+  top: 118px;
+  font-weight: bold;
+}

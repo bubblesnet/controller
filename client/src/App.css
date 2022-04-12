@@ -1,3 +1,5 @@
+@import 'Palette.css';
+
 .App {
   text-align: center;
 }
@@ -14,7 +16,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--color-primary-0);
   min-height: 10vh;
   display: flex;
   flex-direction: column;
@@ -24,16 +26,20 @@
   color: white;
 }
 
-.IcebergApp-header {
-background: #22445e;
-flexDirection: row;
-flexWrap: nowrap;
+.BubblesApp-header {
+  background: linear-gradient(90deg, var(--color-primary-0) 0%, var(--color-primary-1) 49%, rgba(255,255,255,1) 100%);
+  flexDirection: row;
+  flexWrap: nowrap;
   min-height: 5vh;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Logout-Button {
+  float: right
 }
 
 .App-link {
@@ -51,5 +57,24 @@ flexWrap: nowrap;
 
 .RenderEnvironmentPickerFunctional {
   justify-content: center;
-  background: #aaaaaa;
+  background: var(--color-primary-1);
+}
+
+.tabstyle {
+  color: white;
+}
+#animated-gif-container {
+  background-image:url(images/bubbles-gif.gif);
+  background-repeat:no-repeat;
+  width:100px;
+  height:48px;
+  float: left;
+}
+
+#tilt-gif-container {
+  background-image:url(images/tilt.gif);
+  background-repeat:no-repeat;
+  width: 180px;
+  height:48px;
+  float: right;
 }

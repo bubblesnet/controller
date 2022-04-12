@@ -1,3 +1,7 @@
+<<<<<<< HEAD
 # https://www.robotstxt.org/robotstxt.html
+=======
+# https://www.js.robotstxt.org/robotstxt.html
+>>>>>>> feature-waterquality
 User-agent: *
 Disallow:
