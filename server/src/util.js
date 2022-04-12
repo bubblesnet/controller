@@ -70,11 +70,11 @@ function get_server_ports_for_environment(env) {
             ports.activemq_server_host = '192.168.21.204';
             break;
         case "CI":
-            ports.api_server_port = 3004;
+            ports.api_server_port = 3003;
             ports.api_server_host = 'localhost';
             ports.websocket_server_host = 'localhost';
-            ports.websocket_server_port = 8004;
-            ports.activemq_server_port = 61614;
+            ports.websocket_server_port = 8002;
+            ports.activemq_server_port = 61613;
             ports.activemq_server_host = 'localhost';
             break;
     }

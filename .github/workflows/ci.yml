@@ -73,6 +73,7 @@ jobs:
           sudo psql -h localhost -p 5432 -a -q -f migrations/20220328155726_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/20220328175326_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/20220329154913_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/20220402154014_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
