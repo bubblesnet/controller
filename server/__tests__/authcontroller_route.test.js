@@ -33,7 +33,7 @@ describe("Find User",function() {
         console.log("after await findUser")
     });
 });
-
+/*
 describe("Find User good",function() {
     it("should pass login", async function () {
         console.log("process.env.NODE_ENV = "+process.env.NODE_ENV)
@@ -77,3 +77,4 @@ describe("Find User good",function() {
         await au.findUser(req_success, res_success)
     })
 });
+*/

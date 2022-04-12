@@ -1,18 +1,30 @@
-import {Box, Button, Grid, Select} from "grommet";
+import {Box, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
-function RenderStageSelector (props) {
+import stage_options from "../../stage_options.json"
+import log from "roarr";
 
+function RenderStageSelector (props) {
+/*
     function setCurrentStageValue(option) {
-        let x = local_state;
-        console.log("current stage value " +x.automation_settings.current_stage + " new stage value " + option)
-        x.automation_settings.current_stage = option
+        let x = local_station;
+        log.trace("current stage value " +x.current_stage + " new stage value " + option)
+        x.current_stage = option
         props.setStateFromChild(JSON.parse(JSON.stringify(x)))
-        setState(x)
+        setStation(x)
+    }
+*/
+    function setSelectedStageValue(option) {
+        let x = local_station;
+        log.trace("selected stage value " +x.current_stage + " new stage value " + option)
+        x.current_stage = option
+        props.setSelectedStageFromChild(option)
+        setStation(x)
     }
 
-    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
+    const [local_station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
 
+    log.trace("rendering with value={"+props.automation_setting.stage_name+"}")
     let ret = <>
             <Grid
                 justify={'center'}
@@ -33,13 +45,10 @@ function RenderStageSelector (props) {
                     Select Stage
                 </Box>
                 <Box justify={'center'} gridArea={'stage'} width={'small'} round={'xsmall'} >
-                    <Select options={props.state.automation_settings.stage_options} value={local_state.automation_settings.current_stage}
-                            onChange={({ option }) => setCurrentStageValue(option)} />
+                    <Select options={stage_options} value={props.automation_setting.stage_name}
+                            onChange={({ option }) => setSelectedStageValue(option)} />
                 </Box>
-                <Box justify={'center'} gridArea={'setcurrent'} width={'small'} >
-                    <Button gridArea={'apply'} color={'control'} width={'medium'} round={'large'} active={false} label={'Set Current'} primary />
-                </Box>
-         </Grid>
+          </Grid>
    </>
     return(ret);
 }

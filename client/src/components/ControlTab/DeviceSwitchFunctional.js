@@ -2,6 +2,7 @@ import React from "react";
 import Switch from "react-input-switch";
 import {TableRow,TableCell} from "grommet";
 import './controlTab.css'
+import log from "roarr";
 
 var slideclick_valid = new Audio("slideclick_valid.mp3");
 var slideclick_invalid = new Audio("slideclick_invalid.mp3");
@@ -14,11 +15,12 @@ function badbeep() {
 }
 function RenderDeviceSwitch (props) {
     function toggle(e) {
-        console.log("changing = " + props.changing)
+        log.trace("changing = " + props.changing)
         if (props.automaticControl === props.off && props.changing === false) {
             props.toggle(e)
             goodbeep();
         } else {
+            log.trace("changing = " + props.changing + " automaticControl = " + props.automaticControl)
             badbeep();
         }
     }

@@ -3,23 +3,24 @@ import { Grid,Image, Box, RangeInput } from 'grommet';
 import humidity from '../../images/humidityicon.png'
 import './stagesTab.css';
 import '../../Palette.css';
+import log from "roarr";
 
 
 
 function RenderHumiditySelector(props) {
     function setValue(value) {
-        let x = JSON.parse(JSON.stringify(local_state));
-        x.automation_settings.target_humidity = value
-        props.setStateFromChild(x)
-        setState(JSON.parse(JSON.stringify(x)))
+        let x = JSON.parse(JSON.stringify(props.automation_setting));
+        log.trace("RenderHumiditySelector = " + JSON.stringify(x))
+        x.target_humidity = value
+        props.setAutomationSettingFromChild(x)
     }
 
-    const [local_state, setState] = useState(JSON.parse(JSON.stringify(props.state)));
-
     const onChange = event => setValue(event.target.value);
-    const min = props.state.automation_settings.humidity_min;
-    const max = props.state.automation_settings.humidity_max;
-    const units = props.settings.display_settings.humidity_units;
+    const min = props.automation_setting.humidity_min;
+    const max = props.automation_setting.humidity_max;
+    const units = props.display_settings.humidity_units
+    const target_humidity = props.automation_setting.target_humidity
+    log.trace("RenderHumiditySelector 1 = " + JSON.stringify(props.automation_setting))
 
     return (
             <Grid
@@ -51,13 +52,13 @@ function RenderHumiditySelector(props) {
                             min={min}
                             max={max}
                             step={1}
-                            value={local_state.automation_settings.target_humidity}
+                            value={target_humidity}
                             onChange={onChange}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {local_state.automation_settings.target_humidity}{units}
+                    {target_humidity}{units}
                 </Box>
             </Grid>
    );

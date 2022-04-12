@@ -13,30 +13,33 @@ import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
 import {getContainerNames, getModuleTypes} from '../../api/utils';
+import log from "roarr";
 
 function RenderDeviceMapTab (props) {
-    const [station, setStation] = useState(JSON.parse(JSON.stringify(props.station)));
-    const [reset_button_state,setResetButtonState] = useState(false)
-    const [defaults_button_state,setDefaultsButtonState] = useState(true)
-    const [apply_button_state,setApplyButtonState] = useState(false)
+    const [station] = useState(JSON.parse(JSON.stringify(props.station)));
+    const [reset_button_state] = useState(false)
+    const [defaults_button_state] = useState(true)
+    const [apply_button_state] = useState(false)
     const [container_names,setContainerNames] = useState()
     const [module_types,setModuleTypes] = useState()
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+    const [nodeEnv] = useState(props.nodeEnv);
+    const [apiHost] = useState(props.apiHost)
+    const [apiPort] = useState(props.apiPort)
 
     useEffect(() => {
         const fetchData = async () => {
-            let x = await getContainerNames(props.apiHost, props.apiPort)
-            console.log("containers " + JSON.stringify(x))
+            let x = await getContainerNames(apiHost, apiPort)
+            log.trace("containers " + JSON.stringify(container_names))
             setContainerNames(x.container_names)
-            x = await getModuleTypes(props.apiHost, props.apiPort)
-            console.log("modules " + JSON.stringify(x))
+            x = await getModuleTypes(apiHost, apiPort)
+            log.trace("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
         fetchData();
-    }, [nodeEnv])
+    }, [nodeEnv])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    console.log("RenderDeviceMapTab")
-    let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
+    log.trace("RenderDeviceMapTab")
+    let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
         if( module.device_type === "GPIO" ) {
@@ -59,7 +62,7 @@ function RenderDeviceMapTab (props) {
     }
 
     function getModulerow( row, index, arr ) {
-        return <TableRow>
+        return <TableRow  key={row.module.moduleid}>
             <TableCell>{row.device.deviceid}</TableCell>
             <TableCell>{row.module.container_name}</TableCell>
             <TableCell>{row.module.module_type}</TableCell>
@@ -67,7 +70,7 @@ function RenderDeviceMapTab (props) {
             <TableCell>{row.sensors}</TableCell></TableRow>
     }
     function getModules() {
-        console.log("getModules " + JSON.stringify(station))
+//        console.log("getModules " + JSON.stringify(station))
         let arr = []
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
@@ -75,7 +78,7 @@ function RenderDeviceMapTab (props) {
                     sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
             }
         }
-        console.log("arr = " + JSON.stringify(arr))
+        log.trace("arr = " + JSON.stringify(arr))
         let ret = arr.map(getModulerow)
         return ret
     }
@@ -99,14 +102,14 @@ function RenderDeviceMapTab (props) {
     }
 
     let module_rows = getModules()
-    console.log("rendering with font set to " + values.theme.global.font.family)
-    console.log("station = " + JSON.stringify(station))
+//    console.log("rendering with font set to " + values.theme.global.font.family)
+//    console.log("station = " + JSON.stringify(station))
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
                 fonts={[
                     {
-                        font: values.theme.global.font.family
+                        font: displaySettings.theme.global.font.family
                     },
                 ]}
             />

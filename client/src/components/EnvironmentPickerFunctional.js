@@ -1,11 +1,12 @@
 import React from "react";
 import {RadioButtonGroup} from "rendition";
+import log from "roarr";
 // import {ReadyState} from "react-use-websocket";
 
 function RenderEnvironmentPickerFunctional(props) {
 
     let setNodeEnv = (value) => {
-        console.log("EnvironmentPicker set nodeEnv to " + value)
+        log.trace("EnvironmentPicker set nodeEnv to " + value)
         props.handleClick( value )
     }
 

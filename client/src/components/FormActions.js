@@ -2,7 +2,7 @@ import {Button, Grid} from "grommet";
 import React, {useState} from "react";
 
 function RenderFormActions (props) {
-    let [state, setState] = useState(props.state);
+    let [state] = useState(props.state);
 
     function defaultsAction() {
         props.defaultsAction()

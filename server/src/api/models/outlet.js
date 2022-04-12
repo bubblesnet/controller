@@ -14,6 +14,7 @@ let defaultDevices = [
     { "deviceid": 0,stationid: 0, "name":  "waterPump",         "index": 1, "bcm_pin_number": 27, "on": false },
     { "deviceid": 0,stationid: 0, "name":  "lightBloom", "index": 2, "bcm_pin_number": 22, "on": false },
     { "deviceid": 0,stationid: 0, "name":  "lightVegetative",   "index": 3, "bcm_pin_number":  5, "on": false },
+    { "deviceid": 0,stationid: 0, "name":  "waterHeater",   "index": 3, "bcm_pin_number":  5, "on": false },
     { "deviceid": 0,stationid: 0, "name":  "heatingPad",   "index": 0, "bcm_pin_number":  5, "on": false },
     { "deviceid": 0,stationid: 0, "name":  "heatLamp",   "index": 1, "bcm_pin_number":  5, "on": false }
 ];

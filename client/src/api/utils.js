@@ -3,32 +3,59 @@ import log from 'roarr';
 
 
 export async function getContainerNames(host, port) {
-    console.log("getContainerNames calling out to api")
+    log.trace("getContainerNames calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/config/containers');
         if(response.ok) {
             let x = await response.json();
-            console.log("Got container_names " + JSON.stringify(x));
+            log.trace("Got container_names " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
 }
 
+export function getAutomationSetting( automation_settings, stage_name ) {
+    for( let i = 0; i < automation_settings.length; i++ ) {
+        if( automation_settings[i].stage_name === stage_name ) {
+            return( automation_settings[i])
+        }
+    }
+    return({})
+}
+
+export async function getStage(host, port, stationid, stage) {
+
+    return new Promise( async (resolve, reject) => {
+        let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+stage
+        log.trace("getStage calling out to api "+url )
+        const response = await fetch(url);
+        if(response.ok) {
+            let x = await response.json();
+            log.trace("getStage got stage " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+
 export async function getModuleTypes(host, port) {
-    console.log("getModuleTypes calling out to api")
+    log.trace("getModuleTypes calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/config/modules');
         if(response.ok) {
             let x = await response.json();
-            console.log("Got module_types " + JSON.stringify(x));
+            log.trace("Got module_types " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -43,35 +70,76 @@ export async function getModuleTypes(host, port) {
  * @returns {Promise<unknown>}  Response status (200 ...) from the API call
  */
 export async function getSite (host, port, siteid) {
-    console.log("getSite calling out to api")
+    log.trace("getSite calling out to api")
 
     return new Promise( async (resolve, reject) => {
-        const response = await fetch('http://'+host+':'+port+'/api/station/site/'+siteid);
+        let url = 'http://'+host+':'+port+'/api/site/'+siteid
+        log.trace('getSite calling '+url)
+        const response = await fetch(url);
 //            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
-        console.log("getSite response received")
+        log.trace("getSite response received")
         if(response.ok) {
-//            console.log("getSite awaiting site")
+//            log.trace("getSite awaiting site")
             let x = await response.json();
-//            console.log("getSite Got " + JSON.stringify(x));
+//            log.trace("getSite Got " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("getSite error " + response.status)
+            log.trace("getSite error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+// http://192.168.21.237:3003/api/station/1/events/
+// http://192.168.21.237:3003/api/station/1/events
+export async function getLastNEvents (host, port, stationid, count) {
+    log.trace("getLastNEvents calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/events/'
+        log.trace(url)
+        const response = await fetch(url);
+        log.trace("returned response = " + JSON.stringify(response))
+        if(response.ok) {
+            let x = await response.json();
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+export async function getUser (host, port, userid) {
+    log.trace("getSite calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        let url='http://'+host+':'+port+'/api/user/'+userid
+        log.trace('getSite calling '+url)
+        const response = await fetch(url);
+        log.trace("getSite response received")
+        if(response.ok) {
+            let x = await response.json();
+            resolve(x)
+        } else {
+            log.trace("getSite error " + response.status)
             reject( response.status )
         }
     })
 }
 
 export async function saveStage (host, port, stationid, current_stage) {
-    console.log("saveStage calling out to api")
+    log.trace("saveStage calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/station/'+stationid+'/stage/'+current_stage);
-        console.log("saveStage response received")
+        log.trace("saveStage response received")
         if(response.ok) {
             let x = await response.json();
             resolve(x)
         } else {
-            console.log("saveStage error " + response.status)
+            log.trace("saveStage error " + response.status)
             reject( response.status )
         }
     })
@@ -87,17 +155,17 @@ export async function saveStage (host, port, stationid, current_stage) {
  * @todo this is redundant with getSite - eliminate
  */
 export const getDeviceList = (host, port, userid) => {
-    console.log("getDeviceList calling out to api")
+    log.trace("getDeviceList calling out to api")
 
     return new Promise( async (resolve, reject) => {
         const response = await fetch('http://'+host+':'+port+'/api/device/'+userid);
         if(response.ok) {
             let x = await response.json();
-//            console.log(JSON.stringify(x))
-//            console.log("Got devices " + JSON.stringify(x));
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
@@ -126,22 +194,81 @@ export const saveSetting = ( host, port, userid, stationid, thing_name, present 
         });
         if(response.ok) {
             let x = await response.json();
-//            console.log(JSON.stringify(x))
-//            console.log("Got devices " + JSON.stringify(x));
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })
 }
 
+/**
+ * Save to persistent store an individual presence/absence setting for a single
+ * sensor/control item in the current station.
+ *
+ * @param thing_name    The unique name of the sensor/control item
+ * @param present       True/false - true present, false absent
+ * @returns {Promise<unknown>}  The response status (200,500 ...) from the save setting API call
+ * @memberOf AuthenticatedApp
+ */
+export const saveAutomationSettings = ( host, port, userid, stationid, stage_name, new_automation_settings ) => {
+
+    return new Promise( async (resolve, reject) => {
+        const url = 'http://'+host+':'+port+'/api/automation/'+stationid+'/'+stage_name;
+        log.debug("saveAutomationSetting url = " + url)
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(new_automation_settings )
+        });
+        if(response.ok) {
+            let x = await response.json();
+            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.error("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+
+export const changeStage = ( host, port, stationid, oldstage, newstage ) => {
+
+    return new Promise( async (resolve, reject) => {
+        const url = 'http://'+host+':'+port+'/api/station/'+stationid+'/stage/';
+        log.debug("changeStage url = " + url)
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ oldstage: oldstage, newstage: newstage })
+        });
+        if(response.ok) {
+            let x = await response.json();
+//            log.trace(JSON.stringify(x))
+//            log.trace("Got devices " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
+
 export const addStation = async ( host, port, siteid, station_name ) => {
-    console.log("addStation calling out to api ")
+    log.trace("addStation calling out to api ")
 
     return new Promise( async (resolve, reject) => {
         const url = 'http://'+host+':'+port+'/api/station/site/'+siteid+'/'+station_name;
-        console.log("fetching " + url )
+        log.trace("fetching " + url )
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -151,11 +278,11 @@ export const addStation = async ( host, port, siteid, station_name ) => {
         });
         if(response.ok) {
             let x = await response.json();
-            console.log(JSON.stringify(x))
-            console.log("Put station " + JSON.stringify(x));
+            log.trace(JSON.stringify(x))
+            log.trace("Put station " + JSON.stringify(x));
             resolve(x)
         } else {
-            console.log("error " + response.status)
+            log.trace("error " + response.status)
             reject( response.status )
         }
     })

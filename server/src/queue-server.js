@@ -32,7 +32,7 @@ const serveMessageQueue = async() => {
 }
 
 async function storeMessage(body) {
-    debug("storeMessage " + body )
+    console.log("storeMessage " + body )
     let message;
     try {
         message = JSON.parse(body)
@@ -41,19 +41,35 @@ async function storeMessage(body) {
         return;
     }
     try {
+        // TODO cleanup this message cleanup.  relation of device to user should be irrelevant
+        message.userid = 90000009;
+        if( message.message_type === 'measurement')
+            message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;
+        else {
+            if (message.message_type === 'switch_event')
+                message.message = "" + message.deviceid + " " + message.switch_name + ":" + message.on;
+            else
+                message.message = "" + message.deviceid + " " + message.message_type;
+        }
+
+        if( typeof(message.sample_timestamp) !== 'undefined') {
+            message.datetimemillis = message.sample_timestamp;
+        } else {
+            message.datetimemillis = message.event_timestamp;
+        }
+        // TODO this should be cleaned up in the message protocol so that it disappears
+        message.type = message.message_type;
+        message.rawjson = body;
+        // TODO need to decide whether to ALSO keep a file for each json message - hmmmm
+        message.filename = '';
         switch( message.message_type) {
             case 'measurement':
-                // TODO cleanup this message cleanup.  relation of device to user should be stored in memory
-                message.userid = 90000009;
-                message.datetimemillis = message.sample_timestamp;
-                // TODO this should be cleaned up in the message protocol so that it disappears
-                message.type = message.message_type;
-                message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;
-                message.rawjson = body;
-                // TODO need to decide whether to ALSO keep a file for each json message - hmmmm
-                message.filename = '';
-                let ev = event.createEvent(message);
-                debug("storeMessage stored event " + JSON.stringify(ev))
+              //       console.log("inserting new event "+JSON.stringify(event))
+                if( message.type === 'measurement' ) {
+                    message.value_name = message.measurement_name
+                    message.stringvalue = '' + message.value
+                }
+
                 break;
             case 'switch_event':
                 let x = await outlet.setStateByNameAndStation(message.switch_name, message.stationid, message.on)
@@ -61,8 +77,10 @@ async function storeMessage(body) {
                 break;
             default:
                 console.error("Unhandled message type for storage " + JSON.stringify(message))
-                break;
+                return;
         }
+        let ev = await event.createEvent(message);
+        debug("storeMessage stored event " + JSON.stringify(ev))
     } catch( err ) {
         console.error("storeMessage error saving message " + err + " " + message)
         return;
