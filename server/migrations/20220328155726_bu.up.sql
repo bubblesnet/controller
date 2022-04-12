@@ -1,0 +1,1 @@
+ALTER TABLE station DROP COLUMN light_on_hour;

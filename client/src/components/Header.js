@@ -7,6 +7,7 @@ import {ReadyState} from "react-use-websocket";
 // import {Table, TableRow, TableCell} from 'grommet'
 import log from 'roarr';
 import '../logimplementation'
+import {Button} from "grommet";
 
 function Header (props) {
     log.trace("render Header with props "+JSON.stringify(props) )
@@ -45,7 +46,7 @@ function Header (props) {
         webSocketLabel = "WebSocket server down"
     }
 //    log.trace("after websocket")
-//    log.trace("Rendering header")
+//    console.log("Rendering header with station "+JSON.stringify(props.station))
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
@@ -58,7 +59,8 @@ function Header (props) {
                 }}>Bubbles - {props.siteName} - ({nodeEnv}) - {props.station.current_stage}</span>
                 <span style={{'width': '50%'}} >
                     <RenderTiltFunctional tilt={props.tilt}/>
-                </span>
+                    <Button className='Logout-Button' color={'var(--color-button-border)'} width={'medium'} round={'large'} label={'Logout'} onClick={props.logout} />
+               </span>
             </header>
                 <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>

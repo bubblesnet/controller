@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useState} from 'react';
 import RenderTestTab from "./components/TestTab/TestTabFunctional";
 
 function TestApp (props) {
 
-    const [loading, setLoading] = useState(false); // Trigger in useEffect that tells us to refetch data
+    const [loading] = useState(false); // Trigger in useEffect that tells us to refetch data
     const [count, setCount] = useState(1)
 
     function onChange() {

@@ -8,6 +8,10 @@
     text-align: center
 }
 
+.check-selected {
+    float: left;
+}
+
 #temp-text-input {
     width: 250px;
 }

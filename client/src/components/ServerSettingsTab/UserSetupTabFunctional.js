@@ -13,24 +13,21 @@ import {
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import log from "roarr";
 
 
 function RenderUserSetupTab (props) {
     let [applyButtonState, setApplyButtonState] = useState(false)
     let [resetButtonState, setResetButtonState] = useState(false)
-//    let [defaultsButtonState, setDefaultsButtonState] = useState(false)
 
-    let [username, setUsername] = useState(props.username)
+    let [username] = useState(props.username)
     let [email, setEmail] = useState(props.email)
     let [password, setPassword] = useState("")
     let [firstName, setFirstName] = useState(props.firstName)
     let [lastName, setLastName] = useState(props.lastName)
 
-//    function testDatabase(e) {
-//
-//    }
     function addUser() {
-        console.log("addUser")
+        log.trace("addUser")
     }
     function resetForm() {
         setEmail(props.email)
@@ -58,17 +55,17 @@ function RenderUserSetupTab (props) {
         setApplyButtonState(true)
         setResetButtonState(true)
     }
-    console.log("RenderUserSetupTab")
-    let [values, setValues] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
+    log.trace("RenderUserSetupTab")
+    let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
 
-    console.log("rendering with font set to " + values.theme.global.font.family)
+    log.trace("rendering with font set to " + displaySettings.theme.global.font.family)
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader
                 fonts={[
                     {
-                        font: values.theme.global.font.family
+                        font: displaySettings.theme.global.font.family
                     },
                 ]}
             />

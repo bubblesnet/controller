@@ -1,63 +1,82 @@
+const db = require("./database");
+const {sql} = require("@databases/pg");
+const device = require("./device");
 
 
 stage_schedules =  [
     {
+        "name": "idle",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 0,
-            "temperature": 0
-        },
-        "hours_of_light": 1,
-        "name": "idle"
+            "temperature": 0,
+            "water_temperature": 0
+        }
     },
     {
+        "name": "germination",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 30,
-            "temperature": 81
-        },
-        "hours_of_light": 0,
-        "name": "germination"
+            "temperature": 81,
+            "water_temperature": 68
+        }
     },
     {
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80
-        },
+        "name": "seedling",
         "hours_of_light": 18,
-        "name": "seedling"
-    },
-    {
         "environmental_targets": {
             "humidity": 60,
-            "temperature": 80
-        },
+            "temperature": 80,
+            "water_temperature": 61
+       }
+    },
+    {
+        "name": "vegetative",
         "hours_of_light": 12,
-        "name": "vegetative"
-    },
-    {
         "environmental_targets": {
             "humidity": 60,
-            "temperature": 80
-        },
+            "temperature": 80,
+            "water_temperature": 61
+        }
+    },
+    {
+        "name": "bloom",
         "hours_of_light": 12,
-        "name": "flowering"
-    },
-    {
         "environmental_targets": {
             "humidity": 60,
-            "temperature": 80
-        },
-        "hours_of_light": 0,
-        "name": "drying"
+            "temperature": 80,
+            "water_temperature": 61
+        }
     },
     {
+        "name": "dry",
+        "hours_of_light": 0,
         "environmental_targets": {
             "humidity": 60,
-            "temperature": 80
-        },
+            "temperature": 80,
+            "water_temperature": 0
+        }
+    },
+    {
+        "name": "cure",
         "hours_of_light": 0,
-        "name": "curing"
+        "environmental_targets": {
+            "humidity": 60,
+            "temperature": 80,
+            "water_temperature": 0
+        }
     }
 ];
+
+async function getAutomationStage( stationid, stage) {
+        console.log("getAutomationStage "+stationid+"/"+stage)
+        return new Promise(async function (resolve, reject) {
+            const results = await db.query(sql`SELECT * from automationsettings where stationid_Station=${stationid} and stage_name=${stage}`);
+            console.log("getAutomationStage returning "+JSON.stringify(results))
+            resolve( results[0] )
+        })
+}
 
 function getStageSchedules(stationid) {
     return stage_schedules
@@ -65,4 +84,5 @@ function getStageSchedules(stationid) {
 
 module.exports = {
     getStageSchedules,
+    getAutomationStage
 }

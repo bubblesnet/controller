@@ -18,6 +18,7 @@ const path = require('path');
 global.__root   = __dirname + '/';
 
 const config_routes = require('./api/routes/config_routes').router;
+const automation_routes = require('./api/routes/automation_routes').router;
 const device_routes = require('./api/routes/device_routes').router;
 const video_routes = require('./api/routes/video_routes').router;
 const module_routes = require('./api/routes/module_routes').router;
@@ -26,7 +27,9 @@ const edge_measurement_routes = require('./api/routes/edgemeasurement_routes').r
 const user_routes = require('./api/routes/user_routes').router;
 const auth_routes = require('./api/routes/authcontroller_routes').router;
 const station_routes = require('./api/routes/station_routes').router;
+const site_routes = require('./api/routes/site_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
+const event_routes = require('./api/routes/event_routes').router;
 
 logger.info("starting router")
 const router = express.Router();
@@ -80,7 +83,10 @@ apiServer.use('/api/video', video_routes);
 apiServer.use("/api/edgecontrol", edge_control_routes);
 apiServer.use("/api/measurement", edge_measurement_routes);
 apiServer.use("/api/station", station_routes);
+apiServer.use("/api/site", site_routes);
 apiServer.use("/api/module", module_routes);
+apiServer.use("/api/automation", automation_routes);
+apiServer.use("/api/events", event_routes);
 
 // catch 404 and forward to error handler
 apiServer.use(function (req, res, next) {

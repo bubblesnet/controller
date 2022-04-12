@@ -8,23 +8,23 @@ import sprintf from "sprintf-js";
 function RenderSecurityTextStatus (props) {
 
     let outerdoor = <></>
-    if(props.state.station_settings.outer_door_sensor) {
-        outerdoor = <><Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{props.state.status.outer_door_open?'OPEN':'CLOSED'}</Box></>
+    if(props.station_settings.outer_door_sensor) {
+        outerdoor = <><Box gridArea={'outer-door-label'}>Outer Door</Box><Box gridArea={'outer-door-value'}>{props.sensor_readings.outer_door_open?'OPEN':'CLOSED'}</Box></>
     }
     let stationdoor = <></>
-    if(props.state.station_settings.station_door_sensor) {
-        stationdoor = <><Box gridArea={'station-door-label'}>Station Door</Box><Box gridArea={'station-door-value'}>{props.state.status.station_door_open?'OPEN':'CLOSED'}</Box></>
+    if(props.station_settings.station_door_sensor) {
+        stationdoor = <><Box gridArea={'station-door-label'}>Station Door</Box><Box gridArea={'station-door-value'}>{props.sensor_readings.station_door_open?'OPEN':'CLOSED'}</Box></>
     }
     let intpressure = <></>
     let extpressure = <></>
     let pressurediff = <></>
     let valuestr = ""
-    if(props.state.station_settings.pressure_sensors) {
-         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external, props.settings.display_settings.pressure_units )
+    if(props.station_settings.pressure_sensors) {
+         valuestr = sprintf.sprintf( "%.1f %s", props.sensor_readings.pressure_external, props.display_settings.pressure_units )
         extpressure = <><Box gridArea={'external-pressure-label'}>External Pressure</Box><Box gridArea={'external-pressure-value'}>{valuestr}</Box></>
-         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_internal, props.settings.display_settings.pressure_units )
+         valuestr = sprintf.sprintf( "%.1f %s", props.sensor_readings.pressure_internal, props.display_settings.pressure_units )
         intpressure = <><Box gridArea={'internal-pressure-label'}>Internal Pressure</Box><Box gridArea={'internal-pressure-value'}>{valuestr}</Box></>
-         valuestr = sprintf.sprintf( "%.1f %s", props.state.status.pressure_external-props.state.status.pressure_internal, props.settings.display_settings.pressure_units )
+         valuestr = sprintf.sprintf( "%.1f %s", props.sensor_readings.pressure_external-props.sensor_readings.pressure_internal, props.display_settings.pressure_units )
         pressurediff = <><Box gridArea={'pressure-differential-label'}>Pressure Diff (odor)</Box><Box gridArea={'pressure-differential-value'}>{valuestr}</Box></>
     }
 

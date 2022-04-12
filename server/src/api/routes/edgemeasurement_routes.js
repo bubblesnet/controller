@@ -18,6 +18,7 @@ function getClient() {
 function initError(error) {
     logger.error("error " + error)
 }
+
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
  * @apiName GetStatus
@@ -28,7 +29,7 @@ function initError(error) {
  *
  * @apiSuccess {XXXX} XXXX XXXX
  */
-async function postit(req, res, next) {
+async function postToMeasurementQueue(req, res, next) {
     if( typeof(__edgeMeasurementClient) === 'undefined' ) {
         await bubbles_queue.init(setClient,initError).then(() => {
                 // validate json
@@ -53,9 +54,22 @@ async function postit(req, res, next) {
         // return OK
         res.json(req.body);
     }
-
-
 }
+
+/**
+ * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
+ * @apiName GetStatus
+ * @apiGroup Measurement
+ *
+ * @apiParam {Number} userid User's unique ID.
+ * @apiParam {Number} deviceid Device's unique ID.
+ *
+ * @apiSuccess {XXXX} XXXX XXXX
+ */
+async function postit(req, res, next) {
+    return( postToMeasurementQueue(req,res,next))
+}
+
 
 router.post("/:userid/:deviceid", function (req, res, next) {
     logger.silly("post measurement user: " + req.params.userid + " device: " + req.params.deviceid);

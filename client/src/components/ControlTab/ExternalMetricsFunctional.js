@@ -7,8 +7,8 @@ import sprintf from 'sprintf-js';
 
 function RenderExternalMetrics (props) {
     let value = ""
-    if( typeof(props.state.status.light_external) != 'undefined' ) {
-        value = sprintf.sprintf("%.1f", props.state.status.light_external)
+    if( typeof(props.sensor_readings.light_external) != 'undefined' ) {
+        value = sprintf.sprintf("%.1f", props.sensor_readings.light_external)
     }
 
     let ret =
@@ -18,25 +18,28 @@ function RenderExternalMetrics (props) {
                 <div className={"value-holder-light-external"}>{value} lux</div>
             </div>
             <div id="airtempexternal-holder">
-                <RenderThermometer exists={props.state.station_settings.thermometer_external}
-                                   currentTemperature={props.state.status.temp_air_external}
-                                   units={props.settings.display_settings.temperature_units}
-                                   direction={props.state.status.temp_air_external_direction}/>
+                <RenderThermometer exists={props.station.thermometer_external}
+                                   display_settings={props.display_settings}
+                                   currentTemperature={props.sensor_readings.temp_air_external}
+                                   units={props.display_settings.temperature_units}
+                                   direction={props.sensor_readings.temp_air_external_direction}/>
             </div>
             <div id="humidityexternal-text-holder">
                 <RenderHygrometer prefix={"external"} exists="true"
-                                  currentHumidity={props.state.status.humidity_external}
-                                  units={props.settings.display_settings.humidity_units}
-                                  direction={props.state.status.humidity_external_direction}/>
+                                  display_settings={props.display_settings}
+                                  currentHumidity={props.sensor_readings.humidity_external}
+                                  units={props.display_settings.humidity_units}
+                                  direction={props.sensor_readings.humidity_external_direction}/>
             </div>
             <div className="externalpressure-holder">
-                <RenderBarometer exists={props.state.station_settings.pressure_sensors}
+                <RenderBarometer exists={props.station.pressure_sensors}
+                                 display_settings={props.display_settings}
                                  holderClassName={"pressure-holder"}
                                  textClassName={"pressure-text-holder"}
                     iconClassName={"pressure-icon-holder"}
-                    value={props.state.status.pressure_external}
-                    units={props.settings.display_settings.pressure_units}
-                    direction={props.state.status.pressure_external_direction} />
+                    value={props.sensor_readings.pressure_external}
+                    units={props.display_settings.pressure_units}
+                    direction={props.sensor_readings.pressure_external_direction} />
             </div>
         </>
     return (ret)

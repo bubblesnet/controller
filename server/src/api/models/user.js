@@ -47,7 +47,14 @@ async function findOneByUsername(username) {
     console.log("findOneByUsername")
     return new Promise(async function (resolve, reject) {
         console.log("username = " + username)
-        let ssql = 'select * from public.user where username = $1 order by lastname asc, firstname asc, email asc'
+        let ssql = 'select '+
+            ' userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber,  '+
+            ' displaysettingsid, units, language, theme, current_font, light_units, tub_volume_units,  '+
+            ' tub_depth_units, plant_height_units, humidity_units, temperature_units, pressure_units  '+
+            ' from public.user u  '+
+            ' join displaysettings d on u.userid = d.userid_User  '+
+            ' where username = $1 order by lastname asc, firstname asc, email asc'
+
         console.log("ssql = "+ssql)
         let values = [username]
         await pool.query(ssql, values, (err, results) => {
@@ -68,11 +75,19 @@ async function findOneByUsername(username) {
     })
 }
 
+
+
 async function findOneByUserid(userid) {
     console.log("findOneByUserid")
     return new Promise(function (resolve, reject) {
         console.log("userid = " + userid)
-        let ssql = 'select * from public.user where userid = $1 order by lastname asc, firstname asc, email asc'
+        let ssql = 'select '+
+            ' userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber,  '+
+            ' displaysettingsid, units, language, theme, current_font, light_units, tub_volume_units,  '+
+            ' tub_depth_units, plant_height_units, humidity_units, temperature_units, pressure_units  '+
+            ' from public.user u  '+
+            ' join displaysettings d on u.userid = d.userid_User  '+
+            ' where userid = $1 order by lastname asc, firstname asc, email asc'
         console.log("ssql = "+ssql)
         let values = [userid]
         pool.query(ssql, values, (err, results) => {

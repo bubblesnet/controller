@@ -7,10 +7,11 @@ import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 import RenderADCTextStatus from "./ADCTextStatusFunctional";
+import log from "roarr";
 
 
 function RenderTextStatus (props) {
-    console.log("RenderTextStatus")
+    log.trace("RenderTextStatus")
 
     let ret =
         <Grid round={'small'} direction={'vertical'}
@@ -26,19 +27,44 @@ function RenderTextStatus (props) {
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >
-                <RenderEnvironmentTextStatus  settings={props.settings} state={props.state}/>
+                <RenderEnvironmentTextStatus station_settings={props.station}
+                                             sensor_readings={props.sensor_readings}
+                                             display_settings={props.display_settings}
+                                             automation_settings={props.automation_settings}
+                                             settings={props.settings}
+                                             />
             </Box>
             <Box gridArea={'state'} >
-                <RenderStateTextStatus settings={props.settings} state={props.state}/>
+                <RenderStateTextStatus station={props.station}
+                                       sensor_readings={props.sensor_readings}
+                                       display_settings={props.display_settings}
+                                       automation_settings={props.automation_settings}
+                                       settings={props.settings}
+                                       various_dates={props.various_dates}/>
             </Box>
             <Box gridArea={'security'} >
-                <RenderSecurityTextStatus  settings={props.settings} state={props.state}/>
+                <RenderSecurityTextStatus station_settings={props.station}
+                                          sensor_readings={props.sensor_readings}
+                                          display_settings={props.display_settings}
+                                          automation_settings={props.automation_settings}
+                                          settings={props.settings}
+                                          />
             </Box>
             <Box gridArea={'interventions'} >
-                <RenderInterventionsTextStatus  settings={props.settings} state={props.state}/>
+                <RenderInterventionsTextStatus station_settings={props.station}
+                                               sensor_readings={props.sensor_readings}
+                                               display_settings={props.display_settings}
+                                               automation_settings={props.automation_settings}
+                                               settings={props.settings}
+                                               />
             </Box>
             <Box gridArea={'adc'} >
-                <RenderADCTextStatus  settings={props.settings} state={props.state}/>
+                <RenderADCTextStatus station_settings={props.station}
+                                     sensor_readings={props.sensor_readings}
+                                     display_settings={props.display_settings}
+                                     automation_settings={props.automation_settings}
+                                     settings={props.settings}
+                                     />
             </Box>
         </Grid>
     return (ret)

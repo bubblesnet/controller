@@ -12,180 +12,217 @@ import log from 'roarr';
 
 
 function RenderStationSettingsTab (props) {
-    log.info("RenderStationSettingsTab props hum = "+props.state.station_settings.humidifier)
-    let [local_state, setState] = useState({ station_settings: JSON.parse(JSON.stringify(props.state.station_settings))});
+    log.trace("RenderStationSettingsTab props display_settings = "+props.display_settings)
+    let [local_station, setStation] = useState(props.station);
     let [reset_button_state,setResetButtonState] = useState(false)
-    let [defaults_button_state,setDefaultsButtonState] = useState(true)
+    let [defaults_button_state] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
 
 
     function applyChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
-        props.setStateFromChild(local_state)
+        props.setStateFromChild(local_station)
     }
 
     function resetChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
-        let x = JSON.parse(JSON.stringify(props.state.station_settings))
-        setState({station_settings: x});
+        let x = JSON.parse(JSON.stringify(props.station))
+        setStation(x);
     }
 
     function changeState(s) {
-        setState({station_settings: JSON.parse(JSON.stringify(s.station_settings))});
+        setStation(s);
         setApplyButtonState(true);
         setResetButtonState(true);
     }
 
     function setEnclosureType(s) {
-        log.info("setEnclosureType to "+JSON.stringify(s))
-        local_state.station_settings.enclosure_type = s
-        changeState(local_state)
+        log.trace("setEnclosureType to "+JSON.stringify(s))
+        let x = JSON.parse(JSON.stringify(props.station))
+        x.enclosure_type = s
+        changeState(x)
     }
 
     function setTubDepth(s) {
-        log.info("setTubDepth to "+JSON.stringify(s))
+        log.trace("setTubDepth to "+JSON.stringify(s))
+        let x = JSON.parse(JSON.stringify(local_station))
         if( s === '' ) {
-            local_state.station_settings.tub_depth = ''
+            x.tub_depth = ''
         } else {
-            local_state.station_settings.tub_depth = Number(s)
+            x.tub_depth = Number(s)
         }
-        changeState(local_state)
+        changeState(x)
     }
 
     function setTubVolume(s) {
-        log.info("setTubVolume to "+JSON.stringify(s))
+        log.trace("setTubVolume to "+JSON.stringify(s))
+        let x = JSON.parse(JSON.stringify(local_station))
         if( s === '' ) {
-            local_state.station_settings.tub_volume = ''
+            x.tub_volume = ''
         } else {
-            local_state.station_settings.tub_volume = Number(s)
+            x.tub_volume = Number(s)
         }
-        changeState(local_state)
+        changeState(x)
     }
 
 
     function toggleHumidifier() {
-        local_state.station_settings.humidifier = !local_state.station_settings.humidifier
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.humidifier = !x.humidifier
+        changeState(x)
+    }
+    function toggleHeightSensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.height_sensor = !x.height_sensor
+        changeState(x)
+    }
+    function toggleWaterHeater() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.water_heater = !x.water_heater
+        changeState(x)
     }
 
     function toggleRootPhSensor() {
-        local_state.station_settings.root_ph_sensor = !local_state.station_settings.root_ph_sensor
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.root_ph_sensor = !x.root_ph_sensor
+        changeState(x)
     }
 
     function toggleExhaustFan() {
-        local_state.station_settings.exhaust_fan = !local_state.station_settings.exhaust_fan
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.exhaust_fan = !x.exhaust_fan
+        changeState(x)
     }
 
     function toggleIntakeFan() {
-        local_state.station_settings.intake_fan = !local_state.station_settings.intake_fan
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.intake_fan = !x.intake_fan
+        changeState(x)
     }
 
     function toggleWaterLevelSensor() {
-        local_state.station_settings.water_level_sensor = !local_state.station_settings.water_level_sensor
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.water_level_sensor = !x.water_level_sensor
+        changeState(x)
     }
 
     function toggleHumiditySensorInternal() {
-        local_state.station_settings.humidity_sensor_internal = !local_state.station_settings.humidity_sensor_internal
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.humidity_sensor_internal = !x.humidity_sensor_internal
+        changeState(x)
     }
 
     function toggleExternalHumiditySensor() {
-        local_state.station_settings.humidity_sensor_external = !local_state.station_settings.humidity_sensor_external
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.humidity_sensor_external = !x.humidity_sensor_external
+        changeState(x)
     }
 
     function toggleExternalThermometer() {
-        local_state.station_settings.thermometer_external = !local_state.station_settings.thermometer_external
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.thermometer_external = !x.thermometer_external
+        changeState(x)
     }
 
     function toggleThermometerTop() {
-        local_state.station_settings.thermometer_top = !local_state.station_settings.thermometer_top
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.thermometer_top = !x.thermometer_top
+        changeState(x)
     }
 
     function toggleThermometerMiddle() {
-        local_state.station_settings.thermometer_middle = !local_state.station_settings.thermometer_middle
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.thermometer_middle = !x.thermometer_middle
+        changeState(x)
     }
 
     function toggleThermometerBottom() {
-        local_state.station_settings.thermometer_bottom = !local_state.station_settings.thermometer_bottom
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.thermometer_bottom = !x.thermometer_bottom
+        changeState(x)
     }
 
     function toggleWaterThermometer() {
-        local_state.station_settings.thermometer_water = !local_state.station_settings.thermometer_water
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.thermometer_water = !x.thermometer_water
+        changeState(x)
     }
 
     function toggleHeater() {
-        local_state.station_settings.heater = !local_state.station_settings.heater
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.heater = !x.heater
+        changeState(x)
     }
 
     function toggleWaterPump() {
-        local_state.station_settings.water_pump = !local_state.station_settings.water_pump
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.water_pump = !x.water_pump
+        changeState(x)
     }
 
     function toggleAirPump() {
-        local_state.station_settings.air_pump = !local_state.station_settings.air_pump
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.air_pump = !x.air_pump
+        changeState(x)
     }
 
     function toggleLightSensorInternal() {
-        local_state.station_settings.light_sensor_internal = !local_state.station_settings.light_sensor_internal
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.light_sensor_internal = !x.light_sensor_internal
+        changeState(x)
     }
 
     function toggleLightSensorExternal() {
-        local_state.station_settings.light_sensor_external = !local_state.station_settings.light_sensor_external
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x['light_sensor_external'] = !x['light_sensor_external']
+        changeState(x)
     }
 
     function toggleMovementSensor() {
-        local_state.station_settings.movement_sensor = !local_state.station_settings.movement_sensor
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.movement_sensor = !x.movement_sensor
+        changeState(x)
     }
 
     function toggleOuterDoorSensor() {
-        local_state.station_settings.outer_door_sensor = !local_state.station_settings.outer_door_sensor
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.outer_door_sensor = !x.outer_door_sensor
+        changeState(x)
     }
 
     function toggleStationDoorSensor() {
-        local_state.station_settings.station_door_sensor = !local_state.station_settings.station_door_sensor
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.station_door_sensor = !x.station_door_sensor
+        changeState(x)
     }
 
     function togglePressureSensors() {
-        local_state.station_settings.pressure_sensors = !local_state.station_settings.pressure_sensors
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.pressure_sensors = !x.pressure_sensors
+        changeState(x)
     }
 
     function toggleGerminateLight() {
-        local_state.station_settings.light_germinate = !local_state.station_settings.light_germinate
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.light_germinate = !x.light_germinate
+        changeState(x)
     }
 
     function toggleVegetativeLight() {
-        local_state.station_settings.light_vegetative = !local_state.station_settings.light_vegetative
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.light_vegetative = !x.light_vegetative
+        changeState(x)
     }
 
     function toggleBloomLight() {
-        local_state.station_settings.light_bloom = !local_state.station_settings.light_bloom
-        changeState(local_state)
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.light_bloom = !x.light_bloom
+        changeState(x)
     }
 
-    log.info("RenderStationSettingsTab station_settings rendering with props.state.humidifier set to "+ props.state.station_settings.humidifier)
+    log.trace("RenderStationSettingsTab station_settings rendering with props.station.humidifier set to "+ props.station.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader
@@ -209,11 +246,11 @@ function RenderStationSettingsTab (props) {
                                 <Table id="light-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Light</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_state.station_settings.light_germinate}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_state.station_settings.light_vegetative}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_state.station_settings.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor" onChange={toggleLightSensorInternal} checked={local_state.station_settings.light_sensor_internal}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Light Sensor" onChange={toggleLightSensorExternal} checked={local_state.station_settings.light_sensor_external}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_station.light_germinate}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_station.light_vegetative}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_station.light_bloom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor" onChange={toggleLightSensorInternal} checked={local_station.light_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Light Sensor" onChange={toggleLightSensorExternal} checked={local_station.light_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -221,9 +258,9 @@ function RenderStationSettingsTab (props) {
                                 <Table  id="humidity-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={local_state.station_settings.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensorInternal} checked= {local_state.station_settings.humidity_sensor_internal}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_state.station_settings.humidity_sensor_external}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={local_station.humidifier}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensorInternal} checked= {local_station.humidity_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_station.humidity_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -231,12 +268,13 @@ function RenderStationSettingsTab (props) {
                                 <Table  id="temperature-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked= {local_state.station_settings.heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked= {local_state.station_settings.thermometer_top}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_state.station_settings.thermometer_middle}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_state.station_settings.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_state.station_settings.thermometer_external}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_state.station_settings.thermometer_water}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked= {local_station.heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked= {local_station.thermometer_top}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_station.thermometer_middle}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_station.thermometer_bottom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_station.thermometer_external}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Heater" onChange={toggleWaterHeater} checked= {local_station.water_heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_station.thermometer_water}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -244,10 +282,11 @@ function RenderStationSettingsTab (props) {
                                 <Table id="nutrition-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked= {local_state.station_settings.water_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked= {local_state.station_settings.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_state.station_settings.water_level_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_state.station_settings.root_ph_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked= {local_station.water_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked= {local_station.air_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_station.water_level_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_station.root_ph_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Height Sensor" onChange={toggleHeightSensor} checked= {local_station.height_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -257,9 +296,9 @@ function RenderStationSettingsTab (props) {
                                 <Table id="security-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Airflow and Odor</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked= {local_state.station_settings.pressure_sensors}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked= {local_state.station_settings.intake_fan}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked= {local_state.station_settings.exhaust_fan}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked= {local_station.pressure_sensors}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked= {local_station.intake_fan}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked= {local_station.exhaust_fan}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
@@ -267,9 +306,9 @@ function RenderStationSettingsTab (props) {
                                 <Table  >
                                 <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked= {local_state.station_settings.station_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_state.station_settings.outer_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_state.station_settings.movement_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked= {local_station.station_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_station.outer_door_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_station.movement_sensor}/></TableCell></TableRow>
                                 </tbody>
                                 </Table>
                             </TableCell>
@@ -278,26 +317,29 @@ function RenderStationSettingsTab (props) {
                         <TableRow>
                         <TableCell className={"table-cell"}>Enclosure type</TableCell>
                             <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type" options= {props.state.station_settings.enclosure_options} value= {props.state.station_settings.enclosure_type} onChange={event => setEnclosureType(event.target.value)}/>
+                                <RadioButtonGroup name="enclosure-type"
+                                                  options={props.display_settings.enclosure_options}
+                                                  value={props.station.enclosure_type}
+                                                  onChange={event => setEnclosureType(event.target.value)}/>
                             </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub depth</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value= {props.state.station_settings.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
+                                <TextInput value= {props.station.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                             </TableCell>
-                            <TableCell>{props.settings.display_settings.tub_depth_units}</TableCell>
+                            <TableCell>{props.display_settings.tub_depth_units}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tub volume</TableCell>
                             <TableCell colSpan={2}>
-                                <TextInput value= {props.state.station_settings.tub_volume} onChange={event => setTubVolume(event.target.value)} />
+                                <TextInput value= {props.station.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                             </TableCell>
-                            <TableCell >{props.settings.display_settings.tub_volume_units}</TableCell>
+                            <TableCell >{props.display_settings.tub_volume_units}</TableCell>
                         </TableRow>
                        </tbody>
                     </Table>
-            <RenderFormActions state= {local_state} applyAction={applyChanges} resetAction={resetChanges}
+            <RenderFormActions state= {local_station} applyAction={applyChanges} resetAction={resetChanges}
                                resetButtonState={reset_button_state}
                                defaultsButtonState={defaults_button_state}
                                applyButtonState={apply_button_state}

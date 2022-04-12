@@ -302,12 +302,30 @@ body {
   background: url("images/heater-off.gif")
 }
 
+#waterheater-holder-on {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 0px;
+  background: url("images/waterheater-on.gif")
+}
+
+#waterheater-holder-off {
+  right: 38px;
+  width: 76px;
+  height: 76px;
+  position: absolute;
+  top: 0px;
+  background: url("images/waterheater-off.gif")
+}
+
 #humidifier-holder-on {
   right: 230px;
   width: 100px;
   height: 150px;
   position: absolute;
-  top: 325px;
+  top:325px;
   background: url("images/humidifier-on.gif")
 }
 
@@ -930,6 +948,14 @@ body {
   width: 246px;
 }
 
+.waterheater {
+  height: 100px;
+  right: 40px;
+  position: absolute;
+  top: 100px;
+  width: 100px;
+}
+
 .fans {
   height: 450px;
   left: 458px;
@@ -961,6 +987,7 @@ body {
   top: 0;
   background: url(images/heater.png) no-repeat;
 }
+
 .heater-2 {
   left: 9px;
   position: absolute;

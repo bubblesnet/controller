@@ -1,17 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Grid} from 'grommet';
 import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
+import log from "roarr";
 
 function RenderStateTextStatus (props) {
 
-    let [state, setState ] = useState(props.state); //
-    let [settings, setSettings ] = useState(props.settings); //
-
-    console.log("RenderStateTextStatus")
-    let plant_height = sprintf.sprintf("%.1f", state.status.plant_height)
+    log.trace("RenderStateTextStatus")
+    let plant_height = sprintf.sprintf("%.1f", props.sensor_readings.plant_height)
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}
         areas={[
@@ -28,12 +26,12 @@ function RenderStateTextStatus (props) {
         gap={"xxsmall"} >
 
         <Box gridArea={'table-label'}>Current Plant State</Box>
-        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {settings.display_settings.plant_height_units}</Box>
-        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{state.automation_settings.current_lighting_schedule}</Box>
+        <Box gridArea={'plant-label'}>Plant height</Box><Box gridArea={'plant-value'}>{plant_height} {props.display_settings.plant_height_units}</Box>
+        <Box gridArea={'light-schedule-label'}>Light schedule</Box><Box gridArea={'light-schedule-value'}>{props.automation_settings.current_lighting_schedule}</Box>
          <Box gridArea={'light-cycle-label'}>Light cycle starts</Box><Box gridArea={'light-cycle-value'}>{'10 AM EST'}</Box>
-        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{state.automation_settings.current_stage}</Box>
-        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{state.status.start_date_current_stage}</Box>
-        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{state.status.start_date_next_stage}</Box>
+        <Box gridArea={'stage-label'}>Current stage</Box><Box gridArea={'stage-value'}>{props.station.current_stage}</Box>
+        <Box gridArea={'stage-current-label'}>Current stage started</Box><Box gridArea={'stage-current-value'}>{props.various_dates.start_date_current_stage}</Box>
+        <Box gridArea={'next-stage-label'}>Next stage starts</Box><Box gridArea={'next-stage-value'}>{props.various_dates.start_date_next_stage}</Box>
      </Grid>
     return( ret );
 }
