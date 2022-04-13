@@ -1,6 +1,8 @@
 import {Button, Grid} from "grommet";
 import React, {useState} from "react";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderFormActions (props) {
     let [state] = useState(props.state);
 

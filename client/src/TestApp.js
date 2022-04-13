@@ -1,6 +1,8 @@
 import React, { useState} from 'react';
 import RenderTestTab from "./components/TestTab/TestTabFunctional";
 
+// copyright and license inspection - no issues 4/13/22
+
 function TestApp (props) {
 
     const [loading] = useState(false); // Trigger in useEffect that tells us to refetch data

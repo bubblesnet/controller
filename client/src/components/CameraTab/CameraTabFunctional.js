@@ -9,6 +9,8 @@ import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderCameraTab(props) {
 //    console.log("RenderCameraTab "+JSON.stringify(props.station.attached_devices))
     let userid = "90000009"

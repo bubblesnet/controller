@@ -5,6 +5,8 @@ import '../../overview_style.css'
 import {Grommet} from 'grommet'
 import RenderTestButton from './TestButtonFunctional'
 
+/// TODO check copyright and license
+
 function RenderTestTab (props) {
 
     let [loading, setLoading] = useState(true); // Trigger in useEffect that tells us to refetch data

@@ -2,15 +2,7 @@ import React from 'react';
 import '../../App.css';
 import sprintf from 'sprintf-js';
 
-/*
-                        <RenderBarometer exists={props.state.station_settings.pressure_sensors}
-                                         textClassName={"pressure-text-holder"}
-                                         iconClassName={"pressure-icon-holder"}
-                                         value={props.state.status.pressure_internal}
-                                         units={props.settings.display_settings.pressure_units}
-                                         direction={props.state.status.pressure_internal_direction} />
-
- */
+// copyright and license inspection - no issues 4/13/22
 
 function RenderBarometer (props) {
     let directionClassName=""

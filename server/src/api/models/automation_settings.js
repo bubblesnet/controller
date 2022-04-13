@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 const {sql} = require('@databases/pg');
 const stage = require('./stage')
 const device = require('./device')

@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 
 const express = require('express');
 const router = express.Router();
@@ -26,7 +28,6 @@ bcrypt.genSalt(saltRounds, async function(err, salt) {
         if( err ) {
             console.error("Error " + err )
         }
-        // Store hash in your password DB.
         myhash = hash
         console.log("myhash = " + hash)
     });
@@ -75,48 +76,6 @@ async function findUser(req,res) {
     });
 
 }
-
-/*
-router.get('/logout', function(req, res) {
-    res.status(200).send({ auth: false, token: null });
-});
-
-
-router.post('/register', function(req, res) {
-    return (newUser(req, res,
-        function (err, user) {
-            if (err) return res.status(500).send("There was a problem registering the user`.");
-
-            // if user is registered without errors
-            // create a token
-            let token = jwt.sign({id: user._id}, config.secret, {
-                expiresIn: 86400 // expires in 24 hours
-            });
-
-            res.status(200).send({auth: true, token: token});
-        }));
-});
-
-function newUser(req,res, cb) {
-    let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    user.createUser({
-            name : req.body.name,
-            email : req.body.email,
-            passwordhash : hashedPassword
-        }, cb )
-        .then(function (user) {
-            console.log("Created real new user "+JSON.stringify(user));
-            return( user )
-        })
-        .catch(function (err) {
-            console.error("new User error "+err)
-            return( {} )
-        })
-    ;
-}
-
- */
 
 module.exports = {
     router,

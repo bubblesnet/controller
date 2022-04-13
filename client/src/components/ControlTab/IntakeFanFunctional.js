@@ -1,6 +1,8 @@
 import React from 'react';
 import '../../App.css';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderIntakeFan (props) {
 //    console.log("RenderIntakeFan intakeFanOn = " + props.on)
 

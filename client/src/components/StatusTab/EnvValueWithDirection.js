@@ -5,6 +5,8 @@ import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
 
+/// TODO check copyright and license
+
 function RenderEnvValueWithDirection (props) {
     let label_area= `${props.gridArea}-label`
     let value_area= `${props.gridArea}-value`

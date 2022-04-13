@@ -10,6 +10,7 @@ import GoogleFontLoader from "react-google-font-loader";
 import '../../logimplementation'
 import log from 'roarr';
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderStationSettingsTab (props) {
     log.trace("RenderStationSettingsTab props display_settings = "+props.display_settings)

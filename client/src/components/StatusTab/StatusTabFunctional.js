@@ -10,6 +10,8 @@ import RenderPhMeter from "./PhMeterFunctional";
 import RenderTextStatus from "./TextStatusFunctional";
 import GoogleFontLoader from "react-google-font-loader";
 
+/// TODO check copyright and license
+
 function RenderStatusTab (props) {
 
     let ret = ""

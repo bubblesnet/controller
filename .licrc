@@ -1,5 +1,5 @@
 [licenses]
-# This indicates which are the only licenses that Licensebat will accept.
+# This indicates which are the only licenses that Licensebot will accept.
 # The rest will be flagged as not allowed.
 accepted = ["MIT", "MSC", "BSD"]
 # This will indicate which licenses are not accepted.
@@ -9,7 +9,7 @@ accepted = ["MIT", "MSC", "BSD"]
 # If both of them are informed, only accepted will be considered.
 
 [dependencies]
-# This will allow users to flag some dependencies so that Licensebat will not check for their license.
+# This will allow users to flag some dependencies so that Licensebot will not check for their license.
 ignored=["ignored_dep1", "ignored_dep2"]
 
 [behavior]

@@ -6,6 +6,8 @@ import {Box} from "grommet";
 import RenderEnvValueWithDirection from './EnvValueWithDirection'
 import log from "roarr";
 
+/// TODO check copyright and license
+
 function RenderStateTextStatus (props) {
 
     log.trace('RenderStateTextStatus temp='+props.sensor_readings.temp_air_middle)

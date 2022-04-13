@@ -2,6 +2,8 @@ import React from 'react';
 import '../../App.css';
 import sprintf from 'sprintf-js';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderPhmeter (props) {
     let value = sprintf.sprintf("%2.1f", props.sensor_readings.root_ph)
     let className = ""

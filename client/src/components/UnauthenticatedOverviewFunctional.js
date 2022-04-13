@@ -6,6 +6,7 @@ import {Text, Box, TextInput, Markdown} from "grommet";
 import util from "../util";
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderUnauthenticatedOverview (props) {
 

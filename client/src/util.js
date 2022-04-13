@@ -2,6 +2,8 @@
  * Normalize a port into a number, string, or false.
  */
 
+// copyright and license inspection - no issues 4/13/22
+
 const fs = require('fs')
 const log = require("roarr");
 

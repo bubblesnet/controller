@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../../App.css';
 
 import Switch from "react-input-switch";
+/// TODO check copyright and license
 
 function RenderTestButton (props) {
     const [on,setOn] = useState(true);

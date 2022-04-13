@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 global.__root   = __dirname + '/';
 
 const bubbles_queue = require('./api/models/bubbles_queue')
@@ -69,7 +72,6 @@ function runWebSocketServer(port) {
                 console.error("error " + err)
             }
         })
-        /// TODO protocol needs to be extended to put userid and deviceid into message.  This is BS
         conn.on("text", function (str) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND ) {

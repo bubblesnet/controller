@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 

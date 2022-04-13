@@ -1,5 +1,8 @@
 import React from 'react';
 
+// copyright and license inspection - no issues 4/13/22
+
+
 class Loader  extends React.Component {
 
     render() {

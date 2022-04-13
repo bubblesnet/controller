@@ -5,6 +5,8 @@ import RenderHygrometer from "./HygrometerFunctional";
 import RenderLightMeter from "./LightMeterFunctional";
 import RenderBarometer from "./BarometerFunctional";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderGrowLight (props) {
     let ret
         if( props.on === false ) {

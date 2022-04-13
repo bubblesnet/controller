@@ -3,6 +3,8 @@ import React from 'react';
 import log from 'roarr';
 import '../logimplementation'
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderSiteStationMenu(props) {
 
     if( typeof props.site === 'undefined') {

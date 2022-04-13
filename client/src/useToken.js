@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import log from "roarr";
 
+/// TODO check copyright and license
+
 export default function useToken() {
     const getToken = () => {
         try {

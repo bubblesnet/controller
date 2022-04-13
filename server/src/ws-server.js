@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 global.__root   = __dirname + '/';
 const util = require('./util')
 const debug = require('debug')('ws-server')

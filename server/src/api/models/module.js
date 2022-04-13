@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 const sensor = require('./sensor')
@@ -49,7 +51,7 @@ async function updateModule(body) {
 async function deleteModule(moduleid) {
     console.log("deleteModule "+moduleid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM module WHERE moduleid "+moduleid)
+        console.log("DELETE FROM module WHERE moduleid = "+moduleid)
 
         pool.query('DELETE FROM module WHERE moduleid = $1', [moduleid], (error, results) => {
             if (error) {

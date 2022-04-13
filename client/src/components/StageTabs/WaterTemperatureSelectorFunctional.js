@@ -5,6 +5,7 @@ import thermometer from '../../images/thermometer-icon.png'
 import './stagesTab.css';
 import '../../Palette.css';
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderWaterTemperatureSelector(props) {
     function setValue(value) {

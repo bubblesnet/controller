@@ -5,6 +5,8 @@ import lighting_schedule_options from "../../options_lighting_schedule.json"
 import light_type_options from "../../options_light_type.json"
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderLightSelector (props) {
 
     let options = [

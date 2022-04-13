@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 /**
  * Created by rodley on 4/21/2017.
  */

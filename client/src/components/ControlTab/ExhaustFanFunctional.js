@@ -1,5 +1,7 @@
 import React from "react";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderExhaustFan (props) {
 //    console.log("RenderExhaustFan " + props.on)
     let ret

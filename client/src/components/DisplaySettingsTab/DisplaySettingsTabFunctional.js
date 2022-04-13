@@ -10,6 +10,7 @@ import fontlist from "./fontlist.json"
 import GoogleFontLoader from "react-google-font-loader";
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderDisplaySettingsTab (props) {
 

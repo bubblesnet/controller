@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 var express = require('express');
 var router = express.Router();
 const bubbles_queue = require('../models/bubbles_queue')

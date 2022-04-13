@@ -19,6 +19,8 @@ import GoogleFontLoader from "react-google-font-loader";
 import RenderPhmeter from "./PhmeterFunctional";
 import log from 'roarr';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderControlTab(props) {
 
     let switchControl = {

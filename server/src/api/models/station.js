@@ -1,3 +1,6 @@
+// copyright and license inspection - no issues 4/13/22
+
+
 const {sql} = require('@databases/pg');
 const stage = require('./stage')
 const device = require('./device')
@@ -60,7 +63,7 @@ async function getAutomationSettings(stationid) {
 async function getEvents(stationid, count) {
     const results = await db.query(
         sql`
-            SELECT * from events where stationid_station = ${stationid}
+            SELECT * from event where stationid_station = ${stationid}
             `)
     console.log("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )

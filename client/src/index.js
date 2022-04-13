@@ -7,6 +7,9 @@ import App from './App';
 import locale_en from "./translations/en.json";
 import locale_nl from "./translations/nl.json";
 
+// copyright and license inspection - no issues 4/13/22
+
+
 const data = {
     'nl': locale_nl,
     'en': locale_en

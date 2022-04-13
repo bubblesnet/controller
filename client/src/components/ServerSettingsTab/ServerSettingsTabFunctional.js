@@ -17,6 +17,7 @@ import {servers} from "../../api/utils"
 import log from "roarr";
 import util from "../../util";
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderServerSettingsTab (props) {
     let servers = util.get_server_ports_for_environment(props.nodeEnv)

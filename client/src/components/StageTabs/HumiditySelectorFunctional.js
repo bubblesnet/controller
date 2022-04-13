@@ -5,7 +5,7 @@ import './stagesTab.css';
 import '../../Palette.css';
 import log from "roarr";
 
-
+// copyright and license inspection - no issues 4/13/22
 
 function RenderHumiditySelector(props) {
     function setValue(value) {

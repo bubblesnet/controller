@@ -4,6 +4,8 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 
+/// TODO check copyright and license
+
 function RenderStateTextStatus (props) {
     let initValues = {
         stage: "vegetative",

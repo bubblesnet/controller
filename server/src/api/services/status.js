@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 var express = require('express');
 var locals = require('../../config/locals');
 var fs = require('fs');

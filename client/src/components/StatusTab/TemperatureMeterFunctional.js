@@ -3,6 +3,8 @@ import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
 
+/// TODO check copyright and license
+
 function RenderTemperatureMeter (props) {
     let valueText = sprintf.sprintf("%.1f%s", props.sensor_readings.temp_air_middle, props.display_settings.temperature_units)
     let ret =

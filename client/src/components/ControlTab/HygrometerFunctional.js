@@ -2,6 +2,8 @@ import React from 'react';
 import '../../App.css';
 import sprintf from 'sprintf-js';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderHygrometer (props) {
 //    console.log("RenderHygrometer humidity = " + props.currentHumidity)
     let holderid = props.prefix + "humidity-holder"

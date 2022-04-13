@@ -3,6 +3,8 @@ import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
 
+/// TODO check copyright and license
+
 function RenderPhMeter (props) {
 
     let valueText = sprintf.sprintf( "%.1f", props.sensor_readings.root_ph )

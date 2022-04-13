@@ -16,6 +16,7 @@ import options_pressure_units from './options_pressure_units.json'
 import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
+// copyright and license inspection - no issues 4/13/22
 
 function App(props) {
 

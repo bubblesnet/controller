@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 const locals = require("../../config/locals");
 
 const server_db = require('./bubbles_db')

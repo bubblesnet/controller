@@ -1,3 +1,5 @@
+/// TODO check copyright and license
+
 // authcontroller_routes.js
 
 const express = require('express');

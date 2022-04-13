@@ -5,6 +5,8 @@ import './statusTab.css'
 import {Box} from "grommet";
 import RenderADCValueWithDirection from './ADCValueWithDirection'
 
+/// TODO check copyright and license
+
 function RenderADCTextStatus (props) {
     let ret =
         <Grid className={'status-table-holder'}

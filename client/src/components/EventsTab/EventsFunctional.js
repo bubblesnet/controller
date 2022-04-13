@@ -7,6 +7,8 @@ import GoogleFontLoader from "react-google-font-loader";
 import RenderFormActions from "../FormActions";
 import moment from "moment";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderOverview (props) {
     const [station] = useState(JSON.parse(JSON.stringify(props.station)));
     const [events,setEvents] = useState([])

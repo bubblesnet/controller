@@ -1,7 +1,8 @@
 import React from "react";
 import {RadioButtonGroup} from "rendition";
 import log from "roarr";
-// import {ReadyState} from "react-use-websocket";
+
+// copyright and license inspection - no issues 4/13/22
 
 function RenderEnvironmentPickerFunctional(props) {
 

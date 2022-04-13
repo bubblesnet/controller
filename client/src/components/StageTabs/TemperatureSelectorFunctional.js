@@ -7,6 +7,7 @@ import '../../Palette.css';
 import {getAutomationSetting} from "../../api/utils";
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderTemperatureSelector(props) {
     function setValue(value) {

@@ -4,6 +4,8 @@ import {TableRow,TableCell} from "grommet";
 import './controlTab.css'
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
+
 var slideclick_valid = new Audio("slideclick_valid.mp3");
 var slideclick_invalid = new Audio("slideclick_invalid.mp3");
 

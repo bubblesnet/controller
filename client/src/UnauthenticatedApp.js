@@ -2,6 +2,8 @@ import React from 'react';
 import RenderUnauthenticatedOverview from "./components/UnauthenticatedOverviewFunctional";
 import UnauthenticatedHeader from "./components/UnauthenticatedHeader";
 
+// copyright and license inspection - no issues 4/13/22
+
 
 function UnauthenticatedApp(props) {
     return (

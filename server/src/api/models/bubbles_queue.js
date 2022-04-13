@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 'use strict';
 const Stomp = require('stompit');
 let state = require('../../initial_state.json');

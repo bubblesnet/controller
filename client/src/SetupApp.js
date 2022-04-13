@@ -16,6 +16,8 @@ import initial_state from './initial_station_state.json'
 import util from "./util";
 import log from "roarr";
 
+// copyright and license inspection - no issues 4/13/22
+
 function SetupApp (props) {
 
     //Public API that will echo messages sent to it back to the client

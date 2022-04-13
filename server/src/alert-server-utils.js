@@ -4,6 +4,9 @@ let humidity_low,humidity_high, humidity_units
 let pH_low, pH_high, pH_units
 let water_level_low, water_level_high, water_level_units
 
+// copyright and license inspection - no issues 4/13/22
+
+
 function within_range(low,high,units,value, value_units ) {
     //
     if( units !== value_units ) {

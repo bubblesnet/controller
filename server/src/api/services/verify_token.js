@@ -1,3 +1,4 @@
+// copyright and license inspection - no issues 4/13/22
 
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../../config/locals'); // get our config file

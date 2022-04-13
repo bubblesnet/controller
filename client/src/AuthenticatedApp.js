@@ -35,6 +35,8 @@ import moment from "moment";
 
 import {changeStage} from './api/utils';
 
+// copyright and license inspection - no issues 4/13/22
+
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"

@@ -1,6 +1,8 @@
 import React from 'react';
 import '../App.css';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderTiltFunctional (props) {
 //    console.log("RenderTilt rendering as " + props.tilt)
     let ret = <>

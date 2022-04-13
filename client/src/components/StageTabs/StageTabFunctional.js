@@ -15,6 +15,8 @@ import log from "roarr";
 import {getStage,getAutomationSetting, getSite} from "../../api/utils";
 import util from "../../util";
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderStageTab (props) {
 
     log.trace("RenderStageTab props.automation_setting = " + JSON.stringify(getAutomationSetting(props.automation_settings, props.selected_stage)))

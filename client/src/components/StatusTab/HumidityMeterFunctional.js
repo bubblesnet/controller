@@ -4,6 +4,8 @@ import sprintf from 'sprintf-js';
 
 import ReactSpeedometer from "react-d3-speedometer";
 
+/// TODO check copyright and license
+
 function RenderHumidityMeter (props) {
     let valueText = sprintf.sprintf("%.1f%s", props.sensor_readings.humidity_internal, props.display_settings.humidity_units)
     let ret =

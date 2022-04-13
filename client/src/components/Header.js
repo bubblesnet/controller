@@ -9,6 +9,8 @@ import log from 'roarr';
 import '../logimplementation'
 import {Button} from "grommet";
 
+// copyright and license inspection - no issues 4/13/22
+
 function Header (props) {
     log.trace("render Header with props "+JSON.stringify(props) )
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers

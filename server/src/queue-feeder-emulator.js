@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 const bubbles_queue = require("./api/models/bubbles_queue")
 let state = require('./initial_state.json')
 const util = require('./util')

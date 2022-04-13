@@ -6,6 +6,8 @@ import {Box} from "grommet";
 import sprintf from 'sprintf-js'
 import log from "roarr";
 
+/// TODO check copyright and license
+
 function RenderStateTextStatus (props) {
 
     log.trace("RenderStateTextStatus")

@@ -5,6 +5,8 @@ import Switch from "react-input-switch";
 import log from 'roarr';
 import RenderStageSelector from "../StageTabs/StageSelector";
 
+// copyright and license inspection - no issues 4/13/22
+
 var slideclick_valid = new Audio("slideclick_valid.mp3");
 
 function goodbeep() {

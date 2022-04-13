@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 var express = require('express');
 var fs = require('fs');
 var db = require('../routes/db');

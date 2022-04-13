@@ -1,3 +1,5 @@
+// copyright and license inspection - no issues 4/13/22
+
 global.__root   = __dirname + '/';
 const event = require('./api/models/event')
 const debug = require('debug')('queue-server')
@@ -10,8 +12,7 @@ function setClient(client) {
     __queueClient = client;
 }
 
-// TODO service of topic should be distinct from service of queue or queue benefit isn't realized - everything backs up
-// behind slow database.
+/// TODO service of topic should be distinct from service of queue or queue benefit isn't realized - everything backs up behind slow database.
 const serveMessageQueue = async() => {
     const sendHeaders = {
         'destination': '/topic/bubbles_ui',
@@ -41,7 +42,7 @@ async function storeMessage(body) {
         return;
     }
     try {
-        // TODO cleanup this message cleanup.  relation of device to user should be irrelevant
+        /// TODO cleanup this message cleanup.  relation of device to user should be irrelevant
         message.userid = 90000009;
         if( message.message_type === 'measurement')
             message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;
@@ -57,10 +58,8 @@ async function storeMessage(body) {
         } else {
             message.datetimemillis = message.event_timestamp;
         }
-        // TODO this should be cleaned up in the message protocol so that it disappears
         message.type = message.message_type;
         message.rawjson = body;
-        // TODO need to decide whether to ALSO keep a file for each json message - hmmmm
         message.filename = '';
         switch( message.message_type) {
             case 'measurement':

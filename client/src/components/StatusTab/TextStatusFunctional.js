@@ -9,6 +9,7 @@ import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 import RenderADCTextStatus from "./ADCTextStatusFunctional";
 import log from "roarr";
 
+/// TODO check copyright and license
 
 function RenderTextStatus (props) {
     log.trace("RenderTextStatus")

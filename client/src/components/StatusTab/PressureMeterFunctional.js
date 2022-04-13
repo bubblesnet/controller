@@ -3,6 +3,8 @@ import '../../App.css';
 import ReactSpeedometer from "react-d3-speedometer";
 import sprintf from 'sprintf-js';
 
+/// TODO check copyright and license
+
 function RenderPressureMeter (props) {
 
     let diff_float = (props.sensor_readings.pressure_external - props.sensor_readings.pressure_internal)

@@ -2,6 +2,8 @@ import React from 'react';
 import '../../App.css';
 import sprintf from 'sprintf-js';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderThermometer (props) {
     let className=""
     if(props.direction==="up") {

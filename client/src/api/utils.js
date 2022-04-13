@@ -1,6 +1,7 @@
 import '../logimplementation'
 import log from 'roarr';
 
+// copyright and license inspection - no issues 4/13/22
 
 export async function getContainerNames(host, port) {
     log.trace("getContainerNames calling out to api")

@@ -5,6 +5,8 @@ import RenderBarometer from "./BarometerFunctional";
 // import {Text} from "grommet"
 import sprintf from 'sprintf-js';
 
+// copyright and license inspection - no issues 4/13/22
+
 function RenderExternalMetrics (props) {
     let value = ""
     if( typeof(props.sensor_readings.light_external) != 'undefined' ) {

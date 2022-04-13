@@ -5,6 +5,8 @@ import {
     ROARR,
 } from 'roarr';
 
+// copyright and license inspection - no issues 4/13/22
+
 let levelnames = [
     "UNK",
     "UNK",

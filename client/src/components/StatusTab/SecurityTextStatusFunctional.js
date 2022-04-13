@@ -5,6 +5,8 @@ import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from "sprintf-js";
 
+/// TODO check copyright and license
+
 function RenderSecurityTextStatus (props) {
 
     let outerdoor = <></>
