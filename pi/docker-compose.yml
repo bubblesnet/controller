@@ -1,0 +1,89 @@
+version: '2'
+volumes:
+  resin-data:
+services:
+
+  activemq:
+    build: activemq
+    privileged: true
+    restart: always
+    ports:
+      - "61611:61611"
+      - "8161:8161"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  database:
+    build: database
+    privileged: true
+    restart: always
+    ports:
+      - "5432:5432"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  api:
+    build: api
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - activemq
+    ports:
+      - "3001:3001"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  queue:
+    build: queue
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - api
+      - activemq
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+
+  websocket:
+    build: websocket
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - queue
+      - api
+      - activemq
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  ui:
+    build: ui
+    privileged: true
+    restart: always
+    depends_on:
+      - websocket
+    ports:
+      - "80:3005"
+      - "443:3045"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
