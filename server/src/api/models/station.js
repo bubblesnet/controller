@@ -35,10 +35,6 @@ async function getConfigBySite(siteid) {
     result.stations = await getStationConfigsBySite(siteid)
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
-        result.controller_api_port = result.stations[i].controller_api_port
-        result.controller_hostname = result.stations[i].controller_hostname
-        delete result.stations[i].controller_api_port
-        delete result.stations[i].controller_hostname
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
     }
     console.log("\n\n\n"+JSON.stringify(result))
@@ -53,10 +49,6 @@ async function getConfigByUser(uid) {
     console.log("results = " + JSON.stringify(results))
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
-        result.controller_api_port = result.stations[i].controller_api_port
-        result.controller_hostname = result.stations[i].controller_hostname
-        delete result.stations[i].controller_api_port
-        delete result.stations[i].controller_hostname
 
         result.stations[i].tamper = {xmove: result.stations[i].tamper_xmove, ymove: result.stations[i].tamper_ymove, zmove: result.stations[i].tamper_zmove}
         delete result.stations[i].tamper_xmove
@@ -94,7 +86,7 @@ async function getEvents(stationid, count) {
 async function getStationConfigsBySite(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, station_name, location, stationid, controller_hostname, controller_api_port, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, station_name, location, stationid, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
@@ -166,7 +158,7 @@ async function getStationConfigsBySite(siteid) {
 async function getStationConfigsByUser(uid) {
     const results = await db.query(
         sql`
-            SELECT stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove, current_stage,
+            SELECT stationid, tamper_xmove, tamper_ymove, tamper_zmove, current_stage,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external,station_door_sensor, outer_door_sensor, movement_sensor,

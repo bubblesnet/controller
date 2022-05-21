@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.13-buster-run
+FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
 
 RUN apt-get update
 RUN install_packages vim
@@ -6,12 +6,16 @@ RUN install_packages vim
 COPY startservers.sh /
 RUN chmod +x /startservers.sh
 COPY server/src /server/src
+COPY server/config_ci.json /server
+COPY server/config_pi.json /server
+COPY server/config_test.json /server
+COPY server/config_dev.json /server
+COPY server/config_prod.json /server/config.json
+COPY server/config.json /server
 COPY server/package.json /server
 COPY server/package-lock.json /server
 WORKDIR /server
 RUN npm install
-RUN npm install serve -g
-
 
 CMD cd /;./startservers.sh
 # CMD ["bash"]

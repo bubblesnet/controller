@@ -23,7 +23,7 @@
 #
 
 export ICEBREAKER_DB=icebreaker_dev
-export NODE_ENV=DEV
+export NODE_ENV=development
 cd server
 node src/ws-server.js
 

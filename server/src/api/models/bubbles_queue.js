@@ -63,6 +63,7 @@ MessageProducer.prototype.init = async function init(cb) {
     debug("bubbles_queue.init")
     return new Promise(async (resolve, reject) => {
         let ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
+        console.log(JSON.stringify(ports))
         const connectOptions = {
             'host': ports.activemq_server_host,
             'port': ports.activemq_server_port,

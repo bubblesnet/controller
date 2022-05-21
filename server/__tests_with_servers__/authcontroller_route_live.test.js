@@ -30,15 +30,15 @@ let api_server_port = 0;
 let websocket_server_port = 0;
 
 switch( process.env.NODE_ENV ) {
-    case "DEV":
+    case "development":
         api_server_port = 3003;
         websocket_server_port = 8001;
         break;
-    case "TEST":
+    case "test":
         api_server_port = 3002;
         websocket_server_port = 8002;
         break;
-    case "PRODUCTION":
+    case "production":
         api_server_port = 3001;
         websocket_server_port = 8003;
         break;

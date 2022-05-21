@@ -3,30 +3,41 @@ volumes:
   resin-data:
 services:
 
+  wifi-connect:
+    image: balenablocks/wifi-connect:aarch64
+    restart: always
+    network_mode: host
+    privileged: true
+    labels:
+      io.balena.features.dbus: "1"
+      io.balena.features.firmware: "1"
+
   activemq:
-    build: activemq
+    image: bh.cr/g_john_rodley1/activemq-5_17-block:aarch64
     privileged: true
     restart: always
     ports:
       - "61611:61611"
+      - "61612:61612"
+      - "61613:61613"
       - "8161:8161"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
     volumes:
       - 'resin-data:/config'
+      - 'resin-data:/activemq_conf'
 
   database:
-    build: database
+    image: bh.cr/g_john_rodley1/postgresql-11-block:armv7hf
     privileged: true
     restart: always
-    ports:
-      - "5432:5432"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
     volumes:
-      - 'resin-data:/config'
+      - 'resin-data:/postgresql_shared'
+      - 'resin-data:/data'
 
   api:
     build: api
@@ -67,6 +78,8 @@ services:
       - queue
       - api
       - activemq
+    ports:
+      - "8003:8003"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
@@ -80,10 +93,11 @@ services:
     depends_on:
       - websocket
     ports:
-      - "80:3005"
+      - "80:3001"
       - "443:3045"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
     volumes:
       - 'resin-data:/config'
+

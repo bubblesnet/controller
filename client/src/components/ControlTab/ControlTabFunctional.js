@@ -41,6 +41,7 @@ import {Grommet} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import RenderPhmeter from "./PhmeterFunctional";
 import log from 'roarr';
+import sprintf from 'sprintf-js';
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -165,11 +166,13 @@ function RenderControlTab(props) {
                                direction={props.sensor_readings.temp_water_direction}/>
         </div>
 
+        let water_level_text = sprintf.sprintf("%.1f",props.sensor_readings.water_level )
+        log.trace("setting water_level_text to " + water_level_text)
         wl = <div id="water-level-text-holder">
-            {props.sensor_readings.tub_water_level} {props.display_settings.tub_volume_units}
+            {water_level_text} {props.display_settings.tub_volume_units}
         </div>
     }
-    let water_level_percent = props.sensor_readings.tub_water_level/20.0
+    let water_level_percent = props.sensor_readings.water_level/20.0
     let water_level_max_pixels = 188
     let water_level_height = water_level_max_pixels*water_level_percent
     let water_level_top = (water_level_max_pixels-water_level_height) + 'px'

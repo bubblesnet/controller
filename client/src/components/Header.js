@@ -44,20 +44,20 @@ function Header (props) {
         var theNodeEnv = value
         let api_server_port;
         switch( theNodeEnv) {
-            case "DEV":
+            case "development":
                 api_server_port = 3003;
                 break;
-            case "TEST":
+            case "test":
                 api_server_port = 3002;
                 break;
-            case "PRODUCTION":
+            case "production":
                 api_server_port = 3001;
                 break;
             case "CI":
                 api_server_port = 3004;
                 break;
             default:
-                theNodeEnv = "DEV"
+                theNodeEnv = "development"
                 api_server_port = 3003;
                 break;
         }

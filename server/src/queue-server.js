@@ -63,7 +63,7 @@ async function storeMessage(body) {
         return;
     }
     try {
-        /// TODO cleanup this message cleanup.  relation of device to user should be irrelevant
+        /// TODO cleanup this message cleanup. relation of device to user should be irrelevant
         message.userid = 90000009;
         if( message.message_type === 'measurement')
             message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;

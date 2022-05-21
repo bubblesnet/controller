@@ -25,7 +25,7 @@
 
 # Start the ui process
 cd /
-serve --listen tcp://0.0.0.0:3005 -s build &
+ROARR_LOG=true; serve --listen tcp://0.0.0.0:3001 -s build &
 
 # Wait for any process to exit
 wait -n

@@ -29,13 +29,13 @@ const fs = require('fs')
 function get_config_file_for_environment(env) {
     console.log("get_config_file_for_environment "+env)
     switch(env) {
-        case "DEV":
+        case "development":
             return("config_dev.json")
             break;
-        case "TEST":
+        case "test":
             return("config_test.json")
             break;
-        case "PRODUCTION":
+        case "production":
             return("/config/config.json")
             break;
         case "CI":
@@ -68,7 +68,7 @@ function get_server_ports_for_environment(env) {
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = 'activemq';
             break;
-        case "DEV":
+        case "development":
             ports.api_server_port = 3003;
             ports.api_server_host = '192.168.21.237';
             ports.websocket_server_host = '192.168.21.237';
@@ -76,7 +76,7 @@ function get_server_ports_for_environment(env) {
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = '192.168.21.237';
             break;
-        case "TEST":
+        case "test":
             ports.api_server_port = 3002;
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61612;
@@ -84,13 +84,13 @@ function get_server_ports_for_environment(env) {
             ports.websocket_server_host = '192.168.21.237';
             ports.activemq_server_host = '192.168.21.237';
             break;
-        case "PRODUCTION":
+        case "production":
             ports.api_server_port = 3001;
-            ports.api_server_host = '192.168.21.204';
-            ports.websocket_server_host = '192.168.21.204';
+            ports.api_server_host = 'api';
+            ports.websocket_server_host = 'websocket';
             ports.websocket_server_port = 8003;
             ports.activemq_server_port = 61611;
-            ports.activemq_server_host = '192.168.21.204';
+            ports.activemq_server_host = 'activemq';
             break;
         case "CI":
             ports.api_server_port = 3003;

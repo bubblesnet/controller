@@ -27,11 +27,39 @@ export DATABASE_NAME=bubbles
 export DATABASE_USER=postgres
 export DATABASE_PASSWORD=postgres
 
+if [ $NODE_ENV = "production" ]
+then
+#  echo "Re-init database automatically in $NODE_ENV even though we shouldnt do that"
+  echo "Cant re-init database automatically in $NODE_ENV"
+  exit 0;
+elif [ $NODE_ENV = "development" ]
+then
+  if [ $INIT_DB = "TRUE" ]
+  then
+    echo "Skipping INIT_DB in environment $NODE_ENV because INIT_DB env var is set to {$INIT_DB}"
+  else
+    echo "Skipping INIT_DB in environment $NODE_ENV because INIT_DB env var is set to {$INIT_DB} must be TRUE to init"
+    exit 0;
+  fi
+elif [ $NODE_ENV = "CI" ]
+then
+  echo "initializing DB because environment is $NODE_ENV"
+elif [ $NODE_ENV = "test" ]
+then
+  echo "initializing DB because environment is $NODE_ENV"
+else
+  echo "Skipping INIT_DB because NODE_ENV has invalid value $NODE_ENV"
+  exit 0;
+fi
+
 # sudo -u postgres psql
 # ALTER USER postgres PASSWORD 'postgres';
 sudo -u postgres psql -c "ALTER USER $DATABASE_USER PASSWORD '$DATABASE_PASSWORD';"
 
 # create database
+
+sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -c "DROP DATABASE IF EXISTS $DATABASE_NAME" "user=$DATABASE_USER dbname=postgres password=$DATABASE_PASSWORD"
+
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -c "CREATE DATABASE $DATABASE_NAME" "user=$DATABASE_USER dbname=postgres password=$DATABASE_PASSWORD"
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20201105104957_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20201105133628_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
@@ -56,6 +84,7 @@ sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20220328175326_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20220329154913_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
 sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20220402154014_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
+sudo -u postgres psql -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f migrations/20220502195721_bu.up.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"
 
 echo 'Creating template database rows'
 sudo -u postgres psql -a -h $POSTGRES_HOST -p $POSTGRES_PORT -a -q -f init_db.sql  "user=$DATABASE_USER dbname=$DATABASE_NAME password=$DATABASE_PASSWORD"

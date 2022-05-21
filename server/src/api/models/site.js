@@ -33,7 +33,8 @@ const endPool = () => {
 async function getSiteById(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid,
+                   tamper_xmove, tamper_ymove, tamper_zmove,
                    current_stage, time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,

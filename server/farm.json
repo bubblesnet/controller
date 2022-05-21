@@ -1,8 +1,6 @@
 [
   {
     "stationid": 8,
-    "controller_hostname": "192.168.21.237",
-    "controller_api_port": 3003,
     "stage": "idle",
     "light_on_hour": 0,
     "tamper_xmove": 1,
@@ -45,8 +43,6 @@
   },
   {
     "stationid": 1,
-    "controller_hostname": "192.168.21.237",
-    "controller_api_port": 3003,
     "stage": "idle",
     "light_on_hour": 0,
     "tamper_xmove": 1,

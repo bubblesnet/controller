@@ -23,4 +23,3 @@
 
 wget https://downloads.apache.org/activemq/5.17.0/apache-activemq-5.17.0-bin.tar.gz
 tar zxf apache-activemq-5.17.0-bin.tar.gz
-# rm ./apache-activemq-5.17.0-bin.tar.gz

@@ -54,7 +54,7 @@ function getFakeMeasurement() {
             z = {measurement_type: "humidity", sensor_name: "humidity_sensor_internal", measurement_name: "humidity_external", value: 20 +util.getRandomInt(79), units: "%"}
             break;
         case 7:
-            z = {measurement_type: "level", sensor_name: "water_level_sensor", measurement_name: "tub_water_level", value: util.getRandomInt(150) / 10, units: "gallons"}
+            z = {measurement_type: "level", sensor_name: "water_level_sensor", measurement_name: "water_level", value: util.getRandomInt(150) / 10, units: "gallons"}
             break;
         default:
             break;
@@ -85,15 +85,15 @@ let api_server_port = 0;
 let websocket_server_port = 0;
 
 switch( process.env.NODE_ENV ) {
-    case "DEV":
+    case "development":
         api_server_port = 3003;
         websocket_server_port = 8001;
         break;
-    case "TEST":
+    case "test":
         api_server_port = 3002;
         websocket_server_port = 8002;
         break;
-    case "PRODUCTION":
+    case "production":
         api_server_port = 3001;
         websocket_server_port = 8003;
         break;

@@ -41,7 +41,16 @@ import options_language from './options_languages.json'
 
 // copyright and license inspection - no issues 4/13/22
 
+let necessary_environment = [
+    {name: "NODE_ENV", value: process.env.NODE_ENV},
+    {name: "REACT_APP_NODE_ENV", value: process.env.REACT_APP_NODE_ENV},
+    {name: "REACT_APP_API_PORT", value: process.env.REACT_APP_API_PORT},
+    {name: "REACT_APP_API_HOST", value: process.env.REACT_APP_API_HOST}
+
+]
 function App(props) {
+
+    console.log("ENV = " + JSON.stringify(process.env))
 
         let initial_station_state = {
             station_settings: {
@@ -107,7 +116,7 @@ function App(props) {
             pressure_internal_direction: "",
             date_last_training: "never",
             date_last_filter_change: "never",
-            tub_water_level: 0.0
+            water_level: 0.0
         }
 
         let initial_switch_state = {
@@ -167,7 +176,8 @@ function App(props) {
 
     const [site, setSite] = useState({});
 
-    let servers = util.get_server_ports_for_environment(props.nodeEnv)
+        console.log("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+    let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
     let needs_setup = false
 
     const { token, setToken } = useToken();
@@ -216,21 +226,40 @@ function App(props) {
     } else {
         site.automation_settings = {}
     }
+    log.info("hostname = " + window.location.hostname)
+    log.info(JSON.stringify(site))
+    let missing_var = ""
+    function configured() {
+        console.log("checking ENV " + JSON.stringify(process.env))
+        for(let i = 0; i < necessary_environment.length; i++ ) {
+            if (typeof (necessary_environment[i].value) === 'undefined') {
+                console.log("undefined "+necessary_environment[i].name)
+                missing_var = necessary_environment[i].name
+                return false
+            }
+        }
+        return(true)
+    }
 
-
-    return (token?.auth === true) ? <AuthenticatedApp
-                                                      stationindex={selectedStationIndex}
-                                                      initial_station_state={initial_station_state}
-                                                      initial_switch_state = {initial_switch_state}
-                                                      initial_sensor_readings = {initial_sensor_readings}
-                                                      nodeEnv={process.env.REACT_APP_NODE_ENV}
-                                                      site={site}
-                                                      automation_settings={site.stations[selectedStationIndex].automation_settings}
-                                                      display_settings={token}
-                                                      user={token}
-                                                      logout={doLogout}
-                                    /> :
-        <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
+    let ret
+    if( !configured()) {
+        ret = <div className="App"><p>Incorrect configuration: {missing_var} is not defined</p><p>{JSON.stringify(process.env)}</p></div>
+    } else {
+        ret = (token?.auth === true) ? <AuthenticatedApp
+                stationindex={selectedStationIndex}
+                initial_station_state={initial_station_state}
+                initial_switch_state={initial_switch_state}
+                initial_sensor_readings={initial_sensor_readings}
+                nodeEnv={process.env.REACT_APP_NODE_ENV}
+                site={site}
+                automation_settings={site.stations[selectedStationIndex].automation_settings}
+                display_settings={token}
+                user={token}
+                logout={doLogout}
+            /> :
+            <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
+    }
+    return(ret)
 }
 
 export default App

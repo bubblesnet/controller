@@ -122,6 +122,23 @@ async function createDevice(body) {
     })
 }
 
+async function createDefaultDevices(body) {
+    return new Promise(function(resolve, reject) {
+        let retval = []
+        pool.query("INSERT INTO device (deviceid, devicename, devicetypeid_Devicetype, userid_User,created, stationid_Station) VALUES ( $1,$2,$3,$4,current_timestamp,$5) RETURNING *",
+            [70000008, 'Cabinet internal', 0, body.userid, body.stationid], (error, results) => {
+                if (error) {
+                    console.error(error)
+                    reject(error)
+                } else {
+                    console.log("new deviceid " + results.rows[0])
+                    retval[0] = {deviceid: results.rows[0].deviceid, message: "A new device has been added :" + results.rows[0].deviceid}
+                }
+            })
+    })
+}
+
+
 async function updateDevice(body) {
     return new Promise(function(resolve, reject) {
         pool.query("UPDATE device set devicename=$1,devicetypeid_devicetype=$2 where deviceid=$3 RETURNING *",
@@ -163,5 +180,6 @@ module.exports = {
     endPool: endPool,
     getDevicesByUserId,
     getDevicesByStationId,
+    createDefaultDevices,
 }
 
