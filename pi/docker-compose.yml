@@ -32,6 +32,8 @@ services:
     image: bh.cr/g_john_rodley1/postgresql-11-block:armv7hf
     privileged: true
     restart: always
+    ports:
+      - "5432:5432"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'

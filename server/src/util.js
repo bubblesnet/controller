@@ -28,7 +28,7 @@ const fs = require('fs')
 
 function get_config_file_for_environment(env) {
     console.log("get_config_file_for_environment "+env)
-    switch(env) {
+    switch(env.toLowerCase()) {
         case "development":
             return("config_dev.json")
             break;
@@ -44,6 +44,10 @@ function get_config_file_for_environment(env) {
         case "PI":
             return("config_pi.json")
             break;
+        default:
+            return("/config/config.json")
+            break;
+
     }
     return( '' )
 }
@@ -59,8 +63,8 @@ function get_server_ports_for_environment(env) {
         activemq_server_host: ''
     };
 
-    switch(env) {
-        case "PI":
+    switch(env.toLowerCase()) {
+        case "pi":
             ports.api_server_port = 3003;
             ports.api_server_host = 'api_and_ui';
             ports.websocket_server_host = 'api_and_ui';
@@ -92,7 +96,7 @@ function get_server_ports_for_environment(env) {
             ports.activemq_server_port = 61611;
             ports.activemq_server_host = 'activemq';
             break;
-        case "CI":
+        case "ci":
             ports.api_server_port = 3003;
             ports.api_server_host = 'localhost';
             ports.websocket_server_host = 'localhost';

@@ -82,7 +82,7 @@ else
   cp /go/config.json /data/config.json
 fi
 
-export PGPASSWORD=$POSTGRESQL_PASSWORD
+export PGPASSWORD=$ICEBREAKER_POSTGRES_PASSWORD
 
 # terminate all connections
 if [ "$DB_INITIALIZED" = "YES" ]
@@ -91,14 +91,14 @@ then
 else
   echo "Database doesn't already exist, drop/recreate"
   echo "terminate all connections doesn't work yet - skipping"
-  sudo PGPASSWORD=$POSTGRESQL_PASSWORD psql -h $POSTGRESQL_HOST -p 5432 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$BUBBLES_POSTGRESQL_DBNAME' AND pid <> pg_backend_pid();" "user='$BUBBLES_POSTGRES_USER' dbname=postgres password='$BUBBLES_POSTGRES_PASSWORD'"
+  sudo PGPASSWORD=$ICEBREAKER_POSTGRES_PASSWORD psql -h $ICEBREAKER_DB_HOST -p 5432 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$ICEBREAKER_DB_NAME' AND pid <> pg_backend_pid();" "user='$ICEBREAKER_POSTGRES_USER' dbname=postgres password='$ICEBREAKER_POSTGRES_PASSWORD'"
 #  create database
   echo Drop database
-  sudo psql -h $POSTGRESQL_HOST -p 5432 -c "DROP DATABASE IF EXISTS $POSTGRESQL_DBNAME" "user=$POSTGRESQL_UNIX_USER dbname=postgres password='$BUBBLES_POSTGRESQL_PASSWORD'"
+  sudo psql -h $ICEBREAKER_DB_HOST -p 5432 -c "DROP DATABASE IF EXISTS $ICEBREAKER_DB_NAME" "user=$ICEBREAKER_POSTGRES_USER dbname=postgres password='$ICEBREAKER_POSTGRES_PASSWORD'"
   echo Create database
-  sudo PGPASSWORD=$BUBBLES_POSTGRESQL_PASSWORD psql -h $POSTGRESQL_HOST -p 5432 -c "CREATE DATABASE $BUBBLES_POSTGRESQL_DBNAME" "user=$POSTGRESQL_UNIX_USER dbname=postgres password='$BUBBLES_POSTGRESQL_PASSWORD'"
+  sudo PGPASSWORD=$ICEBREAKER_POSTGRES_PASSWORD psql -h $ICEBREAKER_DB_HOST -p 5432 -c "CREATE DATABASE $ICEBREAKER_DB_NAME" "user=$ICEBREAKER_POSTGRES_USER dbname=postgres password='$ICEBREAKER_POSTGRES_PASSWORD'"
   echo Create tables
-  sudo PGPASSWORD=$BUBBLES_POSTGRESQL_PASSWORD psql -h $POSTGRESQL_HOST -U $POSTGRESQL_UNIX_USER -d $BUBBLES_POSTGRESQL_DBNAME -a -f bin/create_tables.sql
+  sudo PGPASSWORD=$ICEBREAKER_POSTGRES_PASSWORD psql -h $ICEBREAKER_DB_HOST -U $ICEBREAKER_POSTGRES_USER -d $ICEBREAKER_DB_NAME -a -f bin/create_tables.sql
 fi
 
 echo "Always run migrations from /postgresql_shared/migrations"
@@ -110,9 +110,9 @@ ls -l /postgresql_shared/migrations/*_ca.up.sql
 
 if [ "$DB_INITIALIZED" = "YES" ]
 then
-  echo "Database already exists"
+  echo "Database already exists, don't import known projects"
 else
-  echo "Database didn't already exist, set initialized flag"
+  echo "Database doesn't already exist, importing known projects"
   cd /go/bin
   echo Marking database as initialized
   date > /postgresql_shared/initialized
