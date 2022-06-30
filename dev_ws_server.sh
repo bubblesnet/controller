@@ -22,7 +22,7 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-export ICEBREAKER_DB=icebreaker_dev
+export POSTGRESQL_APPLICATION_DBNAME=icebreaker_dev
 export NODE_ENV=development
 cd server
 node src/ws-server.js

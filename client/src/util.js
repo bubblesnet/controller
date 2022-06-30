@@ -57,7 +57,7 @@ function get_server_ports_for_environment(env_mixed) {
             ports.websocket_server_port = 8003;
             ports.activemq_server_port = 61611;
             break;
-        case "CI":
+        case "ci":
             ports.api_server_port = 3004;
             ports.api_server_host = 'localhost';
             ports.websocket_server_host = 'localhost';

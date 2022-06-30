@@ -98,7 +98,7 @@ export async function getSite (host, port, siteid) {
 
     return new Promise( async (resolve, reject) => {
         let url = 'http://'+host+':'+port+'/api/site/'+siteid
-        log.trace('getSite calling '+url)
+        log.info('getSite calling '+url)
         const response = await fetch(url);
 //            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
         log.trace("getSite response received")

@@ -35,4 +35,4 @@ xcopy /q ..\server\src websocket\server\src /I /S /Y
 copy ..\server\package.json websocket\server /Y
 copy ..\server\package-lock.json websocket\server /Y
 
-balena push bubblesnet4_controller_dev
+balena push bubblesnet4_controller_aarch64_dev
