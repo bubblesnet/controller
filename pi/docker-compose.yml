@@ -4,7 +4,7 @@ volumes:
 services:
 
   wifi-connect:
-    image: bh.cr/balenablocks/wifi-connect-armv7hf:armv7hf
+    image: bh.cr/balenablocks/wifi-connect-aarch64
     restart: always
     ports:
       - "81:81"
