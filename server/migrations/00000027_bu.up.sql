@@ -1,0 +1,1 @@
+update device set picamera=true, picamera_resolutionx=2592, picamera_resolutiony=1944 where deviceid = 70000008
