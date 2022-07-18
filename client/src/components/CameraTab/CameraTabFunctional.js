@@ -45,7 +45,7 @@ function RenderCameraTab(props) {
     let ImageProps = []
     let indexes = []
     let rowcount = 0
-//    console.log("props.station.attached_devices = " + JSON.stringify(props.station.attached_devices))
+    console.log("props.station.attached_devices = " + JSON.stringify(props.station.attached_devices))
     for( let i = 0; i < props.station.attached_devices.length; i++ ) {
         if( props.station.attached_devices[i].picamera === false ) {
             continue
@@ -53,7 +53,7 @@ function RenderCameraTab(props) {
         let picture_url = 'http://' + servers.api_server_host + ':' + servers.api_server_port +
             '/' + userid + '_' + props.station.attached_devices[i].deviceid + '.jpg?' + props.lastpicture
 
-        log.trace("picture_url = "+picture_url)
+        log.info("picture_url = "+picture_url)
         ImageProps.push( {width: 800,  zoomWidth: 1600, img: picture_url});
 
         Areas.push({ name: 'label'+i, start: [0, rowcount], end: [0, rowcount] })
@@ -62,15 +62,14 @@ function RenderCameraTab(props) {
         Areas.push({ name: 'picture'+i, start: [0, rowcount], end: [0, rowcount] })
         Rows.push('800px')
         rowcount++;
-        indexes.push(i)
+        indexes.push({device_index: i, labelarea_index: rowcount-2, imageprops_index: rowcount-2 })
     }
 
 
-    function getDeviceRow(i) {
-        let labelAreaIndex = i*2
+    function getDeviceRow(indexObject) {
 
-        log.trace("getRow " + i +' labelAreaIndex '+labelAreaIndex + ' label '+props.station.attached_devices[i]);
-        return( <><Text gridArea={"label"+i}>{props.station.attached_devices[i].deviceid}</Text><Box gridArea={Areas[labelAreaIndex+1].name}><ReactImageZoom {...ImageProps[i]} /></Box></>);
+        log.info("getDeviceRow " + JSON.stringify(indexObject) + ' label '+props.station.attached_devices[indexObject.device_index] + ' areas ' + JSON.stringify(Areas));
+        return( <><Text gridArea={"label"+indexObject.labelarea_index}>{props.station.attached_devices[indexObject.device_index].deviceid}</Text><Box gridArea={Areas[indexObject.labelarea_index].name}><ReactImageZoom {...ImageProps[indexObject.imageprops_index]} /></Box></>);
     }
 
 //    console.log(JSON.stringify(Areas))
