@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 
@@ -130,8 +154,6 @@ async function getConfigByStation(stationid, deviceid) {
                     delete ret.device_settings.deviceid
                     delete ret.device_settings.stationid
                     delete ret.device_settings.userid
-                    delete ret.device_settings.controller_hostname
-                    delete ret.device_settings.controller_api_port
                     delete ret.device_settings.time_between_pictures_in_seconds
                     delete ret.device_settings.time_between_sensor_polling_in_seconds
                     delete ret.humidifier
@@ -174,17 +196,9 @@ async function createStation(body) {
     const servers = util.get_server_ports_for_environment( process.env.NODE_ENV )
     return new Promise(function(resolve, reject) {
         pool.query("insert into station (" +
-//            "    userid_User," +
-            "    controller_hostname," +
-            "    controller_api_port," +
             "    tamper_xmove," +
             "    tamper_ymove," +
             "    tamper_zmove," +
-//            "    time_between_pictures_in_seconds," +
-//            "    camera_picamera," +
-//            "    camera_resolutionX," +
-//            "    camera_resolutionY," +
-//            "    time_between_sensor_polling_in_seconds," +
             "    humidifier," +
             "    humidity_sensor_internal," +
             "    humidity_sensor_external," +
@@ -216,17 +230,9 @@ async function createStation(body) {
             "    light_germinate," +
             "    station_name)" +
             "values(" +
-//            "    $1," +
-            "    $1," +
-            "    $2," +
             "    1.0," +
             "    1.0," +
             "    1.0," +
-//            "    300," +
-//            "    false," +
-//            "    2592," +
-//            "    1944," +
-//            "    90," +
             "    false," +
             "    false," +
             "    false," +
@@ -258,7 +264,7 @@ async function createStation(body) {
             "    false," +
             "    'blah'" +
             ") RETURNING *",
-            [servers.api_server_host, servers.api_server_port], (error, results) => {
+            [], (error, results) => {
             if (error) {
                 reject(error)
             } else {
@@ -273,47 +279,43 @@ async function createStation(body) {
 async function updateStation(body) {
     return new Promise(function (resolve, reject) {
         pool.query("UPDATE station set " +
-            "controller_hostname=$2, " +
-            "controller_api_port=$3, " +
-            "tamper_xmove=$4, " +
-            "tamper_ymove=$5, " +
-            "tamper_zmove=$6, " +
-            "time_between_pictures_in_seconds=$7, " +
-            "time_between_sensor_polling_in_seconds=$8, " +
-            "humidifier=$9, " +
-            "humidity_sensor_internal=$10, " +
-            "humidity_sensor_external=$11, " +
-            "heater=$12, " +
-            "thermometer_top=$13, " +
-            "thermometer_middle=$14, " +
-            "thermometer_bottom=$15, " +
-            "thermometer_external=$16, " +
-            "thermometer_water=$17, " +
-            "water_pump=$18, " +
-            "air_pump=$19, " +
-            "light_sensor_internal=$20, " +
-            "light_sensor_internal=$21, " +
-            "station_door_sensor=$22, " +
-            "outer_door_sensor=$23, " +
-            "movement_sensor=$24, " +
-            "pressure_sensors=$25, " +
-            "root_ph_sensor=$26, " +
-            "enclosure_type=$27, " +
-            "water_level_sensor=$28, " +
-            "tub_depth=$29, " +
-            "tub_volume=$30, " +
-            "intake_fan=$31, " +
-            "exhaust_fan=$32, " +
-            "heat_lamp=$33, " +
-            "heating_pad=$34, " +
-            "light_bloom=$35, " +
-            "light_vegetative=$36, " +
-            "light_germinate=$37 " +
+            "tamper_xmove=$2, " +
+            "tamper_ymove=$3, " +
+            "tamper_zmove=$4, " +
+            "time_between_pictures_in_seconds=$5, " +
+            "time_between_sensor_polling_in_seconds=$6, " +
+            "humidifier=$7, " +
+            "humidity_sensor_internal=$8, " +
+            "humidity_sensor_external=$9, " +
+            "heater=$10, " +
+            "thermometer_top=$11, " +
+            "thermometer_middle=$12, " +
+            "thermometer_bottom=$13, " +
+            "thermometer_external=$14, " +
+            "thermometer_water=$15, " +
+            "water_pump=$16, " +
+            "air_pump=$17, " +
+            "light_sensor_internal=$18, " +
+            "light_sensor_internal=$19, " +
+            "station_door_sensor=$20, " +
+            "outer_door_sensor=$21, " +
+            "movement_sensor=$22, " +
+            "pressure_sensors=$23, " +
+            "root_ph_sensor=$24, " +
+            "enclosure_type=$25, " +
+            "water_level_sensor=$26, " +
+            "tub_depth=$27, " +
+            "tub_volume=$28, " +
+            "intake_fan=$29, " +
+            "exhaust_fan=$30, " +
+            "heat_lamp=$31, " +
+            "heating_pad=$32, " +
+            "light_bloom=$33, " +
+            "light_vegetative=$34, " +
+            "light_germinate=$35 " +
             "where stationid=$1 RETURNING *",
             [
                 body.stationid,
-                body.controller_hostname,
-                body.controller_api_port,
                 body.tamper_xmove,
                 body.tamper_ymove,
                 body.tamper_zmove,

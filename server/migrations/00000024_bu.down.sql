@@ -1,0 +1,1 @@
+ALTER TABLE station DROP COLUMN controller_activemq_port;

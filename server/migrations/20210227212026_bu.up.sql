@@ -1,1 +1,0 @@
-ALTER TABLE module ADD COLUMN protocol varchar(128);

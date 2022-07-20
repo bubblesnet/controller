@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 
 const express = require('express');
 const router = express.Router();
@@ -26,7 +49,6 @@ bcrypt.genSalt(saltRounds, async function(err, salt) {
         if( err ) {
             console.error("Error " + err )
         }
-        // Store hash in your password DB.
         myhash = hash
         console.log("myhash = " + hash)
     });
@@ -75,48 +97,6 @@ async function findUser(req,res) {
     });
 
 }
-
-/*
-router.get('/logout', function(req, res) {
-    res.status(200).send({ auth: false, token: null });
-});
-
-
-router.post('/register', function(req, res) {
-    return (newUser(req, res,
-        function (err, user) {
-            if (err) return res.status(500).send("There was a problem registering the user`.");
-
-            // if user is registered without errors
-            // create a token
-            let token = jwt.sign({id: user._id}, config.secret, {
-                expiresIn: 86400 // expires in 24 hours
-            });
-
-            res.status(200).send({auth: true, token: token});
-        }));
-});
-
-function newUser(req,res, cb) {
-    let hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    user.createUser({
-            name : req.body.name,
-            email : req.body.email,
-            passwordhash : hashedPassword
-        }, cb )
-        .then(function (user) {
-            console.log("Created real new user "+JSON.stringify(user));
-            return( user )
-        })
-        .catch(function (err) {
-            console.error("new User error "+err)
-            return( {} )
-        })
-    ;
-}
-
- */
 
 module.exports = {
     router,

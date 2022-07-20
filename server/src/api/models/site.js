@@ -1,5 +1,28 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 const locals = require("../../config/locals");
-const server_db = require('./bubbles_db')
+let server_db = require('./bubbles_db')
 const db = require("./database");
 const {sql} = require("@databases/pg");
 const pool = server_db.getPool()
@@ -10,7 +33,8 @@ const endPool = () => {
 async function getSiteById(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid,
+                   tamper_xmove, tamper_ymove, tamper_zmove,
                    current_stage, time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
@@ -143,9 +167,10 @@ async function deleteSite(siteid) {
     })
 }
 
+
 module.exports = {
     createSite,
     deleteSite,
-    updateSite,
-    getSiteById
+    getSiteById,
+    updateSite
 }

@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 'use strict';
 const Stomp = require('stompit');
 let state = require('../../initial_state.json');
@@ -5,17 +28,6 @@ const debug = require('debug')('bubbles_queue')
 
 let util = require("../../util")
 
-let ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
-const connectOptions = {
-    'host': ports.activemq_server_host,
-    'port': ports.activemq_server_port,
-    'connectHeaders': {
-        'host': '/',
-        'login': 'user',
-        'passcode': 'password',
-//        'heart-beat': '5000,5000' // LEAVE THIS TURNED OFF BECAUSE ACTIVEMQ TIMES OUT OTHERWISE
-    }
-};
 /*  This is the error that turning on heart-beat causes ...
 Error: connection timed out
     at Client._createError (C:\Users\rodley\Documents\go\src\bubblesnet\controller\server\node_modules\←[4mstompit←[24m\lib\Socket.js:240:15)
@@ -50,10 +62,22 @@ function sleep(ms) {
 MessageProducer.prototype.init = async function init(cb) {
     debug("bubbles_queue.init")
     return new Promise(async (resolve, reject) => {
+        let ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
+        console.log(JSON.stringify(ports))
+        const connectOptions = {
+            'host': ports.activemq_server_host,
+            'port': ports.activemq_server_port,
+            'connectHeaders': {
+                'host': '/',
+                'login': 'user',
+                'passcode': 'password',
+//        'heart-beat': '5000,5000' // LEAVE THIS TURNED OFF BECAUSE ACTIVEMQ TIMES OUT OTHERWISE
+            }
+        };
         let count = 1
         clientSet = false;
         while (clientSet === false && count <= 20) {
-            debug("initing .... " + count)
+            console.log("initing "+connectOptions.host+":"+connectOptions.port+" .... " + count)
 
             await Stomp.connect(connectOptions, function (error, client) {
                 if (!error) {

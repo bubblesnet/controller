@@ -1,4 +1,4 @@
-SET NODE_ENV=DEV
+SET NODE_ENV=development
 SET DEBUG=queue-server
 SET LOG_LEVEL=silly
 cd server

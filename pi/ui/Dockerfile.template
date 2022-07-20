@@ -1,0 +1,19 @@
+#FROM balenalib/%%BALENA_MACHINE_NAME%%-node:15-buster-run
+FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
+
+# RUN apt-get update
+RUN install_packages vim inetutils-telnet
+
+COPY ca-certificates.crt /etc/ssl/certs/
+COPY build /build
+COPY startservers.sh /
+RUN chmod +x /startservers.sh
+# COPY client/package.json /client
+# COPY client/package-lock.json /client
+# WORKDIR /client
+# RUN npm install
+RUN npm install serve -g
+
+
+CMD cd /;./startservers.sh
+# CMD ["bash"]

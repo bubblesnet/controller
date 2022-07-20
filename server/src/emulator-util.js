@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 
 const util = require("./util")
 const axios = require('axios')
@@ -31,7 +54,7 @@ function getFakeMeasurement() {
             z = {measurement_type: "humidity", sensor_name: "humidity_sensor_internal", measurement_name: "humidity_external", value: 20 +util.getRandomInt(79), units: "%"}
             break;
         case 7:
-            z = {measurement_type: "level", sensor_name: "water_level_sensor", measurement_name: "tub_water_level", value: util.getRandomInt(150) / 10, units: "gallons"}
+            z = {measurement_type: "level", sensor_name: "water_level_sensor", measurement_name: "water_level", value: util.getRandomInt(150) / 10, units: "gallons"}
             break;
         default:
             break;
@@ -62,15 +85,15 @@ let api_server_port = 0;
 let websocket_server_port = 0;
 
 switch( process.env.NODE_ENV ) {
-    case "DEV":
+    case "development":
         api_server_port = 3003;
         websocket_server_port = 8001;
         break;
-    case "TEST":
+    case "test":
         api_server_port = 3002;
         websocket_server_port = 8002;
         break;
-    case "PRODUCTION":
+    case "production":
         api_server_port = 3001;
         websocket_server_port = 8003;
         break;

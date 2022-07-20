@@ -1,1 +1,0 @@
-ALTER TABLE station DROP COLUMN water_heater;

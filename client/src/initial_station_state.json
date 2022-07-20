@@ -105,7 +105,7 @@
     "pressure_internal_direction": "",
     "date_last_training": "never",
     "date_last_filter_change": "never",
-    "tub_water_level": 0.0
+    "water_level": 0.0
   },
   "application_settings": {
   }

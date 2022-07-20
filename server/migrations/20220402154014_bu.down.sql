@@ -1,1 +1,0 @@
-ALTER TABLE automationsettings DROP COLUMN hours_of_light;

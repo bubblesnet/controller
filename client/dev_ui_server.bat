@@ -1,4 +1,4 @@
-NODE_ENV=DEV
+NODE_ENV=development
 DEBUG=api-server,edgemeasurement_routes
 LOG_LEVEL=silly
 PORT=3005

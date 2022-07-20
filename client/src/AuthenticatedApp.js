@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import React, {useState, useMemo, useRef, useEffect} from 'react';
 
 import {Tabs, Tab} from "rendition";
@@ -34,6 +57,8 @@ import log from 'roarr';
 import moment from "moment";
 
 import {changeStage} from './api/utils';
+
+// copyright and license inspection - no issues 4/13/22
 
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
@@ -106,14 +131,22 @@ function AuthenticatedApp (props) {
         pressure_internal: 0.0,
         pressure_external_direction: "",
         pressure_internal_direction: "",
-        tub_water_level: 0.0
+        water_level: 0.0
     }
+
+    /**
+     * The value of environment variable NODE_ENV which controls the hostname and port the API
+     * is listening on. Changing this causes a rerender
+     */
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+
 
     /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
      * @type {{activemq_server_host: string, api_server_port: number, api_server_host: string, websocket_server_host: string, activemq_server_port: number, websocket_server_port: number}}
+     * now that nodeenv is set, we can figure out what URLs to talk to
      */
-    let servers = util.get_server_ports_for_environment(props.nodeEnv)
+    let servers = util.get_server_ports_for_environment(nodeEnv)
 
     //
     //
@@ -151,12 +184,6 @@ function AuthenticatedApp (props) {
     const [switch_state, setSwitchState] = useState(props.initial_switch_state);
     const [sensor_readings] = useState(initial_sensor_readings);
     const [tilt,setTilt] = useState({ currently_tilted: false, last_tilt: 0} )
-
-    /**
-     * The value of environment variable NODE_ENV which controls the hostname and port the API
-     * is listening on. Changing this causes a rerender
-     */
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
 
     /**
      * Port the API server is listening on - change it and rerender
@@ -318,7 +345,7 @@ function AuthenticatedApp (props) {
                 log.error("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
                 if (msg.measurement_name === 'water_level') {
-                    sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
+                    sensor_readings['water_level'] = sprintf.sprintf("%.1f", msg.value)
                 }
                 if( typeof sensor_readings === 'undefined') {
                     log.error("WTF")
@@ -350,7 +377,7 @@ function AuthenticatedApp (props) {
                         break;
                     case "switch_event":
                         because = "switch_evt " + msg.switch_name
-                        log.debug("ws: received switch_event " + JSON.stringify(msg));
+                        log.trace("ws: received switch_event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case "event":
@@ -635,7 +662,8 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         const fetchData = async () => {
             let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
-            log.trace("useEffect stationid = " + z.stations[0].stationid)
+//            log.trace("useEffect stationid = " + z.stations[0].stationid)
+//            log.info("useEffect " + JSON.stringify(z))
             z.stations[0].automation_settings = z.stations[0].automation_settings[0] // returned as array from server
 
             setSite(JSON.parse(JSON.stringify(z)))

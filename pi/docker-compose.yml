@@ -1,0 +1,105 @@
+version: '2'
+volumes:
+  resin-data:
+services:
+
+  wifi-connect:
+    image: bh.cr/balenablocks/wifi-connect-aarch64
+    restart: always
+    ports:
+      - "81:81"
+    privileged: true
+    network_mode: host
+
+  activemq:
+    image: bh.cr/g_john_rodley1/activemq-5_17-block:armv7hf
+    privileged: true
+    restart: always
+    ports:
+      - "61611:61611"
+      - "61612:61612"
+      - "61613:61613"
+      - "8161:8161"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+      - 'resin-data:/activemq_conf'
+
+  database:
+    image: bh.cr/g_john_rodley1/postgresql-11-block:armv7hf
+    privileged: true
+    restart: always
+    ports:
+      - "5432:5432"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/postgresql_shared'
+      - 'resin-data:/data'
+
+  api:
+    build: api
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - activemq
+    ports:
+      - "3001:3001"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+      - 'resin-data:/postgresql_shared'
+
+  queue:
+    build: queue
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - api
+      - activemq
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+
+  websocket:
+    build: websocket
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - queue
+      - api
+      - activemq
+    ports:
+      - "8003:8003"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  ui:
+    build: ui
+    privileged: true
+    restart: always
+    depends_on:
+      - websocket
+    ports:
+      - "80:3001"
+      - "443:3045"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
