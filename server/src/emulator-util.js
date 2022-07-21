@@ -104,7 +104,7 @@ switch( process.env.NODE_ENV ) {
 }
 
 function sendTextToAPI(msg) {
-    let url = "http://192.168.21.237:"+api_server_port+"/api/measurement/90000009/70000007"
+    let url = "http://192.168.23.237:"+api_server_port+"/api/measurement/90000009/70000007"
 
     axios
         .post(url, msg)

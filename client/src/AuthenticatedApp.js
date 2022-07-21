@@ -22,26 +22,21 @@
  */
 
 import React, {useState, useMemo, useRef, useEffect} from 'react';
-
 import {Tabs, Tab} from "rendition";
-// import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
 import { Button, Grid} from 'grommet'
 import Header from "./components/Header"
-
 import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
 import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
 import RenderEvents from "./components/EventsTab/EventsFunctional";
 import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
 import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
-import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
-// import RenderSiteStationMenu from "./components/SiteStationMenu";
+import RenderCalibration from "./components/CalibrationTab/CalibrationTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-// import {Add,Clock,Help} from 'grommet-icons'
 import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 
 import sprintf from 'sprintf-js';
@@ -57,6 +52,11 @@ import log from 'roarr';
 import moment from "moment";
 
 import {changeStage} from './api/utils';
+
+// import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
+// import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
+// import RenderSiteStationMenu from "./components/SiteStationMenu";
+// import {Add,Clock,Help} from 'grommet-icons'
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -877,6 +877,16 @@ function AuthenticatedApp (props) {
                                            onLocalFontChange={localFontChange}
                     />
                 </Tab>
+                <Tab title="Calibration">
+                    <RenderCalibration nodeEnv={nodeEnv}
+                                       apiHost={servers.api_server_host}
+                                           apiPort={apiPort}
+                                           theme={bubbles_theme}
+                                           station={site.stations[currentStationIndex]}
+                                           display_settings={props.display_settings}
+                    />
+                </Tab>
+
             </Tabs>
         </Grid>
     </div>

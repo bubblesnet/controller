@@ -74,19 +74,19 @@ function get_server_ports_for_environment(env) {
             break;
         case "development":
             ports.api_server_port = 3003;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
+            ports.api_server_host = '192.168.23.237';
+            ports.websocket_server_host = '192.168.23.237';
             ports.websocket_server_port = 8001;
             ports.activemq_server_port = 61613;
-            ports.activemq_server_host = '192.168.21.237';
+            ports.activemq_server_host = '192.168.23.237';
             break;
         case "test":
             ports.api_server_port = 3002;
             ports.websocket_server_port = 8002;
             ports.activemq_server_port = 61612;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
-            ports.activemq_server_host = '192.168.21.237';
+            ports.api_server_host = '192.168.23.237';
+            ports.websocket_server_host = '192.168.23.237';
+            ports.activemq_server_host = '192.168.23.237';
             break;
         case "production":
             ports.api_server_port = 3001;
