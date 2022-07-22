@@ -30,12 +30,12 @@ import {
     Grommet,
     Table,
     TableRow,
-    TableCell
+    TableCell, Button
 } from 'grommet'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import {getContainerNames, getModuleTypes} from '../../api/utils';
+import { getModuleTypes} from '../../api/utils';
 import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
@@ -45,7 +45,6 @@ function RenderCalibrationTab (props) {
     const [reset_button_state] = useState(false)
     const [defaults_button_state] = useState(true)
     const [apply_button_state] = useState(false)
-    const [container_names,setContainerNames] = useState()
     const [module_types,setModuleTypes] = useState()
     const [nodeEnv] = useState(props.nodeEnv);
     const [apiHost] = useState(props.apiHost)
@@ -53,10 +52,7 @@ function RenderCalibrationTab (props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            let x = await getContainerNames(apiHost, apiPort)
-            log.trace("containers " + JSON.stringify(container_names))
-            setContainerNames(x.container_names)
-            x = await getModuleTypes(apiHost, apiPort)
+            let x = await getModuleTypes(apiHost, apiPort)
             log.trace("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
@@ -82,29 +78,51 @@ function RenderCalibrationTab (props) {
         }
     }
 
-    function getSensorsForModule(module) {
-        return( module.included_sensors.map(getIncludedSensor))
-    }
+//    function getSensorsForModule(module) {
+//        return( module.included_sensors.map(getIncludedSensor))
+//    }
 
-    function getModulerow( row, index, arr ) {
-        return <TableRow  key={row.module.moduleid}>
+    function getSensorrow( row, index, arr ) {
+        console.log("getSensorrow " + JSON.stringify(row.sensor))
+        return <TableRow  key={row.sensor.sensorid}>
             <TableCell>{row.device.deviceid}</TableCell>
-            <TableCell>{row.module.container_name}</TableCell>
             <TableCell>{row.module.module_type}</TableCell>
             <TableCell>{getAddress(row.module)}</TableCell>
-            <TableCell>{row.sensors}</TableCell></TableRow>
+            <TableCell>{row.sensor.sensor_name}</TableCell>
+            <TableCell>{row.sensor.measurement_name}</TableCell>
+            <TableCell>never</TableCell>
+            <TableCell>
+                <Button color={'var(--color-button-border)'} width={'medium'} round={'large'} disabled={!isCalibratable(row.sensor)} label={'Calibrate'} />
+            </TableCell>
+        </TableRow>
     }
+
+    function isCalibratable(sensor) {
+        if( sensor.sensor_name === 'ph_sensor' ) {
+            return true
+        }
+        return(false)
+    }
+
     function getModules() {
-//        console.log("getModules " + JSON.stringify(station))
+//        console.log("getModules " + JSON.stringify(station.attached_devices.length))
         let arr = []
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
-               arr.push({deviceid: station.attached_devices[device_index], module: station.attached_devices[device_index].modules[module_index],
-                    sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
+                let z = station.attached_devices[device_index].modules[module_index].included_sensors
+                console.log("sensors " + JSON.stringify(z))
+                for (let sensor_index = 0; sensor_index < z.length; sensor_index++) {
+                    arr.push({
+                        deviceid: station.attached_devices[device_index],
+                        module: station.attached_devices[device_index].modules[module_index],
+                        sensor: z[sensor_index],
+                        device: station.attached_devices[device_index]
+                    })
+                }
             }
         }
         log.trace("arr = " + JSON.stringify(arr))
-        let ret = arr.map(getModulerow)
+        let ret = arr.map(getSensorrow)
         return ret
     }
 
@@ -143,21 +161,15 @@ function RenderCalibrationTab (props) {
                     <tbody>
                     <TableRow>
                         <th >Device</th>
-                        <th >Container</th>
                         <th >Module Type</th>
                         <th >Address</th>
-                        <th >Attached Sensors</th>
+                        <th >Sensor</th>
+                        <th >Measurement</th>
+                        <th >Last Calibration</th>
                     </TableRow>
                     {module_rows}
                     </tbody></Table>
-
-                <RenderFormActions station={station} applyAction={applyChanges} resetAction={resetChanges}
-                                   defaultsAction={defaultsAction}
-                                   resetButtonState={reset_button_state}
-                                   defaultsButtonState={defaults_button_state}
-                                   applyButtonState={apply_button_state}
-                />
-                </div>
+             </div>
         </Grommet>
     return (ret)
 }

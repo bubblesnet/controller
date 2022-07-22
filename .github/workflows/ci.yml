@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         node-version: [15.x, 10.x, 12.x, 14.x]
-        activemq-version: [5.16.4, 5.17.0]
+        activemq-version: [5.16.4, 5.17.1]
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
