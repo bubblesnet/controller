@@ -44,7 +44,7 @@ jobs:
           wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq console
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
       - name: Setup PostgreSQL
@@ -78,6 +78,7 @@ jobs:
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000025_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000027_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000028_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

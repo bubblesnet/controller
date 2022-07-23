@@ -153,6 +153,20 @@ async function updateDevice(body) {
     })
 }
 
+async function setLatestPicture( deviceid, filename, datetimemillis )  {
+    return new Promise(function(resolve, reject) {
+        pool.query("UPDATE device set latest_picture_filename=$1,latest_picture_datetimemillis=$2 where deviceid=$3 RETURNING *",
+            [filename, datetimemillis, deviceid], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+//                    console.log("updated updateDevice " + body.deviceid)
+                    resolve({deviceid: deviceid, rowcount: results.rowCount, message: "picture has been modified :" + results.rowCount})
+                }
+            })
+    })
+}
+
 async function deleteDevice(deviceid) {
     console.log("deleteDevice "+deviceid)
     return new Promise(function(resolve, reject) {
@@ -181,5 +195,6 @@ module.exports = {
     getDevicesByUserId,
     getDevicesByStationId,
     createDefaultDevices,
+    setLatestPicture,
 }
 

@@ -72,6 +72,8 @@ async function getSiteById(siteid) {
                                                d.picamera,
                                                d.picamera_resolutionx,
                                                d.picamera_resolutiony,
+                                               d.latest_picture_filename,
+                                               d.latest_picture_datetimemillis,
                                                coalesce((
                                                             SELECT array_to_json(array_agg(row_to_json(y)))
                                                             FROM (
@@ -84,7 +86,7 @@ async function getSiteById(siteid) {
                                                                             coalesce((
                                                                                          SELECT array_to_json(array_agg(row_to_json(y)))
                                                                                          FROM (
-                                                                                                  SELECT sensorid, sensor_name, measurement_name, extraconfig
+                                                                                                  SELECT sensorid, sensor_name, measurement_name, extraconfig, latest_calibration_datetimemillis
                                                                                                   from sensor s
                                                                                                   where s.moduleid_module = n.moduleid
                                                                                               ) y)
