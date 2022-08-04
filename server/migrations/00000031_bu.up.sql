@@ -1,0 +1,1 @@
+update station set ec_sensor=true;

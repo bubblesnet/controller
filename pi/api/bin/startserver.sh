@@ -90,7 +90,7 @@ else
 fi
 
 echo "Always run migrations from /$POSTGRESQL_SHARED_DIRECTORY/migrations"
-ls -l "/$POSTGRESQL_SHARED_DIRECTORY/migrations/*_ca.up.sql"
+ls -l "/$POSTGRESQL_SHARED_DIRECTORY/migrations/*_bu.up.sql"
 /go/migrate -verbose -source "file:///$POSTGRESQL_SHARED_DIRECTORY/migrations -database postgres://$POSTGRESQL_POSTGRES_USER:$POSTGRESQL_POSTGRES_PASSWORD@$POSTGRESQL_HOST:5432/$POSTGRESQL_DBNAME?sslmode=disable" up
 
 # echo "Update ClamAV database"

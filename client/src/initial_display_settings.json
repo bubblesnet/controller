@@ -1,5 +1,4 @@
 {
-  "display_settings": {
     "units": "METRIC",
     "language": "en-us",
     "languageOptions": [
@@ -18,12 +17,15 @@
     "plant_height_units": "inches",
     "humidity_units": "%",
     "temperature_units": "F",
+    "voc_units": "ppm",
+    "co2_units":  "ppb",
+    "ec_units":  "",
     "pressure_units": "hPa",
     "pressure_units_options": [
       "hPa",
       "mbar",
       "mm Hg",
       "psi"
-    ]
-  }
+    ],
+  "enclosure_options": ["Cabinet", "Tent", "Outdoor"]
 }

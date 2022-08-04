@@ -58,9 +58,9 @@ else
   sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRESQL_APPLICATION_DBNAME' AND pid <> pg_backend_pid();" "user='$POSTGRESQL_POSTGRES_USER' dbname=$POSTGRESQL_APPLICATION_DBNAME password='$POSTGRESQL_POSTGRES_PASSWORD'"
 #  create database
   echo Drop database
-  sudo psql -h "$POSTGRESQL_HOST" -p 5432 -c "DROP DATABASE IF EXISTS $POSTGRESQL_SYSTEM_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname=$POSTGRESQL_SYSTEM_DBNAME password='$POSTGRESQL_POSTGRES_PASSWORD'"
+  sudo psql -h "$POSTGRESQL_HOST" -p 5432 -c "DROP DATABASE IF EXISTS $POSTGRESQL_SYSTEM_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname='$POSTGRESQL_SYSTEM_DBNAME' password='$POSTGRESQL_POSTGRES_PASSWORD'"
   echo Create database
-  sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "CREATE DATABASE $POSTGRESQL_APPLICATION_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname=$POSTGRESQL_SYSTEM_DBNAME password='$POSTGRESQL_POSTGRES_PASSWORD'"
+  sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "CREATE DATABASE $POSTGRESQL_APPLICATION_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname='$POSTGRESQL_SYSTEM_DBNAME' password='$POSTGRESQL_POSTGRES_PASSWORD'"
 fi
 
 echo "Always run migrations from $POSTGRESQL_SHARED_DIRECTORY/migrations - this will create all the tables"
@@ -79,13 +79,42 @@ else
   date > "$POSTGRESQL_SHARED_DIRECTORY/initialized"
 fi
 
-echo Turning coral dev board fan on
-sudo echo "disabled" > /sys/devices/virtual/thermal/thermal_zone0/mode
-sudo echo 8600 > /sys/devices/platform/gpio_fan/hwmon/hwmon0/fan1_target
+if [ -b "/dev/sda1" ]
+then
+  echo Mounting /dev/sda1 into /mnt/backups
+  sudo mkdir -p /mnt/backups
+  sudo mount -t exfat -o rw /dev/sda1 /mnt/backups
+  sudo mkdir -p /mnt/backups/database
+  sudo mkdir -p /mnt/backups/pictures
+  echo Moving pictures to backup drive
+  sudo mv /server/src/public/*.jpg /mnt/backups/pictures
+  echo Backing database "$POSTGRESQL_APPLICATION_DBNAME" up to mounted backup drive
+
+  echo *:*:*:*:$POSTGRESQL_POSTGRES_PASSWORD > ~/.pgpass
+  export PGPASSFILE=~/.pgpass
+  chmod 600 ~/.pgpass
+  now=$(date +"%Y.%m.%d_%H.%M.%S")
+  mkdir /mnt/backups/database/${now}
+  sudo pg_dump --no-password -h "$POSTGRESQL_HOST" -p 5432 -U postgres "$POSTGRESQL_APPLICATION_DBNAME" > /mnt/backups/database/${now}/"$POSTGRESQL_APPLICATION_DBNAME".bak 2>> /mnt/backups/database/${now}/dbname.bak.log
+  cat /mnt/backups/database/${now}/dbname.bak.log
+else
+  echo "/dev/sda1 doesn't exist, not mounting"
+fi
+
+if [ "$BALENA_DEVICE_TYPE" = "coral" ]
+then
+  echo Turning coral dev board fan on
+  sudo echo "disabled" > /sys/devices/virtual/thermal/thermal_zone0/mode
+  sudo echo 8600 > /sys/devices/platform/gpio_fan/hwmon/hwmon0/fan1_target
+fi
+
+echo Setting timezone
+CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 echo "Starting API"
 cd /server || exit
 
 # Start the first process
 node src/api-server.js
+sleep 1m
 

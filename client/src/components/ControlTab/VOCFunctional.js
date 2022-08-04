@@ -21,47 +21,42 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-
+import React from 'react';
 import '../../App.css';
-import './statusTab.css'
-import {Box} from "grommet";
-import sprintf from 'sprintf-js'
-import log from "roarr";
+import sprintf from 'sprintf-js';
 
 // copyright and license inspection - no issues 4/13/22
 
-function RenderEnvValueWithDirection (props) {
-    log.info("RenderEnvValueWithDirection "+ props.label +" units = " + props.units)
+function RenderVOC (props) {
+    let directionClassName=""
+    let ret = <></>
 
-    let ret =''
-    let label_area= `${props.gridArea}-label`
-    let value_area= `${props.gridArea}-value`
-    let direction_area= `${props.gridArea}-direction`
-    if( props.exists !== true ) {
-        ret = <>
-            <Box gridArea={label_area}>{props.label}</Box>
-            <Box gridArea={value_area} />
-            <Box gridArea={direction_area} />
-        </>
-    } else {
-        let className = ''
-        if(props.direction === 'up') {
-            className='zero-arrowup-icon'
-        }
-        if(props.direction === 'down') {
-            className='zero-arrowdown-icon'
-        }
-        let valuestr = sprintf.sprintf( "%.1f %s", props.value, props.units )
-
-        ret = <>
-            <Box gridArea={label_area}>{props.label}</Box>
-            <Box gridArea={value_area}>{valuestr}</Box>
-            <Box gridArea={direction_area}>
-                <div className={className}/>
-            </Box>
-        </>
+    if(props.exists !== true ) {
+        return( ret )
     }
-    return( ret )
+
+    if(props.direction==="up") {
+        directionClassName="vocarrowup-icon"
+    }
+    if(props.direction==="down") {
+        directionClassName="vocarrowdown-icon"
+    }
+    let value = sprintf.sprintf("%.0f", props.value)
+//    console.log("value rendering as " + value)
+    ret = <>
+        <div className={"value-holder-co2-voc"} >
+            VOC {value} {props.units}
+        </div>
+    </>
+
+    if(props.exists === false ) {
+        ret = <></>
+    }
+
+    return (ret);
 }
-export default RenderEnvValueWithDirection;
+
+export default RenderVOC;
+
+
+

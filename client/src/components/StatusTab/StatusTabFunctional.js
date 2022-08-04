@@ -32,10 +32,12 @@ import RenderPressureMeter from "./PressureMeterFunctional";
 import RenderPhMeter from "./PhMeterFunctional";
 import RenderTextStatus from "./TextStatusFunctional";
 import GoogleFontLoader from "react-google-font-loader";
+import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderStatusTab (props) {
+    log.info("RenderStatusTab display_settings.co2_units = " + props.display_settings.co2_units)
 
     let ret = ""
 

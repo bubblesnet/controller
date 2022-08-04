@@ -209,6 +209,21 @@ function RenderStationSettingsTab (props) {
         x.movement_sensor = !x.movement_sensor
         changeState(x)
     }
+    function toggleVOCSensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.voc_sensor = !x.voc_sensor
+        changeState(x)
+    }
+    function toggleCO2Sensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.co2_sensor = !x.co2_sensor
+        changeState(x)
+    }
+    function toggleECSensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.ec_sensor = !x.ec_sensor
+        changeState(x)
+    }
 
     function toggleOuterDoorSensor() {
         let x = JSON.parse(JSON.stringify(local_station))
@@ -311,6 +326,9 @@ function RenderStationSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_station.water_level_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_station.root_ph_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Height Sensor" onChange={toggleHeightSensor} checked= {local_station.height_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="VOC Sensor" onChange={toggleVOCSensor} checked= {local_station.voc_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="CO2 Sensor" onChange={toggleCO2Sensor} checked= {local_station.co2_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="EC Sensor" onChange={toggleECSensor} checked= {local_station.ec_sensor}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>

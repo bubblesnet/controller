@@ -1,4 +1,4 @@
-COPY ui\.env.production ..\client\.env
+COPY ui\.env.development ..\client\.env
 cd ..\client
 call npm run --silent build
 cd ..\pi
@@ -14,14 +14,7 @@ copy ..\server\config_ci.json api\server\config_ci.json /Y
 copy ..\server\config_test.json api\server\config_test.json /Y
 copy ..\server\config_dev.json api\server\config_dev.json /Y
 
-copy ..\server\config_prod.json queue\server\config.json /Y
-copy ..\server\config_prod.json queue\server\config_prod.json /Y
-copy ..\server\config_pi.json queue\server\config_pi.json /Y
-copy ..\server\config_ci.json queue\server\config_ci.json /Y
-copy ..\server\config_test.json queue\server\config_test.json /Y
-copy ..\server\config_dev.json queue\server\config_dev.json /Y
-
-xcopy /q ..\server\migrations database\migrations /I /S /Y
+xcopy /q ..\server\migrations api\migrations /I /S /Y
 
 xcopy /q ..\server\src queue\server\src /I /S /Y
 copy ..\server\package.json queue\server /Y
@@ -35,4 +28,4 @@ xcopy /q ..\server\src websocket\server\src /I /S /Y
 copy ..\server\package.json websocket\server /Y
 copy ..\server\package-lock.json websocket\server /Y
 
-balena push bubblesnet4_controller_aarch64_dev
+balena push bubblesnet4_controller_dev

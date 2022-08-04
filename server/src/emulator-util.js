@@ -81,30 +81,12 @@ function getFakeStatus() {
     return( current_state )
 }
 
-let api_server_port = 0;
-let websocket_server_port = 0;
-
-switch( process.env.NODE_ENV ) {
-    case "development":
-        api_server_port = 3003;
-        websocket_server_port = 8001;
-        break;
-    case "test":
-        api_server_port = 3002;
-        websocket_server_port = 8002;
-        break;
-    case "production":
-        api_server_port = 3001;
-        websocket_server_port = 8003;
-        break;
-    case "CI":
-        api_server_port = 3004;
-        websocket_server_port = 8004;
-        break;
-}
+let server_ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
+let api_server_port = server_ports.api_server_port
+let websocket_server_port = server_ports.websocket_server_port
 
 function sendTextToAPI(msg) {
-    let url = "http://192.168.23.237:"+api_server_port+"/api/measurement/90000009/70000007"
+    let url = "http://"+server_ports.api_server_host+":"+api_server_port+"/api/measurement/90000009/70000007"
 
     axios
         .post(url, msg)

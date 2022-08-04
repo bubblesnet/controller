@@ -37,6 +37,7 @@ import log from "roarr";
 function RenderTextStatus (props) {
     log.trace("RenderTextStatus")
 
+    log.info("TextStatusFunctional display_settings.co2_units = " + props.display_settings.co2_units)
     let ret =
         <Grid round={'small'} direction={'vertical'}
               areas={[
@@ -47,7 +48,7 @@ function RenderTextStatus (props) {
                   { name: 'adc', start: [0, 4], end: [0, 4] },
               ]}
               columns={['large']}
-              rows={['240px','small','small','small','small']}
+              rows={['300px','small','small','small','small']}
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >

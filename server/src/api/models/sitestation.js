@@ -312,7 +312,9 @@ async function updateStation(body) {
             "heating_pad=$32, " +
             "light_bloom=$33, " +
             "light_vegetative=$34, " +
-            "light_germinate=$35 " +
+            "light_germinate=$35," +
+            "voc_sensor=$36," +
+            "co2_sensor=$37 " +
             "where stationid=$1 RETURNING *",
             [
                 body.stationid,
@@ -349,7 +351,9 @@ async function updateStation(body) {
                 body.heating_pad,
                 body.light_bloom,
                 body.light_vegetative,
-                body.light_germinate
+                body.light_germinate,
+                body.voc_sensor,
+                body.co2_sensor
             ], (error, results) => {
                 if (error) {
                     console.log("update err " + error)

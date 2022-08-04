@@ -19,7 +19,11 @@ services:
       - "61611:61611"
       - "61612:61612"
       - "61613:61613"
+      - "61614:61614"
       - "8161:8161"
+      - "8162:8162"
+      - "8163:8163"
+      - "8164:8164"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
@@ -48,7 +52,10 @@ services:
       - database
       - activemq
     ports:
-      - "3001:3001"
+      - "4001:4001"
+      - "4002:4002"
+      - "4003:4003"
+      - "4004:4004"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
@@ -81,7 +88,10 @@ services:
       - api
       - activemq
     ports:
-      - "8003:8003"
+      - "5001:5001"
+      - "5002:5002"
+      - "5003:5003"
+      - "5004:5004"
     labels:
       io.balena.features.kernel-modules: '1'
       io.balena.features.dbus: '1'
@@ -95,7 +105,10 @@ services:
     depends_on:
       - websocket
     ports:
-      - "80:3001"
+      - "80:3004"
+      - "81:3001"
+      - "83:3003"
+      - "82:3002"
       - "443:3045"
     labels:
       io.balena.features.kernel-modules: '1'

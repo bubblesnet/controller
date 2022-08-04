@@ -31,6 +31,7 @@ import {ReadyState} from "react-use-websocket";
 import log from 'roarr';
 import '../logimplementation'
 import {Button} from "grommet";
+import {get_server_ports_for_environment} from "../util";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -41,28 +42,12 @@ function Header (props) {
 //    log.trace("after useState")
     let setEnvironment = (value) => {
         log.trace("Header.setEnvironment(" + value + ")")
-        var theNodeEnv = value
+        var theNodeEnv = value.toLowerCase()
         let api_server_port;
-        switch( theNodeEnv) {
-            case "development":
-                api_server_port = 3003;
-                break;
-            case "test":
-                api_server_port = 3002;
-                break;
-            case "production":
-                api_server_port = 3001;
-                break;
-            case "CI":
-                api_server_port = 3004;
-                break;
-            default:
-                theNodeEnv = "development"
-                api_server_port = 3003;
-                break;
-        }
+
         setNodeEnv(theNodeEnv);
-        setApiPort(api_server_port);
+        let server_ports = get_server_ports_for_environment(value)
+        setApiPort(server_ports.api_server_port);
         props.setNodeEnv(value)
     }
 //    log.trace("after setenv")

@@ -174,6 +174,27 @@ function App(props) {
             }
         }
 
+        async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
+            log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+//            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+//            setSite(JSON.parse(JSON.stringify(z)))
+
+            for (let i = 0; i < site.stations.length; i++) {
+                for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
+                    log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                    if (site.stations[i].attached_devices[j].deviceid === deviceid) {
+                        let local_site = JSON.parse(JSON.stringify(site))
+                        local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
+                        local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
+                        log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                        log.info("local_site = " + JSON.stringify(local_site))
+                        setSite(JSON.parse(JSON.stringify(local_site)))
+                        return
+                    }
+                }
+            }
+        }
+
     const [site, setSite] = useState({});
 
         console.log("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
@@ -221,11 +242,12 @@ function App(props) {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
-    if(typeof site.automation_settings != 'undefined') {
+/*    if(typeof site.automation_settings != 'undefined') {
         site.automation_settings = site.automation_settings[0] // returned as array from server
     } else {
         site.automation_settings = {}
     }
+ */
     log.info("hostname = " + window.location.hostname)
     log.info(JSON.stringify(site))
     let missing_var = ""
@@ -241,6 +263,10 @@ function App(props) {
         return(true)
     }
 
+    for ( let i = 0; i < site.stations[0].attached_devices.length; i++ ) {
+        log.info("RenderCameraTab App attached_devices[" + i + "].latest_picture_filename = " + site.stations[0].attached_devices[i].latest_picture_filename)
+    }
+
     let ret
     if( !configured()) {
         ret = <div className="App"><p>Incorrect configuration: {missing_var} is not defined</p><p>{JSON.stringify(process.env)}</p></div>
@@ -253,9 +279,10 @@ function App(props) {
                 nodeEnv={process.env.REACT_APP_NODE_ENV}
                 site={site}
                 automation_settings={site.stations[selectedStationIndex].automation_settings}
-                display_settings={token}
+                display_settings={initial_station_state.station_settings.display_settings}
                 user={token}
                 logout={doLogout}
+                setLatestPictureFromChild={setLatestPictureFromChild}
             /> :
             <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
     }

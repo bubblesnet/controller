@@ -25,6 +25,7 @@ const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 
 const server_db = require('./bubbles_db')
+const fs = require("fs");
 const pool = server_db.getPool()
 const endPool = () => {
     pool.end()
@@ -71,6 +72,25 @@ async function findAllByUserid(userid) {
     })
 }
 
+async function getDeviceShallow(deviceid) {
+    console.log("getDeviceShallow "+deviceid)
+    return new Promise(function (resolve, reject) {
+        console.log("userid = " + userid)
+        let ssql = 'select * from device where deviceid = $1'
+        console.log("ssql = "+ssql)
+        let values = [deviceid]
+        pool.query(ssql, values, (err, results) => {
+//            console.log("callback from findAllByUserid with err " + err + " results " + results)
+            if (err) {
+                console.error("findAllByUserid error " + err)
+                reject(err)
+            }
+            else  {
+                resolve(results);
+            }
+        })
+    })
+}
 
 async function getDevicesByStationId(userid) {
     return( findAllByStationid(userid))
@@ -154,13 +174,25 @@ async function updateDevice(body) {
 }
 
 async function setLatestPicture( deviceid, filename, datetimemillis )  {
+//    let shallowDevice = await device.getDeviceShallow(req.params.deviceid)
+//    let rmPath = __dirname + '/../../public/'+shallowDevice.latest_picture_filename
+
     return new Promise(function(resolve, reject) {
+
         pool.query("UPDATE device set latest_picture_filename=$1,latest_picture_datetimemillis=$2 where deviceid=$3 RETURNING *",
             [filename, datetimemillis, deviceid], (error, results) => {
                 if (error) {
                     reject(error)
                 } else {
-//                    console.log("updated updateDevice " + body.deviceid)
+/*                    console.log("updated updateDevice " + body.deviceid)
+                    fs.unlink(rmPath, (err) => {
+                        if (err) {
+                            console.error(rmPath + ' was NOT deleted - ', err);
+                        } else {
+                            console.log(rmPath + ' was deleted');
+                        }
+                    });
+*/
                     resolve({deviceid: deviceid, rowcount: results.rowCount, message: "picture has been modified :" + results.rowCount})
                 }
             })
@@ -196,5 +228,6 @@ module.exports = {
     getDevicesByStationId,
     createDefaultDevices,
     setLatestPicture,
+    getDeviceShallow,
 }
 

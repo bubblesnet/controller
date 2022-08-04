@@ -33,37 +33,51 @@ function get_server_ports_for_environment(env_mixed) {
 
     let env_lower = env_mixed.toLowerCase()
     let ports = {
-        api_server_port: 3003,
-        api_server_host: window.location.hostname,
-        websocket_server_host: window.location.hostname,
-        websocket_server_port: 8001,
-        activemq_server_port: 61613,
-        activemq_server_host: window.location.hostname
+        api_server_host: 'unset',
+        websocket_server_host: 'unset',
+        activemq_server_host: 'unset',
+        ui_server_port: 0,
+        api_server_port: 0,
+        websocket_server_port: 0,
+        activemq_server_port: 0,
     };
 
     switch(env_lower) {
         case "development":
-            ports.api_server_port = 3003;
-            ports.websocket_server_port = 8001;
-            ports.activemq_server_port = 61613;
+            ports.ui_server_port = 3001;
+            ports.api_server_port = 4001;
+            ports.api_server_host = window.location.hostname;
+            ports.websocket_server_host = window.location.hostname;
+            ports.websocket_server_port = 5001;
+            ports.activemq_server_port = 61611;
+            ports.activemq_server_host = 'activemq';
             break;
         case "test":
-            ports.api_server_port = 3002;
-            ports.websocket_server_port = 8002;
+            ports.ui_server_port = 3002;
+            ports.api_server_port = 4002;
+            ports.websocket_server_port = 5002;
             ports.activemq_server_port = 61612;
-            break;
-        case "production":
-            ports.api_server_port = 3001;
-            ports.websocket_server_port = 8003;
-            ports.activemq_server_port = 61611;
+            ports.api_server_host = window.location.hostname;
+            ports.websocket_server_host = window.location.hostname;
+            ports.activemq_server_host = window.location.hostname;
             break;
         case "ci":
-            ports.api_server_port = 3004;
+            ports.ui_server_port = 3003;
+            ports.api_server_port = 4003;
             ports.api_server_host = 'localhost';
             ports.websocket_server_host = 'localhost';
-            ports.websocket_server_port = 8004;
-            ports.activemq_server_port = 61614;
+            ports.websocket_server_port = 5003;
+            ports.activemq_server_port = 61613;
             ports.activemq_server_host = 'localhost';
+            break;
+        case "production":
+            ports.ui_server_port = 3004;
+            ports.api_server_port = 4004;
+            ports.api_server_host = window.location.hostname;
+            ports.websocket_server_host = window.location.hostname;
+            ports.websocket_server_port = 5004;
+            ports.activemq_server_port = 61614;
+            ports.activemq_server_host = 'activemq';
             break;
         default:
             console.log("ERROR NODE_ENV invalid value " + env_lower)

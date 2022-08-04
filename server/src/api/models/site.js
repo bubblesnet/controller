@@ -39,8 +39,8 @@ async function getSiteById(siteid) {
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control,
-                   coalesce ((
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
+/*                   coalesce ((
                                  SELECT array_to_json(array_agg(row_to_json(q)))
                                  FROM (
                                           SELECT
@@ -63,6 +63,7 @@ async function getSiteById(siteid) {
                                           FROM automationsettings
                                           where r.stationid_Station = c.stationid
                                       ) q),'[]' ) as automation_settings,
+ */
                    coalesce(
                            (
                                SELECT array_to_json(array_agg(row_to_json(x)))
@@ -119,12 +120,39 @@ async function getSiteById(siteid) {
             FROM public.user u
                      JOIN site i ON i.userid_user = u.userid
                      JOIN station c ON c.siteid_site=i.siteid
-                     JOIN automationsettings r on r.stationid_Station=c.stationid
             WHERE i.siteid = ${siteid}
             `
     );
     let site = { siteid: siteid, sitename: "blah", stations: results }
+    for( let i = 0; i < site.stations.length; i++ ) {
+        site.stations[i].automation_settings = await getAutomationSettings(site.stations[i].stationid)
+    }
     return( site )
+}
+
+async function getAutomationSettings(stationid) {
+    const results = await db.query(
+        sql`SELECT
+                                              stage_name,
+                                              current_lighting_schedule,
+                                              light_on_start_hour,
+                                              hours_of_light,
+                                              target_temperature,
+                                              temperature_min,
+                                              temperature_max,
+                                              target_water_temperature,
+                                              water_temperature_min,
+                                              water_temperature_max,
+                                              humidity_min,
+                                              humidity_max,
+                                              target_humidity,
+                                              humidity_target_range_low,
+                                              humidity_target_range_high,
+                                              current_light_type
+                                          FROM automationsettings
+            WHERE stationid_station = ${stationid}`
+    );
+    return( results )
 }
 
 async function createSite(sitename,userid) {

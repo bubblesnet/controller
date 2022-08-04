@@ -131,7 +131,16 @@ function AuthenticatedApp (props) {
         pressure_internal: 0.0,
         pressure_external_direction: "",
         pressure_internal_direction: "",
-        water_level: 0.0
+        water_level: 0.0,
+        voc: 0.0,
+        voc_direction: "",
+        voc_units: "ppm",
+        co2: 0.0,
+        co2_direction: "",
+        co2_units: "ppb",
+        ec: 0.0,
+        ec_direction: "",
+        ec_units: ""
     }
 
     /**
@@ -146,7 +155,7 @@ function AuthenticatedApp (props) {
      * @type {{activemq_server_host: string, api_server_port: number, api_server_host: string, websocket_server_host: string, activemq_server_port: number, websocket_server_port: number}}
      * now that nodeenv is set, we can figure out what URLs to talk to
      */
-    let servers = util.get_server_ports_for_environment(nodeEnv)
+    let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
     //
     //
@@ -389,6 +398,9 @@ function AuthenticatedApp (props) {
                         because = "picture evt msg " + msg.sample_timestamp
                         log.trace("ws: received picture event");
 //                        shutter_sound.play()
+                        log.info("picture_event " + JSON.stringify(msg))
+                        setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
+//                        props.setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
                         setLastPicture(last_picture + 1)
                         break;
                     default:
@@ -456,6 +468,27 @@ function AuthenticatedApp (props) {
                 deviceid: site.stations[currentStationIndex].attached_devices[i].deviceid
             }
             sendJsonMessage(cmd)
+        }
+    }
+
+    async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
+        log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+//            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+//            setSite(JSON.parse(JSON.stringify(z)))
+
+        for (let i = 0; i < site.stations.length; i++) {
+            for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
+                log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                if (site.stations[i].attached_devices[j].deviceid === deviceid) {
+                    let local_site = JSON.parse(JSON.stringify(site))
+                    local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
+                    local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
+                    log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                    log.info("local_site = " + JSON.stringify(local_site))
+                    setSite(JSON.parse(JSON.stringify(local_site)))
+                    return
+                }
+            }
         }
     }
 
@@ -529,6 +562,9 @@ function AuthenticatedApp (props) {
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", changed_station.light_vegetative)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", changed_station.light_germinate)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", changed_station.height_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "voc_sensor", changed_station.voc_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "co2_sensor", changed_station.co2_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "ec_sensor", changed_station.ec_sensor)
 
         let changed_site = { stations: [JSON.parse(JSON.stringify(x))] }
         let new_site = { ...site, ...changed_site};
@@ -743,8 +779,13 @@ function AuthenticatedApp (props) {
                 </Nav>
             </Sidebar>
  */
-//    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
+    log.info("rendering with station = "+JSON.stringify(site.stations[currentStationIndex]))
     log.trace("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
+    for ( let i = 0; i < site.stations[0].attached_devices.length; i++ ) {
+        log.info("RenderCameraTab AuthApp attached_devices[" + i + "].latest_picture_filename = " + site.stations[0].attached_devices[i].latest_picture_filename)
+    }
+    log.info("AuthenticatedApp display_settings.co2_units = " + props.display_settings.co2_units)
+
     return <div className="App">
         <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}

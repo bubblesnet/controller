@@ -23,6 +23,9 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+echo Setting timezone
+CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+
 cd server
 
 # Start the third process

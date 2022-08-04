@@ -23,9 +23,12 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+echo Setting timezone
+CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+
 # Start the ui process
 cd /
-ROARR_LOG=true; serve --listen tcp://0.0.0.0:3001 -s build &
+ROARR_LOG=true; serve --listen tcp://0.0.0.0:$REACT_APP_UI_PORT -s build &
 
 # Wait for any process to exit
 wait -n
