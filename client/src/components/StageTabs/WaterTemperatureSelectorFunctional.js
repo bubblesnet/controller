@@ -33,15 +33,15 @@ import '../../Palette.css';
 function RenderWaterTemperatureSelector(props) {
     function setValue(value) {
         let x = props.automation_setting;
-        x.target_temperature=value;
+        x.target_water_temperature=value;
         props.setAutomationSettingFromChild(x)
     }
-    const onChange = event => setValue(event.target.value);
+    const changeTarget = event => setValue(event.target.value);
     const units = props.display_settings.temperature_units;
-    const min = props.automation_setting.temperature_min;
-    const max = props.automation_setting.temperature_max;
+    const min = props.automation_setting.water_temperature_min;
+    const max = props.automation_setting.water_temperature_max;
 
-    const target_temperature = props.automation_setting.target_temperature
+    const target_water_temperature = props.automation_setting.target_water_temperature
 
     return (
             <Grid
@@ -73,13 +73,13 @@ function RenderWaterTemperatureSelector(props) {
                             min={min}
                             max={max}
                             step={1}
-                            value={target_temperature}
-                            onChange={onChange}
+                            value={target_water_temperature}
+                            onChange={changeTarget}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {target_temperature}{units}
+                    {target_water_temperature}{units}
                 </Box>
             </Grid>
    );

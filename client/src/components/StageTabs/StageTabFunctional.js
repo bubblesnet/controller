@@ -29,7 +29,7 @@ import {Grommet, Box, Grid, CheckBox} from 'grommet'
 import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderWaterTemperatureSelector from './WaterTemperatureSelectorFunctional'
-import RenderTemperatureSelector from './TemperatureSelectorFunctional'
+import RenderAirTemperatureSelector from './AirTemperatureSelectorFunctional'
 import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
@@ -148,11 +148,11 @@ function RenderStageTab (props) {
                                                  setAutomationSettingFromChild={setAutomationSettingFromChild} />
                         </Box>
                         <Box gridArea={'temp'} >
-                            <RenderTemperatureSelector station={station}
-                                                       display_settings={props.display_settings}
-                                                       automation_setting={automation_setting}
-                                                       label={"Target Temperature"}
-                                                       setStateFromChild={setAutomationSettingFromChild}/>
+                            <RenderAirTemperatureSelector station={station}
+                                                          display_settings={props.display_settings}
+                                                          automation_setting={automation_setting}
+                                                          label={"Target Air Temp"}
+                                                          setAutomationSettingFromChild={setAutomationSettingFromChild}/>
                         </Box>
                         <Box gridArea={'humidity'} >
                             <RenderHumiditySelector station={station}
@@ -165,7 +165,7 @@ function RenderStageTab (props) {
                             <RenderWaterTemperatureSelector station={station}
                                                             display_settings={props.display_settings}
                                                             automation_setting={automation_setting}
-                                                            label={"Water Temperature"}
+                                                            label={"Target Water Temp"}
                                                             setAutomationSettingFromChild={setAutomationSettingFromChild}/>
                         </Box>
                         <Box gridArea={'actions'}   >
