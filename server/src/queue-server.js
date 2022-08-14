@@ -28,6 +28,7 @@ const debug = require('debug')('queue-server')
 const bubbles_queue = require('./api/models/bubbles_queue')
 const outlet = require('./api/models/outlet')
 let __queueClient
+const log = require("./bubbles_logger").log
 
 function setClient(client) {
     __queueClient = client;
@@ -40,26 +41,26 @@ const serveMessageQueue = async() => {
         'content-type': 'text/plain'
     };
 
-    console.log("serveMessageQueue")
-    console.log("subscribe to activemq message queue")
+    log.info("serveMessageQueue")
+    log.info("subscribe to activemq message queue")
     bubbles_queue.init(setClient).then( value => {
-        console.log("bubbles_queue.init succeeded, subscribing");
+        log.info("bubbles_queue.init succeeded, subscribing");
         bubbles_queue.subscribeToQueue(__queueClient, function (body) {
                 bubbles_queue.sendMessageToTopic(__queueClient,sendHeaders, body)
                 storeMessage(body);
         });
     }, reason => {
-        console.log("bubbles_queue.init failed "+reason)
+        log.info("bubbles_queue.init failed "+reason)
     });
 }
 
 async function storeMessage(body) {
-    console.log("storeMessage " + body )
+    log.info("storeMessage " + body )
     let message;
     try {
         message = JSON.parse(body)
     } catch( error ) {
-        console.error("storeMessage error parsing message " + body)
+        log.error("storeMessage error parsing message " + body)
         return;
     }
     try {
@@ -84,7 +85,7 @@ async function storeMessage(body) {
         message.filename = '';
         switch( message.message_type) {
             case 'measurement':
-              //       console.log("inserting new event "+JSON.stringify(event))
+              //       log.info("inserting new event "+JSON.stringify(event))
                 if( message.type === 'measurement' ) {
                     message.value_name = message.measurement_name
                     message.stringvalue = '' + message.value
@@ -95,14 +96,18 @@ async function storeMessage(body) {
                 let x = await outlet.setStateByNameAndStation(message.switch_name, message.stationid, message.on)
                 console.info( "setState returns "+JSON.stringify(x))
                 break;
+            case 'dispenser_event':
+                x = await outlet.setDispenserStateByNameAndStation(message.dispenser_name, message.stationid, message.on)
+                console.info( "setState returns "+JSON.stringify(x))
+                break;
             default:
-                console.error("Unhandled message type for storage " + JSON.stringify(message))
+                log.error("Unhandled message type for storage " + JSON.stringify(message))
                 return;
         }
         let ev = await event.createEvent(message);
         debug("storeMessage stored event " + JSON.stringify(ev))
     } catch( err ) {
-        console.error("storeMessage error saving message " + err + " " + message)
+        log.error("storeMessage error saving message " + err + " " + message)
         return;
     }
 }

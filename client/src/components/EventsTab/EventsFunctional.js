@@ -51,7 +51,7 @@ function RenderOverview (props) {
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     */
     useEffect(() => {
-        log.trace("useEffect getLastN")
+        log.info("useEffect getLastN")
         const fetchData = async () => {
             log.trace("fetchData")
 //            let x = await getSite(apiHost, apiPort, 1)

@@ -21,15 +21,33 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var express = require('express');
-var locals = require('../../config/locals');
-var fs = require('fs');
-var db = require('../models/bubbles_db');
-const disk = require('diskspace');
-var sprintf = require('sprintf-js').sprintf;
-const log = require("../../bubbles_logger").log
+CREATE TABLE additive (
+    additiveid SERIAL PRIMARY KEY,
+    manufacturer_name VARCHAR(255) NOT NULL,
+    additive_name VARCHAR(255) NOT NULL,
+    spec_url VARCHAR(1024) NULL,
+    is_pgr BOOL NOT NULL default False
+);
 
-/* GET users listing. */
-exports.status = function (userid, deviceid, cb) {
-        console.log("statusbyuserdevice user: " + userid + " device: " + deviceid);
-    }
+CREATE TABLE dispenser
+(
+    dispenserid SERIAL PRIMARY KEY,
+    stationid_Station  INT  NOT NULL,
+    deviceid_Device  INT  NOT NULL,
+    dispenser_name   VARCHAR(255) NOT NULL,
+    currently_loaded_additiveid INT NULL,
+    index           INT      NOT NULL,
+    bcm_pin_number  INT      NOT NULL,
+    onoff           BOOL NOT NULL default false,
+    FOREIGN KEY (currently_loaded_additiveid) REFERENCES "additive" (additiveid),
+    FOREIGN KEY (stationid_Station) REFERENCES "station" (stationid),
+    FOREIGN KEY (deviceid_Device) REFERENCES "device" (deviceid)
+);
+
+
+
+
+
+
+
+

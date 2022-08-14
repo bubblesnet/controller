@@ -24,6 +24,8 @@
 /**
  * Created by rodley on 4/21/2017.
  */
+const log = require("../../bubbles_logger").log
+
 const sgMail = require('@sendgrid/mail')
 const from_email = 'sendgridrodley@gmail.com';
 const to_email = 'sendgridrodley@gmail.com'

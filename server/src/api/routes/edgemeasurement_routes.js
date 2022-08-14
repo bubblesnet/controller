@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 var express = require('express');
 var router = express.Router();

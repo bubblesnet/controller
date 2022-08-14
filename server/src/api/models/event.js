@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 
@@ -37,7 +38,7 @@ let good_deviceid = 0
 
 async function createEvent(event) {
     return new Promise(function(resolve, reject) {
-        console.log("inserting new event "+JSON.stringify(event))
+        log.info("inserting new event "+JSON.stringify(event))
 
         if( event.siteid == 0 ) { /// TODO fix error handling and get rid of this hack
             event.siteid = 1
@@ -51,7 +52,7 @@ async function createEvent(event) {
                 if (error) {
                     reject(error)
                 } else {
-//                    console.log("new event " + results.rows[0])
+//                    log.info("new event " + results.rows[0])
                     resolve({eventid: results.rows[0].eventid, message: "A new event has been added :" + results.rows[0].eventid})
                 }
             })
@@ -59,14 +60,14 @@ async function createEvent(event) {
 }
 
 async function getLastN(stationid, count,  exclude_measurement) {
-    console.log("getLastN "+stationid+' '+count+' ' + exclude_measurement)
+    log.info("getLastN "+stationid+' '+count+' ' + exclude_measurement)
     let query = sql`SELECT * FROM event where stationid_station=${stationid} ORDER BY datetimemillis DESC LIMIT ${count}`
     if( exclude_measurement === true ) {
         query = sql`SELECT * FROM event where stationid_station=${stationid} AND type != 'measurement' ORDER BY datetimemillis DESC LIMIT ${count}`
-        console.log(query)
+        log.info(query)
     }
     let results = await db.query(query);
-//    console.log("\n\n\n"+JSON.stringify(results))
+//    log.info("\n\n\n"+JSON.stringify(results))
     return(results)
 }
 

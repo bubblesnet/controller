@@ -33,5 +33,6 @@ WORKDIR /server
 RUN npm install
 
 CMD cp /server/config.json /config
-CMD cd /;./startservers.sh
+CMD cd /
+CMD /startservers.sh
 # CMD ["bash"]

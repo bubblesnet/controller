@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const express = require('express');
 const router = express.Router();
@@ -40,12 +41,12 @@ const sitestation = require('../models/sitestation')
 
 
 async function getDeviceConfig(req,res,next) {
-    console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
+    log.info("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
     // read config from file
 //    let x = await station.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
     let x = await station.getConfigByUser(req.params.userid).catch((err) =>
-    { console.log("caught err "+err)})
-    console.log("got x = " + JSON.stringify(x))
+    { log.error("caught err "+err)})
+    log.info("got x = " + JSON.stringify(x))
     res.json(x);
 }
 

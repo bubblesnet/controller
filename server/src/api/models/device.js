@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
@@ -32,7 +33,7 @@ const endPool = () => {
 }
 
 async function getAllDevices() {
-    console.log("device_model getAllDevices")
+    log.info("device_model getAllDevices")
     return new Promise(function (resolve, reject) {
         let ssql = "select * from device order by userid_user asc"
         pool.query(ssql, (error, results) => {
@@ -53,14 +54,14 @@ async function getDevicesByUserId(userid) {
 }
 
 async function findAllByUserid(userid) {
-    console.log("findAllByUserid "+userid)
+    log.info("findAllByUserid "+userid)
     return new Promise(function (resolve, reject) {
-        console.log("userid = " + userid)
+        log.info("userid = " + userid)
         let ssql = 'select * from device where userid_user = $1 order by deviceid'
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [userid]
         pool.query(ssql, values, (err, results) => {
-//            console.log("callback from findAllByUserid with err " + err + " results " + results)
+//            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
                 console.error("findAllByUserid error " + err)
                 reject(err)
@@ -73,14 +74,14 @@ async function findAllByUserid(userid) {
 }
 
 async function getDeviceShallow(deviceid) {
-    console.log("getDeviceShallow "+deviceid)
+    log.info("getDeviceShallow "+deviceid)
     return new Promise(function (resolve, reject) {
-        console.log("userid = " + userid)
+        log.info("userid = " + userid)
         let ssql = 'select * from device where deviceid = $1'
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [deviceid]
         pool.query(ssql, values, (err, results) => {
-//            console.log("callback from findAllByUserid with err " + err + " results " + results)
+//            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
                 console.error("findAllByUserid error " + err)
                 reject(err)
@@ -98,14 +99,14 @@ async function getDevicesByStationId(userid) {
 
 
 async function findAllByStationid(stationid) {
-    console.log("findAllByStationid "+stationid)
+    log.info("findAllByStationid "+stationid)
     return new Promise(function (resolve, reject) {
-        console.log("userid = " + stationid)
+        log.info("userid = " + stationid)
         let ssql = 'select * from device where stationid_station = $1 order by deviceid'
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [stationid]
         pool.query(ssql, values, (err, results) => {
-//            console.log("callback from findAllByStationid with err " + err + " results " + results)
+//            log.info("callback from findAllByStationid with err " + err + " results " + results)
             if (err) {
                 console.error("findAllByStationid error " + err)
                 reject(err)
@@ -135,7 +136,7 @@ async function createDevice(body) {
             if (error) {
                 reject(error)
             } else {
-//                console.log("new deviceid " + results.rows[0])
+//                log.info("new deviceid " + results.rows[0])
                 resolve({deviceid: results.rows[0].deviceid, message: "A new device has been added :" + results.rows[0].deviceid})
             }
         })
@@ -151,7 +152,7 @@ async function createDefaultDevices(body) {
                     console.error(error)
                     reject(error)
                 } else {
-                    console.log("new deviceid " + results.rows[0])
+                    log.info("new deviceid " + results.rows[0])
                     retval[0] = {deviceid: results.rows[0].deviceid, message: "A new device has been added :" + results.rows[0].deviceid}
                 }
             })
@@ -166,7 +167,7 @@ async function updateDevice(body) {
                 if (error) {
                     reject(error)
                 } else {
-//                    console.log("updated updateDevice " + body.deviceid)
+//                    log.info("updated updateDevice " + body.deviceid)
                     resolve({deviceid: body.deviceid, rowcount: results.rowCount, message: "device has been modified :" + results.rowCount})
                 }
             })
@@ -184,12 +185,12 @@ async function setLatestPicture( deviceid, filename, datetimemillis )  {
                 if (error) {
                     reject(error)
                 } else {
-/*                    console.log("updated updateDevice " + body.deviceid)
+/*                    log.info("updated updateDevice " + body.deviceid)
                     fs.unlink(rmPath, (err) => {
                         if (err) {
                             console.error(rmPath + ' was NOT deleted - ', err);
                         } else {
-                            console.log(rmPath + ' was deleted');
+                            log.info(rmPath + ' was deleted');
                         }
                     });
 */
@@ -200,17 +201,17 @@ async function setLatestPicture( deviceid, filename, datetimemillis )  {
 }
 
 async function deleteDevice(deviceid) {
-    console.log("deleteDevice "+deviceid)
+    log.info("deleteDevice "+deviceid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM device WHERE deviceid = "+deviceid)
+        log.info("DELETE FROM device WHERE deviceid = "+deviceid)
 
         pool.query('DELETE FROM device WHERE deviceid = $1', [deviceid], (error, results) => {
-            console.log("after delete")
+            log.info("after delete")
             if (error) {
                 console.error("deviceid err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({deviceid: deviceid, rowcount: results.rowCount, message: 'device deleted with ID ' + deviceid})
             }
         })

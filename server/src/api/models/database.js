@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 const createConnectionPool = require('@databases/pg');

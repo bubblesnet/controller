@@ -21,7 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Grid,Image, Box, RangeInput } from 'grommet';
 import thermometer from '../../images/thermometer-icon.png'

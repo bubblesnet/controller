@@ -14,6 +14,6 @@ RUN chmod +x /startservers.sh
 # RUN npm install
 RUN npm install serve -g
 
-
-CMD cd /;./startservers.sh
+CMD cd /
+CMD /startservers.sh
 # CMD ["bash"]

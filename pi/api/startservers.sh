@@ -109,12 +109,12 @@ then
 fi
 
 echo Setting timezone
-CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 echo "Starting API"
 cd /server || exit
 
 # Start the first process
 node src/api-server.js
-sleep 1m
+sleep 3m
 

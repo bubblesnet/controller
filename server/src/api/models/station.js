@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 const {sql} = require('@databases/pg');
 const stage = require('./stage')
@@ -37,16 +38,16 @@ async function getConfigBySite(siteid) {
     for( let i = 0; i < result.stations.length; i++ ) {
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
     }
-    console.log("\n\n\n"+JSON.stringify(result))
+    log.info("\n\n\n"+JSON.stringify(result))
     return( result )
 }
 
 async function getConfigByUser(uid) {
-    console.log("getConfigByUser "+uid)
+    log.info("getConfigByUser "+uid)
     const results = await db.query(sql`SELECT userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber FROM public.user where userid=${uid}`);
     let result = results[0]
     result.stations = await getStationConfigsByUser(uid)
-    console.log("results = " + JSON.stringify(results))
+    log.info("results = " + JSON.stringify(results))
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
 
@@ -58,17 +59,27 @@ async function getConfigByUser(uid) {
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
         result.siteid = 1
         result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
+        result.stations[i].dispensers = await getDispensersForStation(result.stations[i].stationid)
+
     }
-    console.log("\n\n\n"+JSON.stringify(result))
+    log.info("\n\n\n"+JSON.stringify(result))
     return( result )
 }
+
+async function getDispensersForStation(stationid) {
+    const results = await db.query(
+        sql`SELECT * from dispenser d join additive a on d.currently_loaded_additiveid = a.additiveid where stationid_station=${stationid}`
+    );
+    return( results )
+}
+
 
 async function getAutomationSettings(stationid) {
     const results = await db.query(
         sql`
             SELECT * from automationsettings where stationid_station = ${stationid}
             `)
-    console.log("\n\n\n"+JSON.stringify(results[0]))
+    log.info("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )
 
 }
@@ -78,7 +89,7 @@ async function getEvents(stationid, count) {
         sql`
             SELECT * from event where stationid_station = ${stationid}
             `)
-    console.log("\n\n\n"+JSON.stringify(results[0]))
+    log.info("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )
 
 }
@@ -151,7 +162,7 @@ async function getStationConfigsBySite(siteid) {
             WHERE i.siteid = ${siteid}`
     );
     let site = { siteid: siteid, sitename: "blah", stations: results }
-    console.log("\n\n\n"+JSON.stringify(site))
+    log.info("\n\n\n"+JSON.stringify(site))
     return( site )
 }
 
@@ -223,7 +234,7 @@ async function getStationConfigsByUser(uid) {
             WHERE u.userid=${uid}
   `,
     );
-    console.log("\n\n\n"+JSON.stringify(results))
+    log.info("\n\n\n"+JSON.stringify(results))
     if( results.length > 0 && typeof results[0].edge_devices !== 'undefined') {
         for (let i = 0; i < results[0].edge_devices.length; i++) {
             results[0].edge_devices[i].camera = {
@@ -240,15 +251,15 @@ async function getStationConfigsByUser(uid) {
 }
 
 async function addStation(name, siteid) {
-    //    console.log(JSON.stringify(body))
+    //    log.info(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
         await pool.query("insert into station (station_name, siteid_site) values ($1,$2) RETURNING *",
             [name,siteid], (error, results) => {
                 if (error) {
-                    console.log("addStation error " + error)
+                    log.info("addStation error " + error)
                     reject(error)
                 } else {
-                    console.log("new station " + JSON.stringify(results.rows[0]))
+                    log.info("new station " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, message: "A new stationid has been added :" + results.rows[0].stationid})
                 }
             })
@@ -256,15 +267,15 @@ async function addStation(name, siteid) {
 }
 
 async function updateStation(stationid, name) {
-    //    console.log(JSON.stringify(body))
+    //    log.info(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
         await pool.query("update station set station_name = $1 where stationid = $2 RETURNING *",
             [name,stationid], (error, results) => {
                 if (error) {
-                    console.log("updateStation error " + error)
+                    log.info("updateStation error " + error)
                     reject(error)
                 } else {
-                    console.log("updateStation " + JSON.stringify(results.rows[0]))
+                    log.info("updateStation " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, message: "Station has been updated :" + results.rows[0].stationid})
                 }
             })
@@ -277,10 +288,10 @@ async function deleteStation(stationid) {
         await pool.query("delete from station where stationid = $1 RETURNING *",
             [stationid], (error, results) => {
                 if (error) {
-                    console.log("deleteStation error " + error)
+                    log.info("deleteStation error " + error)
                     reject(error)
                 } else {
-                    console.log("deleted station " + results.rows[0])
+                    log.info("deleted station " + results.rows[0])
                     resolve({stationid: results.rows[0].stationid, message: "Station has been deleted :" + results.rows[0].stationid})
                 }
             })
@@ -288,9 +299,9 @@ async function deleteStation(stationid) {
 }
 
 async function getStationsForSite(siteid) {
-    console.log("getStationsForSite")
+    log.info("getStationsForSite")
     return new Promise(async function (resolve, reject) {
-        console.log("getSite db query")
+        log.info("getSite db query")
         const results = await db.query(sql`SELECT * from station where siteid_site=${siteid}`);
         for( let i = 0; i < results.length; i++) {
             results[i].attached_devices = await device.getDevicesByStationId(results[i].stationid)

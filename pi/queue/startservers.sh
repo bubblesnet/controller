@@ -26,7 +26,7 @@
 cd server
 
 echo Setting timezone
-CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 # Start the second process
 node src/queue-server.js &

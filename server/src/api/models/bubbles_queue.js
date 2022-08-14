@@ -25,6 +25,7 @@
 const Stomp = require('stompit');
 let state = require('../../initial_state.json');
 const debug = require('debug')('bubbles_queue')
+const log = require("../../bubbles_logger").log
 
 let util = require("../../util")
 
@@ -63,7 +64,7 @@ MessageProducer.prototype.init = async function init(cb) {
     debug("bubbles_queue.init")
     return new Promise(async (resolve, reject) => {
         let ports = util.get_server_ports_for_environment(process.env.NODE_ENV)
-        console.log(JSON.stringify(ports))
+        log.info(JSON.stringify(ports))
         const connectOptions = {
             'host': ports.activemq_server_host,
             'port': ports.activemq_server_port,
@@ -77,7 +78,7 @@ MessageProducer.prototype.init = async function init(cb) {
         let count = 1
         clientSet = false;
         while (clientSet === false && count <= 20) {
-            console.log("initing "+connectOptions.host+":"+connectOptions.port+" .... " + count)
+            log.info("initing "+connectOptions.host+":"+connectOptions.port+" .... " + count)
 
             await Stomp.connect(connectOptions, function (error, client) {
                 if (!error) {

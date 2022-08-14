@@ -24,7 +24,7 @@
 #
 
 echo Setting timezone
-CMD sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 # Start the ui process
 cd /

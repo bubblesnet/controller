@@ -25,6 +25,7 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 
+const log = require("../../bubbles_logger").log
 
 const VerifyToken = require('../services/verify_token');
 

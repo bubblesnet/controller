@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("./bubbles_logger").log
 
 /**
  * Normalize a port into a number, string, or false.
@@ -27,7 +28,7 @@
 const fs = require('fs')
 
 function get_config_file_for_environment(env) {
-    console.log("get_config_file_for_environment "+env)
+    log.info("get_config_file_for_environment "+env)
     switch(env.toLowerCase()) {
         case "development":
             return("config_dev.json")
@@ -124,7 +125,7 @@ function getRandomInt(max) {
 }
 
 function readJsonFile(filepath) {
-    console.log("utils.readJsonFile Reading config from " + filepath)
+    log.info("utils.readJsonFile Reading config from " + filepath)
     const data = fs.readFileSync(filepath, 'utf8');
     // parse JSON string to JSON object
     return(JSON.parse(data));

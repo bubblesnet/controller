@@ -21,7 +21,9 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-let temperature_out_of_range_since
+const log = require("./bubbles_logger").log
+
+
 let temperature_low, temperature_high, temperature_units
 let humidity_low,humidity_high, humidity_units
 let pH_low, pH_high, pH_units
@@ -39,7 +41,7 @@ function within_range(low,high,units,value, value_units ) {
 }
 
 function alert_service_callback(body) {
-    console.log("Alert service analyzing message " + JSON.stringify(body))
+    log.info("Alert service analyzing message " + JSON.stringify(body))
 
     // are environmental measurements out-of-range?
     // temperature, humidity, water level, pH, light

@@ -21,15 +21,46 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var express = require('express');
-var locals = require('../../config/locals');
-var fs = require('fs');
-var db = require('../models/bubbles_db');
-const disk = require('diskspace');
-var sprintf = require('sprintf-js').sprintf;
-const log = require("../../bubbles_logger").log
 
-/* GET users listing. */
-exports.status = function (userid, deviceid, cb) {
-        console.log("statusbyuserdevice user: " + userid + " device: " + deviceid);
-    }
+var winston = require('winston');
+var path = require('path');
+
+winston.level = process.env.LOG_LEVEL
+
+// Set this to whatever, by default the path of the script.
+var logPath = __dirname;
+logPath = ".";
+console.log( "logPath = " + logPath )
+
+const tsFormat = () => (new Date().toISOString());
+
+const errorLog = winston.createLogger({
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+            level: winston.level
+        })
+    ]
+});
+
+const log = winston.createLogger({
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+            level: winston.level
+        })
+        /*
+        new winston.transports.File({
+            filename: path.join(logPath, 'bubblesnet.log'),
+            timestamp: tsFormat,
+            level:  winston.level
+        })
+         */
+    ]
+});
+
+
+module.exports = {
+    errorLog: errorLog,
+    log: log
+};

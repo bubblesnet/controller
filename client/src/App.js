@@ -30,7 +30,8 @@ import SetupApp from './SetupApp'
 import useToken from './useToken';
 import {useEffect, useState} from "react";
 import {getSite} from "./api/utils";
-import log from "roarr";
+//import log from "roarr";
+
 import util from "./util";
 
 import initial_display_settings from './initial_display_settings.json'
@@ -41,6 +42,9 @@ import options_language from './options_languages.json'
 
 // copyright and license inspection - no issues 4/13/22
 
+const log = require("./bubbles_logger").log
+
+
 let necessary_environment = [
     {name: "NODE_ENV", value: process.env.NODE_ENV},
     {name: "REACT_APP_NODE_ENV", value: process.env.REACT_APP_NODE_ENV},
@@ -50,10 +54,13 @@ let necessary_environment = [
 ]
 function App(props) {
 
-    console.log("ENV = " + JSON.stringify(process.env))
+    log.info("ENV = " + JSON.stringify(process.env))
 
         let initial_station_state = {
             station_settings: {
+                station_name: "blah",
+                time_between_pictures_in_seconds: 6000,
+                time_between_sensor_polling_in_seconds: 3000,
                 humidifier: true,
                 humidity_sensor_internal: true,
                 humidity_sensor_external: true,
@@ -174,7 +181,8 @@ function App(props) {
             }
         }
 
-        async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
+
+    async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
             log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
 //            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
 //            setSite(JSON.parse(JSON.stringify(z)))
@@ -197,16 +205,16 @@ function App(props) {
 
     const [site, setSite] = useState({});
 
-        console.log("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+        log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
     let needs_setup = false
 
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        log.trace("App: processLoginResult "+JSON.stringify(loginResult))
+        log.debug("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
-            log.trace("Setting token to " + JSON.stringify(loginResult))
+            log.debug("Setting token to " + JSON.stringify(loginResult))
             loginResult.units_options = options_units
             loginResult.pressure_units_options = options_pressure_units
             loginResult.languageOptions = options_language
@@ -222,22 +230,23 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            log.trace("selected stage value fetching")
+            log.debug("selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+            log.info("zzzzz = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     // ONLY CALL ON MOUNT - empty array arg causes this
 
-//    console.log("App: Rendering App with token set to " + JSON.stringify(token))
+//    log.info("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
         return <SetupApp readyState={true}/>
     }
 
     let selectedStationIndex = 0
 
-//    console.log("App: Rendering App with site set to " + JSON.stringify(site))
+//    log.info("App: Rendering App with site set to " + JSON.stringify(site))
     if( typeof site.stations === 'undefined') {
         return <></>
     }
@@ -252,10 +261,10 @@ function App(props) {
     log.info(JSON.stringify(site))
     let missing_var = ""
     function configured() {
-        console.log("checking ENV " + JSON.stringify(process.env))
+        log.info("checking ENV " + JSON.stringify(process.env))
         for(let i = 0; i < necessary_environment.length; i++ ) {
             if (typeof (necessary_environment[i].value) === 'undefined') {
-                console.log("undefined "+necessary_environment[i].name)
+                log.info("undefined "+necessary_environment[i].name)
                 missing_var = necessary_environment[i].name
                 return false
             }
@@ -275,7 +284,7 @@ function App(props) {
                 stationindex={selectedStationIndex}
                 initial_station_state={initial_station_state}
                 initial_switch_state={initial_switch_state}
-                initial_sensor_readings={initial_sensor_readings}
+               initial_sensor_readings={initial_sensor_readings}
                 nodeEnv={process.env.REACT_APP_NODE_ENV}
                 site={site}
                 automation_settings={site.stations[selectedStationIndex].automation_settings}

@@ -65,6 +65,10 @@
   float: right
 }
 
+.Dispense-Button {
+  font-size: small;
+}
+
 .App-link {
   color: #61dafb;
 }

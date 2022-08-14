@@ -26,6 +26,7 @@ const util = require("./util")
 const axios = require('axios')
 const bubbles_queue = require("./api/models/bubbles_queue")
 let current_state = {}
+const log = require("./bubbles_logger").log
 
 function getFakeMeasurement() {
     let x = util.getRandomInt(9)
@@ -91,11 +92,11 @@ function sendTextToAPI(msg) {
     axios
         .post(url, msg)
         .then(res => {
-            console.log(`statusCode: ${res.statusCode}`)
-            console.log(res)
+            log.info(`statusCode: ${res.statusCode}`)
+            log.info(res)
         })
         .catch(error => {
-            console.error(error)
+            log.error(error)
         })
 
 }
@@ -113,7 +114,7 @@ function sendFakeMeasurement(singleCall) {
 /*
 function sendFakeStatus() {
     current_state = emulator_util.getFakeStatus()
-    console.log("Sending humidity " + current_state.status.humidity_internal)
+    log.info("Sending humidity " + current_state.status.humidity_internal)
     sendText(current_state)
     setTimeout(() => {
         sendFakeStatus()
@@ -124,23 +125,23 @@ function sendFakeStatus() {
 
 
 function sendMeasurement(msg) {
-    console.log("sendFakeMeasurement")
+    log.info("sendFakeMeasurement")
 
     msg.sample_timestamp = Date.now = () => new Date().getTime();
-    console.log("Sending message to API " + JSON.stringify(msg))
+    log.info("Sending message to API " + JSON.stringify(msg))
     sendTextToAPI(msg)
-    console.log("end sendFakeMeasurement")
+    log.info("end sendFakeMeasurement")
 }
 
 function sendFakeMeasurementToTopic(client) {
-    console.log("sendFakeMeasurementToTopic")
+    log.info("sendFakeMeasurementToTopic")
     const sendHeaders = {
         'destination': '/topic/bubbles_ui',
         'content-type': 'text/plain'
     };
 
     let msg = getFakeMeasurement()
-    console.log("Sending message to topic " + JSON.stringify(msg))
+    log.info("Sending message to topic " + JSON.stringify(msg))
     bubbles_queue.sendMessageToTopic(client,sendHeaders, JSON.stringify(msg))
 //    setTimeout(() => {
 //        sendFakeMeasurementToTopic(client)
@@ -150,11 +151,11 @@ function sendFakeMeasurementToTopic(client) {
 }
 
 function sendFakeStatusToQueue(client) {
-    console.log("sendFakeStatusToQueue")
+    log.info("sendFakeStatusToQueue")
     current_state = getFakeStatus()
-    console.log("Sending humidity " + current_state.status.humidity_internal)
+    log.info("Sending humidity " + current_state.status.humidity_internal)
 //    if (bubbles_queue.__stompClient != null) {
-    console.log("sending message to topic")
+    log.info("sending message to topic")
     bubbles_queue.sendMessageToQueue(client,JSON.stringify(current_state))
 //    }
     setTimeout(() => {
@@ -170,8 +171,8 @@ function sendFakeStatusToTopic(client) {
         'content-type': 'text/plain'
     };
 
-    console.log("sendFakeStatusToTopic")
-    console.log("sending message to topic")
+    log.info("sendFakeStatusToTopic")
+    log.info("sending message to topic")
     current_state = getFakeStatus()
     bubbles_queue.sendMessageToTopic(client,sendHeaders, JSON.stringify(current_state))
     setTimeout(() => {

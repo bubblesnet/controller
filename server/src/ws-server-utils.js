@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("./bubbles_logger").log
 
 global.__root   = __dirname + '/';
 
@@ -37,6 +38,7 @@ const STAGE_COMMAND="stage"
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const PICTURE_COMMAND="picture"
+const DISPENSE_COMMAND="dispense"
 
 function setClient(client) {
     debug("setclient " + client)
@@ -95,15 +97,15 @@ function runWebSocketServer(port) {
         })
         conn.on("text", function (str) {
             let x = JSON.parse(str)
-            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND ) {
-                console.log("Received command " + str)
+            if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND  || x.command === DISPENSE_COMMAND) {
+                log.info("Received command " + str)
                 let sendHeaders = {
                     'destination': '/topic/'+x.userid+'/'+x.deviceid,
                     'content-type': 'text/json'
                 };
                 bubbles_queue.sendMessageToTopic(__queueClient, sendHeaders, str)
             } else {
-                debug("NOT Echoing received state")
+                error("NOT sending unknown message "+str)
             }
         })
         conn.on("close", function (code, reason) {

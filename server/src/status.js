@@ -26,9 +26,10 @@ var fs = require('fs');
 var db = require('../routes/db');
 const disk = require('diskspace');
 var sprintf = require('sprintf-js').sprintf;
+const log = require("./bubbles_logger").log
 
 /* GET users listing. */
 exports.status = function (userid, deviceid, cb) {
-        console.log("statusbyuserdevice user: " + userid + " device: " + deviceid);
+        log.info("statusbyuserdevice user: " + userid + " device: " + deviceid);
 
     }

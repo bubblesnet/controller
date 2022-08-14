@@ -80,3 +80,4 @@
         return ( sprintf("%.1f %s", airPressureMonitoredSensor.value, airPressureMonitoredSensor.units));
     }
 }).call(this);
+

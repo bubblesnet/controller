@@ -29,6 +29,7 @@ const pool = server_db.getPool()
 const endPool = () => {
     pool.end()
 }
+const log = require("../../bubbles_logger").log
 
 async function getSiteById(siteid) {
     const results = await db.query(
@@ -127,7 +128,17 @@ async function getSiteById(siteid) {
     for( let i = 0; i < site.stations.length; i++ ) {
         site.stations[i].automation_settings = await getAutomationSettings(site.stations[i].stationid)
     }
+    for( let i = 0; i < site.stations.length; i++ ) {
+        site.stations[i].dispensers = await getDispensersForStation(site.stations[i].stationid)
+    }
     return( site )
+}
+
+async function getDispensersForStation(stationid) {
+    const results = await db.query(
+        sql`SELECT * from dispenser d join additive a on d.currently_loaded_additiveid = a.additiveid where stationid_station=${stationid}`
+    );
+    return( results )
 }
 
 async function getAutomationSettings(stationid) {
@@ -162,7 +173,7 @@ async function createSite(sitename,userid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("new site " + JSON.stringify(results.rows[0]))
+                    log.info("new site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "A new site has been added :" + results.rows[0].siteid})
                 }
             })
@@ -176,7 +187,7 @@ async function updateSite(siteid,sitename,userid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("updated site " + JSON.stringify(results.rows[0]))
+                    log.info("updated site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "Site has been updated :" + results.rows[0].siteid})
                 }
             })
@@ -190,7 +201,7 @@ async function deleteSite(siteid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("deleted site " + JSON.stringify(results.rows[0]))
+                    log.info("deleted site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "Site has been deleted :" + results.rows[0].siteid})
                 }
             })
@@ -202,5 +213,6 @@ module.exports = {
     createSite,
     deleteSite,
     getSiteById,
+    getDispensersForStation,
     updateSite
 }

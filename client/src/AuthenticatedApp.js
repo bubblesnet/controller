@@ -34,6 +34,7 @@ import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
 import RenderStageTab from "./components/StageTabs/StageTabFunctional"
 import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import RenderCalibration from "./components/CalibrationTab/CalibrationTabFunctional"
+import RenderNutes from "./components/NutesTab/NutesTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
@@ -64,6 +65,7 @@ const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
+const DISPENSE_COMMAND="dispense"
 
 let because = "don't know"
 
@@ -302,6 +304,23 @@ function AuthenticatedApp (props) {
         }
     }
 
+    /**
+     * Send a "take picture" command to all the devices attached to this controller.
+     */
+    function dispense( deviceid, dispenser_name, ms ) {
+        let intms = Math.trunc( ms );
+        alert("button: dispense " + dispenser_name + " for " + intms + "ms")
+        let cmd = {
+            command: DISPENSE_COMMAND,
+            userid: userid,
+            deviceid: deviceid,
+            dispenser_name: dispenser_name,
+            milliseconds: intms
+        }
+        log.info("Sending dispense message " + JSON.stringify(cmd))
+        sendJsonMessage(cmd)
+        log.info("Sent dispense message " + JSON.stringify(cmd) + "???????")
+    }
 
     let various_dates = {
         start_date_current_stage: "25 days ago",
@@ -383,6 +402,11 @@ function AuthenticatedApp (props) {
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
                         log.trace("ws: received measurement");
                         applyMeasurementToState(msg)
+                        break;
+                    case "dispenser_event":
+                        because = "dispenser_evt " + msg.dispenser_name
+                        log.info("ws: received dispenser_event " + JSON.stringify(msg));
+                        toggleDispenserTo(msg.dispenser_name, msg.on)
                         break;
                     case "switch_event":
                         because = "switch_evt " + msg.switch_name
@@ -521,6 +545,40 @@ function AuthenticatedApp (props) {
 //        console.log("Clearing changing new_switch_state[" + switch_name + "] to false")
         new_switch_state[switch_name].changing = false
         setSwitchState(new_switch_state)
+    }
+
+    /**
+     * Change the state of the specified switch to the specified value and
+     * save to useState for a rerender.
+     *
+     * @param switch_name   The name of the switch from switch_names enum
+     * @param on    True/false on/off
+     */
+    async function toggleDispenserTo(dispenser_name, on) {
+        log.info("button: toggleDispenserTo " + dispenser_name + " to " + on)
+        if (typeof (dispenser_name) === 'undefined') {
+            return
+        }
+        for( let i = 0; i < site.stations[currentStationIndex].dispensers.length; i++ ) {
+            if( site.stations[currentStationIndex].dispensers[i].dispenser_name === dispenser_name) {
+                let local_site = JSON.parse(JSON.stringify(site))
+                local_site.stations[currentStationIndex].dispensers[i].onoff = on
+                setSite(JSON.parse(JSON.stringify(local_site)))
+                break
+            }
+        }
+ /*
+        let new_dispenser_state = JSON.parse(JSON.stringify(dispenser_state))
+        log.info("dispenser_state = " + JSON.stringify(dispenser_state))
+
+        if( typeof(new_dispenser_state[dispenser_name] === 'undefined')) {
+            new_dispenser_state[dispenser_name] = { on: on, changing: false}
+        }
+        new_dispenser_state[dispenser_name].on = on
+        log.info("Clearing changing new_dispenser_state[" + dispenser_name + "] to false")
+        new_dispenser_state[dispenser_name].changing = false
+        setDispenserState(new_dispenser_state)
+  */
     }
 
 
@@ -916,6 +974,16 @@ function AuthenticatedApp (props) {
                                            display_settings={props.display_settings}
                                            onApplyFontChange={applyFontChange}
                                            onLocalFontChange={localFontChange}
+                    />
+                </Tab>
+                <Tab title="Nutes">
+                    <RenderNutes nodeEnv={nodeEnv}
+                                       apiHost={servers.api_server_host}
+                                       apiPort={apiPort}
+                                       theme={bubbles_theme}
+                                       station={site.stations[currentStationIndex]}
+                                       display_settings={props.display_settings}
+                                        dispense_function={dispense}
                     />
                 </Tab>
                 <Tab title="Calibration">

@@ -30,6 +30,8 @@ const notification = require('../models/notification')
 const alertcondition = require('../models/alertcondition')
 const locals = require('../../config/locals')
 
+const log = require("../../bubbles_logger").log
+
 let notificationsserviced = 0;
 let notificationsneeded = 100000;
 
