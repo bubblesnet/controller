@@ -127,6 +127,10 @@ async function getSiteById(siteid) {
     let site = { siteid: siteid, sitename: "blah", stations: results }
     for( let i = 0; i < site.stations.length; i++ ) {
         site.stations[i].automation_settings = await getAutomationSettings(site.stations[i].stationid)
+        for( let j = 0; j < site.stations[i].attached_devices.length; j++ ) {
+            site.stations[i].attached_devices[j].time_between_pictures_in_seconds = site.stations[i].time_between_pictures_in_seconds
+            site.stations[i].attached_devices[j].time_between_sensor_polling_in_seconds = site.stations[i].time_between_sensor_polling_in_seconds
+        }
     }
     for( let i = 0; i < site.stations.length; i++ ) {
         site.stations[i].dispensers = await getDispensersForStation(site.stations[i].stationid)

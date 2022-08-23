@@ -60,9 +60,13 @@ async function getConfigByUser(uid) {
         result.siteid = 1
         result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
         result.stations[i].dispensers = await getDispensersForStation(result.stations[i].stationid)
-
+        for( let j = 0; j < result.stations[i].edge_devices.length; j++ ) {
+            result.stations[i].edge_devices[j].time_between_pictures_in_seconds = result.stations[i].time_between_pictures_in_seconds
+            result.stations[i].edge_devices[j].time_between_sensor_polling_in_seconds = result.stations[i].time_between_sensor_polling_in_seconds
+        }
     }
-    log.info("\n\n\n"+JSON.stringify(result))
+
+    log.info("getConfigByUser returns "+JSON.stringify(result))
     return( result )
 }
 

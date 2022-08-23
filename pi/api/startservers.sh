@@ -79,6 +79,8 @@ else
   date > "$POSTGRESQL_SHARED_DIRECTORY/initialized"
 fi
 
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+
 if [ -b "/dev/sda1" ]
 then
   echo Mounting /dev/sda1 into /mnt/backups
@@ -86,6 +88,11 @@ then
   sudo mount -t exfat -o rw /dev/sda1 /mnt/backups
   sudo mkdir -p /mnt/backups/database
   sudo mkdir -p /mnt/backups/pictures
+  sudo mkdir -p /mnt/backups/logs/api/${now}
+  sudo mkdir -p /mnt/backups/logs/queue/${now}
+  sudo mkdir -p /mnt/backups/logs/ui/${now}
+  sudo mkdir -p /mnt/backups/logs/websocket/${now}
+
   echo Moving pictures to backup drive
   sudo mv /server/src/public/*.jpg /mnt/backups/pictures
   echo Backing database "$POSTGRESQL_APPLICATION_DBNAME" up to mounted backup drive
@@ -93,7 +100,6 @@ then
   echo *:*:*:*:$POSTGRESQL_POSTGRES_PASSWORD > ~/.pgpass
   export PGPASSFILE=~/.pgpass
   chmod 600 ~/.pgpass
-  now=$(date +"%Y.%m.%d_%H.%M.%S")
   mkdir /mnt/backups/database/${now}
   sudo pg_dump --no-password -h "$POSTGRESQL_HOST" -p 5432 -U postgres "$POSTGRESQL_APPLICATION_DBNAME" > /mnt/backups/database/${now}/"$POSTGRESQL_APPLICATION_DBNAME".bak 2>> /mnt/backups/database/${now}/dbname.bak.log
   cat /mnt/backups/database/${now}/dbname.bak.log
@@ -115,6 +121,24 @@ echo "Starting API"
 cd /server || exit
 
 # Start the first process
-node src/api-server.js
-sleep 3m
+node src/api-server.js &
 
+# Wait for any process to exit
+wait -n
+
+exit_status=$?
+
+if [ -b "/dev/sda1" ]
+then
+  echo Moving API logs to mounted storage
+  mv /server/src/*.log /mnt/backups/logs/api/${now}
+  echo Umounting mounted storage
+  sudo umount /dev/sda1
+fi
+
+echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+
+echo Exiting with exit status $exit_status
+
+exit $exit_status
