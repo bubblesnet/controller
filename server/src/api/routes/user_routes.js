@@ -74,7 +74,7 @@ router.get('/:id', function (req, res) {
 
 // GETS A SINGLE USER FROM THE DATABASE - unusual case
 function getUserByName( req, res ) {
-    console.log("Get by name " + req.params.id)
+    log.info("Get by name " + req.params.id)
     UserModel.findOneByUsername(req.params.id).then( function (user) {
         if (!user) return res.status(401).send("No user found.");
         res.setHeader("Access-Control-Allow-Origin", "*")

@@ -63,7 +63,7 @@ async function findAllByUserid(userid) {
         pool.query(ssql, values, (err, results) => {
 //            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
-                console.error("findAllByUserid error " + err)
+                log.error("findAllByUserid error " + err)
                 reject(err)
             }
             else  {
@@ -83,7 +83,7 @@ async function getDeviceShallow(deviceid) {
         pool.query(ssql, values, (err, results) => {
 //            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
-                console.error("findAllByUserid error " + err)
+                log.error("findAllByUserid error " + err)
                 reject(err)
             }
             else  {
@@ -108,7 +108,7 @@ async function findAllByStationid(stationid) {
         pool.query(ssql, values, (err, results) => {
 //            log.info("callback from findAllByStationid with err " + err + " results " + results)
             if (err) {
-                console.error("findAllByStationid error " + err)
+                log.error("findAllByStationid error " + err)
                 reject(err)
             }
             else  {
@@ -149,7 +149,7 @@ async function createDefaultDevices(body) {
         pool.query("INSERT INTO device (deviceid, devicename, devicetypeid_Devicetype, userid_User,created, stationid_Station) VALUES ( $1,$2,$3,$4,current_timestamp,$5) RETURNING *",
             [70000008, 'Cabinet internal', 0, body.userid, body.stationid], (error, results) => {
                 if (error) {
-                    console.error(error)
+                    log.error(error)
                     reject(error)
                 } else {
                     log.info("new deviceid " + results.rows[0])
@@ -188,7 +188,7 @@ async function setLatestPicture( deviceid, filename, datetimemillis )  {
 /*                    log.info("updated updateDevice " + body.deviceid)
                     fs.unlink(rmPath, (err) => {
                         if (err) {
-                            console.error(rmPath + ' was NOT deleted - ', err);
+                            log.error(rmPath + ' was NOT deleted - ', err);
                         } else {
                             log.info(rmPath + ' was deleted');
                         }
@@ -208,7 +208,7 @@ async function deleteDevice(deviceid) {
         pool.query('DELETE FROM device WHERE deviceid = $1', [deviceid], (error, results) => {
             log.info("after delete")
             if (error) {
-                console.error("deviceid err3 " + error)
+                log.error("deviceid err3 " + error)
                 reject(error)
             } else {
 //                log.info("results " + JSON.stringify(results))

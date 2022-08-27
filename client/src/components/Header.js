@@ -28,8 +28,10 @@ import RenderTiltFunctional from "./TiltFunctional"
 import {ReadyState} from "react-use-websocket";
 // import getReadyState from '../AuthenticatedApp'
 // import {Table, TableRow, TableCell} from 'grommet'
-import log from 'roarr';
-import '../logimplementation'
+import log from "roarr";
+// import log from "./bubbles_logger"
+
+// import '../logimplementation'
 import {Button} from "grommet";
 import {get_server_ports_for_environment} from "../util";
 

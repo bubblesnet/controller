@@ -44,6 +44,26 @@ services:
       - 'resin-data:/postgresql_shared'
       - 'resin-data:/data'
 
+  alert:
+    build: alert
+    privileged: true
+    restart: always
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
+  notify:
+    build: notify
+    privileged: true
+    restart: always
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+
   api:
     build: api
     privileged: true

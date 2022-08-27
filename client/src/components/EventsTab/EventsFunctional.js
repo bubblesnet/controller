@@ -23,7 +23,7 @@
 
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
-import {getLastNEvents, getSite} from "../../api/utils";
+import {getLastNEvents} from "../../api/utils";
 import log from "roarr";
 import {Grommet, Table, TableCell, TableRow} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
@@ -38,7 +38,6 @@ function RenderOverview (props) {
     const [reset_button_state] = useState(false)
     const [defaults_button_state] = useState(true)
     const [apply_button_state] = useState(false)
-    const [nodeEnv] = useState(props.nodeEnv);
     const [apiHost] = useState(props.apiHost)
     const [apiPort] = useState(props.apiPort)
 /*

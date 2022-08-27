@@ -21,11 +21,12 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import util from "../../util";
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, Box, Grid, CheckBox} from 'grommet'
+import {Grommet, Box, Grid} from 'grommet'
 import './stagesTab.css'
 import RenderLightSelector from './LightScheduleSelector'
 import RenderWaterTemperatureSelector from './WaterTemperatureSelectorFunctional'
@@ -34,9 +35,9 @@ import RenderHumiditySelector from './HumiditySelectorFunctional'
 import RenderStageSelector from './StageSelector'
 import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
+import {getStage,getAutomationSetting} from "../../api/utils";
+
 import log from "roarr";
-import {getStage,getAutomationSetting, getSite} from "../../api/utils";
-import util from "../../util";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -81,12 +82,14 @@ function RenderStageTab (props) {
         props.updateStageFromChild(station.current_stage,station.automation_settings)
     }
 
-    function setCurrent( e ) {
+/*    function setCurrent( e ) {
         log.trace("e.getchecked = " + e.target.checked)
         setapplyButtonState(true)
         setresetButtonState(true)
         setChecked(e.target.checked)
     }
+
+ */
 
     function resetAction() {
         setStation(JSON.parse(JSON.stringify(props.station)));

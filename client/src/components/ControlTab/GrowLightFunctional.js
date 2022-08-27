@@ -95,6 +95,22 @@ function RenderGrowLight (props) {
         } else {
             ret =
                 <div className="growlight-container-on">
+                    <div className="co2-holder">
+                        <RenderCO2 exists={props.station.co2_sensor}
+                                   textClassName={"co2-text-holder"}
+                                   iconClassName={"co2-icon-holder"}
+                                   value={props.sensor_readings.co2}
+                                   units={props.display_settings.co2_units}
+                                   direction={props.sensor_readings.co2_direction} />
+                    </div>
+                    <div className="voc-holder">
+                        <RenderVOC exists={props.station.voc_sensor}
+                                   textClassName={"voc-text-holder"}
+                                   iconClassName={"voc-icon-holder"}
+                                   value={props.sensor_readings.voc}
+                                   units={props.display_settings.voc_units}
+                                   direction={props.sensor_readings.voc_direction} />
+                    </div>
                     <div className="pressure-holder">
                     <RenderBarometer exists={props.station.pressure_sensors}
                                      textClassName={"pressure-text-holder"}

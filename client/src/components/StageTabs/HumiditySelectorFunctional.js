@@ -27,6 +27,7 @@ import humidity from '../../images/humidityicon.png'
 import './stagesTab.css';
 import '../../Palette.css';
 import log from "roarr";
+// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 

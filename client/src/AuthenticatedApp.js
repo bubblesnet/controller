@@ -48,8 +48,12 @@ import './Palette.css'
 import util from './util'
 import {addStation, saveSetting, getSite, saveAutomationSettings} from './api/utils'
 
-import './logimplementation'
-import log from 'roarr';
+import types from "./types"
+
+// import './logimplementation'
+import log from "roarr";
+// import log from "./bubbles_logger"
+
 import moment from "moment";
 
 import {changeStage} from './api/utils';
@@ -372,8 +376,8 @@ function AuthenticatedApp (props) {
             if (typeof msg.value === 'undefined' ) {
                 log.error("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
-                if (msg.measurement_name === 'water_level') {
-                    sensor_readings['water_level'] = sprintf.sprintf("%.1f", msg.value)
+                if (msg.measurement_name === types.measurement_name.water_level) {
+                    sensor_readings[types.measurement_name.water_level] = sprintf.sprintf("%.1f", msg.value)
                 }
                 if( typeof sensor_readings === 'undefined') {
                     log.error("WTF")
@@ -398,27 +402,27 @@ function AuthenticatedApp (props) {
             } else {
                 log.trace("ws: received message type " + msg.message_type);
                 switch (msg.message_type) {
-                    case "measurement":
+                    case types.message_type.measurement:
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
                         log.trace("ws: received measurement");
                         applyMeasurementToState(msg)
                         break;
-                    case "dispenser_event":
+                    case types.message_type.dispenser_event:
                         because = "dispenser_evt " + msg.dispenser_name
                         log.info("ws: received dispenser_event " + JSON.stringify(msg));
                         toggleDispenserTo(msg.dispenser_name, msg.on)
                         break;
-                    case "switch_event":
+                    case types.message_type.switch_event:
                         because = "switch_evt " + msg.switch_name
                         log.trace("ws: received switch_event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
-                    case "event":
+                    case types.message_type.event:
                         because = "evt msg " + msg.sample_timestamp
                         log.trace("ws: received event ");
                         applyEventToState(msg)
                         break;
-                    case "picture_event":
+                    case types.message_type.picture_event:
                         because = "picture evt msg " + msg.sample_timestamp
                         log.trace("ws: received picture event");
 //                        shutter_sound.play()
@@ -591,38 +595,38 @@ function AuthenticatedApp (props) {
 
         let changed_station = JSON.parse(JSON.stringify(x))
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", changed_station.automatic_control)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", changed_station.humidity_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", changed_station.humidity_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_heater", changed_station.water_heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", changed_station.heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", changed_station.thermometer_top)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", changed_station.thermometer_middle)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", changed_station.thermometer_bottom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", changed_station.thermometer_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", changed_station.thermometer_water)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", changed_station.water_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", changed_station.air_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", changed_station.light_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", changed_station.light_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", changed_station.station_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", changed_station.outer_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensor", changed_station.movement_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.humidifier, changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.humidity_sensor_internal, changed_station.humidity_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.humidity_sensor_external, changed_station.humidity_sensor_external)
+//        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.water_heater, changed_station.water_heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heater, changed_station.heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_top, changed_station.thermometer_top)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_middle, changed_station.thermometer_middle)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_bottom, changed_station.thermometer_bottom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_external, changed_station.thermometer_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_water, changed_station.thermometer_water)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.water_pump, changed_station.water_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.air_pump, changed_station.air_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.light_sensor_internal, changed_station.light_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.light_sensor_external, changed_station.light_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.station_door_sensor, changed_station.station_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.outer_door_sensor, changed_station.outer_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.movement_sensor, changed_station.movement_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", changed_station.pressure_sensors)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", changed_station.root_ph_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", changed_station.water_level_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", changed_station.intake_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", changed_station.exhaust_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", changed_station.heat_lamp)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", changed_station.heating_pad)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", changed_station.light_bloom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", changed_station.light_vegetative)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", changed_station.light_germinate)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", changed_station.height_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "voc_sensor", changed_station.voc_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "co2_sensor", changed_station.co2_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "ec_sensor", changed_station.ec_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.root_ph_sensor, changed_station.root_ph_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.water_level_sensor, changed_station.water_level_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.intake_fan, changed_station.intake_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.exhaust_fan, changed_station.exhaust_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heat_lamp, changed_station.heat_lamp)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heating_pad, changed_station.heating_pad)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_bloom, changed_station.light_bloom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_vegetative, changed_station.light_vegetative)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_germinate, changed_station.light_germinate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.height_sensor, changed_station.height_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.voc_sensor, changed_station.voc_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.co2_sensor, changed_station.co2_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.ec_sensor, changed_station.ec_sensor)
 
         let changed_site = { stations: [JSON.parse(JSON.stringify(x))] }
         let new_site = { ...site, ...changed_site};
@@ -698,8 +702,8 @@ function AuthenticatedApp (props) {
         log.trace("setSwitchStateFromChild "+switch_name +","+on)
         let new_switch_state = JSON.parse(JSON.stringify(switch_state))
         let sw_name = switch_name
-        if (switch_name === "growLight") {
-            sw_name = "lightBloom"
+        if (switch_name === types.switch_name.growLight) {
+            sw_name = types.switch_name.lightBloom
         }
         if (typeof new_switch_state[switch_name] === 'undefined') {
             console.error("button: bad switch_name " + switch_name)
@@ -797,7 +801,7 @@ function AuthenticatedApp (props) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
     } else {
         if (lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
-            lastJsonMessage.message_type === 'measurement') {
+            lastJsonMessage.message_type === types.message_type.measurement) {
 //            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {

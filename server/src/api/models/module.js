@@ -77,7 +77,7 @@ async function deleteModule(moduleid) {
 
         pool.query('DELETE FROM module WHERE moduleid = $1', [moduleid], (error, results) => {
             if (error) {
-                console.error("delete moduleid err3 " + error)
+                log.error("delete moduleid err3 " + error)
                 reject(error)
             } else {
 //                log.info("results " + JSON.stringify(results))

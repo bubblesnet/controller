@@ -46,14 +46,14 @@ function sendATestEmail () {
         text: test_email_text,
         html: test_email_html,
     }
-    console.log("Sending email via unit test")
+    log.info("Sending email via unit test")
 
     sgMail.send(msg)
         .then(() => {
-            console.log('Email sent')
+            log.info('Email sent')
         })
         .catch((error) => {
-            console.error("sendATestEmail error " + error)
+            log.error("sendATestEmail error " + error)
         })
 }
 
@@ -66,16 +66,16 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
         html: "<html><body><h1>"+shortmessage+"</h1><p>" + longmessage + "</p></body></html>",
     }
     if( typeof locals.getLocals(false).dontSendEmail === 'undefined' || locals.getLocals(false).dontSendEmail === true ) {
-        console.log("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals(false).dontSendEmail )
+        log.info("Skipping actual send of email since config.dontSendEmail = " + locals.getLocals(false).dontSendEmail )
         cb(null);
     } else {
         sgMail.send(msg)
             .then(() => {
-                console.log('Email sent')
+                log.info('Email sent')
                 cb(null);
             })
             .catch((error) => {
-                console.error("sendAMessage error " + error)
+                log.error("sendAMessage error " + error)
                 cb(error);
             })
     }
@@ -84,11 +84,11 @@ function sendAMessage(to, from, subject, shortmessage, longmessage, cb) {
 
 
 function sendANotification (type, notification, alertcondition, cb) {
-    console.log('sendANotification ' + notification.notificationid);
+    log.info('sendANotification ' + notification.notificationid);
     sendAMessage(notification.email_recipient,locals.getLocals(false).sendgridSenderEmailAddress,
         type + ' notification from BubblesWeb',alertcondition.shortmessage,
         "Reference notification [" + notification.notificationid + "]", function(err) {
-            console.log("callback from sendAMessage with err = " + err);
+            log.info("callback from sendAMessage with err = " + err);
             cb(err,"sent")
         })
 };

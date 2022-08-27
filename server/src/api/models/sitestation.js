@@ -68,7 +68,7 @@ async function findAllByUserid(userid) {
         pool.query(ssql, values, (err, results) => {
 //            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
-                console.error("findAllByUserid error " + err)
+                log.error("findAllByUserid error " + err)
                 reject(err)
             }
             else  {
@@ -86,7 +86,7 @@ async function findCabinetIDByDeviceID(userid,deviceid) {
         log.info("ssql = " + ssql)
         pool.query(ssql, [deviceid,userid], async (err, results) => {
             if (err) {
-                console.error("getConfigByStation error " + err)
+                log.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount == 0 ) {
@@ -123,7 +123,7 @@ async function getConfigByStation(stationid, deviceid) {
         pool.query(ssql, [stationid], async (err, results) => {
 //            log.info("callback from getConfigByStation with err " + err + " results " + results)
             if (err) {
-                console.error("getConfigByStation error " + err)
+                log.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount === 0 ) {
@@ -379,7 +379,7 @@ async function deleteStation(stationid) {
 
         pool.query('DELETE FROM station WHERE stationid = $1', [stationid], (error, results) => {
             if (error) {
-                console.error("delete stationid err3 " + error)
+                log.error("delete stationid err3 " + error)
                 reject(error)
             } else {
 //                log.info("results " + JSON.stringify(results))
@@ -397,7 +397,7 @@ async function setSensorPresent(stationid,sensor_name,present) {
         let ssql = 'UPDATE station set '+sensor_name+'=$2 where stationid = $1 RETURNING *'
         pool.query(ssql, [stationid, present], (error, results) => {
             if (error) {
-                console.error("update stationid err3 " + error)
+                log.error("update stationid err3 " + error)
                 reject(error)
             } else {
 //                log.info("setSensorPresent results " + JSON.stringify(results))

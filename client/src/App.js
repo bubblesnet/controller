@@ -30,7 +30,6 @@ import SetupApp from './SetupApp'
 import useToken from './useToken';
 import {useEffect, useState} from "react";
 import {getSite} from "./api/utils";
-//import log from "roarr";
 
 import util from "./util";
 
@@ -40,9 +39,11 @@ import options_pressure_units from './options_pressure_units.json'
 import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
+import log from "roarr";
+// import log from "./bubbles_logger"
+
 // copyright and license inspection - no issues 4/13/22
 
-const log = require("./bubbles_logger").log
 
 
 let necessary_environment = [
@@ -205,7 +206,7 @@ function App(props) {
 
     const [site, setSite] = useState({});
 
-        log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+    log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
     let needs_setup = false
 

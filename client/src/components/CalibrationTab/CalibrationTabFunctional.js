@@ -32,7 +32,7 @@ import {
     TableRow,
     TableCell, Button
 } from 'grommet'
-import RenderFormActions from "../FormActions";
+// import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
 import { getModuleTypes} from '../../api/utils';
@@ -83,7 +83,7 @@ function RenderCalibrationTab (props) {
 //    }
 
     function getSensorrow( row, index, arr ) {
-        console.log("getSensorrow " + JSON.stringify(row.sensor))
+        log.info("getSensorrow " + JSON.stringify(row.sensor))
         return <TableRow  key={row.sensor.sensorid}>
             <TableCell>{row.device.deviceid}</TableCell>
             <TableCell>{row.module.module_type}</TableCell>
@@ -110,7 +110,7 @@ function RenderCalibrationTab (props) {
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
                 let z = station.attached_devices[device_index].modules[module_index].included_sensors
-                console.log("sensors " + JSON.stringify(z))
+                log.info("sensors " + JSON.stringify(z))
                 for (let sensor_index = 0; sensor_index < z.length; sensor_index++) {
                     arr.push({
                         deviceid: station.attached_devices[device_index],

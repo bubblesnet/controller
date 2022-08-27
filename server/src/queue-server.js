@@ -21,7 +21,8 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-global.__root   = __dirname + '/';
+// global.__root   = __dirname + '/';
+const message_type = require('./types').message_type
 const event = require('./api/models/event')
 const debug = require('debug')('queue-server')
 
@@ -66,10 +67,11 @@ async function storeMessage(body) {
     try {
         /// TODO cleanup this message cleanup. relation of device to user should be irrelevant
         message.userid = 90000009;
-        if( message.message_type === 'measurement')
+
+        if( message.message_type === message_type.measurement)
             message.message = ""+message.deviceid+" sensor/measurement "+ message.sensor_name + "/"+message.measurement_name + " = " + message.value +" "+message.units;
         else {
-            if (message.message_type === 'switch_event')
+            if (message.message_type === message_type.switch_event)
                 message.message = "" + message.deviceid + " " + message.switch_name + ":" + message.on;
             else
                 message.message = "" + message.deviceid + " " + message.message_type;
@@ -84,28 +86,31 @@ async function storeMessage(body) {
         message.rawjson = body;
         message.filename = '';
         switch( message.message_type) {
-            case 'measurement':
+            case message_type.measurement: /// TODO WHAT THE F?  TYPE AND MESSAGE_TYPE???
               //       log.info("inserting new event "+JSON.stringify(event))
-                if( message.type === 'measurement' ) {
+                if( message.type === message_type.measurement ) {
                     message.value_name = message.measurement_name
                     message.stringvalue = '' + message.value
                 }
 
                 break;
-            case 'switch_event':
+            case message_type.switch_event:
                 let x = await outlet.setStateByNameAndStation(message.switch_name, message.stationid, message.on)
-                console.info( "setState returns "+JSON.stringify(x))
+                log.info( "setState returns "+JSON.stringify(x))
                 break;
-            case 'dispenser_event':
+            case message_type.dispenser_event:
                 x = await outlet.setDispenserStateByNameAndStation(message.dispenser_name, message.stationid, message.on)
-                console.info( "setState returns "+JSON.stringify(x))
+                log.info( "setState returns "+JSON.stringify(x))
+                break;
+            case message_type.picture_event:
+                log.debug("ignoring message_type picture_event")
                 break;
             default:
                 log.error("Unhandled message type for storage " + JSON.stringify(message))
                 return;
         }
         let ev = await event.createEvent(message);
-        debug("storeMessage stored event " + JSON.stringify(ev))
+        log.debug("storeMessage stored event " + JSON.stringify(ev))
     } catch( err ) {
         log.error("storeMessage error saving message " + err + " " + message)
         return;

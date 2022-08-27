@@ -75,7 +75,7 @@ async function deleteSensor(sensorid) {
 
         pool.query('DELETE FROM sensor WHERE sensorid = $1', [sensorid], (error, results) => {
             if (error) {
-                console.error("delete sensorid err3 " + error)
+                log.error("delete sensorid err3 " + error)
                 reject(error)
             } else {
 //                log.info("results " + JSON.stringify(results))

@@ -37,7 +37,7 @@ import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 import log from "roarr";
-
+// import log from "./bubbles_logger"
 // copyright and license inspection - no issues 4/13/22
 
 function RenderUserSetupTab (props) {

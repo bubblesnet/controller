@@ -37,7 +37,7 @@ const log = require("../../bubbles_logger").log
  * @apiSuccess {XXXX} XXXX XXXX
  */
 function getStatus(req,res,next) {
-    console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
+    log.info("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
     res.json({"status": "ok" });
 
 }

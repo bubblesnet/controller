@@ -21,7 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import './nutesTab.css';
 import '../../Palette.css';
@@ -37,7 +37,6 @@ import {
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import {getContainerNames, getModuleTypes} from '../../api/utils';
 import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
@@ -109,7 +108,7 @@ function RenderNutesTab (props) {
             <TableCell>{row.deviceid_device}</TableCell>
             <TableCell>{row.dispenser_name}</TableCell>
             <TableCell>{row.manufacturer_name}</TableCell>
-            <TableCell><a target="_blank" href={row.spec_url}>{row.additive_name}</a></TableCell>
+            <TableCell><a rel="noopener noreferrer" target="_blank" href={row.spec_url}>{row.additive_name}</a></TableCell>
             <TableCell>{row.index}</TableCell>
             <TableCell>{row.bcm_pin_number}</TableCell>
             <TableCell><TextInput value={row.milliliters_per_millisecond}

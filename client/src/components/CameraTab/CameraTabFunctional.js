@@ -31,6 +31,7 @@ import {Text, Button, Box, Grommet, Grid} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
 import log from "roarr";
+// import log from "./bubbles_logger"
 import moment from "moment";
 
 // copyright and license inspection - no issues 4/13/22
@@ -77,7 +78,7 @@ function RenderCameraTab(props) {
             </Box></>);
     }
 
-    console.log(JSON.stringify(Areas))
+    log.info(JSON.stringify(Areas))
      let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

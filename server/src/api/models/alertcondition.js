@@ -39,7 +39,7 @@ async function createAlertCondition(alert) {
                 [alert.shortmessage, alert.longmessage, alert.userid,
             alert.deviceid, alert.triggered_datetimemillis, alert.eventid], (error, results) => {
             if (error) {
-                console.error("rejecting with error " + error)
+                log.error("rejecting with error " + error)
                 reject(error)
             } else {
                 log.info("new alertcondition " + results.rows[0])

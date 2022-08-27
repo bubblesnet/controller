@@ -15,3 +15,5 @@ SET LOG_LEVEL=silly
 
 cd server
 node src/ws-server.js
+cd ..
+

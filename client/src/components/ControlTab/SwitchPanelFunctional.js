@@ -25,7 +25,9 @@ import React from "react";
 import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
-import log from 'roarr';
+import log from "roarr";
+// import log from "./bubbles_logger"
+
 import RenderStageSelector from "../StageTabs/StageSelector";
 
 // copyright and license inspection - no issues 4/13/22

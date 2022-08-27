@@ -22,13 +22,13 @@
  */
 
 
-var winston = require('winston');
-var path = require('path');
+const winston = require('winston');
+const path = require('path');
 
 winston.level = process.env.LOG_LEVEL
 
 // Set this to whatever, by default the path of the script.
-var logPath = __dirname;
+const logPath = __dirname;
 const tsFormat = () => (new Date().toISOString());
 
 const errorLog = winston.createLogger({
