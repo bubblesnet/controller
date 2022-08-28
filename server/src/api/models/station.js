@@ -77,7 +77,6 @@ async function getDispensersForStation(stationid) {
     return( results )
 }
 
-
 async function getAutomationSettings(stationid) {
     const results = await db.query(
         sql`

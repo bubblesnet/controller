@@ -33,7 +33,6 @@ import RenderVOC from "./VOCFunctional";
 // copyright and license inspection - no issues 4/13/22
 
 function RenderGrowLight (props) {
-
     let ret
     let growlight_classname = "growlight-container-on"
     let empty_div_classname = "growlight-on"

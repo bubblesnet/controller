@@ -31,5 +31,4 @@ const log = require("./bubbles_logger").log
 /* GET users listing. */
 exports.status = function (userid, deviceid, cb) {
         log.info("statusbyuserdevice user: " + userid + " device: " + deviceid);
-
     }

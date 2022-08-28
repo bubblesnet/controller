@@ -14,6 +14,7 @@ This repo is temporarily public. It will revert to private shortly and without n
 
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bubblesnet&show_icons=true)
 
+
 The controller is a control, and data collection and analysis service designed to 
 work with the bubblesnet edge-device.  It consists of:
 

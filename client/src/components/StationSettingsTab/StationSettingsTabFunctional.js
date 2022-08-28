@@ -549,7 +549,7 @@ function RenderStationSettingsTab (props) {
                             </TableCell>
                         </TableRow>
                      </tbody>
-                    </Table>
+                 </Table>
             <RenderFormActions state= {local_station} applyAction={applyChanges} resetAction={resetChanges}
                                resetButtonState={reset_button_state}
                                defaultsButtonState={defaults_button_state}

@@ -24,7 +24,6 @@
 import React from 'react';
 
 import log from "roarr";
-// import log from "./bubbles_logger"
 
 // import '../logimplementation'
 

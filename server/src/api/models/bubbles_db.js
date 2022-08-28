@@ -58,7 +58,6 @@ exports.testConnection = async function(failfunc) {
     })
 }
 
-
 exports.getLastKnownIPAddress = async function (userid, deviceid, cb) {
     log.info("db.getLastKnownIPAddress " + userid + "/" + deviceid);
     log.info("getLastKnownIPAddress select * from currentevent where userid_user = " + userid + " AND deviceid_device = " + deviceid + " AND (type = 'SYSTEM_START') and stringvalue <> 'null' order by datetimemillis desc LIMIT 1;");

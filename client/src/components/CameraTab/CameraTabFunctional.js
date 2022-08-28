@@ -57,7 +57,6 @@ function RenderCameraTab(props) {
 
         log.info("RenderCameraTab picture_url = "+picture_url)
         ImageProps.push( {width: 600,  scale: 2.5, zoomPosition: 'original', img: picture_url});
-
         Areas.push({ name: 'label'+rowcount, start: [0, rowcount], end: [0, rowcount] })
         Rows.push('40px')
         rowcount++;

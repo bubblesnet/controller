@@ -95,6 +95,7 @@ function runWebSocketServer(port) {
                 log.error("error " + err)
             }
         })
+        /// TODO protocol needs to be extended to put userid and deviceid into message.  This is BS
         conn.on("text", function (str) {
             let x = JSON.parse(str)
             if (x.command === SWITCH_COMMAND || x.command === PICTURE_COMMAND || x.command === STATUS_COMMAND || x.command === STAGE_COMMAND  || x.command === DISPENSE_COMMAND) {

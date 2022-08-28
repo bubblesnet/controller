@@ -23,16 +23,6 @@
 
 import React, {useState, useMemo, useRef, useEffect} from 'react';
 import {Tabs, Tab} from "rendition";
-import { Button, Grid} from 'grommet'
-import Header from "./components/Header"
-import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
-import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
-import RenderEvents from "./components/EventsTab/EventsFunctional";
-import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
-import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
-import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
-import RenderStageTab from "./components/StageTabs/StageTabFunctional"
-import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import RenderCalibration from "./components/CalibrationTab/CalibrationTabFunctional"
 import RenderNutes from "./components/NutesTab/NutesTabFunctional"
 import initial_theme from './InitialTheme.json'
@@ -70,6 +60,8 @@ const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
 const DISPENSE_COMMAND="dispense"
+
+let because = "don't know"
 
 let because = "don't know"
 
@@ -154,7 +146,6 @@ function AuthenticatedApp (props) {
      * is listening on. Changing this causes a rerender
      */
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
-
 
     /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
@@ -999,7 +990,6 @@ function AuthenticatedApp (props) {
                                            display_settings={props.display_settings}
                     />
                 </Tab>
-
             </Tabs>
         </Grid>
     </div>
