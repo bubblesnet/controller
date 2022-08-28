@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
@@ -37,7 +38,7 @@ const endPool = () => {
 }
 
 async function getAllDevices() {
-    console.log("device_model getAllDevices")
+    log.info("device_model getAllDevices")
     return new Promise(function (resolve, reject) {
         let ssql = "select * from device order by userid_user asc"
         pool.query(ssql, (error, results) => {
@@ -58,16 +59,16 @@ async function getDevicesByUserId(userid) {
 }
 
 async function findAllByUserid(userid) {
-    console.log("findAllByUserid "+userid)
+    log.info("findAllByUserid "+userid)
     return new Promise(function (resolve, reject) {
-        console.log("userid = " + userid)
+        log.info("userid = " + userid)
         let ssql = 'select * from device where userid_user = $1 order by deviceid'
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [userid]
         pool.query(ssql, values, (err, results) => {
-//            console.log("callback from findAllByUserid with err " + err + " results " + results)
+//            log.info("callback from findAllByUserid with err " + err + " results " + results)
             if (err) {
-                console.error("findAllByUserid error " + err)
+                log.error("findAllByUserid error " + err)
                 reject(err)
             }
             else  {
@@ -79,20 +80,20 @@ async function findAllByUserid(userid) {
 
 async function findCabinetIDByDeviceID(userid,deviceid) {
     return new Promise(function (resolve, reject) {
-        console.log("deviceid = " + deviceid)
+        log.info("deviceid = " + deviceid)
 //        let ssql = 'select distinct c.stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on u.userid = c.userid_user where d.deviceid=$1 and u.userid=$2'
         let ssql = 'select stationid from public.user u left outer join device d on u.userid = d.userid_user left outer join station c on c.stationid = d.stationid_station where d.deviceid=$1 and u.userid=$2'
-        console.log("ssql = " + ssql)
+        log.info("ssql = " + ssql)
         pool.query(ssql, [deviceid,userid], async (err, results) => {
             if (err) {
-                console.error("getConfigByStation error " + err)
+                log.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount == 0 ) {
                     reject( new Error("no station for deviceid " + deviceid))
                 } else {
                     let stationid = results.rows[0].stationid
-                    console.log("found stationid " + stationid)
+                    log.info("found stationid " + stationid)
                     resolve(stationid)
                 }
             }
@@ -105,7 +106,7 @@ async function getConfigByDevice(userid,deviceid) {
     try {
         stationid = await findCabinetIDByDeviceID(userid,deviceid)
     } catch(err) {
-        console.log("Caught rejection " + err)
+        log.info("Caught rejection " + err)
         throw (err);
     }
     return (getConfigByStation(stationid, deviceid))
@@ -114,15 +115,15 @@ async function getConfigByDevice(userid,deviceid) {
 
 
 async function getConfigByStation(stationid, deviceid) {
-    console.log("getConfigByStation " + stationid + ","+deviceid)
+    log.info("getConfigByStation " + stationid + ","+deviceid)
     return new Promise(function (resolve, reject) {
-        console.log("stationid = " + stationid)
+        log.info("stationid = " + stationid)
         let ssql = 'select * from station c left outer join device d on d.stationid_station = c.stationid where stationid=$1 order by stationid'
-        console.log("ssql = " + ssql)
+        log.info("ssql = " + ssql)
         pool.query(ssql, [stationid], async (err, results) => {
-//            console.log("callback from getConfigByStation with err " + err + " results " + results)
+//            log.info("callback from getConfigByStation with err " + err + " results " + results)
             if (err) {
-                console.error("getConfigByStation error " + err)
+                log.error("getConfigByStation error " + err)
                 reject(err)
             } else {
                 if(results.rowCount === 0 ) {
@@ -268,7 +269,7 @@ async function createStation(body) {
             if (error) {
                 reject(error)
             } else {
-                console.log("new stationid " + results.rows[0])
+                log.info("new stationid " + results.rows[0])
                 resolve({stationid: results.rows[0].stationid, message: "A new station has been added :" + results.rows[0].stationid})
             }
         })
@@ -312,7 +313,9 @@ async function updateStation(body) {
             "heating_pad=$32, " +
             "light_bloom=$33, " +
             "light_vegetative=$34, " +
-            "light_germinate=$35 " +
+            "light_germinate=$35," +
+            "voc_sensor=$36," +
+            "co2_sensor=$37 " +
             "where stationid=$1 RETURNING *",
             [
                 body.stationid,
@@ -349,13 +352,15 @@ async function updateStation(body) {
                 body.heating_pad,
                 body.light_bloom,
                 body.light_vegetative,
-                body.light_germinate
+                body.light_germinate,
+                body.voc_sensor,
+                body.co2_sensor
             ], (error, results) => {
                 if (error) {
-                    console.log("update err " + error)
+                    log.info("update err " + error)
                     reject(error)
                 } else {
-                    console.log("updated " + results.rowCount + " rows of Station " + body.stationid)
+                    log.info("updated " + results.rowCount + " rows of Station " + body.stationid)
                     resolve({
                         stationid: body.stationid,
                         rowcount: results.rowCount,
@@ -368,16 +373,16 @@ async function updateStation(body) {
 
 
 async function deleteStation(stationid) {
-    console.log("deleteStation "+stationid)
+    log.info("deleteStation "+stationid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM station WHERE stationid = "+stationid)
+        log.info("DELETE FROM station WHERE stationid = "+stationid)
 
         pool.query('DELETE FROM station WHERE stationid = $1', [stationid], (error, results) => {
             if (error) {
-                console.error("delete stationid err3 " + error)
+                log.error("delete stationid err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({stationid: stationid, rowcount: results.rowCount, message: 'station deleted with ID ' + stationid})
             }
         })
@@ -385,17 +390,17 @@ async function deleteStation(stationid) {
 }
 
 async function setSensorPresent(stationid,sensor_name,present) {
-    console.log("setSensorPresent "+sensor_name+" present " + present + " where stationid="+stationid)
+    log.info("setSensorPresent "+sensor_name+" present " + present + " where stationid="+stationid)
     return new Promise( function(resolve, reject) {
-        console.log("UPDATE station set "+sensor_name+" = "+present+" where stationid="+stationid)
+        log.info("UPDATE station set "+sensor_name+" = "+present+" where stationid="+stationid)
 
         let ssql = 'UPDATE station set '+sensor_name+'=$2 where stationid = $1 RETURNING *'
         pool.query(ssql, [stationid, present], (error, results) => {
             if (error) {
-                console.error("update stationid err3 " + error)
+                log.error("update stationid err3 " + error)
                 reject(error)
             } else {
-//                console.log("setSensorPresent results " + JSON.stringify(results))
+//                log.info("setSensorPresent results " + JSON.stringify(results))
                 resolve({stationid: stationid, rowcount: results.rowCount, message: 'station updated ' + results.rowCount})
             }
         })

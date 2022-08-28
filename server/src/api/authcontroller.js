@@ -22,6 +22,7 @@
  */
 
 // authcontroller_routes.js
+const log = require("../bubbles_logger").log
 
 const express = require('express');
 const router = express.Router();

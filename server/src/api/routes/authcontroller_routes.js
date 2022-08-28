@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 const express = require('express');
 const router = express.Router();
@@ -47,35 +48,35 @@ let myhash = ""
 bcrypt.genSalt(saltRounds, async function(err, salt) {
     bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
         if( err ) {
-            console.error("Error " + err )
+            log.error("Error " + err )
         }
         myhash = hash
-        console.log("myhash = " + hash)
+//        log.info("myhash = " + hash)
     });
 });
 
 router.post('/login', function(req, res) {
-    console.log("api/auth/login generating token")
+    log.info("api/auth/login generating token")
     x = findUser(req, res).then( function(data) {
-        console.log("then findUser " + JSON.stringify(data))
+        log.debug("then findUser " + JSON.stringify(data))
     })
-    console.log("after findUser " + JSON.stringify(x))
+    log.info("after findUser " + JSON.stringify(x))
 })
 
 async function findUser(req,res) {
-    console.log("Calling findOneByUsername with body = " + JSON.stringify(req.body) )
+    log.info("Calling findOneByUsername with body = " + JSON.stringify(req.body) )
     let u = await user.findOneByUsername(req.body.username).then( function (user) {
-        console.log("findOneByUsername callback user = " + JSON.stringify(user))
+        log.info("findOneByUsername callback user = " + JSON.stringify(user))
         if (!user) {
-            console.log("Sending 401 - auth failed No user found user = " + user)
+            log.error("Sending 401 - auth failed No user found user = " + user)
             return res.status(401).json({message: ''});
         }
 
         // check if the password is valid
-        console.log("Checking password")
+        log.info("Checking password")
         let passwordIsValid = bcrypt.compareSync(req.body.password, myhash);
         if (!passwordIsValid){
-            console.log("Sending 401 - auth failed")
+            log.error("Sending 401 - auth failed")
             return res.status(401).json({message: "", auth: false, token: null });
         }
 
@@ -89,10 +90,10 @@ async function findUser(req,res) {
         let retval = user
         user.auth = true
         user.token = token
-        console.log("returning 200 " + JSON.stringify(retval))
+        log.info("returning 200 " + JSON.stringify(retval))
         return res.status(200).json(retval);
     }).catch(function(err) {
-        console.error("Returning 500 error " + err)
+        log.error("Returning 500 error " + err)
         if (err) return res.status(500).json({message: 'Error on the server .'+err});
     });
 

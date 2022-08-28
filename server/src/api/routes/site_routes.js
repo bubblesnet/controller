@@ -25,6 +25,7 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const log = require("../../bubbles_logger").log
 
 const site = require('../models/site')
 
@@ -37,7 +38,7 @@ router.get('/:siteid', function (req, res) {
 });
 
 function getSiteBySiteId( req, res ) {
-    console.log("getSiteBySiteId")
+    log.info("getSiteBySiteId")
     site.getSiteById(req.params.siteid).then( function ( site) {
         if (!site) return res.status(200).send("{}");
         return res.status(200).send(site);

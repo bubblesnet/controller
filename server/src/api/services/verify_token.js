@@ -23,6 +23,7 @@
 
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../../config/locals'); // get our config file
+const log = require("../../bubbles_logger").log
 
 function verify_token(req, res, next) {
 

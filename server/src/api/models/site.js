@@ -29,6 +29,7 @@ const pool = server_db.getPool()
 const endPool = () => {
     pool.end()
 }
+const log = require("../../bubbles_logger").log
 
 async function getSiteById(siteid) {
     const results = await db.query(
@@ -39,8 +40,8 @@ async function getSiteById(siteid) {
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control,
-                   coalesce ((
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
+/*                   coalesce ((
                                  SELECT array_to_json(array_agg(row_to_json(q)))
                                  FROM (
                                           SELECT
@@ -63,6 +64,7 @@ async function getSiteById(siteid) {
                                           FROM automationsettings
                                           where r.stationid_Station = c.stationid
                                       ) q),'[]' ) as automation_settings,
+ */
                    coalesce(
                            (
                                SELECT array_to_json(array_agg(row_to_json(x)))
@@ -72,6 +74,8 @@ async function getSiteById(siteid) {
                                                d.picamera,
                                                d.picamera_resolutionx,
                                                d.picamera_resolutiony,
+                                               d.latest_picture_filename,
+                                               d.latest_picture_datetimemillis,
                                                coalesce((
                                                             SELECT array_to_json(array_agg(row_to_json(y)))
                                                             FROM (
@@ -84,7 +88,7 @@ async function getSiteById(siteid) {
                                                                             coalesce((
                                                                                          SELECT array_to_json(array_agg(row_to_json(y)))
                                                                                          FROM (
-                                                                                                  SELECT sensorid, sensor_name, measurement_name, extraconfig
+                                                                                                  SELECT sensorid, sensor_name, measurement_name, extraconfig, latest_calibration_datetimemillis
                                                                                                   from sensor s
                                                                                                   where s.moduleid_module = n.moduleid
                                                                                               ) y)
@@ -117,12 +121,53 @@ async function getSiteById(siteid) {
             FROM public.user u
                      JOIN site i ON i.userid_user = u.userid
                      JOIN station c ON c.siteid_site=i.siteid
-                     JOIN automationsettings r on r.stationid_Station=c.stationid
             WHERE i.siteid = ${siteid}
             `
     );
     let site = { siteid: siteid, sitename: "blah", stations: results }
+    for( let i = 0; i < site.stations.length; i++ ) {
+        site.stations[i].automation_settings = await getAutomationSettings(site.stations[i].stationid)
+        for( let j = 0; j < site.stations[i].attached_devices.length; j++ ) {
+            site.stations[i].attached_devices[j].time_between_pictures_in_seconds = site.stations[i].time_between_pictures_in_seconds
+            site.stations[i].attached_devices[j].time_between_sensor_polling_in_seconds = site.stations[i].time_between_sensor_polling_in_seconds
+        }
+    }
+    for( let i = 0; i < site.stations.length; i++ ) {
+        site.stations[i].dispensers = await getDispensersForStation(site.stations[i].stationid)
+    }
     return( site )
+}
+
+async function getDispensersForStation(stationid) {
+    const results = await db.query(
+        sql`SELECT * from dispenser d join additive a on d.currently_loaded_additiveid = a.additiveid where stationid_station=${stationid}`
+    );
+    return( results )
+}
+
+async function getAutomationSettings(stationid) {
+    const results = await db.query(
+        sql`SELECT
+                                              stage_name,
+                                              current_lighting_schedule,
+                                              light_on_start_hour,
+                                              hours_of_light,
+                                              target_temperature,
+                                              temperature_min,
+                                              temperature_max,
+                                              target_water_temperature,
+                                              water_temperature_min,
+                                              water_temperature_max,
+                                              humidity_min,
+                                              humidity_max,
+                                              target_humidity,
+                                              humidity_target_range_low,
+                                              humidity_target_range_high,
+                                              current_light_type
+                                          FROM automationsettings
+            WHERE stationid_station = ${stationid}`
+    );
+    return( results )
 }
 
 async function createSite(sitename,userid) {
@@ -132,7 +177,7 @@ async function createSite(sitename,userid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("new site " + JSON.stringify(results.rows[0]))
+                    log.info("new site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "A new site has been added :" + results.rows[0].siteid})
                 }
             })
@@ -146,7 +191,7 @@ async function updateSite(siteid,sitename,userid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("updated site " + JSON.stringify(results.rows[0]))
+                    log.info("updated site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "Site has been updated :" + results.rows[0].siteid})
                 }
             })
@@ -160,7 +205,7 @@ async function deleteSite(siteid) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("deleted site " + JSON.stringify(results.rows[0]))
+                    log.info("deleted site " + JSON.stringify(results.rows[0]))
                     resolve({siteid: results.rows[0].siteid, message: "Site has been deleted :" + results.rows[0].siteid})
                 }
             })
@@ -172,5 +217,6 @@ module.exports = {
     createSite,
     deleteSite,
     getSiteById,
+    getDispensersForStation,
     updateSite
 }

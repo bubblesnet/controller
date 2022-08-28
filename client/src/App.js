@@ -30,7 +30,7 @@ import SetupApp from './SetupApp'
 import useToken from './useToken';
 import {useEffect, useState} from "react";
 import {getSite} from "./api/utils";
-import log from "roarr";
+
 import util from "./util";
 
 import initial_display_settings from './initial_display_settings.json'
@@ -39,7 +39,12 @@ import options_pressure_units from './options_pressure_units.json'
 import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
+import log from "roarr";
+// import log from "./bubbles_logger"
+
 // copyright and license inspection - no issues 4/13/22
+
+
 
 let necessary_environment = [
     {name: "NODE_ENV", value: process.env.NODE_ENV},
@@ -50,10 +55,13 @@ let necessary_environment = [
 ]
 function App(props) {
 
-    console.log("ENV = " + JSON.stringify(process.env))
+    log.info("ENV = " + JSON.stringify(process.env))
 
         let initial_station_state = {
             station_settings: {
+                station_name: "blah",
+                time_between_pictures_in_seconds: 6000,
+                time_between_sensor_polling_in_seconds: 3000,
                 humidifier: true,
                 humidity_sensor_internal: true,
                 humidity_sensor_external: true,
@@ -174,18 +182,40 @@ function App(props) {
             }
         }
 
+
+    async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
+            log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+//            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+//            setSite(JSON.parse(JSON.stringify(z)))
+
+            for (let i = 0; i < site.stations.length; i++) {
+                for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
+                    log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                    if (site.stations[i].attached_devices[j].deviceid === deviceid) {
+                        let local_site = JSON.parse(JSON.stringify(site))
+                        local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
+                        local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
+                        log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                        log.info("local_site = " + JSON.stringify(local_site))
+                        setSite(JSON.parse(JSON.stringify(local_site)))
+                        return
+                    }
+                }
+            }
+        }
+
     const [site, setSite] = useState({});
 
-        console.log("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+    log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
     let needs_setup = false
 
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        log.trace("App: processLoginResult "+JSON.stringify(loginResult))
+        log.debug("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
-            log.trace("Setting token to " + JSON.stringify(loginResult))
+            log.debug("Setting token to " + JSON.stringify(loginResult))
             loginResult.units_options = options_units
             loginResult.pressure_units_options = options_pressure_units
             loginResult.languageOptions = options_language
@@ -201,44 +231,50 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            log.trace("selected stage value fetching")
+            log.debug("selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+            log.info("zzzzz = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     // ONLY CALL ON MOUNT - empty array arg causes this
 
-//    console.log("App: Rendering App with token set to " + JSON.stringify(token))
+//    log.info("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
         return <SetupApp readyState={true}/>
     }
 
     let selectedStationIndex = 0
 
-//    console.log("App: Rendering App with site set to " + JSON.stringify(site))
+//    log.info("App: Rendering App with site set to " + JSON.stringify(site))
     if( typeof site.stations === 'undefined') {
         return <></>
     }
     initial_station_state.station_settings.display_settings = initial_display_settings
-    if(typeof site.automation_settings != 'undefined') {
+/*    if(typeof site.automation_settings != 'undefined') {
         site.automation_settings = site.automation_settings[0] // returned as array from server
     } else {
         site.automation_settings = {}
     }
+ */
     log.info("hostname = " + window.location.hostname)
     log.info(JSON.stringify(site))
     let missing_var = ""
     function configured() {
-        console.log("checking ENV " + JSON.stringify(process.env))
+        log.info("checking ENV " + JSON.stringify(process.env))
         for(let i = 0; i < necessary_environment.length; i++ ) {
             if (typeof (necessary_environment[i].value) === 'undefined') {
-                console.log("undefined "+necessary_environment[i].name)
+                log.info("undefined "+necessary_environment[i].name)
                 missing_var = necessary_environment[i].name
                 return false
             }
         }
         return(true)
+    }
+
+    for ( let i = 0; i < site.stations[0].attached_devices.length; i++ ) {
+        log.info("RenderCameraTab App attached_devices[" + i + "].latest_picture_filename = " + site.stations[0].attached_devices[i].latest_picture_filename)
     }
 
     let ret
@@ -249,13 +285,14 @@ function App(props) {
                 stationindex={selectedStationIndex}
                 initial_station_state={initial_station_state}
                 initial_switch_state={initial_switch_state}
-                initial_sensor_readings={initial_sensor_readings}
+               initial_sensor_readings={initial_sensor_readings}
                 nodeEnv={process.env.REACT_APP_NODE_ENV}
                 site={site}
                 automation_settings={site.stations[selectedStationIndex].automation_settings}
-                display_settings={token}
+                display_settings={initial_station_state.station_settings.display_settings}
                 user={token}
                 logout={doLogout}
+                setLatestPictureFromChild={setLatestPictureFromChild}
             /> :
             <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
     }

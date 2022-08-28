@@ -2,7 +2,7 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
 
 # RUN apt-get update
-RUN install_packages vim inetutils-telnet
+RUN install_packages vim inetutils-telnet xsel
 
 COPY ca-certificates.crt /etc/ssl/certs/
 COPY build /build
@@ -14,6 +14,6 @@ RUN chmod +x /startservers.sh
 # RUN npm install
 RUN npm install serve -g
 
-
-CMD cd /;./startservers.sh
+CMD cd /
+CMD /startservers.sh
 # CMD ["bash"]

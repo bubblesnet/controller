@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import log from 'roarr';
-import '../logimplementation'
+import log from "roarr";
+// import log from "./bubbles_logger"
+
+// import '../logimplementation'
 
 // copyright and license inspection - no issues 4/13/22
 

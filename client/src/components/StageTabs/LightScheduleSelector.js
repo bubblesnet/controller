@@ -22,11 +22,12 @@
  */
 
 import {Box, Grid, Select, TextInput} from "grommet";
-import React, {useState} from "react";
+import React from "react";
 
 import lighting_schedule_options from "../../options_lighting_schedule.json"
 import light_type_options from "../../options_light_type.json"
 import log from "roarr";
+// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 

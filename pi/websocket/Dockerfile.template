@@ -13,5 +13,6 @@ WORKDIR /server
 
 RUN npm install
 
-CMD cd /;./startservers.sh
+CMD cd /
+CMD /startservers.sh
 # CMD ["bash"]

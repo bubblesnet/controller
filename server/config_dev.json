@@ -17,10 +17,10 @@
   "sendgridSenderEmailAddress": "sendgridrodley@gmail.com",
   "deviceForDiskCheck": "C",
   "bubbles_db_config": {
-    "host": "localhost",
+    "host": "database",
     "user": "postgres",
     "password": "postgres",
-    "database": "bubbles_dev",
+    "database": "bubbles",
     "port": "5432"
   },
   "secret": "supersecret"

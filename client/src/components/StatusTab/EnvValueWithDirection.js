@@ -27,27 +27,34 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
+import log from "roarr";
+// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderEnvValueWithDirection (props) {
+    log.info("RenderEnvValueWithDirection "+ props.label +" units = " + props.units)
+
+    let ret =''
     let label_area= `${props.gridArea}-label`
     let value_area= `${props.gridArea}-value`
     let direction_area= `${props.gridArea}-direction`
-
-    let className = ''
-    if(props.direction === 'up') {
-        className='zero-arrowup-icon'
-    }
-    if(props.direction === 'down') {
-        className='zero-arrowdown-icon'
-    }
-    let valuestr = sprintf.sprintf( "%.1f %s", props.value, props.units )
-    let ret =''
-
-    if( props.exists === false ) {
-        ret = <></>
+    if( props.exists !== true ) {
+        ret = <>
+            <Box gridArea={label_area}>{props.label}</Box>
+            <Box gridArea={value_area} />
+            <Box gridArea={direction_area} />
+        </>
     } else {
+        let className = ''
+        if(props.direction === 'up') {
+            className='zero-arrowup-icon'
+        }
+        if(props.direction === 'down') {
+            className='zero-arrowdown-icon'
+        }
+        let valuestr = sprintf.sprintf( "%.1f %s", props.value, props.units )
+
         ret = <>
             <Box gridArea={label_area}>{props.label}</Box>
             <Box gridArea={value_area}>{valuestr}</Box>

@@ -36,9 +36,8 @@ import {
 import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
-import {servers} from "../../api/utils"
-import log from "roarr";
 import util from "../../util";
+import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
 

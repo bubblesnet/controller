@@ -21,8 +21,8 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-export PORT=3001
-export POSTGRESQL_APPLICATION_DBNAME=icebreaker_prod
+export PORT=3004
+export POSTGRESQL_APPLICATION_DBNAME=bubbles
 export NODE_ENV=production
 cd server || exit
 node src/api-server.js

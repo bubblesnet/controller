@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const db = require("./database");
 const {sql} = require("@databases/pg");
@@ -93,10 +94,10 @@ stage_schedules =  [
 ];
 
 async function getAutomationStage( stationid, stage) {
-        console.log("getAutomationStage "+stationid+"/"+stage)
+        log.info("getAutomationStage "+stationid+"/"+stage)
         return new Promise(async function (resolve, reject) {
             const results = await db.query(sql`SELECT * from automationsettings where stationid_Station=${stationid} and stage_name=${stage}`);
-            console.log("getAutomationStage returning "+JSON.stringify(results))
+            log.info("getAutomationStage returning "+JSON.stringify(results))
             resolve( results[0] )
         })
 }

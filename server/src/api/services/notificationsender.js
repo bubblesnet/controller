@@ -30,6 +30,8 @@ const notification = require('../models/notification')
 const alertcondition = require('../models/alertcondition')
 const locals = require('../../config/locals')
 
+const log = require("../../bubbles_logger").log
+
 let notificationsserviced = 0;
 let notificationsneeded = 100000;
 
@@ -91,10 +93,10 @@ async function getNewAlertConditions() {
                         event_class = 'testing';
                         break;
                     default:
-                        console.error("Bad alert type " + alertcondition.type)
+                        log.error("Bad alert type " + alertcondition.type)
                         break;
                 }
-                console.log('event_class = ' + event_class + " alert_condition type " + alertcondition.type + " useemail "+alertcondition.useemailforsecurity);
+                log.info('event_class = ' + event_class + " alert_condition type " + alertcondition.type + " useemail "+alertcondition.useemailforsecurity);
                 let email_required = "0";
                 let sms_required = "0";
                 switch (event_class) {
@@ -131,39 +133,39 @@ async function getNewAlertConditions() {
                     sms_required: sms_required,
 //                    sms_recipient: alertcondition.mobilenumber
                 };
-                console.log('note = ' + JSON.stringify(note));
+                log.info('note = ' + JSON.stringify(note));
                 notifications.push(note)
-                console.log("notifications " + JSON.stringify(notifications))
+                log.info("notifications " + JSON.stringify(notifications))
                 notification.createNotification(note, function (err, insertResult) {
                     if (err) {
-                        console.error("createNotification failed " + err + " skipping send");
+                        log.error("createNotification failed " + err + " skipping send");
                         notificationsserviced++;
                     } else {
                         note.notificationid = insertResult.rows[0].notificationid;
-                        console.log("notification " + note.notificationid + " saved");
+                        log.info("notification " + note.notificationid + " saved");
                         // if useemail is checked
                         // send email
-                        console.log("note = " + JSON.stringify(note))
-                        console.log("note.email_required = "+(typeof note.email_required)+" " + note.email_required + " sendEmailNotification = " + locals.getLocals().sendEmailNotification )
+                        log.info("note = " + JSON.stringify(note))
+                        log.info("note.email_required = "+(typeof note.email_required)+" " + note.email_required + " sendEmailNotification = " + locals.getLocals().sendEmailNotification )
                         if (note.email_required === "1") {
                             if (locals.getLocals(false).sendEmailNotification === true) {
-                                console.log("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
+                                log.info("notification " + note.notificationid + " email is required, sending to " + note.email_recipient);
                                 email.sendANotification(event_class, note, alertcondition, function (err, response) {
                                     if (err) {
                                         notificationsserviced++;
-                                        console.log("send email for notification " + notification_count + " failed " + err);
+                                        log.info("send email for notification " + notification_count + " failed " + err);
                                     } else {
-                                        console.log("notification " + notification_count + " email sent");
+                                        log.info("notification " + notification_count + " email sent");
                                         notification.setEmailNotificationSent(note, function (err, response) {
-                                            console.log("notification sent set for notificationid " + note.notificationid);
+                                            log.info("notification sent set for notificationid " + note.notificationid);
                                             notificationsserviced++;
                                         });
                                     }
                                 });
                             } else {
-                                console.log("notification sent set for IGNORED notificationid " + note.notificationid);
+                                log.info("notification sent set for IGNORED notificationid " + note.notificationid);
                                 notification.setEmailNotificationSent(note, function (err, response) {
-                                    console.log("notification sent set for notificationid " + note.notificationid);
+                                    log.info("notification sent set for notificationid " + note.notificationid);
                                     notificationsserviced++;
                                 });
                             }

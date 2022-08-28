@@ -23,4 +23,6 @@
 #
 cd server
 node src/api-server.js
+cd ..
+
 

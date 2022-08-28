@@ -24,6 +24,7 @@
 
 const express = require('express');
 const router = express.Router();
+const log = require("../../bubbles_logger").log
 
 const bodyParser = require('body-parser');
 
@@ -34,7 +35,7 @@ const event = require('../models/event');
 
 // RETURNS ALL THE EVENTS IN THE DATABASE
 router.get('/station/:stationid', function (req, res) {
-    console.log("event route stationid = " + stationid)
+    log.info("event route stationid = " + stationid)
     let exclude_measurement = true
     event.getLastN(req.params.stationid, 103, exclude_measurement, function (err, events) {
         if (err) return res.status(500).send("There was a problem finding the events.");
@@ -44,7 +45,7 @@ router.get('/station/:stationid', function (req, res) {
 
 // GETS A SINGLE EVENT FROM THE DATABASE
 router.get('/:id', function (req, res) {
-    console.log("event route id = " + id)
+    log.info("event route id = " + id)
     event.findById(req.params.stationid, function (err, user) {
         if (err) return res.status(500).send("There was a problem finding the events.");
         if (!user) return res.status(404).send("No user found.");

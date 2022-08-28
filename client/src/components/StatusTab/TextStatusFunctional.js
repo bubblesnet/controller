@@ -31,12 +31,14 @@ import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 import RenderADCTextStatus from "./ADCTextStatusFunctional";
 import log from "roarr";
+// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderTextStatus (props) {
     log.trace("RenderTextStatus")
 
+    log.info("TextStatusFunctional display_settings.co2_units = " + props.display_settings.co2_units)
     let ret =
         <Grid round={'small'} direction={'vertical'}
               areas={[
@@ -47,7 +49,7 @@ function RenderTextStatus (props) {
                   { name: 'adc', start: [0, 4], end: [0, 4] },
               ]}
               columns={['large']}
-              rows={['240px','small','small','small','small']}
+              rows={['300px','small','small','small','small']}
               gap={"xxsmall"}
         >
             <Box gridArea={'environment'} >

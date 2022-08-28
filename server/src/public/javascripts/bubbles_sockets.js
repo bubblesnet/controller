@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const {log} = require("../../bubbles_logger");
 window.bubbles = {
         subscribeToServer: function (requestMsg, requestObj, responseEvent) {
         var socket = io.connect('/', {
@@ -29,21 +30,21 @@ window.bubbles = {
             'max reconnection attempts': 'Infinity'
         });
         socket.on('close', function () {
-            console.log('bubbles.js server closed the connection!!');
+            log.info('bubbles.js server closed the connection!!');
         });
         socket.on('error', function () {
-            console.error('bubbles.js socket error');
+            log.error('bubbles.js socket error');
             // window.location.reload();
         });
         socket.on('connect', function () {
-            console.log('bubbles.js "successfully connected"');
+            log.info('bubbles.js "successfully connected"');
         });
         socket.on('disconnect', function () {
-            console.log('bubbles.js "server disconnected"');
+            log.info('bubbles.js "server disconnected"');
         });
         socket.emit(requestMsg, requestObj);
         socket.on(responseEvent, function (data) {
-            console.log('data = ' + JSON.stringify(data));
+            log.info('data = ' + JSON.stringify(data));
         });
     }
 };

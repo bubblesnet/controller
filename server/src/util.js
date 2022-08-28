@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("./bubbles_logger").log
 
 /**
  * Normalize a port into a number, string, or false.
@@ -27,7 +28,7 @@
 const fs = require('fs')
 
 function get_config_file_for_environment(env) {
-    console.log("get_config_file_for_environment "+env)
+    log.info("get_config_file_for_environment "+env)
     switch(env.toLowerCase()) {
         case "development":
             return("config_dev.json")
@@ -64,45 +65,41 @@ function get_server_ports_for_environment(env) {
     };
 
     switch(env.toLowerCase()) {
-        case "pi":
-            ports.api_server_port = 3003;
-            ports.api_server_host = 'api_and_ui';
-            ports.websocket_server_host = 'api_and_ui';
-            ports.websocket_server_port = 8001;
-            ports.activemq_server_port = 61613;
-            ports.activemq_server_host = 'activemq';
-            break;
         case "development":
-            ports.api_server_port = 3003;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
-            ports.websocket_server_port = 8001;
-            ports.activemq_server_port = 61613;
-            ports.activemq_server_host = '192.168.21.237';
-            break;
-        case "test":
-            ports.api_server_port = 3002;
-            ports.websocket_server_port = 8002;
-            ports.activemq_server_port = 61612;
-            ports.api_server_host = '192.168.21.237';
-            ports.websocket_server_host = '192.168.21.237';
-            ports.activemq_server_host = '192.168.21.237';
-            break;
-        case "production":
-            ports.api_server_port = 3001;
+            ports.ui_server_port = 3001;
+            ports.api_server_port = 4001;
             ports.api_server_host = 'api';
             ports.websocket_server_host = 'websocket';
-            ports.websocket_server_port = 8003;
+            ports.websocket_server_port = 5001;
             ports.activemq_server_port = 61611;
             ports.activemq_server_host = 'activemq';
             break;
+        case "test":
+            ports.ui_server_port = 3002;
+            ports.api_server_port = 4002;
+            ports.websocket_server_port = 5002;
+            ports.activemq_server_port = 61612;
+            ports.api_server_host = '192.168.23.237';
+            ports.websocket_server_host = '192.168.23.237';
+            ports.activemq_server_host = '192.168.23.237';
+            break;
         case "ci":
-            ports.api_server_port = 3003;
+            ports.ui_server_port = 3003;
+            ports.api_server_port = 4003;
             ports.api_server_host = 'localhost';
             ports.websocket_server_host = 'localhost';
-            ports.websocket_server_port = 8002;
+            ports.websocket_server_port = 5003;
             ports.activemq_server_port = 61613;
             ports.activemq_server_host = 'localhost';
+            break;
+        case "production":
+            ports.ui_server_port = 3004;
+            ports.api_server_port = 4004;
+            ports.api_server_host = 'api';
+            ports.websocket_server_host = 'websocket';
+            ports.websocket_server_port = 5004;
+            ports.activemq_server_port = 61614;
+            ports.activemq_server_host = 'activemq';
             break;
     }
     return( ports)
@@ -128,7 +125,7 @@ function getRandomInt(max) {
 }
 
 function readJsonFile(filepath) {
-    console.log("utils.readJsonFile Reading config from " + filepath)
+    log.info("utils.readJsonFile Reading config from " + filepath)
     const data = fs.readFileSync(filepath, 'utf8');
     // parse JSON string to JSON object
     return(JSON.parse(data));

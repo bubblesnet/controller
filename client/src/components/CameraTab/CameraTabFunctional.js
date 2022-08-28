@@ -31,6 +31,8 @@ import {Text, Button, Box, Grommet, Grid} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
 import log from "roarr";
+// import log from "./bubbles_logger"
+import moment from "moment";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -45,34 +47,38 @@ function RenderCameraTab(props) {
     let ImageProps = []
     let indexes = []
     let rowcount = 0
-    console.log("props.station.attached_devices = " + JSON.stringify(props.station.attached_devices))
     for( let i = 0; i < props.station.attached_devices.length; i++ ) {
+        log.info("RenderCameraTab attached_devices["+i+"].latest_picture_filename = " + props.station.attached_devices[i].latest_picture_filename)
         if( props.station.attached_devices[i].picamera === false ) {
             continue
         }
         let picture_url = 'http://' + servers.api_server_host + ':' + servers.api_server_port +
-            '/' + userid + '_' + props.station.attached_devices[i].deviceid + '.jpg?' + props.lastpicture
+            '/' + props.station.attached_devices[i].latest_picture_filename + '?' + props.lastpicture
 
-        log.info("picture_url = "+picture_url)
-        ImageProps.push( {width: 800,  zoomWidth: 1600, img: picture_url});
+        log.info("RenderCameraTab picture_url = "+picture_url)
+        ImageProps.push( {width: 600,  scale: 2.5, zoomPosition: 'original', img: picture_url});
 
-        Areas.push({ name: 'label'+i, start: [0, rowcount], end: [0, rowcount] })
+        Areas.push({ name: 'label'+rowcount, start: [0, rowcount], end: [0, rowcount] })
         Rows.push('40px')
         rowcount++;
-        Areas.push({ name: 'picture'+i, start: [0, rowcount], end: [0, rowcount] })
+        Areas.push({ name: 'picture'+rowcount, start: [0, rowcount], end: [0, rowcount] })
         Rows.push('800px')
         rowcount++;
-        indexes.push({device_index: i, labelarea_index: rowcount-2, imageprops_index: rowcount-2 })
+        indexes.push({device_index: i, labelarea_index: rowcount-2, picturearea_index: rowcount-1, imageprops_index: rowcount-2 })
     }
 
 
     function getDeviceRow(indexObject) {
 
-        log.info("getDeviceRow " + JSON.stringify(indexObject) + ' label '+props.station.attached_devices[indexObject.device_index] + ' areas ' + JSON.stringify(Areas));
-        return( <><Text gridArea={"label"+indexObject.labelarea_index}>{props.station.attached_devices[indexObject.device_index].deviceid}</Text><Box gridArea={Areas[indexObject.labelarea_index].name}><ReactImageZoom {...ImageProps[indexObject.imageprops_index]} /></Box></>);
+//        log.info("getDeviceRow " + JSON.stringify(indexObject) + ' label '+props.station.attached_devices[indexObject.device_index] + ' areas ' + JSON.stringify(Areas));
+        return( <><Text gridArea={"label"+indexObject.labelarea_index}>{props.station.attached_devices[indexObject.device_index].deviceid + ' ' +
+            moment(props.station.attached_devices[indexObject.device_index].latest_picture_datetimemillis).format("LLLL")}</Text>
+            <Box gridArea={Areas[indexObject.picturearea_index].name}>
+                <ReactImageZoom {...ImageProps[indexObject.imageprops_index]} />
+            </Box></>);
     }
 
-//    console.log(JSON.stringify(Areas))
+    log.info(JSON.stringify(Areas))
      let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

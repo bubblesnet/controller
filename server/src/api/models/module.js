@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
@@ -32,33 +33,33 @@ const pool = server_db.getPool()
 
  */
 async function createModule(body) {
-//    console.log(JSON.stringify(body))
+//    log.info(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("insert into module (module_name, deviceid_device, container_name, module_type, i2caddress, protocol) values ($1,$2,$3,$4,$5, $6)" +
             " RETURNING *",
             [body.module_name, body.deviceid, body.container_name, body.module_type, body.i2caddress, body.protocol], (error, results) => {
                 if (error) {
-                    console.log("createModule error " + error)
+                    log.info("createModule error " + error)
                     reject(error)
                 } else {
-                    console.log("new moduleid " + results.rows[0])
+                    log.info("new moduleid " + results.rows[0])
                     resolve({moduleid: results.rows[0].moduleid, message: "A new moduleid has been added :" + results.rows[0].moduleid})
                 }
             })
     })
 }
 async function updateModule(body) {
-    console.log(JSON.stringify(body))
+    log.info(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("UPDATE module set deviceid_Device=$2, " +
             " module_name=$3,container_name=$4,module_type=$5, i2caddress=$6 " +
             " where moduleid=$1 ",
             [body.moduleid, body.deviceid, body.module_name, body.container_name, body.module_type, body.i2caddress], (error, results) => {
                 if (error) {
-                    console.log("updatemodule err " + error)
+                    log.info("updatemodule err " + error)
                     reject(error)
                 } else {
-                    console.log("updated " + results.rowCount + " rows of module " + body.moduleid)
+                    log.info("updated " + results.rowCount + " rows of module " + body.moduleid)
                     resolve({
                         moduleid: body.moduleid,
                         rowcount: results.rowCount,
@@ -70,16 +71,16 @@ async function updateModule(body) {
 }
 
 async function deleteModule(moduleid) {
-    console.log("deleteModule "+moduleid)
+    log.info("deleteModule "+moduleid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM module WHERE moduleid = "+moduleid)
+        log.info("DELETE FROM module WHERE moduleid = "+moduleid)
 
         pool.query('DELETE FROM module WHERE moduleid = $1', [moduleid], (error, results) => {
             if (error) {
-                console.error("delete moduleid err3 " + error)
+                log.error("delete moduleid err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({moduleid: moduleid, rowcount: results.rowCount, message: 'moduleid deleted with ID ' + moduleid})
             }
         })
@@ -173,12 +174,12 @@ async function createDefaultModules(deviceid) {
     let list = []
     for (let i = 0; i < defaultModules.length; i++) {
         defaultModules[i].deviceid = deviceid
-//        console.log(JSON.stringify(defaultModules[i]))
+//        log.info(JSON.stringify(defaultModules[i]))
 
         let x = await createModule(defaultModules[i])
         list.push(x)
     }
-    console.log("returning list length " + list.length)
+    log.info("returning list length " + list.length)
     return (list)
 }
 
@@ -188,12 +189,12 @@ async function createDefaultSetOfModules( body ) {
 }
 
 async function getAllModulesByCabinet(stationid) {
-    console.log("getAllModulesByCabinet " + stationid)
+    log.info("getAllModulesByCabinet " + stationid)
     return new Promise( function (resolve, reject) {
         let ssql = "select i2caddress, container_name, devicetypename, module_type, deviceid, moduleid, protocol from station c join device d on d.stationid_Station = stationid join devicetype t on d.devicetypeid_devicetype=t.devicetypeid join module m on m.deviceid_device = d.deviceid where c.stationid =$1"
         pool.query(ssql, [stationid], async (error, results) => {
             if (error) {
-                console.log("getAllModulesByCabinet error " + error)
+                log.info("getAllModulesByCabinet error " + error)
                 reject(error)
             }
             if (results) {

@@ -25,11 +25,21 @@
 
 cd server
 
+echo Setting timezone
+sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+
 # Start the second process
 node src/queue-server.js &
 
 # Wait for any process to exit
 wait -n
 
+exit_status=$?
+
+echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+
+echo Exiting with exit status $exit_status
+
 # Exit with status of process that exited first
-exit $?
+exit $exit_status

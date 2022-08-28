@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 var express = require('express');
 var router = express.Router();
@@ -73,7 +74,7 @@ async function postToMeasurementQueue(req, res, next) {
         // add json to queue
         logger.log("silly","sending to queue " + JSON.stringify(req.body))
         bubbles_queue.sendMessageToQueue(__edgeMeasurementClient, JSON.stringify(req.body))
-//        debug("sending topic " + JSON.stringify(req.body))
+//        log.debug("sending topic " + JSON.stringify(req.body))
 //        bubbles_queue.sendMessageToTopic(__edgeMeasurementClient, JSON.stringify(req.body))
         // return OK
         res.json(req.body);

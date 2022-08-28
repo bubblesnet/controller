@@ -21,14 +21,15 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-var express = require('express');
-var locals = require('../../config/locals');
-var fs = require('fs');
-var db = require('../models/bubbles_db');
+const express = require('express');
+const locals = require('../../config/locals');
+const fs = require('fs');
+const db = require('../models/bubbles_db');
 const disk = require('diskspace');
-var sprintf = require('sprintf-js').sprintf;
+const sprintf = require('sprintf-js').sprintf;
+const log = require("../../bubbles_logger").log
 
 /* GET users listing. */
 exports.status = function (userid, deviceid, cb) {
-        console.log("statusbyuserdevice user: " + userid + " device: " + deviceid);
+    log.info("statusbyuserdevice user: " + userid + " device: " + deviceid);
     }

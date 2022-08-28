@@ -21,6 +21,8 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
+
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 
@@ -44,7 +46,7 @@ const getUser = (email_address, cb) => {
  */
 
 async function getAllUsers() {
-    console.log("user_model getUsers")
+    log.info("user_model getUsers")
     return new Promise(function (resolve, reject) {
         let ssql = "select * from public.user order by lastname asc, firstname asc, email asc"
         pool.query(ssql, (error, results) => {
@@ -56,7 +58,7 @@ async function getAllUsers() {
                     results.rows[i].port = process.env.PORT
                     results.rows[i].database = process.env.ICEBREAKER_DB
                 }
-                //               console.log("users " + results)
+                //               log.info("users " + results)
                 resolve(results.rows);
             } else {
                 //               reject("no data")
@@ -67,9 +69,9 @@ async function getAllUsers() {
 }
 
 async function findOneByUsername(username) {
-    console.log("findOneByUsername")
+    log.info("findOneByUsername")
     return new Promise(async function (resolve, reject) {
-        console.log("username = " + username)
+        log.info("username = " + username)
         let ssql = 'select '+
             ' userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber,  '+
             ' displaysettingsid, units, language, theme, current_font, light_units, tub_volume_units,  '+
@@ -78,20 +80,20 @@ async function findOneByUsername(username) {
             ' join displaysettings d on u.userid = d.userid_User  '+
             ' where username = $1 order by lastname asc, firstname asc, email asc'
 
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [username]
         await pool.query(ssql, values, (err, results) => {
-            console.log("callback from findOne with err " + err + " results " + results)
+            log.info("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.error("findOne error " + err)
+                log.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
-                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
+                log.info("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
                 resolve(results.rows[0]);
             } else {
                 //               reject("no data")
-                console.log("no user found at username " + username)
+                log.info("no user found at username " + username)
                 resolve(null);
             }
         })
@@ -101,9 +103,9 @@ async function findOneByUsername(username) {
 
 
 async function findOneByUserid(userid) {
-    console.log("findOneByUserid")
+    log.info("findOneByUserid")
     return new Promise(function (resolve, reject) {
-        console.log("userid = " + userid)
+        log.info("userid = " + userid)
         let ssql = 'select '+
             ' userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber,  '+
             ' displaysettingsid, units, language, theme, current_font, light_units, tub_volume_units,  '+
@@ -111,20 +113,20 @@ async function findOneByUserid(userid) {
             ' from public.user u  '+
             ' join displaysettings d on u.userid = d.userid_User  '+
             ' where userid = $1 order by lastname asc, firstname asc, email asc'
-        console.log("ssql = "+ssql)
+        log.info("ssql = "+ssql)
         let values = [userid]
         pool.query(ssql, values, (err, results) => {
-            console.log("callback from findOne with err " + err + " results " + results)
+            log.info("callback from findOne with err " + err + " results " + results)
             if (err) {
-                console.error("findOne error " + err)
+                log.error("findOne error " + err)
                 reject(err)
             }
             else if (results && results.rowCount > 0) {
-                console.log("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
+                log.info("resolving with results row 0 = " + JSON.stringify(results.rows[0]))
                 resolve(results.rows[0]);
             } else {
                 //               reject("no data")
-                console.log("no user found at userid " + userid)
+                log.info("no user found at userid " + userid)
                 resolve(null);
             }
         })
@@ -134,12 +136,12 @@ async function findOneByUserid(userid) {
 
 async function createEmptyUser(body) {
     return new Promise(function(resolve, reject) {
-        console.log("inserting new USER "+JSON.stringify(body))
+        log.info("inserting new USER "+JSON.stringify(body))
         pool.query("INSERT INTO public.user (username,firstname,lastname,email,passwordhash) VALUES ('','','','','') RETURNING *", [], (error, results) => {
             if (error) {
                 reject(error)
             } else {
-                console.log("new userid " + results.rows[0])
+                log.info("new userid " + results.rows[0])
                 resolve({userid: results.rows[0].userid, message: "A new user has been added :" + results.rows[0].userid})
             }
         })
@@ -168,7 +170,7 @@ async function createSettings(body) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("new usersettings " + JSON.stringify(results.rows[0]))
+                    log.info("new usersettings " + JSON.stringify(results.rows[0]))
                     resolve({usersettingsid: results.rows[0].usersettingsid, message: "A new usersettings has been added :" + results.rows[0].usersettingsid})
                 }
             })
@@ -182,7 +184,7 @@ async function createUser(body) {
             if (error) {
                 reject(error)
             } else {
-                console.log("new userid " + results.rows[0])
+                log.info("new userid " + results.rows[0])
                 resolve({userid: results.rows[0].userid, message: "A new user has been added :" + results.rows[0].userid})
             }
         })
@@ -197,7 +199,7 @@ async function updateUser(body) {
                 if (error) {
                     reject(error)
                 } else {
-                    console.log("updated email " + body.email)
+                    log.info("updated email " + body.email)
                     resolve({userid: results.rows[0].userid, message: "user has been modified :" + results.rowCount})
                 }
             })
@@ -206,16 +208,16 @@ async function updateUser(body) {
 
 
 async function updateSingleUserField(body) {
-    console.log('updateSingleUserField')
-    console.log("body = " + JSON.stringify(body))
-    console.log(' typeof(body.value) = ' + typeof (body.value))
+    log.info('updateSingleUserField')
+    log.info("body = " + JSON.stringify(body))
+    log.info(' typeof(body.value) = ' + typeof (body.value))
     return new Promise(function (resolve, reject) {
-            console.log('UPDATE public.user SET ' + body.fieldname + '= ' + body.value + ' WHERE userid = ' + body.userid)
+            log.info('UPDATE public.user SET ' + body.fieldname + '= ' + body.value + ' WHERE userid = ' + body.userid)
 //                pool.query(`UPDATE public.user SET ${body.fieldname} = '${body.value}' WHERE userid = ${body.userid}`, (error, results) => {
             pool.query(`UPDATE public.user SET ${body.fieldname} = $1 WHERE userid = $2`,
                 [body.value, body.userid], (error, results) => {
                     if (error) {
-                        console.error("updateSingleUserField err1 " + error)
+                        log.error("updateSingleUserField err1 " + error)
                         reject(error)
                     } else {
                         resolve({userid: body.userid, message: 'user id ' + body.userid + ' has been updated'})
@@ -227,22 +229,22 @@ async function updateSingleUserField(body) {
 
 async function setPassword(userid, plaintext_password) {
     let passwordhash = bcrypt.hashSync(plaintext_password, 8);
-    console.log("plaintext = " + plaintext_password+" hash = "+passwordhash)
+    log.info("plaintext = " + plaintext_password+" hash = "+passwordhash)
     return await updateSingleUserField({userid: userid, fieldname: 'passwordhash', value: passwordhash})
 }
 
 async function deleteUser(id) {
-    console.log("deleteUser "+id)
+    log.info("deleteUser "+id)
     return new Promise(function(resolve, reject) {
         const userid = parseInt(id)
-        console.log("DELETE FROM public.user WHERE userid "+userid)
+        log.info("DELETE FROM public.user WHERE userid "+userid)
 
         pool.query('DELETE FROM public.user WHERE userid = $1', [userid], (error, results) => {
             if (error) {
-                console.error("deleteUser err3 " + error)
+                log.error("deleteUser err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({userid: id, message: 'USER deleted with ID ' + userid})
             }
         })
@@ -250,10 +252,10 @@ async function deleteUser(id) {
 }
 
 function getUserSettings (userid, cb) {
-    console.log("user.getUserSettings " + userid);
+    log.info("user.getUserSettings " + userid);
     return pool.query('select * from usersettings where userid_user = $1', [userid], function (err, result) {
-//        console.log('getUserSettings err ' + err + ' result ' + result);
-//        console.log('getUserSettings results = ' + JSON.stringify(result));
+//        log.info('getUserSettings err ' + err + ' result ' + result);
+//        log.info('getUserSettings results = ' + JSON.stringify(result));
 //        if (err === null) {
             return cb(err, result);
 //        }

@@ -23,6 +23,7 @@
 
 global.__root   = __dirname + '/';
 
+const log = require("./bubbles_logger").log
 
 const wsu = require('./ws-server-utils')
 const util = require('./util')

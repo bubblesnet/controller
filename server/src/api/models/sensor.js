@@ -20,6 +20,7 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
@@ -32,31 +33,31 @@ const pool = server_db.getPool()
 
  */
 async function createSensor(body) {
-//    console.log(JSON.stringify(body))
+//    log.info(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("insert into sensor (sensor_name, moduleid_module, measurement_name) values ($1,$2,$3)" +
             " RETURNING *",
             [body.sensor_name, body.moduleid, body.measurement_name], (error, results) => {
                 if (error) {
-                    console.log("createSensor error " + error)
+                    log.info("createSensor error " + error)
                     reject(error)
                 } else {
-                    console.log("new sensorid " + results.rows[0])
+                    log.info("new sensorid " + results.rows[0])
                     resolve({sensorid: results.rows[0].sensorid, message: "A new sensorid has been added :" + results.rows[0].sensorid})
                 }
             })
     })
 }
 async function updateSensor(body) {
-    console.log(JSON.stringify(body))
+    log.info(JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("UPDATE sensor set moduleid_module=$2, sensor_name=$3,measurement_name=$4,extraconfig=$5 where sensorid=$1 ",
             [body.sensorid, body.moduleid, body.sensor_name, body.measurement_name, body.extraconfig], (error, results) => {
                 if (error) {
-                    console.log("updatesensor err " + error)
+                    log.info("updatesensor err " + error)
                     reject(error)
                 } else {
-                    console.log("updated " + results.rowCount + " rows of sensor " + body.sensorid)
+                    log.info("updated " + results.rowCount + " rows of sensor " + body.sensorid)
                     resolve({
                         sensorid: body.sensorid,
                         rowcount: results.rowCount,
@@ -68,16 +69,16 @@ async function updateSensor(body) {
 }
 
 async function deleteSensor(sensorid) {
-    console.log("deleteSensor "+sensorid)
+    log.info("deleteSensor "+sensorid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM sensor WHERE sensorid "+sensorid)
+        log.info("DELETE FROM sensor WHERE sensorid "+sensorid)
 
         pool.query('DELETE FROM sensor WHERE sensorid = $1', [sensorid], (error, results) => {
             if (error) {
-                console.error("delete sensorid err3 " + error)
+                log.error("delete sensorid err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({sensorid: sensorid, rowcount: results.rowCount, message: 'sensorid deleted with ID ' + sensorid})
             }
         })
@@ -168,12 +169,12 @@ let defaultSensors = [
 ]
 
 async function getAllSensorsByModule(moduleid) {
-    console.log("getAllSensorsByCabinet")
+    log.info("getAllSensorsByCabinet")
     return new Promise(function (resolve, reject) {
         let ssql = "select * from sensor where moduleid_module =$1"
         pool.query(ssql, [moduleid], (error, results) => {
             if (error) {
-                console.log("getAllSensorsByModule error " + error)
+                log.info("getAllSensorsByModule error " + error)
                 reject(error)
             }
             if (results) {

@@ -30,7 +30,7 @@ const cors = require('cors')
 apiServer.use(cors());
 
 const util = require("./util")
-const logger = require("./bubbles_logger").log
+const log = require("./bubbles_logger").log
 const fileUpload = require('express-fileupload');
 
 const favicon = require('serve-favicon');
@@ -56,12 +56,12 @@ const health_check = require('./api/routes/health_check_routes').router;
 const event_routes = require('./api/routes/event_routes').router;
 const bubbles_db = require('./api/models/bubbles_db');
 
-logger.info("starting router")
+log.info("starting router")
 const router = express.Router();
-logger.silly("after router")
+log.silly("after router")
 apiServer.locals = {};
 apiServer.locals.config = require('./config/locals.js');
-logger.log('silly',"after locals")
+log.log('silly',"after locals")
 apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
@@ -132,13 +132,13 @@ apiServer.use(function (err, req, res, next) {
 });
 
 // Test the database connection
-bubbles_db.testConnection( function(err) { console.error("!!!!!!!!!!!!!!!!!! ", err); process.exit(1)})
+bubbles_db.testConnection( function(err) { log.error("!!!!!!!!!!!!!!!!!! ", err); process.exit(1)})
 
 let listening = false
 
 const hostname = '0.0.0.0'
 let runningServer = apiServer.listen(ports.api_server_port, hostname, () => {
-    logger.log('info',`API server listening on ${hostname} ${ports.api_server_port}.`)
+    log.log('info',`API server listening on ${hostname} ${ports.api_server_port}.`)
     listening = true
 });
 
@@ -146,10 +146,10 @@ function close() {
     let ret
     runningServer.close( function(err) {
         if (typeof err !== 'undefined') {
-            logger.error('close error! ' + err)
+            log.error('close error! ' + err)
             ret = err
         } else {
-            logger.info('server closed')
+            log.info('server closed')
         }
     })
     return(ret);

@@ -153,7 +153,7 @@
 }
 
 #airtempexternal-holder {
-    height: 0px;
+    height: 0;
     left: 10px;
     position: absolute;
     top: 0;
@@ -196,4 +196,35 @@
     top: 180px;
     width: 175px;
     font-size: large;
+}
+
+.voc-holder {
+    height: 40px;
+    left: 10px;
+    position: absolute;
+    top: 0;
+    width: 80px;
+    background-color: white;
+    font-size: small;
+}
+
+.co2-holder {
+    height: 40px;
+    left: 10px;
+    position: absolute;
+    top: 40px;
+    width: 80px;
+    background-color: white;
+    font-size: small;
+}
+
+.value-holder-co2-voc {
+    left: 0;
+    top: 2px;
+    position: absolute;
+    height: 40px;
+    width: 80px;
+    font-weight: bolder;
+    font-size: small;
+    color: black;
 }

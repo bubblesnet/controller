@@ -21,17 +21,73 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
+/*
+DONE
+    humidifier boolean,
+    humidity_sensor_internal boolean,
+    humidity_sensor_external boolean,
+    heater boolean,
+    thermometer_top boolean,
+    thermometer_middle boolean,
+    thermometer_bottom boolean,
+    thermometer_external boolean,
+    thermometer_water boolean,
+    water_pump boolean,
+    air_pump boolean,
+    light_sensor_internal boolean,
+    station_door_sensor boolean,
+    outer_door_sensor boolean,
+    movement_sensor boolean,
+    pressure_sensors boolean,
+    root_ph_sensor boolean,
+    enclosure_type character varying(80) COLLATE pg_catalog."default" DEFAULT 'CABINET'::character varying,
+    water_level_sensor boolean,
+    tub_depth double precision,
+    tub_volume double precision,
+    intake_fan boolean,
+    exhaust_fan boolean,
+    light_bloom boolean,
+    light_vegetative boolean,
+    light_germinate boolean,
+    height_sensor boolean DEFAULT false,
+    station_name character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+    light_sensor_external boolean DEFAULT false,
+    water_heater boolean,
+    ec_sensor boolean NOT NULL DEFAULT false,
+    voc_sensor boolean NOT NULL DEFAULT false,
+    co2_sensor boolean NOT NULL DEFAULT false,
+    tamper_xmove double precision,
+    tamper_ymove double precision,
+    tamper_zmove double precision,
+
+NOT DONE
+    stationid integer NOT NULL DEFAULT nextval('cabinet_cabinetid_seq'::regclass),
+    controller_hostname character varying(255) COLLATE pg_catalog."default",
+    controller_api_port integer,
+    time_between_pictures_in_seconds integer,
+    time_between_sensor_polling_in_seconds integer,
+    heat_lamp boolean,
+    heating_pad boolean,
+    automatic_control boolean DEFAULT true,
+    siteid_site integer,
+    location character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+    current_stage character varying(255) COLLATE pg_catalog."default" NOT NULL DEFAULT 'idle'::character varying,
+    controller_activemq_port integer NOT NULL DEFAULT 61613,
+ */
+
 import React, {useState} from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
-import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell} from 'grommet'
+import {Grommet, RadioButtonGroup, CheckBox, TextInput, Table, TableRow, TableCell, Text} from 'grommet'
 import './cabinetSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import '../../logimplementation'
-import log from 'roarr';
+// import '../../logimplementation'
+import log from "roarr";
+// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -88,6 +144,33 @@ function RenderStationSettingsTab (props) {
         } else {
             x.tub_volume = Number(s)
         }
+        changeState(x)
+    }
+
+    function setPictureTime(s) {
+        log.error("setPictureTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        let x = JSON.parse(JSON.stringify(local_station))
+        changeState(x)
+    }
+    function setSensorPollTime(s) {
+        log.error("setSensorPollTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        let x = JSON.parse(JSON.stringify(local_station))
+        changeState(x)
+    }
+
+    function setMovementX(s) {
+        log.error("setMovementX to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        let x = JSON.parse(JSON.stringify(local_station))
+        changeState(x)
+    }
+    function setMovementY(s) {
+        log.error("setMovementY to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        let x = JSON.parse(JSON.stringify(local_station))
+        changeState(x)
+    }
+    function setMovementZ(s) {
+        log.error("setMovementZ to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        let x = JSON.parse(JSON.stringify(local_station))
         changeState(x)
     }
 
@@ -209,6 +292,21 @@ function RenderStationSettingsTab (props) {
         x.movement_sensor = !x.movement_sensor
         changeState(x)
     }
+    function toggleVOCSensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.voc_sensor = !x.voc_sensor
+        changeState(x)
+    }
+    function toggleCO2Sensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.co2_sensor = !x.co2_sensor
+        changeState(x)
+    }
+    function toggleECSensor() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.ec_sensor = !x.ec_sensor
+        changeState(x)
+    }
 
     function toggleOuterDoorSensor() {
         let x = JSON.parse(JSON.stringify(local_station))
@@ -260,9 +358,107 @@ function RenderStationSettingsTab (props) {
         <Table id={'settings-tab'} >
                         <tbody>
                         <TableRow >
-                            <TableCell border={'bottom'} >Station name</TableCell>
-                            <TableCell  border={'bottom'} colSpan={3}>
-                                <TextInput value= {props.station.station_name} onChange={event => setTubVolume(event.target.value)} />
+                            <TableCell  border={'bottom'} >
+                                <Table id="station-name-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Station</td></tr></thead>
+                                    <tbody>
+                                    <TableRow>
+                                        <TableCell>Name <TextInput value={props.station.station_name} onChange={event => setTubVolume(event.target.value)} /></TableCell>
+                                    </TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell  border={'bottom'}>
+                                <Table id="enclosure-type-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Enclosure type</td></tr></thead>
+                                    <tbody>
+
+                                    <TableRow><TableCell><RadioButtonGroup name="enclosure-type"
+                                                  options={props.display_settings.enclosure_options}
+                                                  value={props.station.enclosure_type}
+                                                  onChange={event => setEnclosureType(event.target.value)}/>
+                                    </TableCell>
+                                    </TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell  border={'bottom'} >
+                                <Table id="monitoring-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Monitoring</td></tr></thead>
+                                    <tbody>
+                                    <TableRow>
+                                        <TableCell>Time between pictures (seconds) <TextInput value={props.station.time_between_pictures_in_seconds} onChange={event => setPictureTime(event.target.value)} /></TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>Time between sensor polls (seconds) <TextInput value={props.station.time_between_sensor_polling_in_seconds} onChange={event => setSensorPollTime(event.target.value)} /></TableCell>
+                                    </TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow >
+                            <TableCell  border={'bottom'}>
+                                <Table id="security-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked={local_station.station_door_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked={local_station.outer_door_sensor}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell  border={'bottom'}>
+                                <Table id="tilt-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Tamper Sensing</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell>
+                                        <CheckBox label="Movement Sensor (axl345)" onChange={toggleMovementSensor} checked={local_station.movement_sensor}/>
+                                    </TableCell></TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                        <Table >
+                                            <tbody>
+                                            <TableRow >
+                                                <TableCell ><Text >Up and down sensitivity</Text></TableCell>
+                                                <TableCell ><TextInput size="xsmall" value={props.station.tamper_xmove} onChange={event => setMovementX(event.target.value)} /></TableCell>
+                                            </TableRow>
+                                            </tbody>
+                                        </Table>
+                                    </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Table >
+                                                <tbody>
+                                                <TableRow >
+                                                    <TableCell ><Text >Side to side sensitivity</Text></TableCell>
+                                                    <TableCell ><TextInput size="xsmall" value={props.station.tamper_ymove} onChange={event => setMovementY(event.target.value)} /></TableCell>
+                                                </TableRow>
+                                                </tbody>
+                                            </Table>
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Table >
+                                                <tbody>
+                                                <TableRow >
+                                                    <TableCell ><Text >Back and forth sensitivity</Text></TableCell>
+                                                    <TableCell ><TextInput size="xsmall" value={props.station.tamper_zmove} onChange={event => setMovementZ(event.target.value)} /></TableCell>
+                                                </TableRow>
+                                                </tbody>
+                                            </Table>
+                                        </TableCell>
+                                    </TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell  border={'bottom'}>
+                                <Table id="odor-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Odor Control</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Pressure Sensors (bme280)" onChange={togglePressureSensors} checked={local_station.pressure_sensors}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
                             </TableCell>
                         </TableRow>
                         <TableRow >
@@ -273,95 +469,86 @@ function RenderStationSettingsTab (props) {
                                     <TableRow><TableCell><CheckBox label="Germinate (<20W)" onChange={toggleGerminateLight} checked={local_station.light_germinate}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Vegetative"  onChange={toggleVegetativeLight} checked={local_station.light_vegetative}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Bloom" onChange={toggleBloomLight} checked={local_station.light_bloom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor" onChange={toggleLightSensorInternal} checked={local_station.light_sensor_internal}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Light Sensor" onChange={toggleLightSensorExternal} checked={local_station.light_sensor_external}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Internal Light Sensor (bh1750)" onChange={toggleLightSensorInternal} checked={local_station.light_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Light Sensor (bh1750)" onChange={toggleLightSensorExternal} checked={local_station.light_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
                             <TableCell  border={'bottom'}>
                                 <Table  id="humidity-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Humidity</td></tr></thead>
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Air</td></tr></thead>
                                     <tbody>
+                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked= {local_station.intake_fan}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Humidifier" onChange={toggleHumidifier} checked={local_station.humidifier}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Humidity Sensor" onChange={toggleHumiditySensorInternal} checked= {local_station.humidity_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Humidity Sensor (bme280)" onChange={toggleHumiditySensorInternal} checked= {local_station.humidity_sensor_internal}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="VOC Sensor (cs811)" onChange={toggleVOCSensor} checked= {local_station.voc_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="CO2 Sensor (cs811)" onChange={toggleCO2Sensor} checked= {local_station.co2_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked= {local_station.exhaust_fan}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="External Humidity Sensor" onChange={toggleExternalHumiditySensor} checked= {local_station.humidity_sensor_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
                             <TableCell  border={'bottom'}>
                                 <Table  id="temperature-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Temperature</td></tr></thead>
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Heat</td></tr></thead>
                                     <tbody>
                                     <TableRow><TableCell><CheckBox label="Heater" onChange={toggleHeater} checked= {local_station.heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Top Sensor" onChange={toggleThermometerTop} checked= {local_station.thermometer_top}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Middle Sensor" onChange={toggleThermometerMiddle} checked= {local_station.thermometer_middle}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Bottom Sensor" onChange={toggleThermometerBottom} checked= {local_station.thermometer_bottom}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="External Sensor" onChange={toggleExternalThermometer} checked= {local_station.thermometer_external}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Heater" onChange={toggleWaterHeater} checked= {local_station.water_heater}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor" onChange={toggleWaterThermometer} checked= {local_station.thermometer_water}/></TableCell></TableRow>
-                                    </tbody>
-                                </Table>
-                            </TableCell>
-                            <TableCell border={'bottom'}>
-                                <Table id="nutrition-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Nutrition</td></tr></thead>
-                                    <tbody>
-                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked= {local_station.water_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Air Pump" onChange={toggleAirPump} checked= {local_station.air_pump}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Water Level Sensor" onChange={toggleWaterLevelSensor} checked= {local_station.water_level_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Root pH Sensor" onChange={toggleRootPhSensor} checked= {local_station.root_ph_sensor}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Height Sensor" onChange={toggleHeightSensor} checked= {local_station.height_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Top Sensor (bme280)" onChange={toggleThermometerTop} checked= {local_station.thermometer_top}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Middle Sensor (bme280)" onChange={toggleThermometerMiddle} checked= {local_station.thermometer_middle}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Bottom Sensor (bme280)" onChange={toggleThermometerBottom} checked= {local_station.thermometer_bottom}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="External Sensor (bme280)" onChange={toggleExternalThermometer} checked= {local_station.thermometer_external}/></TableCell></TableRow>
                                     </tbody>
                                 </Table>
                             </TableCell>
                         </TableRow>
                         <TableRow >
                             <TableCell border={'bottom'} >
-                                <Table id="security-table">
-                                    <thead><tr><td className="centered-thead-text" colSpan="2">Airflow and Odor</td></tr></thead>
-                                    <tbody>
-                                    <TableRow><TableCell><CheckBox label="Pressure Sensors" onChange={togglePressureSensors} checked= {local_station.pressure_sensors}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Intake Fan" onChange={toggleIntakeFan} checked= {local_station.intake_fan}/></TableCell></TableRow>
-                                    <TableRow><TableCell><CheckBox label="Exhaust Fan" onChange={toggleExhaustFan} checked= {local_station.exhaust_fan}/></TableCell></TableRow>
-                                    </tbody>
-                                </Table>
-                            </TableCell>
-                            <TableCell  border={'bottom'}>
-                                <Table  >
-                                <thead><tr><td className="centered-thead-text" colSpan="2">Security</td></tr></thead>
+                                <Table id="tub-table">
+                                <thead><tr><td className="centered-thead-text" colSpan="2">Reservoir</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell><CheckBox label="Station Door Sensor" onChange={toggleStationDoorSensor} checked= {local_station.station_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Outer Door Sensor" onChange={toggleOuterDoorSensor} checked= {local_station.outer_door_sensor}/></TableCell></TableRow>
-                                <TableRow><TableCell><CheckBox label="Movement Sensor" onChange={toggleMovementSensor} checked= {local_station.movement_sensor}/></TableCell></TableRow>
+                                <TableRow><TableCell>Volume <TextInput value={props.station.tub_volume} onChange={event => setTubVolume(event.target.value)} />
+                                    {props.display_settings.tub_volume_units} </TableCell></TableRow>
+                                <TableRow><TableCell>Depth <TextInput value={props.station.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
+                                    {props.display_settings.tub_depth_units} </TableCell></TableRow>
                                 </tbody>
                                 </Table>
                             </TableCell>
+
+                            <TableCell border={'bottom'} >
+                                <Table id="water-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Water</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Water Dispenser" onChange={toggleWaterPump} checked={local_station.water_dispenser}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={local_station.water_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Level Sensor (eTape)" onChange={toggleWaterLevelSensor} checked={local_station.water_level_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Heater" onChange={toggleWaterHeater} checked={local_station.water_heater}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Temp Sensor ()" onChange={toggleWaterThermometer} checked={local_station.thermometer_water}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+                            <TableCell border={'bottom'}>
+                                <Table id="nutrition-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Root Nutrition</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Bubbler Pump" onChange={toggleAirPump} checked={local_station.air_pump}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Root pH Sensor (ezoPH)" onChange={toggleRootPhSensor} checked={local_station.root_ph_sensor}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="EC Sensor ()" onChange={toggleECSensor} checked={local_station.ec_sensor}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
+                            </TableCell>
+
                         </TableRow>
-                        <tr><td className="centered-thead-text" colSpan="4">Enclosure Characteristics</td></tr>
                         <TableRow>
-                        <TableCell className={"table-cell"}>Enclosure type</TableCell>
-                            <TableCell colSpan={3}>
-                                <RadioButtonGroup name="enclosure-type"
-                                                  options={props.display_settings.enclosure_options}
-                                                  value={props.station.enclosure_type}
-                                                  onChange={event => setEnclosureType(event.target.value)}/>
+                            <TableCell border={'bottom'} >
+                                <Table id="pressure-table">
+                                    <thead><tr><td className="centered-thead-text" colSpan="2">Progress</td></tr></thead>
+                                    <tbody>
+                                    <TableRow><TableCell><CheckBox label="Height Sensor ()" onChange={toggleHeightSensor} checked={local_station.height_sensor}/></TableCell></TableRow>
+                                    </tbody>
+                                </Table>
                             </TableCell>
                         </TableRow>
-                        <TableRow>
-                            <TableCell>Tub depth</TableCell>
-                            <TableCell colSpan={2}>
-                                <TextInput value= {props.station.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
-                            </TableCell>
-                            <TableCell>{props.display_settings.tub_depth_units}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell>Tub volume</TableCell>
-                            <TableCell colSpan={2}>
-                                <TextInput value= {props.station.tub_volume} onChange={event => setTubVolume(event.target.value)} />
-                            </TableCell>
-                            <TableCell >{props.display_settings.tub_volume_units}</TableCell>
-                        </TableRow>
-                       </tbody>
+                     </tbody>
                     </Table>
             <RenderFormActions state= {local_station} applyAction={applyChanges} resetAction={resetChanges}
                                resetButtonState={reset_button_state}

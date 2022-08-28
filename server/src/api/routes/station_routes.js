@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const log = require("../../bubbles_logger").log
 
 const express = require('express');
 const router = express.Router();
@@ -47,7 +48,7 @@ router.put('/site/:siteid/:station', function (req, res) {
 
 
 function getStationsBySiteId( req, res ) {
-    console.log("getStationsBySiteId")
+    log.info("getStationsBySiteId")
     station.getStationConfigsBySite(req.params.siteid).then( function ( stationlist) {
         if (!stationlist) return res.status(200).json({});
         return res.status(200).send(stationlist);
@@ -70,31 +71,31 @@ router.post('/:stationid/stage', function (req, res) {
 });
 
 async function getLastNEvents(req,res,next) {
-    console.log("get events : " + req.params.stationid);
+    log.info("get events : " + req.params.stationid);
     let exclude_measurement = true
     let x = await events.getLastN(req.params.stationid, 100, exclude_measurement).catch((err) =>
-    { console.log("caught err "+err)})
+    { log.error("caught err "+err)})
 //    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
 
 router.get('/:stationid/events', function (req, res, next) {
-    console.log("get stationid/events "+req.params.stationid)
+    log.info("get stationid/events "+req.params.stationid)
     let x = req.body
     getLastNEvents(req, res, next )
 });
 
 async function getAutomationStage(req,res,next) {
-    console.log("get getAutomationStage : " + req.params.stationid+"/automation/"+req.params.stage_name);
+    log.info("get getAutomationStage : " + req.params.stationid+"/automation/"+req.params.stage_name);
     let exclude_measurement = true
     let x = await stage.getAutomationStage(req.params.stationid, req.params.stage_name).catch((err) =>
-    { console.log("caught err "+err)})
+    { log.error("caught err "+err)})
 //    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
 
 router.get('/:stationid/stage/:stage_name', function (req, res, next) {
-    console.log("GET "+req.params.stationid+"/automation/"+req.params.stage_name)
+    log.info("GET "+req.params.stationid+"/automation/"+req.params.stage_name)
     let x = req.body
     getAutomationStage(req, res, next )
 });

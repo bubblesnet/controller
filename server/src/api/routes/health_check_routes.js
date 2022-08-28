@@ -24,6 +24,7 @@
 
 var express = require('express');
 var router = express.Router();
+const log = require("../../bubbles_logger").log
 
 /**
  * @api {get} /status/:userid/:deviceid Get the last reported status from specified device
@@ -36,7 +37,7 @@ var router = express.Router();
  * @apiSuccess {XXXX} XXXX XXXX
  */
 function getStatus(req,res,next) {
-    console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
+    log.info("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
     res.json({"status": "ok" });
 
 }
