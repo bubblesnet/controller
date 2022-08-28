@@ -1,0 +1,5 @@
+ALTER TABLE STATION DROP COLUMN water_dispenser;
+ALTER TABLE STATION DROP COLUMN phup_dispenser;
+ALTER TABLE STATION DROP COLUMN phdown_dispenser;
+
+ALTER TABLE DISPENSER DROP COLUMN milliliters_per_millisecond;

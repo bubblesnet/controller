@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         node-version: [15.x, 10.x, 12.x, 14.x]
-        activemq-version: [5.16.4, 5.17.0]
+        activemq-version: [5.16.4, 5.17.1]
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
@@ -51,29 +51,35 @@ jobs:
         # Creates the DB schema and loads initial table data
         run: |
           sudo psql -h localhost -p 5432 -c "CREATE DATABASE bubbles_ci" "user=postgres dbname=postgres password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105104957_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20201105133628_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210205154039_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210211101505_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210226211054_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210227212026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210302130129_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210305151120_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210312202057_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210331183354_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210401151451_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210408094508_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210415164803_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210509114508_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20210512122951_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220307183422_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220315223802_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220324154619_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220325135908_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220328155726_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220328175326_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220329154913_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
-          sudo psql -h localhost -p 5432 -a -q -f migrations/20220402154014_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000001_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000002_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000003_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000004_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000005_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000006_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000007_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000008_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000009_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000010_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000011_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000012_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000013_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000014_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000015_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000016_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000017_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000018_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000019_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000020_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000021_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000022_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000023_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000024_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000025_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000026_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000027_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000028_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000029_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

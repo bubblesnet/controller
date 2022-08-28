@@ -1,11 +1,36 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
-import {getLastNEvents, getSite} from "../../api/utils";
+import {getLastNEvents} from "../../api/utils";
 import log from "roarr";
 import {Grommet, Table, TableCell, TableRow} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import RenderFormActions from "../FormActions";
 import moment from "moment";
+
+// copyright and license inspection - no issues 4/13/22
 
 function RenderOverview (props) {
     const [station] = useState(JSON.parse(JSON.stringify(props.station)));
@@ -13,7 +38,6 @@ function RenderOverview (props) {
     const [reset_button_state] = useState(false)
     const [defaults_button_state] = useState(true)
     const [apply_button_state] = useState(false)
-    const [nodeEnv] = useState(props.nodeEnv);
     const [apiHost] = useState(props.apiHost)
     const [apiPort] = useState(props.apiPort)
 /*
@@ -26,7 +50,7 @@ function RenderOverview (props) {
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     */
     useEffect(() => {
-        log.trace("useEffect getLastN")
+        log.info("useEffect getLastN")
         const fetchData = async () => {
             log.trace("fetchData")
 //            let x = await getSite(apiHost, apiPort, 1)

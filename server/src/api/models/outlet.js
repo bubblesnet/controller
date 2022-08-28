@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+const log = require("../../bubbles_logger").log
+
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
 
@@ -20,11 +45,12 @@ let defaultDevices = [
 ];
 
 async function createDefaultSetOfOutlets( body ) {
+    log.info("outlet.createDefaultSetOfOutlets " + JSON.stringify(body))
     let list = []
     for( let i = 0; i < defaultDevices.length; i++ ) {
         defaultDevices[i].deviceid = body.deviceid
         defaultDevices[i].stationid = body.stationid
-        console.log(JSON.stringify(defaultDevices[i]))
+        log.info(JSON.stringify(defaultDevices[i]))
 
         let x = await createOutlet(defaultDevices[i])
         list.push(x)
@@ -36,33 +62,33 @@ async function createDefaultSetOfOutlets( body ) {
 
  */
 async function createOutlet(body) {
-//    console.log(JSON.stringify(body))
+    log.info("outlet.createOutlet " + JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("insert into outlet (stationid_Station, deviceid_device, name, index, bcm_pin_number, onoff) values ($1,$2,$3,$4,$5,$6)" +
             " RETURNING *",
             [body.stationid, body.deviceid, body.name, body.index, body.bcm_pin_number, body.onoff], (error, results) => {
                 if (error) {
-                    console.log("createOutlet error " + error)
+                    log.info("createOutlet error " + error)
                     reject(error)
                 } else {
-                    console.log("new outlet " + JSON.stringify(results.rows[0]))
+                    log.info("new outlet " + JSON.stringify(results.rows[0]))
                     resolve({outletid: results.rows[0].outletid, message: "A new outletid has been added :" + results.rows[0].outletid})
                 }
             })
     })
 }
 async function updateOutlet(body) {
-    console.log(JSON.stringify(body))
+    log.info("outlet.updateOutlet " + JSON.stringify(body))
     return new Promise(function(resolve, reject) {
         pool.query("UPDATE outlet set stationid_station=$2, deviceid_Device=$3, " +
             " name=$4,index=$5,bcm_pin_number=$6, onoff=$7 " +
             " where outletid=$1 ",
             [body.outletid, body.stationid, body.deviceid, body.name, body.index, body.bcm_pin_number, body.onoff], (error, results) => {
                 if (error) {
-                    console.log("updateoutlet err " + error)
+                    log.error("updateOutlet err " + error)
                     reject(error)
                 } else {
-                    console.log("updated " + results.rowCount + " rows of outlet " + body.outletid)
+                    log.info("updateOutlet updated " + results.rowCount + " rows of outlet " + body.outletid)
                     resolve({
                         outletid: body.outletid,
                         rowcount: results.rowCount,
@@ -74,16 +100,16 @@ async function updateOutlet(body) {
 }
 
 async function deleteOutlet(outletid) {
-    console.log("deleteOutlet "+outletid)
+    log.info("outlet.deleteOutlet "+outletid)
     return new Promise(function(resolve, reject) {
-        console.log("DELETE FROM outlet WHERE outletid "+outletid)
+        log.info("DELETE FROM outlet WHERE outletid "+outletid)
 
         pool.query('DELETE FROM outlet WHERE outletid = $1', [outletid], (error, results) => {
             if (error) {
-                console.error("delete outletid err3 " + error)
+                log.error("updateOutlet delete outletid err3 " + error)
                 reject(error)
             } else {
-//                console.log("results " + JSON.stringify(results))
+//                log.info("results " + JSON.stringify(results))
                 resolve({outletid: outletid, rowcount: results.rowCount, message: 'outletid deleted with ID ' + outletid})
             }
         })
@@ -91,12 +117,12 @@ async function deleteOutlet(outletid) {
 }
 
 async function getOutletsByCabinetDevice(stationid, deviceid) {
-    console.log("getOutletsByCabinetDevice "+stationid+"/"+deviceid)
+    log.info("outlet.getOutletsByCabinetDevice "+stationid+"/"+deviceid)
     return new Promise(function (resolve, reject) {
         let ssql = "select onoff as on, deviceid_device as deviceid, * from outlet where stationid_Station=$1 AND deviceid_device=$2"
         pool.query(ssql, [stationid,deviceid], (error, results) => {
             if (error) {
-                console.log("getOutletsByCabinetDevice error " + error)
+                log.info("getOutletsByCabinetDevice error " + error)
                 reject(error)
             }
             if (results) {
@@ -109,11 +135,32 @@ async function getOutletsByCabinetDevice(stationid, deviceid) {
 }
 
 async function setStateByNameAndStation( name, stationid, onoff) {
+    log.info("outlet.setStateByNameAndStation "+name+"/"+stationid+"/"+onoff)
     return new Promise(function (resolve, reject) {
         let ssql = "update outlet set onoff=$1 where name = $2 and stationid_station = $3 RETURNING *"
         pool.query(ssql, [onoff,name,stationid], (error, results) => {
             if (error) {
-                console.log("setStateByNameAndStation error " + error)
+                log.info("setStateByNameAndStation error " + error)
+                reject(error)
+            }
+            if (results) {
+                resolve(results);
+            } else {
+                resolve({results: []});
+            }
+        })
+    })
+
+
+}
+
+async function setDispenserStateByNameAndStation( dispenser_name, stationid, onoff) {
+    log.info("outlet.setDispenserStateByNameAndStation "+dispenser_name+"/"+stationid+"/"+onoff)
+    return new Promise(function (resolve, reject) {
+        let ssql = "update dispenser set onoff=$1 where dispenser_name = $2 and stationid_station = $3 RETURNING *"
+        pool.query(ssql, [onoff,dispenser_name,stationid], (error, results) => {
+            if (error) {
+                log.error("setDispenserStateByNameAndStation error " + error)
                 reject(error)
             }
             if (results) {
@@ -131,8 +178,9 @@ async function setStateByNameAndStation( name, stationid, onoff) {
 module.exports = {
     createOutlet,
     createDefaultSetOfOutlets,
+    deleteOutlet,
     getOutletsByCabinetDevice,
+    setDispenserStateByNameAndStation,
     setStateByNameAndStation,
-    updateOutlet,
-    deleteOutlet
+    updateOutlet
 }

@@ -37,7 +37,8 @@
     "roarr": "^4.2.5",
     "sprintf-js": "^1.1.2",
     "stompit": "^1.0.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.8",
@@ -59,9 +60,9 @@
   },
   "scripts": {
     "start": "set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
-    "start_dev_windows": "set NODE_ENV=DEV&&set HOST=0.0.0.0&&set PORT=3005&&react-scripts start",
+    "start_dev_windows": "set NODE_ENV=development&&set HOST=0.0.0.0&&set PORT=%REACT_APP_UI_PORT%&&react-scripts start",
     "start_test_windows": "set HOST=0.0.0.0&&set PORT=3006&&react-scripts start",
-    "start_prod_windows": "set HOST=0.0.0.0&&set PORT=3000&&react-scripts start",
+    "start_prod_windows": "set HOST=0.0.0.0&&set PORT=80&&react-scripts start",
     "start_dev": "HOST=0.0.0.0 PORT=3005&&react-scripts start",
     "start_test": "HOST=0.0.0.0 PORT=3006 react-scripts start",
     "start_prod": "serve --listen tcp://192.168.21.204:3005 -s build",

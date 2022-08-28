@@ -1,24 +1,33 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import React, {useState, useMemo, useRef, useEffect} from 'react';
-
 import {Tabs, Tab} from "rendition";
-// import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
-import { Button, Grid} from 'grommet'
-import Header from "./components/Header"
-
-import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
-import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
-import RenderEvents from "./components/EventsTab/EventsFunctional";
-import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
-import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
-import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
-import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
-import RenderStageTab from "./components/StageTabs/StageTabFunctional"
-import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
-// import RenderSiteStationMenu from "./components/SiteStationMenu";
+import RenderCalibration from "./components/CalibrationTab/CalibrationTabFunctional"
+import RenderNutes from "./components/NutesTab/NutesTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
-// import {Add,Clock,Help} from 'grommet-icons'
 import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 
 import sprintf from 'sprintf-js';
@@ -29,16 +38,30 @@ import './Palette.css'
 import util from './util'
 import {addStation, saveSetting, getSite, saveAutomationSettings} from './api/utils'
 
-import './logimplementation'
-import log from 'roarr';
+import types from "./types"
+
+// import './logimplementation'
+import log from "roarr";
+// import log from "./bubbles_logger"
+
 import moment from "moment";
 
 import {changeStage} from './api/utils';
+
+// import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
+// import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
+// import RenderSiteStationMenu from "./components/SiteStationMenu";
+// import {Add,Clock,Help} from 'grommet-icons'
+
+// copyright and license inspection - no issues 4/13/22
 
 const STATUS_COMMAND="status"
 const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
+const DISPENSE_COMMAND="dispense"
+
+let because = "don't know"
 
 let because = "don't know"
 
@@ -106,12 +129,28 @@ function AuthenticatedApp (props) {
         pressure_internal: 0.0,
         pressure_external_direction: "",
         pressure_internal_direction: "",
-        tub_water_level: 0.0
+        water_level: 0.0,
+        voc: 0.0,
+        voc_direction: "",
+        voc_units: "ppm",
+        co2: 0.0,
+        co2_direction: "",
+        co2_units: "ppb",
+        ec: 0.0,
+        ec_direction: "",
+        ec_units: ""
     }
+
+    /**
+     * The value of environment variable NODE_ENV which controls the hostname and port the API
+     * is listening on. Changing this causes a rerender
+     */
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
 
     /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
      * @type {{activemq_server_host: string, api_server_port: number, api_server_host: string, websocket_server_host: string, activemq_server_port: number, websocket_server_port: number}}
+     * now that nodeenv is set, we can figure out what URLs to talk to
      */
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
@@ -151,12 +190,6 @@ function AuthenticatedApp (props) {
     const [switch_state, setSwitchState] = useState(props.initial_switch_state);
     const [sensor_readings] = useState(initial_sensor_readings);
     const [tilt,setTilt] = useState({ currently_tilted: false, last_tilt: 0} )
-
-    /**
-     * The value of environment variable NODE_ENV which controls the hostname and port the API
-     * is listening on. Changing this causes a rerender
-     */
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
 
     /**
      * Port the API server is listening on - change it and rerender
@@ -266,6 +299,23 @@ function AuthenticatedApp (props) {
         }
     }
 
+    /**
+     * Send a "take picture" command to all the devices attached to this controller.
+     */
+    function dispense( deviceid, dispenser_name, ms ) {
+        let intms = Math.trunc( ms );
+        alert("button: dispense " + dispenser_name + " for " + intms + "ms")
+        let cmd = {
+            command: DISPENSE_COMMAND,
+            userid: userid,
+            deviceid: deviceid,
+            dispenser_name: dispenser_name,
+            milliseconds: intms
+        }
+        log.info("Sending dispense message " + JSON.stringify(cmd))
+        sendJsonMessage(cmd)
+        log.info("Sent dispense message " + JSON.stringify(cmd) + "???????")
+    }
 
     let various_dates = {
         start_date_current_stage: "25 days ago",
@@ -317,8 +367,8 @@ function AuthenticatedApp (props) {
             if (typeof msg.value === 'undefined' ) {
                 log.error("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
-                if (msg.measurement_name === 'water_level') {
-                    sensor_readings['tub_water_level'] = sprintf.sprintf("%.1f", msg.value)
+                if (msg.measurement_name === types.measurement_name.water_level) {
+                    sensor_readings[types.measurement_name.water_level] = sprintf.sprintf("%.1f", msg.value)
                 }
                 if( typeof sensor_readings === 'undefined') {
                     log.error("WTF")
@@ -343,25 +393,33 @@ function AuthenticatedApp (props) {
             } else {
                 log.trace("ws: received message type " + msg.message_type);
                 switch (msg.message_type) {
-                    case "measurement":
+                    case types.message_type.measurement:
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
                         log.trace("ws: received measurement");
                         applyMeasurementToState(msg)
                         break;
-                    case "switch_event":
+                    case types.message_type.dispenser_event:
+                        because = "dispenser_evt " + msg.dispenser_name
+                        log.info("ws: received dispenser_event " + JSON.stringify(msg));
+                        toggleDispenserTo(msg.dispenser_name, msg.on)
+                        break;
+                    case types.message_type.switch_event:
                         because = "switch_evt " + msg.switch_name
-                        log.debug("ws: received switch_event " + JSON.stringify(msg));
+                        log.trace("ws: received switch_event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
-                    case "event":
+                    case types.message_type.event:
                         because = "evt msg " + msg.sample_timestamp
                         log.trace("ws: received event ");
                         applyEventToState(msg)
                         break;
-                    case "picture_event":
+                    case types.message_type.picture_event:
                         because = "picture evt msg " + msg.sample_timestamp
                         log.trace("ws: received picture event");
 //                        shutter_sound.play()
+                        log.info("picture_event " + JSON.stringify(msg))
+                        setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
+//                        props.setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
                         setLastPicture(last_picture + 1)
                         break;
                     default:
@@ -432,6 +490,27 @@ function AuthenticatedApp (props) {
         }
     }
 
+    async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
+        log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+//            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
+//            setSite(JSON.parse(JSON.stringify(z)))
+
+        for (let i = 0; i < site.stations.length; i++) {
+            for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
+                log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                if (site.stations[i].attached_devices[j].deviceid === deviceid) {
+                    let local_site = JSON.parse(JSON.stringify(site))
+                    local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
+                    local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
+                    log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                    log.info("local_site = " + JSON.stringify(local_site))
+                    setSite(JSON.parse(JSON.stringify(local_site)))
+                    return
+                }
+            }
+        }
+    }
+
     //
     //
     //
@@ -463,6 +542,40 @@ function AuthenticatedApp (props) {
         setSwitchState(new_switch_state)
     }
 
+    /**
+     * Change the state of the specified switch to the specified value and
+     * save to useState for a rerender.
+     *
+     * @param switch_name   The name of the switch from switch_names enum
+     * @param on    True/false on/off
+     */
+    async function toggleDispenserTo(dispenser_name, on) {
+        log.info("button: toggleDispenserTo " + dispenser_name + " to " + on)
+        if (typeof (dispenser_name) === 'undefined') {
+            return
+        }
+        for( let i = 0; i < site.stations[currentStationIndex].dispensers.length; i++ ) {
+            if( site.stations[currentStationIndex].dispensers[i].dispenser_name === dispenser_name) {
+                let local_site = JSON.parse(JSON.stringify(site))
+                local_site.stations[currentStationIndex].dispensers[i].onoff = on
+                setSite(JSON.parse(JSON.stringify(local_site)))
+                break
+            }
+        }
+ /*
+        let new_dispenser_state = JSON.parse(JSON.stringify(dispenser_state))
+        log.info("dispenser_state = " + JSON.stringify(dispenser_state))
+
+        if( typeof(new_dispenser_state[dispenser_name] === 'undefined')) {
+            new_dispenser_state[dispenser_name] = { on: on, changing: false}
+        }
+        new_dispenser_state[dispenser_name].on = on
+        log.info("Clearing changing new_dispenser_state[" + dispenser_name + "] to false")
+        new_dispenser_state[dispenser_name].changing = false
+        setDispenserState(new_dispenser_state)
+  */
+    }
+
 
     /**
      * Set a state variable with the specified station_settings object and cause rerender
@@ -473,35 +586,38 @@ function AuthenticatedApp (props) {
 
         let changed_station = JSON.parse(JSON.stringify(x))
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "automatic_control", changed_station.automatic_control)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_internal", changed_station.humidity_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidity_sensor_external", changed_station.humidity_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_heater", changed_station.water_heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heater", changed_station.heater)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_top", changed_station.thermometer_top)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_middle", changed_station.thermometer_middle)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_bottom", changed_station.thermometer_bottom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_external", changed_station.thermometer_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "thermometer_water", changed_station.thermometer_water)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_pump", changed_station.water_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "air_pump", changed_station.air_pump)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_internal", changed_station.light_sensor_internal)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_sensor_external", changed_station.light_sensor_external)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "station_door_sensor", changed_station.station_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "outer_door_sensor", changed_station.outer_door_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "movement_sensor", changed_station.movement_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.humidifier, changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.humidity_sensor_internal, changed_station.humidity_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.humidity_sensor_external, changed_station.humidity_sensor_external)
+//        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "humidifier", changed_station.humidifier)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.water_heater, changed_station.water_heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heater, changed_station.heater)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_top, changed_station.thermometer_top)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_middle, changed_station.thermometer_middle)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_bottom, changed_station.thermometer_bottom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_external, changed_station.thermometer_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.thermometer_water, changed_station.thermometer_water)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.water_pump, changed_station.water_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.air_pump, changed_station.air_pump)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.light_sensor_internal, changed_station.light_sensor_internal)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.light_sensor_external, changed_station.light_sensor_external)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.station_door_sensor, changed_station.station_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.outer_door_sensor, changed_station.outer_door_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.movement_sensor, changed_station.movement_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", changed_station.pressure_sensors)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "root_ph_sensor", changed_station.root_ph_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "water_level_sensor", changed_station.water_level_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "intake_fan", changed_station.intake_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "exhaust_fan", changed_station.exhaust_fan)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heat_lamp", changed_station.heat_lamp)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "heating_pad", changed_station.heating_pad)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_bloom", changed_station.light_bloom)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_vegetative", changed_station.light_vegetative)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "light_germinate", changed_station.light_germinate)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "height_sensor", changed_station.height_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.root_ph_sensor, changed_station.root_ph_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.water_level_sensor, changed_station.water_level_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.intake_fan, changed_station.intake_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.exhaust_fan, changed_station.exhaust_fan)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heat_lamp, changed_station.heat_lamp)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.heating_pad, changed_station.heating_pad)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_bloom, changed_station.light_bloom)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_vegetative, changed_station.light_vegetative)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.light_germinate, changed_station.light_germinate)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.height_sensor, changed_station.height_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.voc_sensor, changed_station.voc_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.co2_sensor, changed_station.co2_sensor)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.ec_sensor, changed_station.ec_sensor)
 
         let changed_site = { stations: [JSON.parse(JSON.stringify(x))] }
         let new_site = { ...site, ...changed_site};
@@ -577,8 +693,8 @@ function AuthenticatedApp (props) {
         log.trace("setSwitchStateFromChild "+switch_name +","+on)
         let new_switch_state = JSON.parse(JSON.stringify(switch_state))
         let sw_name = switch_name
-        if (switch_name === "growLight") {
-            sw_name = "lightBloom"
+        if (switch_name === types.switch_name.growLight) {
+            sw_name = types.switch_name.lightBloom
         }
         if (typeof new_switch_state[switch_name] === 'undefined') {
             console.error("button: bad switch_name " + switch_name)
@@ -635,7 +751,8 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         const fetchData = async () => {
             let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
-            log.trace("useEffect stationid = " + z.stations[0].stationid)
+//            log.trace("useEffect stationid = " + z.stations[0].stationid)
+//            log.info("useEffect " + JSON.stringify(z))
             z.stations[0].automation_settings = z.stations[0].automation_settings[0] // returned as array from server
 
             setSite(JSON.parse(JSON.stringify(z)))
@@ -675,7 +792,7 @@ function AuthenticatedApp (props) {
         lastCompleteStatusMessage = JSON.parse(JSON.stringify(lastJsonMessage))
     } else {
         if (lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
-            lastJsonMessage.message_type === 'measurement') {
+            lastJsonMessage.message_type === types.message_type.measurement) {
 //            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
@@ -715,8 +832,13 @@ function AuthenticatedApp (props) {
                 </Nav>
             </Sidebar>
  */
-//    console.log("rendering with station.current_stage={"+site.stations[currentStationIndex].current_stage+"}")
+    log.info("rendering with station = "+JSON.stringify(site.stations[currentStationIndex]))
     log.trace("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
+    for ( let i = 0; i < site.stations[0].attached_devices.length; i++ ) {
+        log.info("RenderCameraTab AuthApp attached_devices[" + i + "].latest_picture_filename = " + site.stations[0].attached_devices[i].latest_picture_filename)
+    }
+    log.info("AuthenticatedApp display_settings.co2_units = " + props.display_settings.co2_units)
+
     return <div className="App">
         <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
@@ -847,6 +969,25 @@ function AuthenticatedApp (props) {
                                            display_settings={props.display_settings}
                                            onApplyFontChange={applyFontChange}
                                            onLocalFontChange={localFontChange}
+                    />
+                </Tab>
+                <Tab title="Nutes">
+                    <RenderNutes nodeEnv={nodeEnv}
+                                       apiHost={servers.api_server_host}
+                                       apiPort={apiPort}
+                                       theme={bubbles_theme}
+                                       station={site.stations[currentStationIndex]}
+                                       display_settings={props.display_settings}
+                                        dispense_function={dispense}
+                    />
+                </Tab>
+                <Tab title="Calibration">
+                    <RenderCalibration nodeEnv={nodeEnv}
+                                       apiHost={servers.api_server_host}
+                                           apiPort={apiPort}
+                                           theme={bubbles_theme}
+                                           station={site.stations[currentStationIndex]}
+                                           display_settings={props.display_settings}
                     />
                 </Tab>
             </Tabs>

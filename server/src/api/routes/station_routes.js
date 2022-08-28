@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+const log = require("../../bubbles_logger").log
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -23,7 +48,7 @@ router.put('/site/:siteid/:station', function (req, res) {
 
 
 function getStationsBySiteId( req, res ) {
-    console.log("getStationsBySiteId")
+    log.info("getStationsBySiteId")
     station.getStationConfigsBySite(req.params.siteid).then( function ( stationlist) {
         if (!stationlist) return res.status(200).json({});
         return res.status(200).send(stationlist);
@@ -46,31 +71,31 @@ router.post('/:stationid/stage', function (req, res) {
 });
 
 async function getLastNEvents(req,res,next) {
-    console.log("get events : " + req.params.stationid);
+    log.info("get events : " + req.params.stationid);
     let exclude_measurement = true
     let x = await events.getLastN(req.params.stationid, 100, exclude_measurement).catch((err) =>
-    { console.log("caught err "+err)})
+    { log.error("caught err "+err)})
 //    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
 
 router.get('/:stationid/events', function (req, res, next) {
-    console.log("get stationid/events "+req.params.stationid)
+    log.info("get stationid/events "+req.params.stationid)
     let x = req.body
     getLastNEvents(req, res, next )
 });
 
 async function getAutomationStage(req,res,next) {
-    console.log("get getAutomationStage : " + req.params.stationid+"/automation/"+req.params.stage_name);
+    log.info("get getAutomationStage : " + req.params.stationid+"/automation/"+req.params.stage_name);
     let exclude_measurement = true
     let x = await stage.getAutomationStage(req.params.stationid, req.params.stage_name).catch((err) =>
-    { console.log("caught err "+err)})
+    { log.error("caught err "+err)})
 //    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
 
 router.get('/:stationid/stage/:stage_name', function (req, res, next) {
-    console.log("GET "+req.params.stationid+"/automation/"+req.params.stage_name)
+    log.info("GET "+req.params.stationid+"/automation/"+req.params.stage_name)
     let x = req.body
     getAutomationStage(req, res, next )
 });

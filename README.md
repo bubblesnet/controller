@@ -1,7 +1,6 @@
-<<<<<<< HEAD
-# controller
-=======
 # BubblesNet Controller
+
+This repo is temporarily public. It will revert to private shortly and without notice as, imho, it is not quite ready yet.
 
 [![codecov](https://codecov.io/gh/bubblesnet/controller/branch/develop/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
 ![ci](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg)
@@ -14,7 +13,7 @@
 [![Github all releases](https://img.shields.io/github/downloads/bubblesnet/controller/total.svg)](https://GitHub.com/bubblesnet/controller/releases/)
 
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bubblesnet&show_icons=true)
->>>>>>> feature-waterquality
+
 
 The controller is a control, and data collection and analysis service designed to 
 work with the bubblesnet edge-device.  It consists of:
@@ -23,9 +22,6 @@ Client - a React application for controlling one or more edge devices
 and viewing the data from those devices.
 
 Server - an API server that serves both the controller React application AND 
-<<<<<<< HEAD
-the edge devices manipulating the physical environment and queueing data for storage.
-=======
 the edge devices manipulating the physical environment and queueing data for storage.
 
 This open-source project is a port and integration of an existing set of unrelated private projects.  This
@@ -243,4 +239,3 @@ Add
 | Harvest | Weeks 27 No light or pumps. Fans, heat and humidity controlled |
 | Dry | Weeks 28-32 No light or pumps. Fans, heat and humidity controlled |
 
->>>>>>> feature-waterquality

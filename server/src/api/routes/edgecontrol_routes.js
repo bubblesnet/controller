@@ -1,8 +1,32 @@
-var express = require('express');
-var router = express.Router();
-var status = require('../services/status');
-var htmlDecode = require("js-htmlencode").htmlDecode;
-var db = require("../models/bubbles_db");
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+const log = require("../../bubbles_logger").log
+
+const express = require('express');
+const router = express.Router();
+const status = require('../services/status');
+const htmlDecode = require("js-htmlencode").htmlDecode;
+const db = require("../models/bubbles_db");
 const dgram = require("dgram");
 
 /**
@@ -16,7 +40,7 @@ const dgram = require("dgram");
  * @apiSuccess {XXXX} XXXX XXXX
  */
 router.get("/status/:userid/:deviceid", function (req, res, next) {
-        console.log("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
+        log.info("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
         status.status(req.params.userid, req.params.deviceid, function (obj) {
         res.render("asyncstatus", obj);
     });
@@ -38,7 +62,7 @@ router.get("/status/:userid/:deviceid", function (req, res, next) {
  */
 
 function getDeviceOutlets( client, req, res, next ) {
-    console.log("command userid " + req.params.userid + " deviceid " + req.params.deviceid + " outletname " + req.params.outletname + " onoff " + req.params.onoff);
+    log.info("command userid " + req.params.userid + " deviceid " + req.params.deviceid + " outletname " + req.params.outletname + " onoff " + req.params.onoff);
     let outletname = htmlDecode(req.params.outletname);
     let outboundmessage = {
         onoff: req.params.onoff,
@@ -50,11 +74,11 @@ function getDeviceOutlets( client, req, res, next ) {
 
     client.on('listening', function () {
         let address = client.address();
-        console.log('UDP Server listening on ' + address.address + ":" + address.port);
+        log.info('UDP Server listening on ' + address.address + ":" + address.port);
     });
 
     client.on('message', function (message, remote) {
-        console.log(remote.address + ':' + remote.port + ' - ' + message);
+        log.info(remote.address + ':' + remote.port + ' - ' + message);
         let returnmessage = JSON.parse(message);
         client.close();
         res.setHeader("Access-Control-Allow-Origin", "*");
@@ -63,19 +87,19 @@ function getDeviceOutlets( client, req, res, next ) {
 
     client.on("error", function (err) {
         client.close();
-        console.error("Error: " + err);
+        log.error("Error: " + err);
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.json("{ \"error\": \"" + err + "\"}");
     });
 
     db.getLastKnownIPAddress(req.params.userid, req.params.deviceid, function (err, eventresult) {
-        console.log("db.getLastKnownIPAddress")
+        log.info("db.getLastKnownIPAddress")
         if( !err && eventresult && eventresult[0] ) {
-            console.log("sending message " + JSON.stringify(outboundmessage) + " to " + eventresult[0].stringvalue + ":8777");
+            log.info("sending message " + JSON.stringify(outboundmessage) + " to " + eventresult[0].stringvalue + ":8777");
             client.send(JSON.stringify(outboundmessage), 8777, eventresult[0].stringvalue);
         }
         else {
-            console.error("Failed to find IP address to send command to!!");
+            log.error("Failed to find IP address to send command to!!");
         }
     });
 }

@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+const log = require("../../bubbles_logger").log
+
 const {sql} = require('@databases/pg');
 const stage = require('./stage')
 const device = require('./device')
@@ -7,15 +31,15 @@ const pool = server_db.getPool()
 
 
 async function changeStage(stationid, oldstage, newstage) {
-    //    console.log(JSON.stringify(body))
+    //    log.info(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
         await pool.query("update station SET current_stage = $1 where stationid = $2 RETURNING *",
             [newstage,stationid], (error, results) => {
                 if (error) {
-                    console.log("changeStage error " + error)
+                    log.info("changeStage error " + error)
                     reject(error)
                 } else {
-                    console.log("changeStage " + JSON.stringify(results.rows[0]))
+                    log.info("changeStage " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, stage: newstage, message: "Station "+results.rows[0].stationid+" stage has been updated to " + newstage})
                 }
             })
@@ -64,10 +88,10 @@ async function updateStageSettings(station_id, stage_name, new_automation_settin
                 new_automation_settings.current_light_type,
                 station_id, stage_name ], (error, results) => {
                 if (error) {
-                    console.log("updateAutomationSettings error " + error)
+                    log.info("updateAutomationSettings error " + error)
                     reject(error)
                 } else {
-                    console.log("updateAutomationSettings result (" + JSON.stringify(results.rows[0])+")")
+                    log.info("updateAutomationSettings result (" + JSON.stringify(results.rows[0])+")")
                     resolve(new_automation_settings)
                 }
             })

@@ -1,200 +1,33 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+const log = require("../../bubbles_logger").log
+
 const express = require('express');
 const router = express.Router();
 const util = require('../../util')
 const station = require('../models/station')
 const sitestation = require('../models/sitestation')
 
-/*
-const config = {
-    automation_settings: {
-        current_stage: "Germinate",
-        stage_options: [
-    "germinate",
-    "vegetative",
-    "bloom",
-    "harvest",
-    "dry",
-    "idle"
-        ],
-        current_lighting_schedule: "12 on/12 off",
-        "lighting_schedule_options": [
-            "24 on",
-            "18 on/6 off",
-            "14 on/10 off",
-            "12 on/12 off",
-            "10 on/14 off",
-            "6 on/18 off",
-            "24 off"
-        ],
-        light_on_start_hour: 10,
-        target_temperature: 75,
-        temperature_min: 60,
-        temperature_max: 90,
-        humidity_min: 0,
-        humidity_max: 90,
-        target_humidity: 70,
-        humidity_target_range_low: 75,
-        humidity_target_range_high: 85,
-        current_light_type: "Grow Light Veg",
-        light_type_options: [
-            "Germinate",
-            "Grow Light Veg",
-            "Grow Light Bloom"
-        ]
-    },
-    edge_devices: [
-        {
-            container_name: "sense-python",
-            deviceid: 70000007,
-            device_type: "bme280",
-            protocol: "i2c",
-            address: "0x76",
-            included_sensors: [{sensor_name: "humidity_sensor_internal"}
-                , {sensor_name: "pressure_sensor_internal", address: "44"}, {
-                    sensor_name: "thermometer_middle",
-                    address: "55"
-                }]
-        },
-        {
-            container_name: "sense-python",
-            deviceid: 70000008,
-            device_type: "bme280",
-            protocol: "i2c",
-            address: "0x76",
-            included_sensors: [{sensor_name: "humidity_sensor_external", address: "55"},
-                {sensor_name: "pressure_sensor_external", address: "55"}, {
-                    sensor_name: "thermometer_external",
-                    address: "55"
-                }]
-        },
-        {
-            container_name: "sense-python",
-            deviceid: 70000007,
-            device_type: "bh1750",
-            protocol: "i2c",
-            address: "0x23",
-            included_sensors: [{sensor_name: "light_sensor_internal", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "ads1115",
-            protocol: "i2c",
-            address: "0x49",
-            included_sensors: [{sensor_name: "water_level", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "ads1115",
-            protocol: "i2c",
-            address: "0x48",
-            included_sensors: [{sensor_name: "", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "adxl345",
-            protocol: "i2c",
-            address: "0x53",
-            included_sensors: [{sensor_name: "movement_sensor", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "ezoph",
-            protocol: "i2c",
-            address: "0x63",
-            included_sensors: [{sensor_name: "root_ph_sensor", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "hcsr04",
-            protocol: "i2c",
-            address: "0x47",
-            included_sensors: [{sensor_name: "distance_sensor", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "GPIO",
-            protocol: "gpio",
-            address: "0x47",
-            included_sensors: [{sensor_name: "station_door_sensor", address: "55"}]
-        },
-        {
-            container_name: "sense-go",
-            deviceid: 70000008,
-            device_type: "GPIO",
-            protocol: "gpio",
-            address: "0x47",
-            included_sensors: [{sensor_name: "external_door_sensor", address: "55"}]
-        }
-    ],
-    station_settings: {
-        humidifier: true,
-        humidity_sensor_internal: true,
-        humidity_sensor_external: true,
-        heater: true,
-        heating_pad: true,
-        heat_lamp: true,
-        thermometer_top: true,
-        thermometer_middle: true,
-        thermometer_bottom: true,
-        thermometer_external: true,
-        thermometer_water: true,
-        water_pump: true,
-        air_pump: true,
-        light_sensor_internal: true,
-        light_sensor_external: true,
-        station_door_sensor: true,
-        outer_door_sensor: true,
-        movement_sensor: true,
-        pressure_sensors: true,
-        root_ph_sensor: true,
-        enclosure_type: "Cabinet",
-        water_level_sensor: true,
-        tub_depth: 18.0,
-        tub_volume: 20.0,
-        intake_fan: true,
-        exhaust_fan: true,
-        enclosure_options: [
-            "Cabinet",
-            "Tent"
-        ],
-        light_bloom: true,
-        light_vegetative: true,
-        light_germinate: true
-    },
-    switch_state: {
-        automaticControl: {
-            on: false
-        },
-        humidifier: {
-            on: true
-        },
-        heater: {
-            on: true
-        },
-        airPump: {
-            on: true
-        },
-        waterPump: {
-            on: true
-        },
-        intakeFan: {
-            on: true
-        },
-        exhaustFan: {
-            on: true
-        },
-        currentGrowLight: {
-            on: true
-        }
-    }
-}
- */
 /**
  * @api {post} /measurement/:userid/:deviceid Get the last reported status from specified device
  * @apiName GetStatus
@@ -208,12 +41,12 @@ const config = {
 
 
 async function getDeviceConfig(req,res,next) {
-    console.log("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
+    log.info("get device config user: " + req.params.userid + " device: " + req.params.deviceid);
     // read config from file
 //    let x = await station.getConfigByDevice(req.params.userid, req.params.deviceid).catch((err) =>
     let x = await station.getConfigByUser(req.params.userid).catch((err) =>
-    { console.log("caught err "+err)})
-    console.log("got x = " + JSON.stringify(x))
+    { log.error("caught err "+err)})
+    log.info("got x = " + JSON.stringify(x))
     res.json(x);
 }
 

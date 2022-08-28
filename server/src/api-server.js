@@ -1,3 +1,27 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+
 const express = require('express');
 const apiServer = express()
 
@@ -6,7 +30,7 @@ const cors = require('cors')
 apiServer.use(cors());
 
 const util = require("./util")
-const logger = require("./bubbles_logger").log
+const log = require("./bubbles_logger").log
 const fileUpload = require('express-fileupload');
 
 const favicon = require('serve-favicon');
@@ -30,13 +54,14 @@ const station_routes = require('./api/routes/station_routes').router;
 const site_routes = require('./api/routes/site_routes').router;
 const health_check = require('./api/routes/health_check_routes').router;
 const event_routes = require('./api/routes/event_routes').router;
+const bubbles_db = require('./api/models/bubbles_db');
 
-logger.info("starting router")
+log.info("starting router")
 const router = express.Router();
-logger.silly("after router")
+log.silly("after router")
 apiServer.locals = {};
 apiServer.locals.config = require('./config/locals.js');
-logger.log('silly',"after locals")
+log.log('silly',"after locals")
 apiServer.locals.units = require('./api/services/formatted_units.js');
 
 // view engine setup
@@ -106,13 +131,14 @@ apiServer.use(function (err, req, res, next) {
 //    res.render('error');
 });
 
-
+// Test the database connection
+bubbles_db.testConnection( function(err) { log.error("!!!!!!!!!!!!!!!!!! ", err); process.exit(1)})
 
 let listening = false
 
 const hostname = '0.0.0.0'
 let runningServer = apiServer.listen(ports.api_server_port, hostname, () => {
-    logger.log('info',`API server listening on ${hostname} ${ports.api_server_port}.`)
+    log.log('info',`API server listening on ${hostname} ${ports.api_server_port}.`)
     listening = true
 });
 
@@ -120,10 +146,10 @@ function close() {
     let ret
     runningServer.close( function(err) {
         if (typeof err !== 'undefined') {
-            logger.error('close error! ' + err)
+            log.error('close error! ' + err)
             ret = err
         } else {
-            logger.info('server closed')
+            log.info('server closed')
         }
     })
     return(ret);

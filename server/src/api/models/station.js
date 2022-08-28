@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+const log = require("../../bubbles_logger").log
+
 const {sql} = require('@databases/pg');
 const stage = require('./stage')
 const device = require('./device')
@@ -11,28 +36,20 @@ async function getConfigBySite(siteid) {
     result.stations = await getStationConfigsBySite(siteid)
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
-        result.controller_api_port = result.stations[i].controller_api_port
-        result.controller_hostname = result.stations[i].controller_hostname
-        delete result.stations[i].controller_api_port
-        delete result.stations[i].controller_hostname
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
     }
-    console.log("\n\n\n"+JSON.stringify(result))
+    log.info("\n\n\n"+JSON.stringify(result))
     return( result )
 }
 
 async function getConfigByUser(uid) {
-    console.log("getConfigByUser "+uid)
+    log.info("getConfigByUser "+uid)
     const results = await db.query(sql`SELECT userid, firstname, lastname, email, username, created, deleted, timezone, provisioned, mobilenumber FROM public.user where userid=${uid}`);
     let result = results[0]
     result.stations = await getStationConfigsByUser(uid)
-    console.log("results = " + JSON.stringify(results))
+    log.info("results = " + JSON.stringify(results))
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
-        result.controller_api_port = result.stations[i].controller_api_port
-        result.controller_hostname = result.stations[i].controller_hostname
-        delete result.stations[i].controller_api_port
-        delete result.stations[i].controller_hostname
 
         result.stations[i].tamper = {xmove: result.stations[i].tamper_xmove, ymove: result.stations[i].tamper_ymove, zmove: result.stations[i].tamper_zmove}
         delete result.stations[i].tamper_xmove
@@ -42,9 +59,22 @@ async function getConfigByUser(uid) {
         result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
         result.siteid = 1
         result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
+        result.stations[i].dispensers = await getDispensersForStation(result.stations[i].stationid)
+        for( let j = 0; j < result.stations[i].edge_devices.length; j++ ) {
+            result.stations[i].edge_devices[j].time_between_pictures_in_seconds = result.stations[i].time_between_pictures_in_seconds
+            result.stations[i].edge_devices[j].time_between_sensor_polling_in_seconds = result.stations[i].time_between_sensor_polling_in_seconds
+        }
     }
-    console.log("\n\n\n"+JSON.stringify(result))
+
+    log.info("getConfigByUser returns "+JSON.stringify(result))
     return( result )
+}
+
+async function getDispensersForStation(stationid) {
+    const results = await db.query(
+        sql`SELECT * from dispenser d join additive a on d.currently_loaded_additiveid = a.additiveid where stationid_station=${stationid}`
+    );
+    return( results )
 }
 
 async function getAutomationSettings(stationid) {
@@ -52,7 +82,7 @@ async function getAutomationSettings(stationid) {
         sql`
             SELECT * from automationsettings where stationid_station = ${stationid}
             `)
-    console.log("\n\n\n"+JSON.stringify(results[0]))
+    log.info("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )
 
 }
@@ -60,9 +90,9 @@ async function getAutomationSettings(stationid) {
 async function getEvents(stationid, count) {
     const results = await db.query(
         sql`
-            SELECT * from events where stationid_station = ${stationid}
+            SELECT * from event where stationid_station = ${stationid}
             `)
-    console.log("\n\n\n"+JSON.stringify(results[0]))
+    log.info("\n\n\n"+JSON.stringify(results[0]))
     return( results[0] )
 
 }
@@ -70,12 +100,12 @@ async function getEvents(stationid, count) {
 async function getStationConfigsBySite(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, station_name, location, stationid, controller_hostname, controller_api_port, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, station_name, location, stationid, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control,
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
                                    coalesce(
                                            (
                                                SELECT array_to_json(array_agg(row_to_json(x)))
@@ -135,19 +165,19 @@ async function getStationConfigsBySite(siteid) {
             WHERE i.siteid = ${siteid}`
     );
     let site = { siteid: siteid, sitename: "blah", stations: results }
-    console.log("\n\n\n"+JSON.stringify(site))
+    log.info("\n\n\n"+JSON.stringify(site))
     return( site )
 }
 
 async function getStationConfigsByUser(uid) {
     const results = await db.query(
         sql`
-            SELECT stationid, controller_hostname, controller_api_port, tamper_xmove, tamper_ymove, tamper_zmove, current_stage,
+            SELECT stationid, tamper_xmove, tamper_ymove, tamper_zmove, current_stage,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external,station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, 
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
                                    coalesce(
                                            (
                                                SELECT array_to_json(array_agg(row_to_json(x)))
@@ -207,7 +237,7 @@ async function getStationConfigsByUser(uid) {
             WHERE u.userid=${uid}
   `,
     );
-    console.log("\n\n\n"+JSON.stringify(results))
+    log.info("\n\n\n"+JSON.stringify(results))
     if( results.length > 0 && typeof results[0].edge_devices !== 'undefined') {
         for (let i = 0; i < results[0].edge_devices.length; i++) {
             results[0].edge_devices[i].camera = {
@@ -224,15 +254,15 @@ async function getStationConfigsByUser(uid) {
 }
 
 async function addStation(name, siteid) {
-    //    console.log(JSON.stringify(body))
+    //    log.info(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
         await pool.query("insert into station (station_name, siteid_site) values ($1,$2) RETURNING *",
             [name,siteid], (error, results) => {
                 if (error) {
-                    console.log("addStation error " + error)
+                    log.info("addStation error " + error)
                     reject(error)
                 } else {
-                    console.log("new station " + JSON.stringify(results.rows[0]))
+                    log.info("new station " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, message: "A new stationid has been added :" + results.rows[0].stationid})
                 }
             })
@@ -240,15 +270,15 @@ async function addStation(name, siteid) {
 }
 
 async function updateStation(stationid, name) {
-    //    console.log(JSON.stringify(body))
+    //    log.info(JSON.stringify(body))
     return new Promise(async function(resolve, reject) {
         await pool.query("update station set station_name = $1 where stationid = $2 RETURNING *",
             [name,stationid], (error, results) => {
                 if (error) {
-                    console.log("updateStation error " + error)
+                    log.info("updateStation error " + error)
                     reject(error)
                 } else {
-                    console.log("updateStation " + JSON.stringify(results.rows[0]))
+                    log.info("updateStation " + JSON.stringify(results.rows[0]))
                     resolve({stationid: results.rows[0].stationid, message: "Station has been updated :" + results.rows[0].stationid})
                 }
             })
@@ -261,10 +291,10 @@ async function deleteStation(stationid) {
         await pool.query("delete from station where stationid = $1 RETURNING *",
             [stationid], (error, results) => {
                 if (error) {
-                    console.log("deleteStation error " + error)
+                    log.info("deleteStation error " + error)
                     reject(error)
                 } else {
-                    console.log("deleted station " + results.rows[0])
+                    log.info("deleted station " + results.rows[0])
                     resolve({stationid: results.rows[0].stationid, message: "Station has been deleted :" + results.rows[0].stationid})
                 }
             })
@@ -272,9 +302,9 @@ async function deleteStation(stationid) {
 }
 
 async function getStationsForSite(siteid) {
-    console.log("getStationsForSite")
+    log.info("getStationsForSite")
     return new Promise(async function (resolve, reject) {
-        console.log("getSite db query")
+        log.info("getSite db query")
         const results = await db.query(sql`SELECT * from station where siteid_site=${siteid}`);
         for( let i = 0; i < results.length; i++) {
             results[i].attached_devices = await device.getDevicesByStationId(results[i].stationid)

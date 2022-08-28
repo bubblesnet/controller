@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
+/*
+ * Copyright (c) John Rodley 2022.
+ * SPDX-FileCopyrightText:  John Rodley 2022.
+ * SPDX-License-Identifier: MIT
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the
+ * Software without restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+ * and to permit persons to whom the Software is furnished to do so, subject to the
+ * following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+import React from 'react';
 
 import { Grid,Image, Box, RangeInput } from 'grommet';
 import thermometer from '../../images/thermometer-icon.png'
 import './stagesTab.css';
 import '../../Palette.css';
 
+// copyright and license inspection - no issues 4/13/22
 
 function RenderWaterTemperatureSelector(props) {
     function setValue(value) {
         let x = props.automation_setting;
-        x.target_temperature=value;
+        x.target_water_temperature=value;
         props.setAutomationSettingFromChild(x)
     }
-    const onChange = event => setValue(event.target.value);
+    const changeTarget = event => setValue(event.target.value);
     const units = props.display_settings.temperature_units;
-    const min = props.automation_setting.temperature_min;
-    const max = props.automation_setting.temperature_max;
+    const min = props.automation_setting.water_temperature_min;
+    const max = props.automation_setting.water_temperature_max;
 
-    const target_temperature = props.automation_setting.target_temperature
+    const target_water_temperature = props.automation_setting.target_water_temperature
 
     return (
             <Grid
@@ -49,13 +73,13 @@ function RenderWaterTemperatureSelector(props) {
                             min={min}
                             max={max}
                             step={1}
-                            value={target_temperature}
-                            onChange={onChange}
+                            value={target_water_temperature}
+                            onChange={changeTarget}
                         />
                 </Box>
                 <Box gridArea="max" justify={"center"}>{max}{units}</Box>
                 <Box gridArea="value" justify={"center"} align="center">
-                    {target_temperature}{units}
+                    {target_water_temperature}{units}
                 </Box>
             </Grid>
    );
