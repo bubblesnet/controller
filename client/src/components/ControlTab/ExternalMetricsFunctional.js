@@ -32,16 +32,15 @@ import sprintf from 'sprintf-js';
 
 function RenderExternalMetrics (props) {
     let value = ""
-    if( typeof(props.sensor_readings.light_external) != 'undefined' ) {
+    let light_sensor = <></>
+    if( props.station.light_sensor_external === true && typeof(props.sensor_readings.light_external) != 'undefined' ) {
         value = sprintf.sprintf("%.1f", props.sensor_readings.light_external)
+        light_sensor = <div><div id={"sun-moon-icon-holder"}/><div className={"value-holder-light-external"}>{value} lux</div></div>
     }
 
     let ret =
         <>
-            <div>
-                <div id={"sun-moon-icon-holder"}/>
-                <div className={"value-holder-light-external"}>{value} lux</div>
-            </div>
+            {light_sensor}
             <div id="airtempexternal-holder">
                 <RenderThermometer exists={props.station.thermometer_external}
                                    display_settings={props.display_settings}
@@ -50,7 +49,8 @@ function RenderExternalMetrics (props) {
                                    direction={props.sensor_readings.temp_air_external_direction}/>
             </div>
             <div id="humidityexternal-text-holder">
-                <RenderHygrometer prefix={"external"} exists="true"
+                <RenderHygrometer prefix={"external"}
+                                  exists={props.station.humidity_sensor_external}
                                   display_settings={props.display_settings}
                                   currentHumidity={props.sensor_readings.humidity_external}
                                   units={props.display_settings.humidity_units}
