@@ -47,11 +47,8 @@ function RenderVOC (props) {
         <div className={"value-holder-co2-voc"} >
             VOC {value} {props.units}
         </div>
+        <div className={directionClassName} />
     </>
-
-    if(props.exists === false ) {
-        ret = <></>
-    }
 
     return (ret);
 }

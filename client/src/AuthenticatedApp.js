@@ -23,11 +23,22 @@
 
 import React, {useState, useMemo, useRef, useEffect} from 'react';
 import {Tabs, Tab} from "rendition";
+import { Button, Grid} from 'grommet'
+import Header from "./components/Header"
+import RenderControlTab from "./components/ControlTab/ControlTabFunctional";
+import RenderStatusTab from "./components/StatusTab/StatusTabFunctional";
+import RenderEvents from "./components/EventsTab/EventsFunctional";
+import RenderDisplaySettings from "./components/DisplaySettingsTab/DisplaySettingsTabFunctional"
+import RenderSettings from "./components/StationSettingsTab/StationSettingsTabFunctional"
+import RenderDeviceMap from "./components/DeviceMapTab/DeviceMapTabFunctional"
+import RenderStageTab from "./components/StageTabs/StageTabFunctional"
+import RenderCameraTab from "./components/CameraTab/CameraTabFunctional"
 import RenderCalibration from "./components/CalibrationTab/CalibrationTabFunctional"
 import RenderNutes from "./components/NutesTab/NutesTabFunctional"
 import initial_theme from './InitialTheme.json'
 import {deepMerge} from "grommet/utils"
 import {grommet} from 'grommet/themes'
+
 import {TextField,Dialog,DialogTitle,DialogContent,DialogContentText,DialogActions} from '@material-ui/core'
 
 import sprintf from 'sprintf-js';
@@ -60,8 +71,6 @@ const SWITCH_COMMAND="switch"
 const STAGE_COMMAND="stage"
 const PICTURE_COMMAND="picture"
 const DISPENSE_COMMAND="dispense"
-
-let because = "don't know"
 
 let because = "don't know"
 

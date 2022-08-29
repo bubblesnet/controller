@@ -32,22 +32,25 @@ function RenderCO2 (props) {
     let ret = <></>
 
     if(props.exists !== true ) {
+        console.log("CO2 doesn't exist!!! " + props.exists)
         return( ret )
     }
 
-    if(props.direction ==="up") {
+    if(props.direction === "up") {
         directionClassName="co2arrowup-icon"
     }
-    if(props.direction==="down") {
+    if(props.direction === "down") {
         directionClassName="co2arrowdown-icon"
     }
     let value = sprintf.sprintf("%.0f", props.value)
-//    console.log("value rendering as " + value)
+    console.log("CO2 value rendering as " + value)
      ret = <>
         <div className={"value-holder-co2-voc"} >
             CO2 {value} {props.units}
         </div>
-    </>
+         <div className={directionClassName} />
+
+     </>
 
     return (ret);
 }

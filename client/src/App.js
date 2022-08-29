@@ -285,7 +285,7 @@ function App(props) {
                 stationindex={selectedStationIndex}
                 initial_station_state={initial_station_state}
                 initial_switch_state={initial_switch_state}
-               initial_sensor_readings={initial_sensor_readings}
+                initial_sensor_readings={initial_sensor_readings}
                 nodeEnv={process.env.REACT_APP_NODE_ENV}
                 site={site}
                 automation_settings={site.stations[selectedStationIndex].automation_settings}
