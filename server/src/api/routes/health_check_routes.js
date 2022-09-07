@@ -39,7 +39,7 @@ const log = require("../../bubbles_logger").log
 function getStatus(req,res,next) {
     log.info("asyncstatusbyuserdevice user: " + req.params.userid + " device: " + req.params.deviceid);
     res.json({"status": "ok" });
-
+    log.info("done sending json")
 }
 
 router.get("/", function (req, res, next) {
