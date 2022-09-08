@@ -114,6 +114,36 @@ export async function getSite (host, port, siteid) {
         }
     })
 }
+
+/**
+ * Get the crop of the station specified by stationid from the API.
+ *
+ * @param host      hostname or ip of the controller API server
+ * @param port      port number of the controller API server
+ * @param stationid    ID of the station we want
+ * @returns {Promise<unknown>}  Response status (200 ...) from the API call
+ */
+export async function getCrop (host, port, stationid) {
+    console.log("getCrop calling out to api")
+
+    return new Promise( async (resolve, reject) => {
+        let url = 'http://'+host+':'+port+'/api/station/'+stationid+'/crop'
+        console.log('getCrop calling '+url)
+        const response = await fetch(url);
+//            const response = await fetch('http://'+host+':'+port+'/api/config/90000009/70000007');
+        log.trace("getCrop response received")
+        if(response.ok) {
+//            log.trace("getCrop awaiting site")
+            let x = await response.json();
+//            log.trace("getCrop Got " + JSON.stringify(x));
+            resolve(x)
+        } else {
+            log.trace("getCrop error " + response.status)
+            reject( response.status )
+        }
+    })
+}
+
 // http://192.168.21.237:3003/api/station/1/events/
 // http://192.168.21.237:3003/api/station/1/events
 export async function getLastNEvents (host, port, stationid, count) {

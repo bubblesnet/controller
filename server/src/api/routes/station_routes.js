@@ -34,6 +34,7 @@ const stage = require('../models/stage')
 
 router.use(bodyParser.urlencoded({ extended: true }));
 const DeviceModel = require('../models/device');
+const crop = require('../models/crop')
 
 // Add a new station
 router.put('/site/:siteid/:station', function (req, res) {
@@ -57,6 +58,7 @@ function getStationsBySiteId( req, res ) {
     });
 }
 
+
 //
 router.post('/:stationid/stage', function (req, res) {
     let x = req.body
@@ -78,6 +80,20 @@ async function getLastNEvents(req,res,next) {
 //    console.log("got x = " + JSON.stringify(x))
     res.json(x);
 }
+
+async function getCurrentCrop(req,res,next) {
+    log.info("get events : " + req.params.stationid);
+    let exclude_measurement = true
+    let x = await crop.getCurrentByStation(req.params.stationid).catch((err) =>
+    { log.error("caught err "+err)})
+    res.json(x);
+}
+
+router.get('/:stationid/crop', function (req, res, next) {
+    log.info("get stationid/crop "+req.params.stationid)
+    let x = req.body
+    getCurrentCrop(req, res, next )
+});
 
 router.get('/:stationid/events', function (req, res, next) {
     log.info("get stationid/events "+req.params.stationid)

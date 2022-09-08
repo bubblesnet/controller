@@ -848,11 +848,17 @@ function AuthenticatedApp (props) {
     }
     log.info("AuthenticatedApp display_settings.co2_units = " + props.display_settings.co2_units)
 
+    let millis_in_a_week = 1000 * 60 * 60 * 24 *7
+    let elapsed_millis = moment.now() - props.site.stations[props.stationindex].crop.startdatetime_millis
+    let CropWeek = 1+Math.floor(elapsed_millis/millis_in_a_week)
+
     return <div className="App">
-        <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name} setNodeEnv={setEnvironment}
+        <Header tilt={tilt.currently_tilted} siteName={props.site.stations[props.stationindex].site_name}
+                setNodeEnv={setEnvironment}
                 station={site.stations[currentStationIndex]} nodeEnv={nodeEnv} readyState={readyState}
                 handleClickSendMessage={handleClickSendMessage}
                 logout={props.logout}
+                CropWeek={CropWeek}
                     />
         <Dialog open={open} onClose={handleToClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Add a station</DialogTitle>

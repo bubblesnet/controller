@@ -30,7 +30,7 @@ import {ReadyState} from "react-use-websocket";
 // import {Table, TableRow, TableCell} from 'grommet'
 import log from "roarr";
 // import log from "./bubbles_logger"
-
+import {Text} from 'grommet'
 // import '../logimplementation'
 import {Button} from "grommet";
 import {get_server_ports_for_environment} from "../util";
@@ -41,6 +41,11 @@ function Header (props) {
     log.trace("render Header with props "+JSON.stringify(props) )
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
+
+    let CropWeek = -1
+
+    console.log("xxxx " + JSON.stringify(props.station))
+
 //    log.trace("after useState")
     let setEnvironment = (value) => {
         log.trace("Header.setEnvironment(" + value + ")")
@@ -76,6 +81,7 @@ function Header (props) {
             </header>
                 <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                                handleClick={setEnvironment}/>
+            <Text >Crop Week {props.CropWeek} </Text>
             <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
             <button onClick={props.handleClickSendMessage} >{"API server"}</button>
             <button onClick={props.handleClickSendMessage} >{"ActiveMQ"}</button>
