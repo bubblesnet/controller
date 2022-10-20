@@ -26,74 +26,6 @@ const db = require("./database");
 const {sql} = require("@databases/pg");
 const device = require("./device");
 
-
-stage_schedules =  [
-    {
-        "name": "idle",
-        "hours_of_light": 0,
-        "environmental_targets": {
-            "humidity": 0,
-            "temperature": 0,
-            "water_temperature": 0
-        }
-    },
-    {
-        "name": "germination",
-        "hours_of_light": 0,
-        "environmental_targets": {
-            "humidity": 30,
-            "temperature": 81,
-            "water_temperature": 68
-        }
-    },
-    {
-        "name": "seedling",
-        "hours_of_light": 18,
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 61
-       }
-    },
-    {
-        "name": "vegetative",
-        "hours_of_light": 12,
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 61
-        }
-    },
-    {
-        "name": "bloom",
-        "hours_of_light": 12,
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 70,
-            "water_temperature": 70
-        }
-    },
-    {
-        "name": "dry",
-        "hours_of_light": 0,
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 0
-        }
-    },
-    {
-        "name": "cure",
-        "hours_of_light": 0,
-        "environmental_targets": {
-            "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 0
-        }
-    }
-];
-
-
 async function getAutomationStage( stationid, stage) {
         log.info("getAutomationStage "+stationid+"/"+stage)
         return new Promise(async function (resolve, reject) {
@@ -123,7 +55,6 @@ async function getStageSchedules(stationid) {
             log.info("Adding sked " + JSON.stringify(sked))
         }
         resolve(skeds)
-//        resolve(stage_schedules)
     })
 }
 
