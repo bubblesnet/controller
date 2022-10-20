@@ -23,7 +23,7 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-cd server
+cd /server
 
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime

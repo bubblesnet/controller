@@ -26,7 +26,7 @@
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
-cd server
+cd /server
 
 # Start the third process
 node src/ws-server.js &

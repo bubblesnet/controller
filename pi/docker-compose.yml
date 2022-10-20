@@ -124,6 +124,7 @@ services:
     restart: always
     depends_on:
       - websocket
+      - api
     ports:
       - "80:3004"
       - "81:3001"

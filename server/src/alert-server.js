@@ -21,6 +21,25 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/*
+  influxdb:
+    build: influxdb
+    privileged: true
+    restart: always
+    ports:
+      - "2003:2003"
+      - "4242:4242"
+      - "8086:8086"
+      - "8088:8088"
+      - "8089:8089"
+      - "25826:25826"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/influxdb_shared'
+
+ */
 global.__root   = __dirname + '/';
 
 const log = require("./bubbles_logger").log

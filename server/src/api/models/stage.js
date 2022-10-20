@@ -26,7 +26,7 @@ const db = require("./database");
 const {sql} = require("@databases/pg");
 const device = require("./device");
 
-
+/*
 stage_schedules =  [
     {
         "name": "idle",
@@ -69,8 +69,8 @@ stage_schedules =  [
         "hours_of_light": 12,
         "environmental_targets": {
             "humidity": 60,
-            "temperature": 80,
-            "water_temperature": 61
+            "temperature": 70,
+            "water_temperature": 70
         }
     },
     {
@@ -92,6 +92,7 @@ stage_schedules =  [
         }
     }
 ];
+*/
 
 async function getAutomationStage( stationid, stage) {
         log.info("getAutomationStage "+stationid+"/"+stage)
@@ -102,8 +103,27 @@ async function getAutomationStage( stationid, stage) {
         })
 }
 
-function getStageSchedules(stationid) {
-    return stage_schedules
+async function getStageSchedules(stationid) {
+    return new Promise(async function (resolve, reject) {
+        const results = await db.query(sql`SELECT * from automationsettings where stationid_Station=${stationid}`);
+        log.info("getAutomationStage returning "+JSON.stringify(results))
+        let skeds = []
+        for( let i = 0; i < results.length; i++ ){
+            let sked = {
+                name: results[i].stage_name,
+                hours_of_light: results[i].hours_of_light,
+                light_on_start_hour: results[i].light_on_start_hour,
+                environmental_targets: {
+                    humidity: results[i].target_humidity,
+                    temperature: results[i].target_temperature,
+                    water_temperature: results[i].target_water_temperature
+                }
+            }
+
+            skeds.push( sked )
+        }
+        resolve(skeds)
+    })
 }
 
 module.exports = {

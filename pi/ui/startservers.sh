@@ -30,6 +30,7 @@ sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 cd /
 ROARR_LOG=true; serve --listen tcp://0.0.0.0:$REACT_APP_UI_PORT -s build &
 
+
 # Wait for any process to exit
 wait -n
 
