@@ -26,7 +26,7 @@ const db = require("./database");
 const {sql} = require("@databases/pg");
 const device = require("./device");
 
-/*
+
 stage_schedules =  [
     {
         "name": "idle",
@@ -92,7 +92,7 @@ stage_schedules =  [
         }
     }
 ];
-*/
+
 
 async function getAutomationStage( stationid, stage) {
         log.info("getAutomationStage "+stationid+"/"+stage)
@@ -106,7 +106,7 @@ async function getAutomationStage( stationid, stage) {
 async function getStageSchedules(stationid) {
     return new Promise(async function (resolve, reject) {
         const results = await db.query(sql`SELECT * from automationsettings where stationid_Station=${stationid}`);
-        log.info("getAutomationStage returning "+JSON.stringify(results))
+        log.info("getStageSchedules returning "+JSON.stringify(results))
         let skeds = []
         for( let i = 0; i < results.length; i++ ){
             let sked = {
@@ -119,10 +119,11 @@ async function getStageSchedules(stationid) {
                     water_temperature: results[i].target_water_temperature
                 }
             }
-
             skeds.push( sked )
+            log.info("Adding sked " + JSON.stringify(sked))
         }
         resolve(skeds)
+//        resolve(stage_schedules)
     })
 }
 
