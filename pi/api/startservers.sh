@@ -92,19 +92,46 @@ then
   sudo mkdir -p /mnt/backups/logs/queue/${now}
   sudo mkdir -p /mnt/backups/logs/ui/${now}
   sudo mkdir -p /mnt/backups/logs/websocket/${now}
+  sudo mkdir -p $POSTGRESQL_SHARED_DIRECTORY/logs/queue/${now}
+  sudo mkdir -p $POSTGRESQL_SHARED_DIRECTORY/logs/ui/${now}
+  sudo mkdir -p $POSTGRESQL_SHARED_DIRECTORY/logs/websocket/${now}
+
+  echo Moving logs to backup
+  sudo mv /server/src/bubblesnet.log /mnt/backups/logs/api/${now}
+  sudo mv $LOGS_SHARED_DIRECTORY/logs/queue /mnt/backups/logs/queue/${now}
+  sudo mv $LOGS_SHARED_DIRECTORY/logs/ui /mnt/backups/logs/ui/${now}
+  sudo mv $LOGS_SHARED_DIRECTORY/logs/websocket /mnt/backups/logs/websocket/${now}
 
   echo Moving pictures to backup drive
   sudo mv /server/src/public/*.jpg /mnt/backups/pictures
+
   echo Backing database "$POSTGRESQL_APPLICATION_DBNAME" up to mounted backup drive
+  echo "****************************************"
+  echo "****                            ********"
+  echo "****                             *******"
+  echo "**** DATABASE BACKING UP NOW        ****"
 
   echo *:*:*:*:$POSTGRESQL_POSTGRES_PASSWORD > ~/.pgpass
   export PGPASSFILE=~/.pgpass
   chmod 600 ~/.pgpass
   mkdir /mnt/backups/database/${now}
   sudo pg_dump --no-password -h "$POSTGRESQL_HOST" -p 5432 -U postgres "$POSTGRESQL_APPLICATION_DBNAME" > /mnt/backups/database/${now}/"$POSTGRESQL_APPLICATION_DBNAME".bak 2>> /mnt/backups/database/${now}/dbname.bak.log
+  echo "****                             *******"
+  echo "****************************************"
   cat /mnt/backups/database/${now}/dbname.bak.log
+
 else
   echo "/dev/sda1 doesn't exist, not mounting"
+  echo "****************************************"
+  echo "****************************************"
+  echo "****                            ********"
+  echo "**** DB BACKUPS NOT SAVED! *************"
+  echo "**** LOGS AND PICTURES NOT SAVED !! ****"
+  echo "****                             *******"
+  echo "****************************************"
+  echo "****************************************"
+  echo "****************************************"
+  echo "****************************************"
 fi
 
 if [ "$BALENA_DEVICE_TYPE" = "coral" ]

@@ -26,6 +26,11 @@
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
+echo Backing up log files
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/websocket/${now}
+sudo mv /server/src/*.log $LOGS_SHARED_DIRECTORY/logs/websocket/${now}
+
 cd /server
 
 # Start the third process

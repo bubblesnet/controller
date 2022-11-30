@@ -4,7 +4,7 @@ volumes:
 services:
 
   wifi-connect:
-    image: bh.cr/balenablocks/wifi-connect-aarch64
+    image: bh.cr/balenalabs/wifi-connect-aarch64
     restart: always
     ports:
       - "81:81"
@@ -30,6 +30,7 @@ services:
     volumes:
       - 'resin-data:/config'
       - 'resin-data:/activemq_conf'
+      - 'resin-data:/logs_shared'
 
   database:
     image: bh.cr/g_john_rodley1/postgresql-11-block:armv7hf
@@ -43,26 +44,7 @@ services:
     volumes:
       - 'resin-data:/postgresql_shared'
       - 'resin-data:/data'
-
-  alert:
-    build: alert
-    privileged: true
-    restart: always
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/config'
-
-  notify:
-    build: notify
-    privileged: true
-    restart: always
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/config'
+      - 'resin-data:/logs_shared'
 
   api:
     build: api
@@ -82,6 +64,7 @@ services:
     volumes:
       - 'resin-data:/config'
       - 'resin-data:/postgresql_shared'
+      - 'resin-data:/logs_shared'
 
   queue:
     build: queue
@@ -96,7 +79,7 @@ services:
       io.balena.features.dbus: '1'
     volumes:
       - 'resin-data:/config'
-
+      - 'resin-data:/logs_shared'
 
   websocket:
     build: websocket
@@ -117,6 +100,7 @@ services:
       io.balena.features.dbus: '1'
     volumes:
       - 'resin-data:/config'
+      - 'resin-data:/logs_shared'
 
   ui:
     build: ui
@@ -136,4 +120,5 @@ services:
       io.balena.features.dbus: '1'
     volumes:
       - 'resin-data:/config'
+      - 'resin-data:/logs_shared'
 
