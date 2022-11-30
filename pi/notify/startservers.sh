@@ -28,6 +28,11 @@ cd server
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
+echo Backing up log files
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/notify/${now}
+sudo mv /server/src/*.log $LOGS_SHARED_DIRECTORY/logs/notify/${now}
+
 # Start the second process
 node src/notify-server.js &
 

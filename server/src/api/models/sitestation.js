@@ -185,7 +185,7 @@ async function getConfigByStation(stationid, deviceid) {
                     delete ret.light_vegetative
                     delete ret.light_germinate
 
-                    ret.stage_schedules = stage.getStageSchedules(stationid)
+                    ret.stage_schedules = await stage.getStageSchedules(stationid)
                     resolve(ret);
                 }
         }})

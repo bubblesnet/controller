@@ -1,6 +1,10 @@
 #FROM balenalib/%%BALENA_MACHINE_NAME%%-node:15-buster-run
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
 
+# Dockerfile boilerplate - certs and timezone
+COPY ca-certificates.crt /etc/ssl/certs/
+RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+
 # RUN apt-get update
 RUN install_packages vim postgresql-client inetutils-telnet
 
