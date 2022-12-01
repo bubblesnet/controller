@@ -17,13 +17,25 @@ This repo is one of 6 repos that make up the BubblesNet project. If you've arriv
 the side door (direct search), then you probably want to start at the [documentation repository](https://github.com/bubblesnet/documentation) for this
 project. You can not understand this repo without seeing how it interacts with the other repos.
 
+## Repository Structure
 The controller is a control, and data collection and analysis service designed to 
 work with the bubblesnet edge-device.  It consists of:
 
-Client - a React application for controlling one or more edge devices
+[Client](client) - a React application for controlling one or more edge devices
 and viewing the data from those devices.
 
-Server - a set of three NodeJS servers (api, websocket, queue) that serve both the controller React application AND 
-the edge devices manipulating the physical environment and queueing data for storage.
+[Server](server) - a set of three NodeJS servers (api, websocket, queue) that serve both the controller React application AND 
+the edge devices manipulating the physical environment and queueing data for storage. Any of the three servers can 
+be run from the server directory by calling the correct main for [api](server/src/api-server.js), [queue](server/src/queue-server.js) 
+or [websocket](server/src/websocket-server.js).
+
+The [pi directory](pi) contains the files necessary for building and deploying an instance of the controller to 
+Balena.  The push scripts take care of building, packaging and deploying the built image to the correct balena fleet.
+
+## System Messaging Structure
+
+The system uses a common JSON messaging structure throughout.  See [here](Messsaging.md) for details.
+
+
 
 
