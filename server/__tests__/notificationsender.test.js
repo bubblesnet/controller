@@ -211,6 +211,7 @@ describe("getNewAlertConditions",   () => {
     })
    });
 
+/**
 describe("notif getNewAlertConditions",   () => {
     console.log("notif getNewAlertConditions")
     it('notif getNewAlertConditions', async function () {
@@ -245,7 +246,7 @@ describe("notif getNewAlertConditions",   () => {
 
 
 });
-
+*/
 
 
 
