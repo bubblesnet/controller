@@ -83,7 +83,7 @@ before(async () => {
      good_eventid = x.eventid;
 })
 
-/**
+
 describe("good alertconditions", () => {
     console.log("create alertcondition")
 
@@ -195,7 +195,7 @@ describe("getNewAlertConditions",   () => {
         expect( process.env.NODE_ENV ).not.to.be.undefined
         await test_utils.setupForThisFile(true,true)
         await test_utils.createCompleteSetOfAlertableEvents(good_userid, good_deviceid);
-
+/*
         let b = await alertcondition.getNewAlertConditions()
             .then( function(result) {
                 console.log("getNewAlertConditions = " + JSON.stringify(result))
@@ -207,6 +207,7 @@ describe("getNewAlertConditions",   () => {
                 expect(err).to.be.undefined
             })
 
+ */
     })
    });
 
@@ -245,7 +246,7 @@ describe("notif getNewAlertConditions",   () => {
 
 
 });
-*/
+
 
 
 
