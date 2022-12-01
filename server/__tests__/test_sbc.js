@@ -5,8 +5,8 @@ const expect = require('chai').expect;
 
 
 describe("Testing sbc_model", () => {
-    it('Testing sbc_model', () => {
-        return sbc_model.getSbcs().then(data => {
+    it('Testing sbc_model', async () => {
+        return await sbc_model.getSbcs().then(data => {
             sbc_model.endPool()
             expect(data.length > 0).to.eq(true);
         });

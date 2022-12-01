@@ -415,6 +415,7 @@ function sendFakeMeasurement(singleCall) {
 module.exports = {
     sendAllFakeMeasurements: sendAllFakeMeasurements,
     getFakeStatus: getFakeStatus,
+    getFakeMeasurement: getFakeMeasurement,
     sendTextToAPI,
     sendFakeMeasurement,
     sendMeasurement,
