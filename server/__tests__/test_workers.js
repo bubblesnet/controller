@@ -1,4 +1,5 @@
-process.env.ICEBREAKER_DB = "icebreaker_dev"
+/** OBSOLETE
+ process.env.ICEBREAKER_DB = "icebreaker_dev"
 
 const devicestatus_model = require("../src/devicestatus_model")
 const expect = require('chai').expect;
@@ -11,3 +12,4 @@ describe("Testing devicestatus_model", () => {
         expect(data.length).gt(0);
         });
     });
+ */
