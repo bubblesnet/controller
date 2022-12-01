@@ -5,10 +5,9 @@ const expect = require('chai').expect;
 
 
 describe("Testing devicestatus_model", () => {
-    it('Testing devicestatus_model', () => {
-        return devicestatus_model.getDeviceStatus().then(data => {
-            devicestatus_model.endPool()
-            expect(data.length > 0).to.eq(true);
+    it('Testing devicestatus_model', async () => {
+        let data = await devicestatus_model.getDeviceStatus()
+        devicestatus_model.endPool()
+        expect(data.length).gt(0);
         });
     });
-});
