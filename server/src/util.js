@@ -39,10 +39,10 @@ function get_config_file_for_environment(env) {
         case "production":
             return("/config/config.json")
             break;
-        case "CI":
+        case "ci":
             return("config_ci.json")
             break;
-        case "PI":
+        case "pi":
             return("config_pi.json")
             break;
         default:
