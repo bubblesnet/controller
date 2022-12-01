@@ -8,7 +8,7 @@ describe("Testing metrics", () => {
     test('Testing metrics', () => {
         return metrics_model.getAllMetrics().then(data => {
             metrics_model.endPool()
-            expect(data.length == 3);
+            expect(data.length).to.eq(3);
         });
     });
 });
