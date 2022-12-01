@@ -5,7 +5,7 @@ const expect = require('chai').expect;
 
 
 describe("Testing metrics", () => {
-    test('Testing metrics', () => {
+    it('Testing metrics', () => {
         return metrics_model.getAllMetrics().then(data => {
             metrics_model.endPool()
             expect(data.length).to.eq(3);
