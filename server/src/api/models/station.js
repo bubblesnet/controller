@@ -36,7 +36,7 @@ async function getConfigBySite(siteid) {
     result.stations = await getStationConfigsBySite(siteid)
     /// TODO: GET the stage schedules and site-level config into the SQL functions - this is a shortcut that guarantees a single global schedule
     for( let i = 0; i < result.stations.length; i++ ) {
-        result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
+        result.stations[i].stage_schedules = await stage.getStageSchedules(result.stations[i].stationid)
     }
     log.info("\n\n\n"+JSON.stringify(result))
     return( result )
@@ -56,7 +56,7 @@ async function getConfigByUser(uid) {
         delete result.stations[i].tamper_ymove
         delete result.stations[i].tamper_zmove
 
-        result.stations[i].stage_schedules = stage.getStageSchedules(result.stations[i].stationid)
+        result.stations[i].stage_schedules = await stage.getStageSchedules(result.stations[i].stationid)
         result.siteid = 1
         result.stations[i].automation_settings = await getAutomationSettings(result.stations[i].stationid)
         result.stations[i].dispensers = await getDispensersForStation(result.stations[i].stationid)

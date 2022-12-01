@@ -26,9 +26,15 @@
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
+echo Backing up log files
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/ui/${now}
+sudo mv /*.log $LOGS_SHARED_DIRECTORY/logs/ui/${now}
+
 # Start the ui process
 cd /
 ROARR_LOG=true; serve --listen tcp://0.0.0.0:$REACT_APP_UI_PORT -s build &
+
 
 # Wait for any process to exit
 wait -n

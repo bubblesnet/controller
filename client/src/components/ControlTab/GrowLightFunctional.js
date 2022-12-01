@@ -43,7 +43,7 @@ function RenderGrowLight (props) {
          empty_div_classname = "growlight-off"
          airtemp_holder_id = "airtemp-holder-night"
     }
-
+    console.log("props.station = " + JSON.stringify(props.station))
     ret =
         <div className={growlight_classname}>
             <div className="co2-holder">

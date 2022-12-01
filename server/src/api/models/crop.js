@@ -20,38 +20,34 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+const log = require("../../bubbles_logger").log
 
-/*
-  influxdb:
-    build: influxdb
-    privileged: true
-    restart: always
-    ports:
-      - "2003:2003"
-      - "4242:4242"
-      - "8086:8086"
-      - "8088:8088"
-      - "8089:8089"
-      - "25826:25826"
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/influxdb_shared'
+const locals = require("../../config/locals");
 
- */
-global.__root   = __dirname + '/';
+const server_db = require('./bubbles_db')
+const db = require("./database");
+const {sql} = require("@databases/pg");
+const stage = require("./stage");
+const pool = server_db.getPool()
 
-const log = require("./bubbles_logger").log
+const endPool = () => {
+    pool.end()
+}
 
-const wsu = require('./ws-server-utils')
-const util = require('./util')
-const asu = require('./alert-server-utils')
+async function getCurrentByStation(stationid) {
+    log.info("getCurrentByStation "+stationid)
+    let query = sql`SELECT * FROM crop c join plant p on p.cropid_crop=c.cropid join seed s on p.seedid_seed=s.seedid where c.stationid_station=1`
+    let results = await db.query(query);
+//    log.info("\n\n\n"+JSON.stringify(results))
+    let crop = {
+        cropid: results[0].cropid,
+        stationid_station: results[0].stationid_station,
+        startdatetime_millis: results[0].startdatetime_millis,
+        plants: results
+    }
+    return(crop)
+}
 
-// copyright and license inspection - no issues 4/13/22
-
-
-ports = util.get_server_ports_for_environment( process.env.NODE_ENV )
-
-// noinspection JSIgnoredPromiseFromCall
-x = wsu.serveUIWebSockets(ports.websocket_server_port, asu.alert_service_callback());
+module.exports = {
+    getCurrentByStation: getCurrentByStation
+}

@@ -29,7 +29,7 @@ import SetupApp from './SetupApp'
 
 import useToken from './useToken';
 import {useEffect, useState} from "react";
-import {getSite} from "./api/utils";
+import {getSite,getCrop} from "./api/utils";
 
 import util from "./util";
 
@@ -55,7 +55,9 @@ let necessary_environment = [
 ]
 function App(props) {
 
-    log.info("ENV = " + JSON.stringify(process.env))
+    console.log("ENV = " + JSON.stringify(process.env))
+    console.log("REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+    console.log("NODE_ENV = " + process.env.NODE_ENV)
 
         let initial_station_state = {
             station_settings: {
@@ -233,7 +235,8 @@ function App(props) {
         const fetchData = async () => {
             log.debug("selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
-            log.info("zzzzz = " + JSON.stringify(z))
+            z.stations[0].crop = await getCrop(servers.api_server_host, servers.api_server_port, 1)
+            console.log("zzzzz = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
@@ -285,7 +288,7 @@ function App(props) {
                 stationindex={selectedStationIndex}
                 initial_station_state={initial_station_state}
                 initial_switch_state={initial_switch_state}
-               initial_sensor_readings={initial_sensor_readings}
+                initial_sensor_readings={initial_sensor_readings}
                 nodeEnv={process.env.REACT_APP_NODE_ENV}
                 site={site}
                 automation_settings={site.stations[selectedStationIndex].automation_settings}
