@@ -27,8 +27,8 @@ jobs:
           - 5432:5432
     strategy:
       matrix:
-        node-version: [15.x, 10.x, 12.x, 14.x]
-        activemq-version: [5.16.4, 5.17.1]
+        node-version: [15.x, 10.x, 12.x, 14.x, 16.x]
+        activemq-version: [5.16.5, 5.17.2]
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
@@ -38,7 +38,7 @@ jobs:
       # Performs a clean installation of ActiveMQ
       - name: "Install ActiveMQ ${{matrix.activemq-version}}"
         run: |
-          sudo apt update -y -q > /dev/null 2> /dev/null
+          # SUDDENLY THIS ERRORS OUT sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           npm install >/dev/null 2> /dev/null
           wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
@@ -80,6 +80,14 @@ jobs:
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000027_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000028_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000029_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000030_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000031_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000032_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000033_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000034_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000035_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000036_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000037_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

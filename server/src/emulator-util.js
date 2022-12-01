@@ -26,19 +26,23 @@
 const util = require("./util")
 
 const axios = require('axios')
-const bubbles_queue = require("./api/models/bubbles_queue")
+let bubbles_queue = require("./api/models/bubbles_queue")
+
+if (typeof (bubbles_queue) === 'undefined' ) {
+    bubbles_queue = require("../api/models/bubbles_queue")
+}
 const {ph_units, co2_units, voc_units, pressure_units, light_units, humidity_units, directions, temperature_units, sensor_name, measurement_name, message_type, measurement_type, liquid_volume_units} = require("./types");
 let current_state = {}
 const log = require("./bubbles_logger").log
 
 function sendAllFakeMeasurements() {
     for( let i = 0; i < 15; i++ ) {
-        let z = getFakeMeasurement1(i)
+        let z = getFakeMeasurement(i)
         sendMeasurement(z)
     }
 }
 
-function getFakeMeasurement1(x) {
+function getFakeMeasurement(x) {
 
     let timestamp = Date.now()
     let l_value = util.getRandomInt(2000)
@@ -411,6 +415,7 @@ function sendFakeMeasurement(singleCall) {
 module.exports = {
     sendAllFakeMeasurements: sendAllFakeMeasurements,
     getFakeStatus: getFakeStatus,
+    getFakeMeasurement: getFakeMeasurement,
     sendTextToAPI,
     sendFakeMeasurement,
     sendMeasurement,
