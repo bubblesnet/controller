@@ -2,7 +2,8 @@
 
 
 [![codecov](https://codecov.io/gh/bubblesnet/controller/branch/develop/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
-![ci](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg)
+[![License](https://raw.githubusercontent.com/bubblesnet/documentation/9c881cf6437198cdab65f13562c5f679dcecaceb/images/bubblesnet.svg)](https://github.com/bubblesnet/documentation/LICENSE)
+
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
