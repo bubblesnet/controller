@@ -11,7 +11,7 @@
 [![Github all releases](https://img.shields.io/github/downloads/bubblesnet/controller/total.svg)](https://GitHub.com/bubblesnet/controller/releases/)
 
 
-![Build controller](https://github.com/bubblesnet/edge-device/workflows/BubblesNetCI/badge.svg?branch=develop)
+![Build controller](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg?branch=develop)
 
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bubblesnet&show_icons=true)
 
