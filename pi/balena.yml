@@ -21,9 +21,6 @@ assets:
       url: >-
         https://raw.githubusercontent.com/bubblesnet/controller/main/static/img/BubblesNetLogo.png
 data:
-  applicationConfigVariables:
-    - BALENA_HOST_CONFIG_gpu_mem: 128
-
   applicationEnvironmentVariables:
     - ACTIVEMQ_HOST: activemq
     - ACTIVEMQ_PORT: 61614
@@ -50,7 +47,6 @@ data:
     - POSTGRESQL_UNIX_USER: postgres
     - REACT_APP_NODE_ENV: PRODUCTION
     - VERBOSE: true
-
   defaultDeviceType: raspberry-pi
   supportedDeviceTypes:
     - raspberrypi4-64

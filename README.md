@@ -5,7 +5,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-![Build controller](https://github.com/bubblesnet/controller/workflows/BubblesNetCI/badge.svg?branch=develop)
+![Build controller](https://github.com/bubblesnet/controller/workflows/controller-ci/badge.svg?branch=develop)
 [![codecov](https://codecov.io/gh/bubblesnet/controller/branch/develop/graph/badge.svg?token=4ETBIJSIKZ)](https://codecov.io/gh/bubblesnet/controller)
 
 [![GitHub stars](https://img.shields.io/github/stars/bubblesnet/controller.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/bubblesnet/controller/)

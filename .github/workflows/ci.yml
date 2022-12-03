@@ -1,4 +1,4 @@
-name: BubblesNetCI
+name: controller-ci
 on: push
 
 jobs:
