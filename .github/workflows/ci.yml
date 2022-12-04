@@ -1,5 +1,11 @@
 name: controller-ci
-on: push
+on:
+  push:
+    branches:
+      - main
+      - develop
+  schedule:
+    - cron:  '30 16 * * *'
 
 jobs:
   # Label of the runner job
