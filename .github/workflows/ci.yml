@@ -1,5 +1,11 @@
 name: controller-ci
-on: push
+on:
+  push:
+    branches:
+      - main
+      - develop
+  schedule:
+    - cron:  '50 16 * * *'
 
 jobs:
   # Label of the runner job
@@ -28,7 +34,7 @@ jobs:
     strategy:
       matrix:
         node-version: [15.x, 10.x, 12.x, 14.x, 16.x]
-        activemq-version: [5.16.5, 5.17.2]
+        activemq-version: [5.16.5, 5.17.2, 5.17.3]
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
@@ -41,7 +47,7 @@ jobs:
           # SUDDENLY THIS ERRORS OUT sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           npm install >/dev/null 2> /dev/null
-          wget https://downloads.apache.org/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
+          wget https://archive.apache.org/dist/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz >/dev/null 2> /dev/null
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
