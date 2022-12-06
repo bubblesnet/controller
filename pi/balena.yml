@@ -3,8 +3,6 @@ description: >-
   Deep-water-culture hydroponics ... automated
 type: sw.application
 post-provisioning: >-
-  DO NOT USE THIS FLEET YET. I CAN'T GET ENVIRONMENT VARIABLES TO FLOW THROUGH FROM BALENA.YML YET.  STAY TUNED.
-
   BubblesNet Controller is the data-storage and user-interface component of the BubblesNet system, a Raspberry Pi 4 based 
   device to store data about the environment inside a cabinet/tent and through commands to the edge-device to turn on and
   off attached relay-controlled environmental control
