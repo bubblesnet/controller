@@ -12,7 +12,7 @@ services:
     network_mode: host
 
   activemq:
-    image: bh.cr/g_john_rodley1/activemq-5_17-block:armv7hf
+    image: bh.cr/gh_bubblesnet/activemq-5_17-block
     privileged: true
     restart: always
     ports:
@@ -33,7 +33,7 @@ services:
       - 'resin-data:/logs_shared'
 
   database:
-    image: bh.cr/g_john_rodley1/postgresql-11-block:armv7hf
+    image: bh.cr/gh_bubblesnet/postgresql-11-block
     privileged: true
     restart: always
     ports:
