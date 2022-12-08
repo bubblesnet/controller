@@ -11,6 +11,14 @@ services:
     privileged: true
     network_mode: host
 
+  hostname:
+    image: bh.cr/g_tomas_migone1/hostname-armv7hf
+    restart: no                               # Required to avoid container restarting indefinitely
+    labels:
+      io.balena.features.supervisor-api: 1    # Required to interact with the supervisor
+    environment:
+      SET_HOSTNAME: bubblesnet-controller
+
   activemq:
     image: bh.cr/gh_bubblesnet/activemq-5_17-block
     privileged: true
