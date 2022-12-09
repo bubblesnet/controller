@@ -11,8 +11,7 @@ post-provisioning: >-
   off attached relay-controlled environmental control
   devices (heater, humidifier ...) to keep that environment in an ideal state to grow for whatever stage the crop 
   may be at.
-  
-  Thanks to Balena [OpenFleets](https://hub.balena.io/organizations/gh_bubblesnet), you benefit from having automatic updates. As soon as updates are shipped, they will be deployed to your device.
+
 assets:
   repository:
     type: blob.asset
