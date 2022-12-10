@@ -1,0 +1,26 @@
+{
+    "datadirectory": "E:/shared/glassdashcamdata",
+    "usersdirectory": "E:/shared/glassdashcamdata/users",
+    "statusfilesdirectory": "E:/shared/bubblesstatus",
+    "sitename": "Bubbles",
+    "sessionTimeoutInMinutes": 30,
+    "baseurl": "http://localhost:3000",
+    "productname": "Bubbles",
+    "googleanalytics_key": "UA-42571213-2",
+    "dbusername": "bubbles",
+    "units": "IMPERIAL",
+    "tubdepth": 16.5,
+    "tubvolume": 18,
+    "dbpw": "bubbles",
+    "sendEmailNotification": false,
+    "sendgridRestrictedAPIKey": "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",
+    "sendgridFullAccessAPIKey": "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",
+    "sendgridSenderEmailAddress": "sendgridrodley@gmail.com",
+    "deviceForDiskCheck": "/",
+    "db_config": {
+        "host": "sausage",
+        "user": "gdc",
+        "password": "gdc",
+        "database": "GlassDashCam"
+    }
+}

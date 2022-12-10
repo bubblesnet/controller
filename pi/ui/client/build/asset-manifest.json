@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.be306fa6.chunk.css",
+    "main.js": "/static/js/main.feb72221.chunk.js",
+    "main.js.map": "/static/js/main.feb72221.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.87d80cc3.js",
+    "runtime-main.js.map": "/static/js/runtime-main.87d80cc3.js.map",
+    "static/js/2.bfb6beed.chunk.js": "/static/js/2.bfb6beed.chunk.js",
+    "static/js/2.bfb6beed.chunk.js.map": "/static/js/2.bfb6beed.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.79af1d1033ae13b58f371a398813984f.js": "/precache-manifest.79af1d1033ae13b58f371a398813984f.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.be306fa6.chunk.css.map": "/static/css/main.be306fa6.chunk.css.map",
+    "static/js/2.bfb6beed.chunk.js.LICENSE.txt": "/static/js/2.bfb6beed.chunk.js.LICENSE.txt",
+    "static/media/overview_style.css": "/static/media/waterpump_running.3a19b166.gif",
+    "static/media/App.css": "/static/media/bubbles-gif.04d9b6cf.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.87d80cc3.js",
+    "static/js/2.bfb6beed.chunk.js",
+    "static/css/main.be306fa6.chunk.css",
+    "static/js/main.feb72221.chunk.js"
+  ]
+}
