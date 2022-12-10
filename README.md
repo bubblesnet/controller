@@ -12,7 +12,7 @@
 [![GitHub pull-requests](https://img.shields.io/github/issues-pr/bubblesnet/controller.svg)](https://GitHub.com/bubblesnet/controller/pull/)
 [![Github all releases](https://img.shields.io/github/downloads/bubblesnet/controller/total.svg)](https://GitHub.com/bubblesnet/controller/releases/)
 
-[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/bubblesnet/controller&configUrl=https://github.com/bubblesnet/controller/blob/f6d8a6d2fd1fdff9d916a5535c760dc48dd7e64c/pi/balena.yml&defaultDeviceType=raspberrypi4-64)
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/bubblesnet/controller&defaultDeviceType=raspberrypi4-64)
 
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bubblesnet&show_icons=true)
 
