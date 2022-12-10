@@ -3,13 +3,15 @@ description: >-
   Deep-water-culture hydroponics ... automated
 type: sw.application
 post-provisioning: >-
-  THE FLEETS BUBBLES3 AND bubblesnet4_controller_aarch64_prod ARE NOT READY FOR PRIME TIME JUST YET. I APOLOGIZE TO ANYONE
-  WHO'S TRIED TO USE THEM. I NEED TO GET AVAHI mdns WORKING IN THE CONTAINERS AND WE'LL BE READY TO GO.
   BubblesNet Controller is the data-storage and user-interface component of the BubblesNet system, a Raspberry Pi 4 based 
   device to store data about the environment inside a cabinet/tent and through commands to the edge-device to turn on and
   off attached relay-controlled environmental control
   devices (heater, humidifier ...) to keep that environment in an ideal state to grow for whatever stage the crop 
   may be at.
+  
+  This is literally an alpha-release. The underlying code has been in production for months, but the deployment to
+  a Balena public fleet is brand new and has required a number of modifications.
+
 
 assets:
   repository:
