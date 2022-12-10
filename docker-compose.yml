@@ -55,7 +55,7 @@ services:
       - 'resin-data:/logs_shared'
 
   api:
-    build: api
+    build: server
     privileged: true
     restart: always
     depends_on:
@@ -75,7 +75,7 @@ services:
       - 'resin-data:/logs_shared'
 
   queue:
-    build: queue
+    build: server
     privileged: true
     restart: always
     depends_on:
@@ -90,7 +90,7 @@ services:
       - 'resin-data:/logs_shared'
 
   websocket:
-    build: websocket
+    build: server
     privileged: true
     restart: always
     depends_on:
@@ -111,7 +111,7 @@ services:
       - 'resin-data:/logs_shared'
 
   ui:
-    build: ui
+    build: pi/ui
     privileged: true
     restart: always
     depends_on:
