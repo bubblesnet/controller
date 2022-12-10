@@ -1,0 +1,31 @@
+{
+  "event_classes": [
+    "safety",
+    "information",
+    "system",
+    "plant progress",
+    "security",
+    "maintenance performed"
+  ],
+  "event_types": [
+    "SYSTEM_START",
+    "ANDROIDEXCEPTION",
+    "WIFIFAIL",
+    "WIFICONNECT",
+    "POWERON",
+    "POWEROFF",
+    "GERMINATION",
+    "COTYLEDON",
+    "FIRSTLEAF",
+    "WATERLEAK",
+    "DOOR_OPEN",
+    "DOOR_CLOSE",
+    "CABINETMOVEMENT",
+    "POTENTIALHACK",
+    "WATERADDED",
+    "RESERVOIRCHANGED",
+    "PHADDED",
+    "NUTESADDED",
+    "WATER_LEVEL_LOW"
+  ]
+}

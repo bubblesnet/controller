@@ -1,0 +1,57 @@
+{
+"status": {
+    "units": "IMPERIAL",
+    "temp_air_external": 65,
+    "temp_air_external_direction": "up",
+    "temp_air_top": 85,
+    "temp_air_top_direction": "up",
+    "temp_air_middle": 80,
+    "temp_air_middle_direction": "up",
+    "temp_air_bottom": 77,
+    "temp_air_bottom_direction": "down",
+    "temp_water": 70,
+    "temp_water_direction": "down",
+    "root_ph": 6.3,
+    "root_ph_direction": "down",
+    "humidity_internal": 69,
+    "humidity_internal_direction": "up",
+    "humidity_external": 43,
+    "humidity_external_direction": "down",
+    "plant_height": 37,
+    "start_date_current_stage": "25 days ago",
+    "start_date_next_stage": "10 days from now",
+    "outer_door_open": false,
+    "station_door_open": false,
+    "pressure_external": 1021,
+    "pressure_internal": 1018,
+    "date_last_training": "never",
+    "date_last_filter_change": "never",
+    "water_level": 14.9
+  },
+  "switch_state": {
+    "automaticControl": {
+      "on": true
+    },
+    "humidifier": {
+      "on": true
+    },
+    "heater": {
+      "on": true
+    },
+    "airPump": {
+      "on": true
+    },
+    "waterPump": {
+      "on": true
+    },
+    "intakeFan": {
+      "on": true
+    },
+    "exhaustFan": {
+      "on": true
+    },
+    "currentGrowLight": {
+      "on": false
+    }
+  }
+}
