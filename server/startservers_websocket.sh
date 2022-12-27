@@ -23,21 +23,25 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-echo Setting timezone
-sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
+echo Backing up log files
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/websocket/${now}
+sudo mv /server/src/*.log $LOGS_SHARED_DIRECTORY/logs/websocket/${now}
 
-if [ $RESIN_SERVICE_NAME = "api" ]
-then
-  echo 'Running API in ' $RESIN_SERVICE_NAME
-  /startservers_api.sh
-elif [ $RESIN_SERVICE_NAME = "queue" ]
-then
-  echo 'Running QUEUE service in ' $RESIN_SERVICE_NAME
-  /startservers_queue.sh
-elif [ $RESIN_SERVICE_NAME = "websocket" ]
-then
-  echo 'Running WEBSOCKET server in ' $RESIN_SERVICE_NAME
-  /startservers_websocket.sh
-else
-  echo $RESIN_SERVICE_NAME
-fi
+cd /server
+
+# Start the third process
+node src/ws-server.js &
+
+# Wait for any process to exit
+wait -n
+
+exit_status=$?
+
+echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+
+echo Exiting with exit status $exit_status
+
+# Exit with status of process that exited first
+exit $exit_status

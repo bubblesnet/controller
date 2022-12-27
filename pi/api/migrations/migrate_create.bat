@@ -1,1 +1,0 @@
-migrate create -seq -digits 8 -ext sql -dir . bu

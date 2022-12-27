@@ -23,21 +23,35 @@
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
+if [ "$BALENA_DEVICE_TYPE" = "coral-dev" ]
+then
+  echo Turning coral dev board fan on
+  sudo echo "disabled" > /sys/devices/virtual/thermal/thermal_zone0/mode
+  sudo echo 8600 > /sys/devices/platform/gpio_fan/hwmon/hwmon0/fan1_target
+fi
+
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
-if [ $RESIN_SERVICE_NAME = "api" ]
-then
-  echo 'Running API in ' $RESIN_SERVICE_NAME
-  /startservers_api.sh
-elif [ $RESIN_SERVICE_NAME = "queue" ]
-then
-  echo 'Running QUEUE service in ' $RESIN_SERVICE_NAME
-  /startservers_queue.sh
-elif [ $RESIN_SERVICE_NAME = "websocket" ]
-then
-  echo 'Running WEBSOCKET server in ' $RESIN_SERVICE_NAME
-  /startservers_websocket.sh
-else
-  echo $RESIN_SERVICE_NAME
-fi
+echo Backing up log files
+now=$(date +"%Y.%m.%d_%H.%M.%S")
+sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/ui/${now}
+sudo mv /*.log $LOGS_SHARED_DIRECTORY/logs/ui/${now}
+
+# Start the ui process
+cd /
+ROARR_LOG=true; serve --listen tcp://0.0.0.0:$REACT_APP_UI_PORT -s build &
+
+
+# Wait for any process to exit
+wait -n
+
+exit_status=$?
+
+echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+
+echo Exiting with exit status $exit_status
+
+# Exit with status of process that exited first
+exit $exit_status
