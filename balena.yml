@@ -1,16 +1,17 @@
 name: BubblesNet Controller
+type: sw.application
 description: >-
   Deep-water-culture hydroponics ... automated
-type: sw.application
 post-provisioning: >-
-  
+
   ## Introduction
 
   BubblesNet Controller is the data-storage and user-interface component of the BubblesNet system, a Raspberry Pi 4 based device to store data about the environment inside a cabinet/tent and through commands to the edge-device to turn on and off attached relay-controlled environmental control devices (heater, humidifier ...) to keep that environment in an ideal state to grow for whatever stage the crop may be at.
-  
-  -- This is literally an alpha-release. The underlying code has been in production for months, but the deployment to a Balena public fleet is brand new and has required a number of modifications. 
-  -- Latest PR fixes an issue with public fleets.
 
+  - Latest PR fixes an issue with public fleets.
+  - This is literally an alpha-release. The underlying code has been in production for months, but the deployment to a Balena public fleet is brand new and has required a number of modifications. 
+
+  Thanks for visiting.
 
 assets:
   repository:
