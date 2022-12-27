@@ -10,7 +10,8 @@ post-provisioning: >-
   may be at.
   
   This is literally an alpha-release. The underlying code has been in production for months, but the deployment to
-  a Balena public fleet is brand new and has required a number of modifications.
+  a Balena public fleet is brand new and has required a number of modifications. Latest push fixes an issue with public
+  fleets.
 
 
 assets:
