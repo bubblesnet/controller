@@ -10,6 +10,8 @@ post-provisioning: >-
 
   - Latest PR fixes an issue with public fleets.
 
+  - Requires at least 4G RAM, preferably 8G. Developed and tested on 8G, known not to work on 1G. RAM requirement driven almost entirely by ActiveMQ.
+
   - This is literally an alpha-release. The underlying code has been in production for months, but the deployment to a Balena public fleet is brand new and has required a number of modifications. 
 
 
@@ -56,4 +58,10 @@ data:
   supportedDeviceTypes:
     - raspberrypi4-64
     - coral-dev
+
+build-variables:
+  services:
+    ui:
+      - DOTENVFILE=.env.production
+
 version: 0.9.0

@@ -26,6 +26,11 @@
 echo Setting timezone
 sudo ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
+if [ ! -f "/config/config.json" ]
+then
+  cp /server/config.json /config/config.json
+fi
+
 if [ $RESIN_SERVICE_NAME = "api" ]
 then
   echo 'Running API in ' $RESIN_SERVICE_NAME
