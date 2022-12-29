@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.0",
     "diskspace": "*",
-    "express": "~4.14.1",
+    "express": "~4.17.3",
     "express-fileupload": "^1.2.1",
     "express-session": "^1.17.1",
     "js-htmlencode": "0.3.0",
