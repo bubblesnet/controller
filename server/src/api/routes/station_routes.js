@@ -85,7 +85,11 @@ async function getCurrentCrop(req,res,next) {
     log.info("get events : " + req.params.stationid);
     let exclude_measurement = true
     let x = await crop.getCurrentByStation(req.params.stationid).catch((err) =>
-    { log.error("caught err "+err)})
+    {
+        log.error("caught err "+err)
+        res.json({ error: err })
+    }
+    )
     res.json(x);
 }
 

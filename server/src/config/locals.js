@@ -39,7 +39,7 @@ function reloadLocals(filepath) {
 function getLocals (force_reload) {
     if( force_reload === true ) {
         configFilePath = util.get_config_file_for_environment(process.env.NODE_ENV)
-        log.info("getLocals - configFilePath %s", configFilePath)
+        log.info("getLocals - configFilePath " + configFilePath)
         reloadLocals(configFilePath);
         log.info("using database "+global.localconfig.bubbles_db_config.database)
     }
