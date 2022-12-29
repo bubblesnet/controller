@@ -43,7 +43,6 @@ COPY config_pi.json /server
 COPY config_test.json /server
 COPY config_dev.json /server
 COPY config_prod.json /server/config.json
-COPY config.json /server
 WORKDIR /server
 RUN npm install
 
