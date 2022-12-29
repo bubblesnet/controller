@@ -65,6 +65,16 @@ else
   sudo psql -h "$POSTGRESQL_HOST" -p 5432 -c "DROP DATABASE IF EXISTS $POSTGRESQL_SYSTEM_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname='$POSTGRESQL_SYSTEM_DBNAME' password='$POSTGRESQL_POSTGRES_PASSWORD'"
   echo Create database
   sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "CREATE DATABASE $POSTGRESQL_APPLICATION_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname='$POSTGRESQL_SYSTEM_DBNAME' password='$POSTGRESQL_POSTGRES_PASSWORD'"
+  exit_status=$?
+  if [ $exit_status != 0 ]
+  then
+    echo "Database create failed $exit_status, sleep and restart as database may be starting-up"
+    sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"
+    exit $exit_status
+  else
+    echo "Database create succeeded $exit_status"
+  fi
+
 fi
 
 echo "Always run migrations from $POSTGRESQL_SHARED_DIRECTORY/migrations - this will create all the tables"
@@ -167,8 +177,8 @@ then
   sudo umount /dev/sda1
 fi
 
-echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
-sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"s
+echo Executing sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"
+sleep "$SLEEP_ON_EXIT_FOR_DEBUGGING"
 
 echo Exiting with exit status $exit_status
 
