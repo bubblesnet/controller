@@ -34,9 +34,6 @@ the edge devices manipulating the physical environment and queueing data for sto
 be run from the server directory by calling the correct main for [api](server/src/api-server.js), [queue](server/src/queue-server.js) 
 or [websocket](server/src/websocket-server.js).
 
-The [pi directory](pi) contains the files necessary for building and deploying an instance of the controller to 
-Balena.  The push scripts take care of building, packaging and deploying the built image to the correct balena fleet.
-
 ## System Messaging Structure
 
 The system uses a common JSON messaging structure throughout.  See [here](Messsaging.md) for details.

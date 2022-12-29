@@ -41,14 +41,14 @@ echo "Copying fresh migrations into shared directory"
 mkdir -p "$POSTGRESQL_SHARED_DIRECTORY/migrations"
 cp /go/migrations/* "$POSTGRESQL_SHARED_DIRECTORY/migrations"
 
-if [ ! -d "$POSTGRESQL_SHARED_DIRECTORY/conf" ]
-then
-  mkdir -p "$POSTGRESQL_SHARED_DIRECTORY/conf"
-else
-  echo "conf directory already exists"
-fi
-cp /go/conf/postgresql.conf "$POSTGRESQL_SHARED_DIRECTORY/conf"
-cp /go/conf/pg_hba.conf "$POSTGRESQL_SHARED_DIRECTORY/conf"
+# if [ ! -d "$POSTGRESQL_SHARED_DIRECTORY/conf" ]
+# then
+#   mkdir -p "$POSTGRESQL_SHARED_DIRECTORY/conf"
+# else
+#   echo "conf directory already exists"
+# fi
+# cp /go/conf/postgresql.conf "$POSTGRESQL_SHARED_DIRECTORY/conf"
+# cp /go/conf/pg_hba.conf "$POSTGRESQL_SHARED_DIRECTORY/conf"
 
 export PGPASSWORD=$POSTGRESQL_POSTGRES_PASSWORD
 
@@ -59,7 +59,7 @@ then
 else
   echo "Database doesn't already exist, drop/recreate"
   echo "terminate all connections doesn't work yet - skipping"
-  sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRESQL_APPLICATION_DBNAME' AND pid <> pg_backend_pid();" "user='$POSTGRESQL_POSTGRES_USER' dbname=$POSTGRESQL_APPLICATION_DBNAME password='$POSTGRESQL_POSTGRES_PASSWORD'"
+#  sudo PGPASSWORD="$POSTGRESQL_POSTGRES_PASSWORD" psql -h "$POSTGRESQL_HOST" -p 5432 -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$POSTGRESQL_APPLICATION_DBNAME' AND pid <> pg_backend_pid();" "user='$POSTGRESQL_POSTGRES_USER' dbname=$POSTGRESQL_APPLICATION_DBNAME password='$POSTGRESQL_POSTGRES_PASSWORD'"
 #  create database
   echo Drop database
   sudo psql -h "$POSTGRESQL_HOST" -p 5432 -c "DROP DATABASE IF EXISTS $POSTGRESQL_SYSTEM_DBNAME" "user=$POSTGRESQL_POSTGRES_USER dbname='$POSTGRESQL_SYSTEM_DBNAME' password='$POSTGRESQL_POSTGRES_PASSWORD'"
@@ -68,7 +68,7 @@ else
 fi
 
 echo "Always run migrations from $POSTGRESQL_SHARED_DIRECTORY/migrations - this will create all the tables"
-ls -l "$POSTGRESQL_SHARED_DIRECTORY/migrations/*_ca.up.sql"
+ls -l "$POSTGRESQL_SHARED_DIRECTORY/migrations/*_bu.up.sql"
 /migrate -verbose -source "file://$POSTGRESQL_SHARED_DIRECTORY/migrations" -database "postgres://$POSTGRESQL_POSTGRES_USER:$POSTGRESQL_POSTGRES_PASSWORD@$POSTGRESQL_HOST:5432/$POSTGRESQL_APPLICATION_DBNAME?sslmode=disable" up
 
 # echo "Update ClamAV database"
@@ -111,8 +111,8 @@ then
 
   echo Backing database "$POSTGRESQL_APPLICATION_DBNAME" up to mounted backup drive
   echo "****************************************"
-  echo "****                            ********"
-  echo "****                             *******"
+  echo "****                                ****"
+  echo "****                                ****"
   echo "**** DATABASE BACKING UP NOW        ****"
 
   echo *:*:*:*:$POSTGRESQL_POSTGRES_PASSWORD > ~/.pgpass
@@ -120,7 +120,7 @@ then
   chmod 600 ~/.pgpass
   mkdir /mnt/backups/database/${now}
   sudo pg_dump --no-password -h "$POSTGRESQL_HOST" -p 5432 -U postgres "$POSTGRESQL_APPLICATION_DBNAME" > /mnt/backups/database/${now}/"$POSTGRESQL_APPLICATION_DBNAME".bak 2>> /mnt/backups/database/${now}/dbname.bak.log
-  echo "****                             *******"
+  echo "****                               *****"
   echo "****************************************"
   cat /mnt/backups/database/${now}/dbname.bak.log
 
@@ -128,10 +128,10 @@ else
   echo "/dev/sda1 doesn't exist, not mounting"
   echo "****************************************"
   echo "****************************************"
-  echo "****                            ********"
-  echo "**** DB BACKUPS NOT SAVED! *************"
+  echo "****                                ****"
+  echo "**** DB BACKUPS NOT SAVED!          ****"
   echo "**** LOGS AND PICTURES NOT SAVED !! ****"
-  echo "****                             *******"
+  echo "****                                ****"
   echo "****************************************"
   echo "****************************************"
   echo "****************************************"

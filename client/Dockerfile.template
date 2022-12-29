@@ -1,5 +1,9 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
 
+ARG DOTENVFILE
+
+RUN echo "The dotenvfile build variable is ${DOTENVFILE}"
+
 RUN install_packages vim inetutils-telnet xsel
 
 # Dockerfile boilerplate - certs and timezone
@@ -8,7 +12,7 @@ RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 RUN mkdir -p /client
 COPY package.json /client/package.json
-COPY .env /client/.env
+COPY ${DOTENVFILE} /client/.env
 COPY src /client/src
 COPY public /client/public
 COPY babel.config.json /client

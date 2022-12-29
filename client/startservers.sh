@@ -39,7 +39,7 @@ sudo mkdir -p $LOGS_SHARED_DIRECTORY/logs/ui/${now}
 sudo mv /*.log $LOGS_SHARED_DIRECTORY/logs/ui/${now}
 
 # Start the ui process
-cd /
+cd /client
 ROARR_LOG=true; serve --listen tcp://0.0.0.0:$REACT_APP_UI_PORT -s build &
 
 

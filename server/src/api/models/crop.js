@@ -39,13 +39,23 @@ async function getCurrentByStation(stationid) {
     let query = sql`SELECT * FROM crop c join plant p on p.cropid_crop=c.cropid join seed s on p.seedid_seed=s.seedid where c.stationid_station=1`
     let results = await db.query(query);
 //    log.info("\n\n\n"+JSON.stringify(results))
-    let crop = {
-        cropid: results[0].cropid,
-        stationid_station: results[0].stationid_station,
-        startdatetime_millis: results[0].startdatetime_millis,
-        plants: results
+    if( results.length > 0 ) {
+        let crop = {
+            cropid: results[0].cropid,
+            stationid_station: results[0].stationid_station,
+            startdatetime_millis: results[0].startdatetime_millis,
+            plants: results
+        }
+        return (crop)
+    } else {
+        return(  {
+            cropid: -1,
+            stationid_station: 0,
+            startdatetime_millis: 0,
+            plants: [],
+            error: "no crop defined"
+        })
     }
-    return(crop)
 }
 
 module.exports = {
