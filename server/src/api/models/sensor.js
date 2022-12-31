@@ -71,7 +71,7 @@ async function updateSensor(body) {
 async function deleteSensor(sensorid) {
     log.info("deleteSensor "+sensorid)
     return new Promise(function(resolve, reject) {
-        log.info("DELETE FROM sensor WHERE sensorid "+sensorid)
+        log.info("DELETE FROM sensor WHERE sensorid="+sensorid)
 
         pool.query('DELETE FROM sensor WHERE sensorid = $1', [sensorid], (error, results) => {
             if (error) {

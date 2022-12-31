@@ -129,23 +129,25 @@ function RenderStationSettingsTab (props) {
 
     function setTubDepth(s) {
         log.trace("setTubDepth to "+JSON.stringify(s))
-        let x = JSON.parse(JSON.stringify(local_station))
-        if( s === '' ) {
-            x.tub_depth = ''
-        } else {
-            x.tub_depth = Number(s)
+        let the_int = parseInt(s,10)
+        if (isNaN(the_int)) {
+            alert("Tub depth must be an integer number of inches")
+            return;
         }
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.tub_depth = the_int
         changeState(x)
     }
 
     function setTubVolume(s) {
         log.trace("setTubVolume to "+JSON.stringify(s))
-        let x = JSON.parse(JSON.stringify(local_station))
-        if( s === '' ) {
-            x.tub_volume = ''
-        } else {
-            x.tub_volume = Number(s)
+        let the_int = parseInt(s,10)
+        if (isNaN(the_int)) {
+            alert("Tub volume must be an integer number of gallons")
+            return;
         }
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.tub_volume = the_int
         changeState(x)
     }
 
@@ -157,29 +159,60 @@ function RenderStationSettingsTab (props) {
     }
 
     function setPictureTime(s) {
-        console.log("setPictureTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setPictureTime to "+JSON.stringify(s))
+        let the_int = parseInt(s,10)
+        if (isNaN(the_int)) {
+            alert("Picture poll interval must be an integer number of seconds")
+            return;
+        }
         let x = JSON.parse(JSON.stringify(local_station))
+        x.time_between_pictures_in_seconds = the_int
         changeState(x)
     }
+
     function setSensorPollTime(s) {
-        console.log("setSensorPollTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setSensorPollTime to "+JSON.stringify(s))
+        let the_int = parseInt(s,10)
+        if (isNaN(the_int)) {
+            alert("Sensor poll interval must be an integer number of seconds")
+            return;
+        }
         let x = JSON.parse(JSON.stringify(local_station))
+        x.time_between_sensor_polling_in_seconds = the_int
         changeState(x)
     }
 
     function setMovementX(s) {
-        log.error("setMovementX to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        log.error("setMovementX to "+JSON.stringify(s))
+        let the_float = parseFloat(s)
+        if (isNaN(the_float) || s.length > (''+the_float).length ) {
+            alert("Movement must be a float number of inches")
+            return;
+        }
         let x = JSON.parse(JSON.stringify(local_station))
+        x.tamper_xmove = the_float
         changeState(x)
     }
     function setMovementY(s) {
-        console.log("setMovementY to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setMovementY to "+JSON.stringify(s))
+        let the_float = parseFloat(s)
+        if (isNaN(the_float)  || s.length > (''+the_float).length ) {
+            alert("Movement must be a float number of inches")
+            return;
+        }
         let x = JSON.parse(JSON.stringify(local_station))
+        x.tamper_ymove = the_float
         changeState(x)
     }
     function setMovementZ(s) {
-        console.log("setMovementZ to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setMovementZ to "+JSON.stringify(s))
+        let the_float = parseFloat(s)
+        if (isNaN(the_float)) {
+            alert("Movement must be a float number of inches")
+            return;
+        }
         let x = JSON.parse(JSON.stringify(local_station))
+        x.tamper_zmove = the_float
         changeState(x)
     }
 
@@ -269,6 +302,12 @@ function RenderStationSettingsTab (props) {
     function toggleHeater() {
         let x = JSON.parse(JSON.stringify(local_station))
         x.heater = !x.heater
+        changeState(x)
+    }
+
+    function toggleWaterDispenser() {
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.water_dispenser = !x.water_dispenser
         changeState(x)
     }
 
@@ -527,7 +566,7 @@ function RenderStationSettingsTab (props) {
                                 <Table id="water-table">
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Water</td></tr></thead>
                                     <tbody>
-                                    <TableRow><TableCell><CheckBox label="Water Dispenser" onChange={toggleWaterPump} checked={local_station.water_dispenser}/></TableCell></TableRow>
+                                    <TableRow><TableCell><CheckBox label="Water Dispenser" onChange={toggleWaterDispenser} checked={local_station.water_dispenser}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Pump" onChange={toggleWaterPump} checked={local_station.water_pump}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Level Sensor (eTape)" onChange={toggleWaterLevelSensor} checked={local_station.water_level_sensor}/></TableCell></TableRow>
                                     <TableRow><TableCell><CheckBox label="Water Heater" onChange={toggleWaterHeater} checked={local_station.water_heater}/></TableCell></TableRow>
