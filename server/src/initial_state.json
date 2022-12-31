@@ -18,15 +18,16 @@
     "movement_sensor": true,
     "pressure_sensors": true,
     "root_ph_sensor": true,
-    "enclosure_type": "Cabinet",
+    "enclosure_type": "CABINET",
     "water_level_sensor": true,
     "tub_depth": 18.0,
     "tub_volume": 20.0,
     "intake_fan": true,
     "exhaust_fan": true,
     "enclosure_options": [
-      "Cabinet",
-      "Tent"
+      "CABINET",
+      "TENT",
+      "OUTDOOR"
     ],
     "light_bloom": true,
     "light_vegetative": true,

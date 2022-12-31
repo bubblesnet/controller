@@ -88,7 +88,9 @@ const sensor_name = {
     height_sensor: "height_sensor",
     voc_sensor: "voc_sensor",
     co2_sensor: "co2_sensor",
-    ec_sensor: "ec_sensor"
+    ec_sensor: "ec_sensor",
+    movement_sensor: "movement_sensor",
+    pressure_sensors: "pressure_sensors"
 }
 
 const ac_device_name = {

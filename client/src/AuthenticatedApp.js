@@ -613,7 +613,7 @@ function AuthenticatedApp (props) {
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.station_door_sensor, changed_station.station_door_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.outer_door_sensor, changed_station.outer_door_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.movement_sensor, changed_station.movement_sensor)
-        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, "pressure_sensors", changed_station.pressure_sensors)
+        await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.pressure_sensors, changed_station.pressure_sensors)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.root_ph_sensor, changed_station.root_ph_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.sensor_name.water_level_sensor, changed_station.water_level_sensor)
         await saveSetting(servers.api_server_host, servers.api_server_port, userid, site.stations[currentStationIndex].stationid, types.ac_device_name.intake_fan, changed_station.intake_fan)

@@ -16,7 +16,7 @@
     "movement_sensor": true,
     "pressure_sensors": true,
     "root_ph_sensor": true,
-    "enclosure_type": "Cabinet",
+    "enclosure_type": "CABINET",
     "water_level_sensor": true,
     "tub_depth": 18.0,
     "tub_volume": 20.0,
@@ -25,8 +25,9 @@
     "heat_lamp": true,
     "heating_pad": true,
     "enclosure_options": [
-      "Cabinet",
-      "Tent"
+      "CABINET",
+      "TENT",
+      "OUTDOOR"
     ],
     "light_sensor_internal": true,
     "light_sensor_external": true,
