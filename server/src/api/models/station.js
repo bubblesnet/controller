@@ -103,7 +103,7 @@ async function getStationConfigsBySite(siteid) {
             SELECT sitename as site_name, station_name, location, stationid, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
-                   thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
+                   water_heater, thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
                    heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
                                    coalesce(

@@ -1,0 +1,2 @@
+update station set time_between_pictures_in_seconds=121 where time_between_pictures_in_seconds is null;
+update station set time_between_sensor_polling_in_seconds=15 where time_between_sensor_polling_in_seconds is null;

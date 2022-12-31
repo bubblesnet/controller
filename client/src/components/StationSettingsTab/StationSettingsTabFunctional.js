@@ -119,8 +119,10 @@ function RenderStationSettingsTab (props) {
     }
 
     function setEnclosureType(s) {
-        log.trace("setEnclosureType to "+JSON.stringify(s))
-        let x = JSON.parse(JSON.stringify(props.station))
+        console.log("setEnclosureType to "+JSON.stringify(s))
+        console.log("options = " + JSON.stringify(props.enclosure_options))
+        console.log("enc type = " + JSON.stringify(local_station.enclosure_type))
+        let x = JSON.parse(JSON.stringify(local_station))
         x.enclosure_type = s
         changeState(x)
     }
@@ -147,13 +149,20 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
 
+    function setStationName(s) {
+        console.log("setStationName to "+JSON.stringify(s))
+        let x = JSON.parse(JSON.stringify(local_station))
+        x.station_name = s
+        changeState(x)
+    }
+
     function setPictureTime(s) {
-        log.error("setPictureTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setPictureTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
         let x = JSON.parse(JSON.stringify(local_station))
         changeState(x)
     }
     function setSensorPollTime(s) {
-        log.error("setSensorPollTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setSensorPollTime to "+JSON.stringify(s) +" NOT IMPLEMENTED")
         let x = JSON.parse(JSON.stringify(local_station))
         changeState(x)
     }
@@ -164,12 +173,12 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
     function setMovementY(s) {
-        log.error("setMovementY to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setMovementY to "+JSON.stringify(s) +" NOT IMPLEMENTED")
         let x = JSON.parse(JSON.stringify(local_station))
         changeState(x)
     }
     function setMovementZ(s) {
-        log.error("setMovementZ to "+JSON.stringify(s) +" NOT IMPLEMENTED")
+        console.log("setMovementZ to "+JSON.stringify(s) +" NOT IMPLEMENTED")
         let x = JSON.parse(JSON.stringify(local_station))
         changeState(x)
     }
@@ -363,7 +372,7 @@ function RenderStationSettingsTab (props) {
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Station</td></tr></thead>
                                     <tbody>
                                     <TableRow>
-                                        <TableCell>Name <TextInput value={props.station.station_name} onChange={event => setTubVolume(event.target.value)} /></TableCell>
+                                        <TableCell>Name <TextInput value={local_station.station_name} onChange={event => setStationName(event.target.value)} /></TableCell>
                                     </TableRow>
                                     </tbody>
                                 </Table>
@@ -375,7 +384,7 @@ function RenderStationSettingsTab (props) {
 
                                     <TableRow><TableCell><RadioButtonGroup name="enclosure-type"
                                                   options={props.display_settings.enclosure_options}
-                                                  value={props.station.enclosure_type}
+                                                  value={local_station.enclosure_type}
                                                   onChange={event => setEnclosureType(event.target.value)}/>
                                     </TableCell>
                                     </TableRow>
@@ -387,10 +396,10 @@ function RenderStationSettingsTab (props) {
                                     <thead><tr><td className="centered-thead-text" colSpan="2">Monitoring</td></tr></thead>
                                     <tbody>
                                     <TableRow>
-                                        <TableCell>Time between pictures (seconds) <TextInput value={props.station.time_between_pictures_in_seconds} onChange={event => setPictureTime(event.target.value)} /></TableCell>
+                                        <TableCell>Time between pictures (seconds) <TextInput value={local_station.time_between_pictures_in_seconds} onChange={event => setPictureTime(event.target.value)} /></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell>Time between sensor polls (seconds) <TextInput value={props.station.time_between_sensor_polling_in_seconds} onChange={event => setSensorPollTime(event.target.value)} /></TableCell>
+                                        <TableCell>Time between sensor polls (seconds) <TextInput value={local_station.time_between_sensor_polling_in_seconds} onChange={event => setSensorPollTime(event.target.value)} /></TableCell>
                                     </TableRow>
                                     </tbody>
                                 </Table>
@@ -419,7 +428,7 @@ function RenderStationSettingsTab (props) {
                                             <tbody>
                                             <TableRow >
                                                 <TableCell ><Text >Up and down sensitivity</Text></TableCell>
-                                                <TableCell ><TextInput size="xsmall" value={props.station.tamper_xmove} onChange={event => setMovementX(event.target.value)} /></TableCell>
+                                                <TableCell ><TextInput size="xsmall" value={local_station.tamper_xmove} onChange={event => setMovementX(event.target.value)} /></TableCell>
                                             </TableRow>
                                             </tbody>
                                         </Table>
@@ -431,7 +440,7 @@ function RenderStationSettingsTab (props) {
                                                 <tbody>
                                                 <TableRow >
                                                     <TableCell ><Text >Side to side sensitivity</Text></TableCell>
-                                                    <TableCell ><TextInput size="xsmall" value={props.station.tamper_ymove} onChange={event => setMovementY(event.target.value)} /></TableCell>
+                                                    <TableCell ><TextInput size="xsmall" value={local_station.tamper_ymove} onChange={event => setMovementY(event.target.value)} /></TableCell>
                                                 </TableRow>
                                                 </tbody>
                                             </Table>
@@ -443,7 +452,7 @@ function RenderStationSettingsTab (props) {
                                                 <tbody>
                                                 <TableRow >
                                                     <TableCell ><Text >Back and forth sensitivity</Text></TableCell>
-                                                    <TableCell ><TextInput size="xsmall" value={props.station.tamper_zmove} onChange={event => setMovementZ(event.target.value)} /></TableCell>
+                                                    <TableCell ><TextInput size="xsmall" value={local_station.tamper_zmove} onChange={event => setMovementZ(event.target.value)} /></TableCell>
                                                 </TableRow>
                                                 </tbody>
                                             </Table>
@@ -506,9 +515,9 @@ function RenderStationSettingsTab (props) {
                                 <Table id="tub-table">
                                 <thead><tr><td className="centered-thead-text" colSpan="2">Reservoir</td></tr></thead>
                                 <tbody>
-                                <TableRow><TableCell>Volume <TextInput value={props.station.tub_volume} onChange={event => setTubVolume(event.target.value)} />
+                                <TableRow><TableCell>Volume <TextInput value={local_station.tub_volume} onChange={event => setTubVolume(event.target.value)} />
                                     {props.display_settings.tub_volume_units} </TableCell></TableRow>
-                                <TableRow><TableCell>Depth <TextInput value={props.station.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
+                                <TableRow><TableCell>Depth <TextInput value={local_station.tub_depth} onChange={event => setTubDepth(event.target.value)}/>
                                     {props.display_settings.tub_depth_units} </TableCell></TableRow>
                                 </tbody>
                                 </Table>
