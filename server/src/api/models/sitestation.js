@@ -149,7 +149,7 @@ async function getConfigByStation(stationid, deviceid) {
                     ret.edge_devices = await modul.getAllModulesByCabinet(stationid)
 
                     ret.device_settings = JSON.parse(JSON.stringify(device_settings))
-                    ret.device_settings.enclosure_options = ["Cabinet", "Tent"]
+                    ret.device_settings.enclosure_options = ["CABINET", "TENT", "OUTDOOR"]
                     delete ret.device_settings.deviceid
                     delete ret.device_settings.automatic_control
                     delete ret.device_settings.deviceid
@@ -229,6 +229,7 @@ async function createStation(body) {
             "    light_bloom," +
             "    light_vegetative," +
             "    light_germinate," +
+            "    water_heater," +
             "    station_name)" +
             "values(" +
             "    1.0," +
@@ -256,6 +257,7 @@ async function createStation(body) {
             "    false," +
             "    0.0," +
             "    0.0," +
+            "    false," +
             "    false," +
             "    false," +
             "    false," +
