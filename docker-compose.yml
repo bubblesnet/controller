@@ -94,9 +94,6 @@ services:
     privileged: true
     restart: always
     depends_on:
-      - database
-      - queue
-      - api
       - activemq
     ports:
       - "5001:5001"

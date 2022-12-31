@@ -392,18 +392,33 @@ async function deleteStation(stationid) {
 }
 
 async function setSensorPresent(stationid,sensor_name,present) {
-    log.info("setSensorPresent "+sensor_name+" present " + present + " where stationid="+stationid)
-    return new Promise( function(resolve, reject) {
-        log.info("UPDATE station set "+sensor_name+" = "+present+" where stationid="+stationid)
+    log.info("setSensorPresent " + sensor_name + " present " + present + " where stationid=" + stationid)
+    return new Promise(function (resolve, reject) {
+        log.info("UPDATE station set " + sensor_name + " = " + present + " where stationid=" + stationid)
+        if (present === null) {
+            reject(new Error("Sensorpresent value for " + sensor_name + " (" + present + ") is null"))
+        }
+        let present_boolean = true
+        if (present.toUpperCase() === "TRUE") {
+            present_boolean = true
+        } else if (present.toUpperCase() === "FALSE") {
+            present_boolean = false
+        } else {
+            reject(new Error("Sensorpresent value for " + sensor_name + " (" + present + ") is not boolean"))
+        }
 
-        let ssql = 'UPDATE station set '+sensor_name+'=$2 where stationid = $1 RETURNING *'
-        pool.query(ssql, [stationid, present], (error, results) => {
+        let ssql = 'UPDATE station set ' + sensor_name + '=$2 where stationid = $1 RETURNING *'
+        pool.query(ssql, [stationid, present_boolean], (error, results) => {
             if (error) {
                 log.error("update stationid err3 " + error)
                 reject(error)
             } else {
 //                log.info("setSensorPresent results " + JSON.stringify(results))
-                resolve({stationid: stationid, rowcount: results.rowCount, message: 'station updated ' + results.rowCount})
+                resolve({
+                    stationid: stationid,
+                    rowcount: results.rowCount,
+                    message: 'station updated ' + results.rowCount
+                })
             }
         })
     })

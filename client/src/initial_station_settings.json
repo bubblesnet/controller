@@ -15,7 +15,7 @@
   "movement_sensor": true,
   "pressure_sensors": true,
   "root_ph_sensor": true,
-  "enclosure_type": "Cabinet",
+  "enclosure_type": "CABINET",
   "water_level_sensor": true,
   "tub_depth": 18.0,
   "tub_volume": 20.0,

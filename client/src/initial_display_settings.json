@@ -27,5 +27,5 @@
       "mm Hg",
       "psi"
     ],
-  "enclosure_options": ["Cabinet", "Tent", "Outdoor"]
+  "enclosure_options": ["CABINET", "TENT", "OUTDOOR"]
 }
