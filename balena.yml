@@ -15,7 +15,8 @@ post-provisioning: >-
   - This is literally an alpha-release. The underlying code has been in production for months, but the deployment to a Balena public fleet is brand new and has required a number of modifications. 
 
 
-  Thanks for visiting.
+  THIS FLEET IS NOT READY FOR PRIMETIME YET. ALTHOUGH THE PROJECT IS MATURE AND HAS ITERATED THROUGH A NUMBER OF CROPS, I STILL HAVE TO DEBUG A NUMBER OF ISSUES THAT ARE 
+  UNIQUE TO BALENA PUBLIC FLEETS. THIS REQUIRES ME TO TURN PUBLIC VISIBILITY ON AND OFF FAIRLY FREQUENTLY. PLEASE DO NOT JOIN THIS FLEET UNTIL THIS MESSAGE IS GONE.
 
 assets:
   repository:
