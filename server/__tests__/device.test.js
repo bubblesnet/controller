@@ -121,10 +121,22 @@ describe("device GETTERS", () => {
         }
         let z = {devicename: "updated", devicetypeid: 0, deviceid: good_deviceid}
 
+        let j = await device.setJustSeen(good_deviceid)
+            .then(function (x) {
+                console.log("setJustSeen = " + JSON.stringify(x))
+                expect(x).not.to.be.undefined
+                expect(x.rowCount).eq(1)
+            })
+            .catch(function (err) {
+                console.log("setJustSeen " + err)
+                expect(err).not.to.be.undefined
+            });
+
         let b = await device.updateDevice(z)
             .then(function (x) {
                 console.log("updateDevice = " + JSON.stringify(x))
                 expect(x).not.to.be.undefined
+                expect(x.rowcount).eq(1)
             })
             .catch(function (err) {
                 console.log("updateDevice " + err)
