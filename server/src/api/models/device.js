@@ -248,7 +248,7 @@ module.exports = {
     getDevicesByUserId,
     getDevicesByStationId,
     createDefaultDevices,
-    setJustSeen,setJustSeen,
+    setJustSeen: setJustSeen,
     setJustSeenFromEvent: setJustSeenFromEvent,
     setLatestPicture,
     getDeviceShallow,
