@@ -111,6 +111,11 @@ async function storeMessage(body) {
         }
         let ev = await event.createEvent(message);
         log.debug("storeMessage stored event " + JSON.stringify(ev))
+
+        // Set that this device was last seen just now.  This may be too costly to do as
+        // a database update
+        let justseen_result = device.setJustSeen(ev)
+        log.info("justseen returns " + JSON.stringify(justseen_result))
     } catch( err ) {
         log.error("storeMessage error saving message " + err + " " + message)
         return;

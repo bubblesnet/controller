@@ -218,6 +218,26 @@ async function deleteDevice(deviceid) {
     })
 }
 
+async function setJustSeenFromEvent(event) {
+    return( await setJustSeen(event.deviceid))
+}
+
+async function setJustSeen(deviceid) {
+    return new Promise(function(resolve, reject) {
+        log.info("setJustSeen "+JSON.stringify(deviceid))
+
+        pool.query("UPDATE device SET lastseen=NOW() where deviceid=$1 RETURNING *",
+            [deviceid], (error, results) => {
+                if (error) {
+                    reject(error)
+                } else {
+//                    log.info("new event " + results.rows[0])
+                    resolve({rowCount: results.rowCount, message: "updated "+ results.rowCount+" rows lastseen for deviceid " + deviceid})
+                }
+            })
+    });
+}
+
 module.exports = {
     getAllDevices: getAllDevices,
     createDevice: createDevice,
@@ -228,6 +248,8 @@ module.exports = {
     getDevicesByUserId,
     getDevicesByStationId,
     createDefaultDevices,
+    setJustSeen,setJustSeen,
+    setJustSeenFromEvent: setJustSeenFromEvent,
     setLatestPicture,
     getDeviceShallow,
 }
