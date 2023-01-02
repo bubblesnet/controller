@@ -97,27 +97,23 @@ function RenderStationSettingsTab (props) {
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state] = useState(true)
     let [apply_button_state,setApplyButtonState] = useState(false)
-
-
+    
     function applyChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
         props.setStateFromChild(local_station)
     }
-
     function resetChanges() {
         setApplyButtonState(false);
         setResetButtonState(false);
         let x = JSON.parse(JSON.stringify(props.station))
         setStation(x);
     }
-
     function changeState(s) {
         setStation(s);
         setApplyButtonState(true);
         setResetButtonState(true);
     }
-
     function setEnclosureType(s) {
         console.log("setEnclosureType to "+JSON.stringify(s))
         console.log("options = " + JSON.stringify(props.enclosure_options))
@@ -126,7 +122,6 @@ function RenderStationSettingsTab (props) {
         x.enclosure_type = s
         changeState(x)
     }
-
     function setTubDepth(s) {
         log.trace("setTubDepth to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
@@ -138,7 +133,6 @@ function RenderStationSettingsTab (props) {
         x.tub_depth = the_int
         changeState(x)
     }
-
     function setTubVolume(s) {
         log.trace("setTubVolume to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
@@ -150,14 +144,12 @@ function RenderStationSettingsTab (props) {
         x.tub_volume = the_int
         changeState(x)
     }
-
     function setStationName(s) {
         console.log("setStationName to "+JSON.stringify(s))
         let x = JSON.parse(JSON.stringify(local_station))
         x.station_name = s
         changeState(x)
     }
-
     function setPictureTime(s) {
         console.log("setPictureTime to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
@@ -169,7 +161,6 @@ function RenderStationSettingsTab (props) {
         x.time_between_pictures_in_seconds = the_int
         changeState(x)
     }
-
     function setSensorPollTime(s) {
         console.log("setSensorPollTime to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
@@ -181,7 +172,6 @@ function RenderStationSettingsTab (props) {
         x.time_between_sensor_polling_in_seconds = the_int
         changeState(x)
     }
-
     function setMovementX(s) {
         log.error("setMovementX to "+JSON.stringify(s))
         let the_float = parseFloat(s)
@@ -215,8 +205,6 @@ function RenderStationSettingsTab (props) {
         x.tamper_zmove = the_float
         changeState(x)
     }
-
-
     function toggleHumidifier() {
         let x = JSON.parse(JSON.stringify(local_station))
         x.humidifier = !x.humidifier
@@ -232,7 +220,6 @@ function RenderStationSettingsTab (props) {
         x.water_heater = !x.water_heater
         changeState(x)
     }
-
     function toggleRootPhSensor() {
         let x = JSON.parse(JSON.stringify(local_station))
         x.root_ph_sensor = !x.root_ph_sensor
