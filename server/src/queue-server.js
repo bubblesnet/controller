@@ -24,6 +24,7 @@
 // global.__root   = __dirname + '/';
 const message_type = require('./types').message_type
 const event = require('./api/models/event')
+const device = require('./api/models/device')
 const debug = require('debug')('queue-server')
 
 const bubbles_queue = require('./api/models/bubbles_queue')
