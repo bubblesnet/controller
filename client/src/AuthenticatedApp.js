@@ -199,6 +199,14 @@ function AuthenticatedApp (props) {
     const [switch_state, setSwitchState] = useState(props.initial_switch_state);
     const [sensor_readings] = useState(initial_sensor_readings);
     const [tilt,setTilt] = useState({ currently_tilted: false, last_tilt: 0} )
+/*    let initial_lastseen = []
+    for( let i = 0; i < site.stations[currentStationIndex].attached_devices.length; i++ ) {
+        initial_lastseen.push({deviceid: site.stations[currentStationIndex].attached_devices[i].deviceid,
+            lastseen_millis: site.stations[currentStationIndex].attached_devices[i].lastseen_millis})
+    }
+    console.log("initial_lastseen = " + JSON.stringify(initial_lastseen))
+    const [lastseen, setLastseen] = useState(initial_lastseen)
+*/
 
     /**
      * Port the API server is listening on - change it and rerender
@@ -386,6 +394,14 @@ function AuthenticatedApp (props) {
                 sensor_readings[msg.measurement_name + "_direction"] = msg.direction
                 sensor_readings[msg.measurement_name + "_units"] = msg.units
                 log.trace("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+/*                for( let i = 0; i < lastseen.length; i++ ) {
+                    if( lastseen[i].deviceid == msg.deviceid ) {
+                        let new_lastseen = JSON.parse(JSON.stringify(lastseen))
+                        setLastseen( new_lastseen )
+                        break;
+                    }
+                }
+ */
             }
         }
 

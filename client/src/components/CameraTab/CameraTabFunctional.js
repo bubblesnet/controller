@@ -68,10 +68,14 @@ function RenderCameraTab(props) {
 
 
     function getDeviceRow(indexObject) {
+        let displayed_lastpicture = moment(props.station.attached_devices[indexObject.device_index].latest_picture_datetimemillis).format("LLLL")
+        if( displayed_lastpicture === 'Invalid date') {
+            displayed_lastpicture = 'No Pictures Yet'
+        }
 
 //        log.info("getDeviceRow " + JSON.stringify(indexObject) + ' label '+props.station.attached_devices[indexObject.device_index] + ' areas ' + JSON.stringify(Areas));
         return( <><Text gridArea={"label"+indexObject.labelarea_index}>{props.station.attached_devices[indexObject.device_index].deviceid + ' ' +
-            moment(props.station.attached_devices[indexObject.device_index].latest_picture_datetimemillis).format("LLLL")}</Text>
+            displayed_lastpicture }</Text>
             <Box gridArea={Areas[indexObject.picturearea_index].name}>
                 <ReactImageZoom {...ImageProps[indexObject.imageprops_index]} />
             </Box></>);

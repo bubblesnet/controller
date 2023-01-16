@@ -71,6 +71,8 @@ async function getSiteById(siteid) {
                                FROM (
                                         SELECT c.stationid AS stationid,
                                                d.deviceid  AS deviceid,
+                                               d.lastseen,
+                                               d.lastseen_millis,
                                                d.picamera,
                                                d.picamera_resolutionx,
                                                d.picamera_resolutiony,
