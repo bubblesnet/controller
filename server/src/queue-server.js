@@ -26,6 +26,7 @@ const message_type = require('./types').message_type
 const event = require('./api/models/event')
 const device = require('./api/models/device')
 const debug = require('debug')('queue-server')
+const moment = require('moment')
 
 const bubbles_queue = require('./api/models/bubbles_queue')
 const outlet = require('./api/models/outlet')
@@ -115,7 +116,7 @@ async function storeMessage(body) {
 
         // Set that this device was last seen just now.  This may be too costly to do as
         // a database update
-        let justseen_result = device.setJustSeen(ev)
+        let justseen_result = await device.setJustSeenFromMessage(message)
         log.info("justseen returns " + JSON.stringify(justseen_result))
     } catch( err ) {
         log.error("storeMessage error saving message " + err + " " + message)

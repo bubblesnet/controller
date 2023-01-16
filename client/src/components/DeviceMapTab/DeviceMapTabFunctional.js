@@ -34,6 +34,7 @@ import {
 } from 'grommet'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
+import moment from "moment";
 
 import {getContainerNames, getModuleTypes} from '../../api/utils';
 import log from "roarr";
@@ -68,10 +69,10 @@ function RenderDeviceMapTab (props) {
     let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
-        if( module.device_type === "GPIO" ) {
-            return ""
+        if (module.protocol === "i2c") {
+            return "i2c " + module.address + " "
         } else {
-            return module.address + " "
+            return module.protocol
         }
     }
 
@@ -109,6 +110,25 @@ function RenderDeviceMapTab (props) {
         return ret
     }
 
+    function getDevices() {
+//        console.log("getModules " + JSON.stringify(station))
+//        log.trace("arr = " + JSON.stringify(arr))
+        let ret = station.attached_devices.map(getDeviceRow)
+        return ret
+    }
+
+    function getDeviceRow( row, index, arr ) {
+        console.log("row.lastseen_millis = "+row.lastseen_millis)
+        let displayed_lastseen = moment(row.lastseen_millis).format("DD MMM YYYY hh:mm a")
+        if( displayed_lastseen === 'Invalid date') {
+            displayed_lastseen = 'never'
+        }
+        return <TableRow key={row.deviceid}>
+            <TableCell >{row.deviceid}</TableCell>
+            <TableCell >{displayed_lastseen}</TableCell>
+            </TableRow>
+    }
+
 //    function getTypeSelector(module) {
 //            return <Text >{module.module_type} {module.module_name}</Text>
 //     }
@@ -128,6 +148,7 @@ function RenderDeviceMapTab (props) {
     }
 
     let module_rows = getModules()
+    let devices = getDevices()
 //    console.log("rendering with font set to " + values.theme.global.font.family)
 //    console.log("station = " + JSON.stringify(station))
     let ret =
@@ -140,7 +161,16 @@ function RenderDeviceMapTab (props) {
                 ]}
             />
             <div className="global_container_">
-                <Table id="settings-tab" >
+                <Table id="devicemap-lastseen-table" caption={"Edge devices and when they last messaged us."}>
+                    <tbody>
+                    <TableRow>
+                        <th >Device</th>
+                        <th >Last seen</th>
+                    </TableRow>
+                    {devices}
+                    </tbody></Table>
+                <hr />
+                <Table id="devicemap-modules-table" caption={"The sensor modules and which device they're attached to."}>
                     <tbody>
                     <TableRow>
                         <th >Device</th>

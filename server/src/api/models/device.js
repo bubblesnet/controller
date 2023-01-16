@@ -21,6 +21,7 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 const log = require("../../bubbles_logger").log
+const moment = require('moment');
 
 const locals = require("../../config/locals");
 const bcrypt = require('bcryptjs');
@@ -218,21 +219,28 @@ async function deleteDevice(deviceid) {
     })
 }
 
-async function setJustSeenFromEvent(event) {
-    return( await setJustSeen(event.deviceid))
+async function setJustSeenFromMessage(message) {
+    return( await setJustSeen(message.deviceid))
 }
 
 async function setJustSeen(deviceid) {
     return new Promise(function(resolve, reject) {
-        log.info("setJustSeen "+JSON.stringify(deviceid))
 
-        pool.query("UPDATE device SET lastseen=NOW() where deviceid=$1 RETURNING *",
-            [deviceid], (error, results) => {
+
+        let ms = moment().valueOf();
+
+        log.info("setJustSeen UPDATE device SET lastseen=NOW(), lastseen_millis="+ms+ " where deviceid="+deviceid)
+
+        pool.query("UPDATE device SET lastseen=NOW(), lastseen_millis=$2 where deviceid=$1 RETURNING *",
+            [deviceid, ms], (error, results) => {
                 if (error) {
-                    reject(error)
+                    let ret = {message: "setJustSeen failed for deviceid " + deviceid, deviceid: deviceid, error: error}
+                    log.error(JSON.stringify(ret))
+                    reject(ret)
                 } else {
-//                    log.info("new event " + results.rows[0])
-                    resolve({rowCount: results.rowCount, message: "updated "+ results.rowCount+" rows lastseen for deviceid " + deviceid})
+                    let ret = {rowCount: results.rowCount, message: "updated "+ results.rowCount+" rows lastseen for deviceid " + deviceid}
+//                    log.info("setJustSeen returning " + JSON.stringify(ret))
+                    resolve(ret)
                 }
             })
     });
@@ -248,8 +256,8 @@ module.exports = {
     getDevicesByUserId,
     getDevicesByStationId,
     createDefaultDevices,
-    setJustSeen,setJustSeen,
-    setJustSeenFromEvent: setJustSeenFromEvent,
+    setJustSeen: setJustSeen,
+    setJustSeenFromMessage: setJustSeenFromMessage,
     setLatestPicture,
     getDeviceShallow,
 }
