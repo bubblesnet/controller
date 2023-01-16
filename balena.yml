@@ -1,7 +1,7 @@
 name: "BubblesNet Controller"
 type: "sw.application"
 description: >-
-  Deep-water-culture hydroponics ... automated
+  Deep-water-culture (DWC) hydroponics ... automated
 post-provisioning: >-
 
   ## Introduction
@@ -12,10 +12,12 @@ post-provisioning: >-
 
   - Requires at least 4G RAM, preferably 8G. Developed and tested on 8G, known not to work on 1G. RAM requirement driven almost entirely by ActiveMQ.
 
+  - Bring a sandwich to this process.  After you flash a micro-SD card and start it up, it can take 20+ minutes for the device to connect and update via Balena.
+  
   - This is literally an alpha-release. The underlying code has been in production for months, but the deployment to a Balena public fleet is brand new and has required a number of modifications. 
 
 
-  THIS FLEET IS NOT READY FOR PRIMETIME YET. ALTHOUGH THE PROJECT IS MATURE AND HAS ITERATED THROUGH A NUMBER OF CROPS, I STILL HAVE TO DEBUG A NUMBER OF ISSUES THAT ARE 
+  THIS FLEET IS NOT READY FOR PRIMETIME YET. THIS BRANCH IS THE FINAL PUSH.  ALTHOUGH THE PROJECT IS MATURE AND HAS ITERATED THROUGH A NUMBER OF CROPS, I STILL HAVE TO DEBUG A NUMBER OF ISSUES THAT ARE 
   UNIQUE TO BALENA PUBLIC FLEETS. THIS REQUIRES ME TO TURN PUBLIC VISIBILITY ON AND OFF FAIRLY FREQUENTLY. PLEASE DO NOT JOIN THIS FLEET UNTIL THIS MESSAGE IS GONE.
 
 assets:

@@ -191,7 +191,7 @@ async function createDefaultSetOfModules( body ) {
 async function getAllModulesByCabinet(stationid) {
     log.info("getAllModulesByCabinet " + stationid)
     return new Promise( function (resolve, reject) {
-        let ssql = "select i2caddress, container_name, devicetypename, module_type, deviceid, moduleid, protocol from station c join device d on d.stationid_Station = stationid join devicetype t on d.devicetypeid_devicetype=t.devicetypeid join module m on m.deviceid_device = d.deviceid where c.stationid =$1"
+        let ssql = "select lastseen, d.lastseen_millis, i2caddress, container_name, devicetypename, module_type, deviceid, moduleid, protocol from station c join device d on d.stationid_Station = stationid join devicetype t on d.devicetypeid_devicetype=t.devicetypeid join module m on m.deviceid_device = d.deviceid where c.stationid =$1"
         pool.query(ssql, [stationid], async (error, results) => {
             if (error) {
                 log.info("getAllModulesByCabinet error " + error)
