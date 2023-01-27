@@ -44,7 +44,7 @@ function Header (props) {
 
     let CropWeek = -1
 
-    console.log("xxxx " + JSON.stringify(props.station))
+//    console.log("xxxx " + JSON.stringify(props.station))
 
 //    log.trace("after useState")
     let setEnvironment = (value) => {

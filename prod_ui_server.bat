@@ -9,10 +9,9 @@ SET POSTGRESQL_SHARED_DIRECTORY=/Users/john/Documents/go/src/bubblesnet/controll
 SET REACT_APP_API_HOST=192.168.23.237
 SET REACT_APP_NODE_ENV=production
 SET POSTGRESQL_UNIX_USER=postgres
-SET DEBUG=*
+SET DEBUG=
 SET REACT_APP_UI_PORT=3004
-SET LOG_LEVEL=silly
 
-cd server
-node src/api-server.js
+cd client
+npm run start_prod_windows
 cd ..

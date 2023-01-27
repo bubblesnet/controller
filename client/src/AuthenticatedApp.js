@@ -88,29 +88,6 @@ function AuthenticatedApp (props) {
         tilt_sound.play()
     }
 
-    //
-    //
-    //
-    // UTILITY FUNCTIONS FOR CREATING REACT SUB-COMPONENTS
-    //
-    //
-    //
-
-    /**
-     * Create a React Button with specified label for "station" button in the sidebar.
-     * @param value     An object containing label values
-     * @param index     not used
-     * @param arr       not used
-     * @returns {JSX.Element}   A React Button element
-     function getStationButton(value, index, arr ) {
-        log.debug("getStationButton value " + JSON.stringify(value))
-        return <Button onClick={changeStation} value={value.stationid} label={value.station_name+":"+value.stationid+" ("+value.attached_devices.length+")"} />
-    }
-     function changeStation(ev) {
-        alert("change station to "+ev.target.value)
-    }
-     */
-
     let initial_sensor_readings = {
         units: "IMPERIAL",
         temp_air_external: 0.0,
@@ -151,12 +128,6 @@ function AuthenticatedApp (props) {
     }
 
     /**
-     * The value of environment variable NODE_ENV which controls the hostname and port the API
-     * is listening on. Changing this causes a rerender
-     */
-    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
-
-    /**
      * An object containing all the parameters needed to do connectivity to the rest of the site/station
      * @type {{activemq_server_host: string, api_server_port: number, api_server_host: string, websocket_server_host: string, activemq_server_port: number, websocket_server_port: number}}
      * now that nodeenv is set, we can figure out what URLs to talk to
@@ -170,6 +141,13 @@ function AuthenticatedApp (props) {
     //
     //
     //
+
+    /**
+     * The value of environment variable NODE_ENV which controls the hostname and port the API
+     * is listening on. Changing this causes a rerender
+     */
+    const [nodeEnv, setNodeEnv] = useState(props.nodeEnv);
+
     /**
      * The user who has logged in.  If we login as a different user, rerender
      * TABLE: user
@@ -227,7 +205,6 @@ function AuthenticatedApp (props) {
      * ????
      */
     const [last_picture, setLastPicture] = useState(0)
-//    const [initial_settings, setInitialSettings] = useState(props.initial_settings)
 
     /**
      * If we change the language, rerender
@@ -243,12 +220,7 @@ function AuthenticatedApp (props) {
     // END STATE VARIABLES
     //
     //
-/*
-    function setStation(index) {
-        log.debug("state: setCurrentStationIndex " + index)
-        setCurrentStationIndex(index)
-    }
-*/
+
     /**
      * ????
      * @type {React.MutableRefObject<*[]>}
@@ -317,7 +289,7 @@ function AuthenticatedApp (props) {
     }
 
     /**
-     * Send a "take picture" command to all the devices attached to this controller.
+     * Send a "dispense" command to a specific device/dispenser.
      */
     function dispense( deviceid, dispenser_name, ms ) {
         let intms = Math.trunc( ms );
@@ -394,16 +366,15 @@ function AuthenticatedApp (props) {
                 sensor_readings[msg.measurement_name + "_direction"] = msg.direction
                 sensor_readings[msg.measurement_name + "_units"] = msg.units
                 log.trace("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
-/*                for( let i = 0; i < lastseen.length; i++ ) {
-                    if( lastseen[i].deviceid == msg.deviceid ) {
-                        let new_lastseen = JSON.parse(JSON.stringify(lastseen))
-                        setLastseen( new_lastseen )
-                        break;
-                    }
-                }
- */
             }
         }
+
+    const setDeviceLastSeenByDeviceId = (deviceid) => {
+        console.log("Just saw device " + deviceid)
+    }
+    const setModuleLastSeenByMeasurementName = (msg) => {
+        console.log("Just saw module for " + JSON.stringify(msg))
+    }
 
     /**
      * Handle a single message that came to the UI from a device via the WebSocket
@@ -417,11 +388,13 @@ function AuthenticatedApp (props) {
                 log.error("ws: received invalid message " + event.data)
             } else {
                 log.trace("ws: received message type " + msg.message_type);
+                setDeviceLastSeenByDeviceId(msg.deviceid)
                 switch (msg.message_type) {
                     case types.message_type.measurement:
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
                         log.trace("ws: received measurement");
                         applyMeasurementToState(msg)
+                        setModuleLastSeenByMeasurementName(msg)
                         break;
                     case types.message_type.dispenser_event:
                         because = "dispenser_evt " + msg.dispenser_name

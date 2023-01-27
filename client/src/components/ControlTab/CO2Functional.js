@@ -43,7 +43,7 @@ function RenderCO2 (props) {
         directionClassName="co2arrowdown-icon"
     }
     let value = sprintf.sprintf("%.0f", props.value)
-    console.log("CO2 value rendering as " + value)
+//    console.log("CO2 value rendering as " + value)
      ret = <>
         <div className={"value-holder-co2-voc"} >
             CO2 {value} {props.units}
