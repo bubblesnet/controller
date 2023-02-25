@@ -365,6 +365,7 @@ function AuthenticatedApp (props) {
                 sensor_readings[msg.measurement_name] = msg.value
                 sensor_readings[msg.measurement_name + "_direction"] = msg.direction
                 sensor_readings[msg.measurement_name + "_units"] = msg.units
+                sensor_readings[msg.measurement_name + "_millis"] = msg.sample_timestamp
                 log.trace("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
             }
         }

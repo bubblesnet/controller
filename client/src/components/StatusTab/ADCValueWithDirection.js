@@ -24,17 +24,19 @@
 import React from "react";
 
 import '../../App.css';
-import './statusTab.css'
+import './statusTab.css';
 import {Box} from "grommet";
-import sprintf from 'sprintf-js'
+import sprintf from 'sprintf-js';
+import moment from "moment";
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderADCValueWithDirection (props) {
-//    console.log("RenderADCValueWithDirection")
+    console.log("RenderADCValueWithDirection grid-area="+props.gridArea)
     let label_area= `${props.gridArea}-label`
     let value_area= `${props.gridArea}-value`
     let direction_area=`${props.gridArea}-direction`
+    let timestamp_area=`${props.gridArea}-timestamp`
 
     let className = ''
     if(props.direction === 'up') {
@@ -47,8 +49,13 @@ function RenderADCValueWithDirection (props) {
     if( typeof props.value !== 'undefined' ) {
         valuestr = sprintf.sprintf( "%.3f %s", props.value, props.units )
     }
-    let ret =''
 
+    let stimestamp = ""
+    if( typeof props.timestamp !== 'undefined' ) {
+        stimestamp = moment(props.timestamp).format("LTS")
+    }
+
+    let ret =''
     if( props.exists === false ) {
 //        console.log("RenderADCValueWithDirection props.exists === false")
         ret = <></>
@@ -60,6 +67,7 @@ function RenderADCValueWithDirection (props) {
             <Box gridArea={direction_area}>
                 <div className={className}/>
             </Box>
+            <Box gridArea={timestamp_area}>{stimestamp}</Box>
         </>
     }
     return( ret )
