@@ -43,12 +43,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
-      - name: Start SSH session
-        uses: luchihoratiu/debug-via-ssh@main
-        with:
-          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-          SSH_PASS: ${{ secrets.SSH_PASS }}
-
       # Performs a clean installation of ActiveMQ
       - name: "Install ActiveMQ ${{matrix.activemq-version}}"
         run: |
