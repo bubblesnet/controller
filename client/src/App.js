@@ -234,10 +234,10 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            log.debug("selected stage value fetching")
+            log.debug("(useEffect) selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
             z.stations[0].crop = await getCrop(servers.api_server_host, servers.api_server_port, 1)
-            console.log("zzzzz = " + JSON.stringify(z))
+            log.debug("(useEffect) setting site = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
