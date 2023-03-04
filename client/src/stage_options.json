@@ -1,9 +1,22 @@
 [
-  "germinate",
-  "vegetative",
-  "bloom",
-  "harvest",
-  "dry",
-  "cure",
-  "idle"
+  {
+  "station_type": 1,
+  "stages": [
+    "germinate",
+    "vegetative",
+    "bloom",
+    "harvest",
+    "dry",
+    "cure",
+    "idle"
+  ]
+},
+  {
+    "station_type": 2,
+    "stages": [
+      "idle",
+      "colonize",
+      "bloom"
+    ]
+  }
 ]

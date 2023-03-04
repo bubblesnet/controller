@@ -24,14 +24,9 @@
 import React, {useState} from 'react';
 
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
+import RenderStationPickerFunctional from "./StationPickerFunctional"
 import RenderTiltFunctional from "./TiltFunctional"
-import {ReadyState} from "react-use-websocket";
-// import getReadyState from '../AuthenticatedApp'
-// import {Table, TableRow, TableCell} from 'grommet'
 import log from "roarr";
-// import log from "./bubbles_logger"
-import {Text} from 'grommet'
-// import '../logimplementation'
 import {Button} from "grommet";
 import {get_server_ports_for_environment} from "../util";
 
@@ -42,15 +37,9 @@ function Header (props) {
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
 
-    let CropWeek = -1
-
-//    console.log("xxxx " + JSON.stringify(props.station))
-
-//    log.trace("after useState")
     let setEnvironment = (value) => {
         log.trace("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value.toLowerCase()
-        let api_server_port;
 
         setNodeEnv(theNodeEnv);
         let server_ports = get_server_ports_for_environment(value)
@@ -58,12 +47,8 @@ function Header (props) {
         props.setNodeEnv(value)
     }
 //    log.trace("after setenv")
-    let webSocketLabel="Ping open WebSocket"
-    if( props.readyState !== ReadyState.OPEN ) {
-        webSocketLabel = "WebSocket server down"
-    }
 //    log.trace("after websocket")
-//    console.log("Rendering header with station "+JSON.stringify(props.station))
+    console.log("Header Rendering header with stationindex "+props.stationindex)
     return (
         <div>
             <header className="BubblesApp-header" style={{'width': '100%'}} >
@@ -79,12 +64,14 @@ function Header (props) {
                     <Button className='Logout-Button' color={'var(--color-button-border)'} width={'medium'} round={'large'} label={'Logout'} onClick={props.logout} />
                </span>
             </header>
-                <RenderEnvironmentPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
-                                               handleClick={setEnvironment}/>
-            <Text >Crop Week {props.CropWeek} </Text>
-            <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
-            <button onClick={props.handleClickSendMessage} >{"API server"}</button>
-            <button onClick={props.handleClickSendMessage} >{"ActiveMQ"}</button>
+            <RenderEnvironmentPickerFunctional readyState={props.readyState} nodeEnv={nodeEnv} apiPort={apiPort}
+                                               handleClick={setEnvironment} handleClickSendMessage={props.handleClickSendMessage} />
+            <RenderStationPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
+                                           changeStationFromChild={props.changeStationFromChild}
+                                           site={props.site}
+                                           stationindex={props.stationindex}
+                                           CropWeek={props.CropWeek}
+            />
         </div>
    );
 }

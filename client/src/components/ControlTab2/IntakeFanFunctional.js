@@ -21,18 +21,26 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import './controlTab.css'
+import React from 'react';
+import '../../App.css';
 
-// copyright and license inspection - no issues 4/13/2
+// copyright and license inspection - no issues 4/13/22
 
-function RenderHumidifier (props) {
+function RenderIntakeFan (props) {
+//    console.log("RenderIntakeFan intakeFanOn = " + props.on)
+
     let ret
-    if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
-    } else {
-        ret = <div id="humidifier-holder-on" />
-    }
+        if( props.on === false ) {
+            ret =
+                <div>
+                    <div id="intake-fan-container" />
+                </div>
+        } else {
+            ret = <div>
+                <div id="intake-animated-wind-container" />
+                <div id="intake-animated-fan-container" />
+            </div>
+        }
     if(props.exists === false) (
         ret = <></>
     )
@@ -40,4 +48,7 @@ function RenderHumidifier (props) {
     return (ret)
 }
 
-export default RenderHumidifier;
+export default RenderIntakeFan;
+
+
+

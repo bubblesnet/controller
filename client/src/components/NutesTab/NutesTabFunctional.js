@@ -59,7 +59,6 @@ function RenderNutesTab (props) {
      * Respond to the dispense button
      */
     function handleDispense(deviceid, dispenserid, dispenser_name, milliliters_per_millisecond, e) {
-        log.info("handleDispense " + dispenserid + " " + dispenser_name + " for " + ms + " milliseconds")
         let amount = 0.0
         for( let i = 0; i < dispensers.length; i++ ) {
             if( dispensers[i].dispenserid === dispenserid ) {
@@ -69,6 +68,7 @@ function RenderNutesTab (props) {
             }
         }
         let ms = Math.trunc(amount/milliliters_per_millisecond)
+        log.info("handleDispense " + dispenserid + " " + dispenser_name + " for " + ms + " milliseconds")
         log.info("Dispensing " + amount +"ml by holding valve open for " + ms + " milliseconds")
         props.dispense_function(deviceid, dispenser_name, ms)
     }
@@ -92,10 +92,10 @@ function RenderNutesTab (props) {
 
     function getNuterow(row, index, arr) {
         let ON = "UNDEF"
-        if (props.station.dispensers[index].onoff == true) {
+        if (props.station.dispensers[index].onoff === true) {
             ON = "ON"
         } else {
-            if (row.onoff == false) {
+            if (row.onoff === false) {
                 ON = ""
             }
         }

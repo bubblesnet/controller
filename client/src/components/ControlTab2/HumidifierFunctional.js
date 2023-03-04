@@ -22,16 +22,15 @@
  */
 
 import React from "react";
-import './controlTab.css'
 
 // copyright and license inspection - no issues 4/13/2
 
 function RenderHumidifier (props) {
     let ret
     if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
+        ret = <div id="xhumidifier-holder-off" />
     } else {
-        ret = <div id="humidifier-holder-on" />
+        ret = <div id="xhumidifier-holder-on" />
     }
     if(props.exists === false) (
         ret = <></>

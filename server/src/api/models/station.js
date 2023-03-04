@@ -100,7 +100,7 @@ async function getEvents(stationid, count) {
 async function getStationConfigsBySite(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, station_name, location, stationid, current_stage, tamper_xmove, tamper_ymove, tamper_zmove,
+            SELECT sitename as site_name, station_name, location, stationid, current_stage, tamper_xmove, tamper_ymove, tamper_zmove, station_type,
                    time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    water_heater, thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external, station_door_sensor, outer_door_sensor, movement_sensor,
@@ -179,7 +179,7 @@ async function getStationConfigsByUser(uid) {
                    humidity_sensor_external, heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,
                    thermometer_water, water_pump, air_pump, light_sensor_internal, light_sensor_external,station_door_sensor, outer_door_sensor, movement_sensor,
                    pressure_sensors, root_ph_sensor, enclosure_type, water_level_sensor, tub_depth, tub_volume, intake_fan, exhaust_fan,
-                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, 
+                   heat_lamp, heating_pad, light_bloom, light_vegetative, light_germinate, height_sensor, automatic_control, voc_sensor, co2_sensor, ec_sensor, station_name, station_type,
                                    coalesce(
                                            (
                                                SELECT array_to_json(array_agg(row_to_json(x)))
@@ -239,7 +239,6 @@ async function getStationConfigsByUser(uid) {
             WHERE u.userid=${uid}
   `,
     );
-    log.info("\n\n\n"+JSON.stringify(results))
     if( results.length > 0 && typeof results[0].edge_devices !== 'undefined') {
         for (let i = 0; i < results[0].edge_devices.length; i++) {
             results[0].edge_devices[i].camera = {
@@ -252,6 +251,7 @@ async function getStationConfigsByUser(uid) {
             delete results[0].edge_devices[i].picamera
         }
     }
+    log.info("\n\n\n"+JSON.stringify(results))
     return( results )
 }
 

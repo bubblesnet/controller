@@ -38,7 +38,6 @@ import moment from "moment";
 
 function RenderCameraTab(props) {
 //    console.log("RenderCameraTab "+JSON.stringify(props.station.attached_devices))
-    let userid = "90000009"
 
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 

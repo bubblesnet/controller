@@ -55,6 +55,7 @@ let necessary_environment = [
 ]
 function App(props) {
 
+
     console.log("ENV = " + JSON.stringify(process.env))
     console.log("REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     console.log("NODE_ENV = " + process.env.NODE_ENV)
@@ -207,7 +208,22 @@ function App(props) {
             }
         }
 
+    function changeStationFromChild(value) {
+        console.log("ChangeStationFromChild to " + JSON.stringify(value))
+        for( let i = 0; i < site.stations.length; i++ ) {
+            if( site.stations[i].station_name === value ) {
+                if( i !== selectedStationIndex ) {
+                    console.log("Changing currentStationIndex from " + selectedStationIndex + " to " + i)
+                    setSelectedStationIndex(i)
+                }
+            }
+        }
+    }
+
+
     const [site, setSite] = useState({});
+    const [selectedStationIndex, setSelectedStationIndex] = useState(0)
+
 
     log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
@@ -232,11 +248,13 @@ function App(props) {
         setToken({auth:false})
     }
 
+    let stationid = 2
+
     useEffect(() => {
         const fetchData = async () => {
             log.debug("(useEffect) selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
-            z.stations[0].crop = await getCrop(servers.api_server_host, servers.api_server_port, 1)
+            z.stations[selectedStationIndex].crop = await getCrop(servers.api_server_host, servers.api_server_port, stationid)
             log.debug("(useEffect) setting site = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
@@ -249,7 +267,6 @@ function App(props) {
         return <SetupApp readyState={true}/>
     }
 
-    let selectedStationIndex = 0
 
 //    log.info("App: Rendering App with site set to " + JSON.stringify(site))
     if( typeof site.stations === 'undefined') {
@@ -277,8 +294,8 @@ function App(props) {
         return(true)
     }
 
-    for ( let i = 0; i < site.stations[0].attached_devices.length; i++ ) {
-        log.info("RenderCameraTab App attached_devices[" + i + "].latest_picture_filename = " + site.stations[0].attached_devices[i].latest_picture_filename)
+    for ( let i = 0; i < site.stations[selectedStationIndex].attached_devices.length; i++ ) {
+        log.debug("picture debugging App attached_devices[" + i + "].latest_picture_filename = " + site.stations[selectedStationIndex].attached_devices[i].latest_picture_filename)
     }
 
     let ret
@@ -287,6 +304,7 @@ function App(props) {
     } else {
         ret = (token?.auth === true) ? <AuthenticatedApp
                 stationindex={selectedStationIndex}
+                station_type={site.stations[selectedStationIndex].station_type}
                 initial_station_state={initial_station_state}
                 initial_switch_state={initial_switch_state}
                 initial_sensor_readings={initial_sensor_readings}
@@ -297,6 +315,7 @@ function App(props) {
                 user={token}
                 logout={doLogout}
                 setLatestPictureFromChild={setLatestPictureFromChild}
+                changeStationFromChild={changeStationFromChild}
             /> :
             <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
     }

@@ -83,7 +83,16 @@
 }
 
 .RenderEnvironmentPickerFunctional {
-  justify-content: center;
+  float: left;
+  height: 45px;
+  width: 50%;
+  background: var(--color-primary-1);
+}
+
+.RenderPingerFunctional {
+  float: right;
+  height: 45px;
+  width: 50%;
   background: var(--color-primary-1);
 }
 

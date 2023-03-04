@@ -28,6 +28,15 @@
 .font-change {
 }
 
+.growbox-container {
+    left: 113px;
+    width: 560px;
+    height: 370px;
+    position: absolute;
+    top: 10px;
+    background-image: var(--gradient-growbox);
+}
+
 .automatic-track-backgroundcolor {
     backgroundColor: red;
 }
@@ -110,7 +119,7 @@
     font-size: small;
 }
 
-.pressure-holder {
+.xpressure-holder {
     height: 60px;
     left: 10px;
     position: absolute;
@@ -120,27 +129,7 @@
     font-size: small;
 }
 
-#airtemptop-text-holder {
-    height: 60px;
-    right: 0;
-    position: absolute;
-    top: 0;
-    width: 80px;
-}
-#airtempmiddle-text-holder {
-    height: 60px;
-    right: 0;
-    position: absolute;
-    top: 80px;
-    width: 80px;
-}
-#airtempbottom-text-holder {
-    height: 60px;
-    right: 0;
-    position: absolute;
-    top: 200px;
-    width: 80px;
-}
+
 
 .lightexternal-text-holder {
     height: 10px;
@@ -189,41 +178,52 @@
     font-size: large;
 }
 
-#controltab-buttongroup {
+#switchpanel-buttongroup {
     height: 600px;
     left: 700px;
     position: absolute;
-    top: 180px;
+    top: 10px;
     width: 175px;
     font-size: large;
 }
 
-.voc-holder {
+.zzz-holder {
     height: 40px;
-    left: 10px;
+    left: 0px;
     position: absolute;
-    top: 0;
+    top: 40px;
     width: 80px;
-    background-color: white;
+    background-color: transparent;
     font-size: small;
 }
 
-.co2-holder {
+.xvoc-holder {
+    height: 60px;
+    left: 10px;
+    position: absolute;
+    top: 40px;
+    width: 80px;
+    font-weight: bolder;
+    background-color: transparent;
+    font-size: small;
+}
+
+.xco2-holder {
     height: 40px;
     left: 10px;
     position: absolute;
     top: 40px;
     width: 80px;
-    background-color: white;
+    background-color: red;
     font-size: small;
 }
 
-.value-holder-co2-voc {
+.value-holder-voc {
     left: 0;
     top: 2px;
     position: absolute;
     height: 40px;
-    width: 80px;
+    width: 40px;
     font-weight: bolder;
     font-size: small;
     color: black;
@@ -253,21 +253,21 @@
     margin-right: 10px
 }
 
-#humidifier-holder-on {
-    right: 230px;
+#xhumidifier-holder-on {
+    left: 70px;
     width: 100px;
     height: 150px;
     position: absolute;
-    top:325px;
+    top:225px;
     background: url("../../images/humidifier-on.gif")
 }
 
-#humidifier-holder-off {
-    right: 230px;
+#xhumidifier-holder-off {
+    left: 70px;
     width: 100px;
     height: 150px;
     position: absolute;
-    top: 325px;
+    top: 225px;
     background: url("../../images/humidifier-off.gif")
 }
 
@@ -275,17 +275,20 @@
     height: 76px;
     left: 0;
     position: absolute;
-    top: 374px;
+    top: 274px;
     width: 242px;
 }
 
-#zzhumidity-holder {
-    top: 120px;
-    left: 270px;
-    width: 82px;
+
+#xco2-holder {
+    top: 40px;
+    left: 170px;
+    width: 110px;
     height: 60px;
     position: absolute;
-    color: white;
+    color: black;
+    font-weight: bold;
+    font-size: large;
 }
 
 #externalhumidityicon-holder {
@@ -308,6 +311,16 @@
     font-size: large;
 }
 
+#xco2-icon-holder {
+    top: 10px;
+    right: 0px;
+    width: 72px;
+    height: 60px;
+    position: absolute;
+    background: url(../../images/co2-icon.png) no-repeat;
+}
+
+
 #humiditytext-holder {
     top: 2px;
     left: 0;
@@ -319,39 +332,105 @@
     font-size: large;
 }
 
-#tubedge-holder {
-    height: 25px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 618px;
-}
-
-#tub {
-    height: 188px;
-    left: 113px;
-    position: absolute;
-    top: 481px;
-    width: 560px;
-    background: var(--color-ceramic-white);
-}
-
-#airtemp-holder-day {
-    top: 40px;
-    right: 80px;
-    width: 80px;
-    height: 280px;
+#xco2-text-holder {
+    top: 2px;
+    left: 0px;
+    width: 20px;
+    height: 50px;
     position: absolute;
     color: black;
     font-weight: bold;
     font-size: large;
 }
 
-#airtemp-holder-night {
+#boxtop {
+    height: 10px;
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    width: 400px;
+    background: black;
+
+}
+
+#box-holder {
+    height: 188px;
+    left: 193px;
+    position: absolute;
+    top: 190px;
+    width: 400px;
+    background: gray;
+}
+
+#humidity-holder {
     top: 40px;
-    right: 80px;
-    width: 100px;
-    height: 280px;
+    left: 290px;
+    width: 82px;
+    height: 60px;
     position: absolute;
     color: white;
+}
+
+#airtempmiddle-text-holder {
+    height: 60px;
+    right: 0;
+    position: absolute;
+    top: 80px;
+    width: 80px;
+}
+
+
+#airtemp-holder {
+    top: 40px;
+    right: 80px;
+    width: 80px;
+    height: 60px;
+    position: absolute;
+    color: black;
+    font-weight: bold;
+    font-size: large;
+}
+
+#growbag {
+    background-image:url(../../images/growbag.png);
+    background-repeat:no-repeat;
+    width:45px;
+    height:100px;
+}
+
+#growbag1-holder {
+    bottom: 0px;
+    left: 10px;
+    width:45px;
+    height:100px;
+    position: absolute;
+}
+#growbag2-holder {
+    bottom: 0px;
+    left: 90px;
+    width:45px;
+    height:100px;
+    position: absolute;
+}
+#growbag3-holder {
+    bottom: 0px;
+    left: 170px;
+    width:45px;
+    height:100px;
+    position: absolute;
+}
+#growbag4-holder {
+    bottom: 0px;
+    left: 250px;
+    width:45px;
+    height:100px;
+    position: absolute;
+}
+
+#growbag5-holder {
+    bottom: 0px;
+    left: 330px;
+    width:45px;
+    height:100px;
+    position: absolute;
 }

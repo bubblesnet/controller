@@ -21,23 +21,45 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import './controlTab.css'
+import React from 'react';
+import '../../App.css';
+import './growbox.css'
+import sprintf from 'sprintf-js';
 
-// copyright and license inspection - no issues 4/13/2
+// copyright and license inspection - no issues 4/13/22
 
-function RenderHumidifier (props) {
-    let ret
-    if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
-    } else {
-        ret = <div id="humidifier-holder-on" />
+function RenderCO2Meter (props) {
+//    console.log("RenderHygrometer humidity = " + props.currentHumidity)
+    let holderid = props.prefix + "xco2-holder"
+    let textid = props.prefix + "xco2-text-holder"
+    let iconid = "xco2-icon-holder"
+    let value = sprintf.sprintf("%2.0f %s", props.currentCO2, props.units)
+    let className = ""
+    if (props.direction === "up") {
+        className = sprintf.sprintf("externalarrowup-icon", props.prefix)
     }
-    if(props.exists === false) (
+    if (props.direction === "down") {
+        className = sprintf.sprintf("externalarrowdown-icon", props.prefix)
+    }
+
+//    console.log("humidity rendering as " + value)
+    let ret =
+        <div id={holderid}>
+         <div id={textid}>
+             {value}
+         </div>
+         <div id={iconid}/>
+        <div className={className}/>
+        </div>
+
+    if (props.exists === false) (
         ret = <></>
     )
 
-    return (ret)
+    return (ret);
 }
 
-export default RenderHumidifier;
+export default RenderCO2Meter;
+
+
+

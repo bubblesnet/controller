@@ -21,23 +21,39 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import './controlTab.css'
+import React from 'react';
+import '../../App.css';
+import './growbox.css';
+import sprintf from 'sprintf-js';
 
-// copyright and license inspection - no issues 4/13/2
+// copyright and license inspection - no issues 4/13/22
 
-function RenderHumidifier (props) {
-    let ret
-    if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
-    } else {
-        ret = <div id="humidifier-holder-on" />
+function RenderVOC (props) {
+    let directionClassName=""
+    let ret = <></>
+
+    if(props.exists !== true ) {
+        return( ret )
     }
-    if(props.exists === false) (
-        ret = <></>
-    )
 
-    return (ret)
+    if(props.direction==="up") {
+        directionClassName="vocarrowup-icon"
+    }
+    if(props.direction==="down") {
+        directionClassName="vocarrowdown-icon"
+    }
+    let value = sprintf.sprintf("%.1f", props.value)
+//    console.log("value rendering as " + value)
+    ret = <>
+        <div className={"value-holder-voc"} >{value} {props.units}
+        </div>
+        <div className={directionClassName} />
+    </>
+
+    return (ret);
 }
 
-export default RenderHumidifier;
+export default RenderVOC;
+
+
+

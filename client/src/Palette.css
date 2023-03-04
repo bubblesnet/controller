@@ -38,6 +38,7 @@
 
     --color-light-as-day: #c0c0c0;
     --color-lighter-as-day: #d0d0d0;
+    --color-lightest-as-day: #f0f0f0;
     --color-dark-as-night: #404040;
     --color-darkish-as-night: #505050;
     --color-darker-as-night: #606060;
@@ -46,6 +47,8 @@
     --color-tub-water-blue: #9ABDE6;
     --gradient-light-as-day: linear-gradient( var(--color-dark-as-night) 2%, var(--color-light-as-day) 49%, var(--color-lighter-as-day)  100%);
     --gradient-dark-as-night: linear-gradient( var(--color-dark-as-night) 0%, var(--color-darkish-as-night) 49%, var(--color-light-as-day) 100%);
+
+    --gradient-growbox: linear-gradient( var(--color-light-as-day) 2%, var(--color-lighter-as-day) 49%, var(--color-lightest-as-day)  100%);
 
     --color-bubbles-brand: #477CBC;	/* Main Primary color */
 

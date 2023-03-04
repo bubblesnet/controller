@@ -102,7 +102,8 @@ function RenderDisplaySettingsTab (props) {
                     <Table id="settings-tab" >
                         <tbody>
                          <TableRow>
-                            <TableCell className={"table-cell"}>Language</TableCell><TableCell className={"table-cell"}><Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
+                            <TableCell className={"table-cell"}>Language</TableCell><TableCell className={"table-cell"}>
+                             <Select options={values.languageOptions} value={values.language} onChange={applyLanguageChangeLocally}/></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell >Font Family</TableCell><TableCell className={"table-cell"}><Select options={fonts} value={values.current_font} onChange={({ option }) => applyFontChangeLocally(option)}/></TableCell>

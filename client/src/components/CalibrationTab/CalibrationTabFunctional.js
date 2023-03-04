@@ -42,9 +42,6 @@ import log from "roarr";
 
 function RenderCalibrationTab (props) {
     const [station] = useState(JSON.parse(JSON.stringify(props.station)));
-    const [reset_button_state] = useState(false)
-    const [defaults_button_state] = useState(true)
-    const [apply_button_state] = useState(false)
     const [module_types,setModuleTypes] = useState()
     const [nodeEnv] = useState(props.nodeEnv);
     const [apiHost] = useState(props.apiHost)
@@ -67,14 +64,6 @@ function RenderCalibrationTab (props) {
             return ""
         } else {
             return module.address + " "
-        }
-    }
-
-    function getIncludedSensor( sensor, index, arr ) {
-        if( sensor.device_type === "GPIO" ) {
-            return sensor.sensor_name + " "
-        } else {
-            return sensor.sensor_name + ":" + sensor.measurement_name + " "
         }
     }
 
@@ -133,16 +122,6 @@ function RenderCalibrationTab (props) {
 //    function testDatabase(e) {
 //
 //    }
-
-    function applyChanges() {
-
-    }
-    function resetChanges() {
-
-    }
-    function defaultsAction() {
-
-    }
 
     let module_rows = getModules()
 //    console.log("rendering with font set to " + values.theme.global.font.family)

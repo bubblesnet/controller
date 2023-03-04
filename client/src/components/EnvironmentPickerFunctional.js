@@ -24,6 +24,8 @@
 import React from "react";
 import {RadioButtonGroup} from "rendition";
 import log from "roarr";
+import {ReadyState} from "react-use-websocket";
+
 // import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
@@ -33,6 +35,10 @@ function RenderEnvironmentPickerFunctional(props) {
     let setNodeEnv = (value) => {
         log.trace("EnvironmentPicker set nodeEnv to " + value)
         props.handleClick( value )
+    }
+    let webSocketLabel="Ping open WebSocket"
+    if( props.readyState !== ReadyState.OPEN ) {
+        webSocketLabel = "WebSocket server down"
     }
 
         return (
@@ -45,6 +51,11 @@ function RenderEnvironmentPickerFunctional(props) {
                 options={['development', 'test', 'production']}
                 value={props.nodeEnv} onChange={(event) => setNodeEnv(event.target.value)}
             />
+            <div className="RenderPingerFunctional" >
+            <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
+            <button onClick={props.handleClickSendMessage} >{"API server"}</button>
+            <button onClick={props.handleClickSendMessage} >{"ActiveMQ"}</button>
+            </div>
         </div>)
 
 }

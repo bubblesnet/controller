@@ -34,7 +34,7 @@ const log = require("../../bubbles_logger").log
 async function getSiteById(siteid) {
     const results = await db.query(
         sql`
-            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid,
+            SELECT sitename as site_name, siteid_site as siteid, station_name, location, stationid, station_type,
                    tamper_xmove, tamper_ymove, tamper_zmove, voc_sensor, co2_sensor, ec_sensor,
                    current_stage, time_between_pictures_in_seconds, time_between_sensor_polling_in_seconds, humidifier, humidity_sensor_internal,
                    humidity_sensor_external, heater, water_heater, thermometer_top, thermometer_middle, thermometer_bottom, thermometer_external,

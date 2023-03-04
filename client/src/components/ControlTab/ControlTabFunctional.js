@@ -25,6 +25,7 @@ import React from 'react';
 import '../../App.css';
 import '../../Palette.css';
 import '../../overview_style.css'
+import './controlTab.css'
 
 import RenderWaterHeater from "./WaterHeaterFunctional";
 import RenderIntakeFan from "./IntakeFanFunctional";

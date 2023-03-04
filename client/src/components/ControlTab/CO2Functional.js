@@ -23,6 +23,7 @@
 
 import React from 'react';
 import '../../App.css';
+import './controlTab.css'
 import sprintf from 'sprintf-js';
 
 // copyright and license inspection - no issues 4/13/22

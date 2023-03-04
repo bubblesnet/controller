@@ -343,53 +343,7 @@ body {
   background: url("images/waterheater-off.gif")
 }
 
-#humidifier-holder-on {
-  right: 230px;
-  width: 100px;
-  height: 150px;
-  position: absolute;
-  top:325px;
-  background: url("images/humidifier-on.gif")
-}
 
-#humidifier-holder-off {
-  right: 230px;
-  width: 100px;
-  height: 150px;
-  position: absolute;
-  top: 325px;
-  background: url("images/humidifier-off.gif")
-}
-
-.input-fan-holder {
-  height: 76px;
-  left: 0;
-  position: absolute;
-  top: 374px;
-  width: 242px;
-}
-#intake-animated-fan-container {
-  background-image:url(images/slow-spinning-fan.gif);
-  background-repeat:no-repeat;
-  width:76px;
-  height:76px;
-  top: 0;
-  left: 140px;
-  position: absolute;
-  float: right;
-  margin-right: 10px
-}
-#intake-fan-container {
-  background-image:url(images/stopped-fan.gif);
-  background-repeat:no-repeat;
-  width:76px;
-  height:76px;
-  top: 0;
-  left: 140px;
-  position: absolute;
-  float: right;
-  margin-right: 10px
-}
 
 #intake-animated-wind-container {
   background-image:url(images/windlines-left-animated.gif);
@@ -584,14 +538,6 @@ body {
   font-size: large;
 }
 
-#humidity-holder {
-  top: 120px;
-  left: 270px;
-  width: 82px;
-  height: 60px;
-  position: absolute;
-  color: white;
-}
 
 #sun-moon-icon-holder {
   top: 10px;
@@ -620,16 +566,6 @@ body {
   background: url(images/humidityicon.png) no-repeat;
 }
 
-#humiditytext-holder {
-  top: 2px;
-  left: 0;
-  width: 20px;
-  height: 50px;
-  position: absolute;
-  color: black;
-  font-weight: bold;
-  font-size: large;
-}
 
 #externalhumiditytext-holder {
   top: 2px;
@@ -660,46 +596,8 @@ body {
   background: url(images/internal_light.png) no-repeat;
 }
 
-#externalhumidityicon-holder {
-  top: 10px;
-  right: 10px;
-  width: 42px;
-  height: 60px;
-  position: absolute;
-  background: url(images/humidityicon.png) no-repeat;
-}
-
-#externalhumidity-holder {
-  bottom: 30px;
-  right: 0;
-  width: 80px;
-  height: 60px;
-  position: absolute;
-  color: black;
-  font-weight: bold;
-  font-size: large;
-}
 
 
-#airtemp-holder-day {
-  top: 40px;
-  right: 80px;
-  width: 80px;
-  height: 280px;
-  position: absolute;
-  color: black;
-  font-weight: bold;
-  font-size: large;
-}
-
-#airtemp-holder-night {
-  top: 40px;
-  right: 80px;
-  width: 100px;
-  height: 280px;
-  position: absolute;
-  color: white;
-}
 
 .thermo-icon {
   top:0;
@@ -803,22 +701,6 @@ body {
   background: url(images/water-level-ruler.png) no-repeat;
 }
 
-#tubedge-holder {
-  height: 25px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 618px;
-}
-
-#tub {
-  height: 188px;
-  left: 113px;
-  position: absolute;
-  top: 481px;
-  width: 560px;
-  background: var(--color-ceramic-white);
-}
 
 #water-level-holder {
   left: 0;
@@ -905,6 +787,7 @@ body {
   width: 164px;
   background: var(--color-pot-green);
 }
+
 .pot-holder-body {
   height: 68px;
   position: absolute;
@@ -913,6 +796,7 @@ body {
   width: 154px;
   background: var(--color-pot-green);
 }
+
 .text-9 {
   left: 32px;
   position: absolute;
@@ -921,6 +805,7 @@ body {
   font-weight: bold;
   line-height: 28px;
 }
+
 .growlight-container-on {
   left: 113px;
   width: 560px;

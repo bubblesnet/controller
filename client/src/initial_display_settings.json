@@ -17,8 +17,8 @@
     "plant_height_units": "inches",
     "humidity_units": "%",
     "temperature_units": "F",
-    "voc_units": "ppm",
-    "co2_units":  "ppb",
+    "voc_units": "ppb",
+    "co2_units":  "ppm",
     "ec_units":  "",
     "pressure_units": "hPa",
     "pressure_units_options": [

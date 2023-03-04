@@ -90,10 +90,6 @@ function RenderServerSettingsTab (props) {
     function openDatabasePort() {
         alert("Database TCP Port at ???? opened successfully")
   }
-    function testDatabase() {
-        alert("Database at ???? called successfully")
-    }
-
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

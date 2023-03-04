@@ -22,22 +22,21 @@
  */
 
 import React from "react";
-import './controlTab.css'
 
-// copyright and license inspection - no issues 4/13/2
+// copyright and license inspection - no issues 4/13/22
 
-function RenderHumidifier (props) {
+function RenderHeater (props) {
+//    console.log("RenderHeater "+props.on)
     let ret
     if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
+        ret = <div id="heater-holder-off" />
     } else {
-        ret = <div id="humidifier-holder-on" />
+        ret = <div id="heater-holder-on" />
     }
     if(props.exists === false) (
         ret = <></>
     )
-
     return (ret)
 }
 
-export default RenderHumidifier;
+export default RenderHeater;

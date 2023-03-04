@@ -140,10 +140,10 @@ const pressure_units = {
     hPa: "hpa"
 }
 const voc_units = {
-    ppm: "ppm",
+    ppm: "ppb",
 }
 const co2_units = {
-    ppb: "ppb",
+    ppb: "ppm",
 }
 
 // CLIENT ADDED

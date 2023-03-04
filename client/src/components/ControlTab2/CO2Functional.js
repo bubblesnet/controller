@@ -21,23 +21,41 @@
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import './controlTab.css'
+import React from 'react';
+import '../../App.css';
+import sprintf from 'sprintf-js';
 
-// copyright and license inspection - no issues 4/13/2
+// copyright and license inspection - no issues 4/13/22
 
-function RenderHumidifier (props) {
-    let ret
-    if( props.on === false ) {
-        ret = <div id="humidifier-holder-off" />
-    } else {
-        ret = <div id="humidifier-holder-on" />
+function RenderCO2 (props) {
+    let directionClassName=""
+    let ret = <></>
+
+    if(props.exists !== true ) {
+        console.log("CO2 doesn't exist!!! " + props.exists)
+        return( ret )
     }
-    if(props.exists === false) (
-        ret = <></>
-    )
 
-    return (ret)
+    if(props.direction === "up") {
+        directionClassName="co2arrowup-icon"
+    }
+    if(props.direction === "down") {
+        directionClassName="co2arrowdown-icon"
+    }
+    let value = sprintf.sprintf("%.0f", props.value)
+//    console.log("CO2 value rendering as " + value)
+     ret = <>
+        <div className={"value-holder-co2-voc"} >
+            CO2 {value} {props.units}
+        </div>
+         <div className={directionClassName} />
+
+     </>
+
+    return (ret);
 }
 
-export default RenderHumidifier;
+export default RenderCO2;
+
+
+

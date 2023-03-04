@@ -24,12 +24,13 @@
 import React from 'react';
 import '../../App.css';
 import sprintf from 'sprintf-js';
+import './controlTab.css'
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderHygrometer (props) {
 //    console.log("RenderHygrometer humidity = " + props.currentHumidity)
-    let holderid = props.prefix + "humidity-holder"
+    let holderid = props.prefix + "zzhumidity-holder"
     let textid = props.prefix + "humiditytext-holder"
     let iconid = "externalhumidityicon-holder"
     let value = sprintf.sprintf("%2.1f", props.currentHumidity)
@@ -40,7 +41,7 @@ function RenderHygrometer (props) {
     if (props.direction === "down") {
         className = sprintf.sprintf("externalarrowdown-icon", props.prefix)
     }
-
+    console.log("holderid "+holderid+" textid "+textid)
 //    console.log("humidity rendering as " + value)
     let ret = <>
         <div id={holderid}>
