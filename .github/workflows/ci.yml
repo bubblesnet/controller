@@ -43,19 +43,20 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       # Performs a clean installation of ActiveMQ
       - name: "Install ActiveMQ ${{matrix.activemq-version}}"
         run: |
+          sleep 30
           # SUDDENLY THIS ERRORS OUT sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre > /dev/null 2> /dev/null
           npm install >/dev/null 2> /dev/null
           wget https://archive.apache.org/dist/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          ls -al *.gz
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-          echo 'calling ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start'
           ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
-          sleep 30
         working-directory: server
 
       - name: Setup PostgreSQL
