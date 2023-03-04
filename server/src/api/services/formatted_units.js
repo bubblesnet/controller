@@ -57,6 +57,9 @@
 
 (function () {
     exports.formattedWaterLevel = function (waterLevelMonitoredSensor) {
+        if(waterLevelMonitoredSensor.value < 0 ) {
+            return('EMPTY')
+        }
         var ret = {};
         var config = require("../../config/locals.js");
         var sprintf = require("sprintf-js").sprintf,
