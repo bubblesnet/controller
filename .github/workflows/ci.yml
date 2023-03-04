@@ -54,7 +54,8 @@ jobs:
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           echo 'calling ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start'
-          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq console
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          sleep 30
         working-directory: server
 
       - name: Setup PostgreSQL
