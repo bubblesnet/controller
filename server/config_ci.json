@@ -6,7 +6,7 @@
   "dontSendEmail": true,
   "sendgridSenderEmailAddress": "sendgridrodley@gmail.com",
   "bubbles_db_config": {
-    "host": "database",
+    "host": "localhost",
     "user": "postgres",
     "password": "postgres",
     "database": "bubbles_ci",
