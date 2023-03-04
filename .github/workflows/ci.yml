@@ -54,9 +54,7 @@ jobs:
           tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
           echo 'calling ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start'
-          echo 'JAVA_HOME = ${JAVA_HOME}'
-          echo 'JAVACMD = ${JAVACMD}'
-          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq console
         working-directory: server
 
       - name: Setup PostgreSQL
