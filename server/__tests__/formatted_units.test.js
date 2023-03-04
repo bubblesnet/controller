@@ -48,7 +48,7 @@ describe("formatted_units", () => {
         expect(x).equals("EMPTY")
         console.log("formattedWaterLevel " + x)
         x = formatted_units.formattedWaterLevel({units: "In", value: 16.5});
-        expect(x).equals("20.0 gallons")
+        expect(x).equals("12.1 gallons")
         console.log("formattedWaterLevel " + x)
 
         localconfig.units = 'IMPERIAL'

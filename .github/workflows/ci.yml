@@ -97,6 +97,15 @@ jobs:
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000035_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000036_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
           sudo psql -h localhost -p 5432 -a -q -f migrations/00000037_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000038_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000039_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000040_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000041_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000042_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000043_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000044_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000045_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
+          sudo psql -h localhost -p 5432 -a -q -f migrations/00000046_bu.up.sql  "user=postgres dbname=bubbles_ci password=postgres"
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost
