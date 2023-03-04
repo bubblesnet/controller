@@ -2,6 +2,7 @@
   "usersdirectory": "d:/glassdashcam/shared/glassdashcamdata/users",
   "units": "IMPERIAL",
   "tubdepth": 16.5,
+  "tubvolume": 20,
   "sendEmailNotification": true,
   "dontSendEmail": true,
   "sendgridSenderEmailAddress": "sendgridrodley@gmail.com",

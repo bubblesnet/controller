@@ -44,12 +44,12 @@ describe("formatted_units", () => {
         x = formatted_units.formattedAtmosphericPressure({units: "H", value: 72.0});
         expect(x).equals("72.0 H")
         console.log("formattedAtmosphericPressure " + x)
-        x = formatted_units.formattedWaterLevel({units: "G", value: -72.0});
+        x = formatted_units.formattedWaterLevel({units: "In", value: -1.0});
         expect(x).equals("EMPTY")
-        console.log("formattedAtmosphericPressure " + x)
-        x = formatted_units.formattedWaterLevel({units: "G", value: 48.9});
-        expect(x).equals("48.9 gallons")
-        console.log("formattedAtmosphericPressure " + x)
+        console.log("formattedWaterLevel " + x)
+        x = formatted_units.formattedWaterLevel({units: "In", value: 16.5});
+        expect(x).equals("20.0 gallons")
+        console.log("formattedWaterLevel " + x)
 
         localconfig.units = 'IMPERIAL'
         x = formatted_units.formattedTemperature({units: "METRIC", value: 0.0});
