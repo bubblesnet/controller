@@ -46,13 +46,14 @@ jobs:
       # Performs a clean installation of ActiveMQ
       - name: "Install ActiveMQ ${{matrix.activemq-version}}"
         run: |
-          # SUDDENLY THIS ERRORS OUT sudo apt update -y -q > /dev/null 2> /dev/null
+          # SUDDENLY THIS ERRORS OUT 
+          sudo apt update -y -q > /dev/null 2> /dev/null
           sudo apt-get install -y -q default-jre
-        #  npm install >/dev/null 2> /dev/null
-        #  wget https://archive.apache.org/dist/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-        #  tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-        #  rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
-        # ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
+          npm install >/dev/null 2> /dev/null
+          wget https://archive.apache.org/dist/activemq/${{matrix.activemq-version}}/apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          tar zxf apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          rm ./apache-activemq-${{matrix.activemq-version}}-bin.tar.gz
+          ./apache-activemq-${{matrix.activemq-version}}/bin/activemq start
         working-directory: server
 
       - name: Setup PostgreSQL
