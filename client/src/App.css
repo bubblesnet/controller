@@ -96,6 +96,10 @@
   background: var(--color-primary-1);
 }
 
+.pinger-table {
+  float: right;
+}
+
 .tabstyle {
   color: white;
 }

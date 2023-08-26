@@ -51,7 +51,7 @@ function get_server_ports_for_environment(env_mixed) {
             ports.websocket_server_host = window.location.hostname;
             ports.websocket_server_port = 5001;
             ports.activemq_server_port = 61611;
-            ports.activemq_server_host = 'activemq';
+            ports.activemq_server_host = window.location.hostname;
             break;
         case "test":
             ports.ui_server_port = 3002;

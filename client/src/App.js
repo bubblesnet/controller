@@ -40,6 +40,9 @@ import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
 import log from "roarr";
+
+import * as constants from "constants";
+
 // import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
@@ -220,6 +223,15 @@ function App(props) {
         }
     }
 
+    function setSelectedStageFromChild(value) {
+        console.log("setSelectedStageFromChild to " + JSON.stringify(value))
+        for (let i = 0; i < site.stations.length; i++) {
+            if (i === selectedStationIndex) {
+                console.log("Changing stage from " + site.stations[i].automation_settings + " to " + value)
+                break;
+            }
+        }
+    }
 
     const [site, setSite] = useState({});
     const [selectedStationIndex, setSelectedStationIndex] = useState(0)
@@ -316,6 +328,7 @@ function App(props) {
                 logout={doLogout}
                 setLatestPictureFromChild={setLatestPictureFromChild}
                 changeStationFromChild={changeStationFromChild}
+                setSelectedStageFromChild={setSelectedStageFromChild}
             /> :
             <UnauthenticatedApp nodeEnv={process.env.REACT_APP_NODE_ENV} processLoginResult={processLoginResult}/>
     }

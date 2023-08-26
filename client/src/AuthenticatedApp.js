@@ -59,6 +59,7 @@ import log from "roarr";
 import moment from "moment";
 
 import {changeStage} from './api/utils';
+import * as constants from './constants';
 
 // import RenderSetup from "./components/ServerSettingsTab/ServerSettingsTabFunctional"
 // import {Avatar, Button, Sidebar, Nav, Grid, Text} from 'grommet'
@@ -469,14 +470,24 @@ function AuthenticatedApp (props) {
      * Respond to a test button by sending a random status request message over the websocket
      * @type {function(): void}
      */
-//    const handleClickSendMessage = useCallback(() => {
-//        getDeviceStatus()
-//    },[]);
 
-    const handleClickSendMessage = () => {
-        log.trace("ws: handleClickSendMessage")
-        getDeviceStatus()
+    const handleWebSocketPing = () => {
+        log.trace("ws: handleWebSocketPing")
+        let cmds = getDeviceStatus()
+        alert("Sent to " + servers.websocket_server_host + ":" + servers.websocket_server_port + " websocket messages " + JSON.stringify(cmds))
     }
+
+    const handleAPIPing = async () => {
+        log.trace("ws: handleAPIPing")
+        let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
+        alert("Get site from " + servers.api_server_host + ":" + servers.api_server_port + " returned " + JSON.stringify(z))
+    }
+
+    const handleActiveMQPing = () => {
+        log.trace("ws: handleActiveMQPing")
+        alert("ActiveMQ server at " + servers.activemq_server_host + ":" + servers.activemq_server_port + ", no test available yet" )
+    }
+
     //
     //
     //
@@ -486,6 +497,7 @@ function AuthenticatedApp (props) {
     //
     function getDeviceStatus() {
         log.trace("aq: getDeviceStatus()")
+        let cmds = []
         for( let i = 0; i < site.stations[props.stationindex].attached_devices.length; i++ ) {
             let cmd = {
                 command: STATUS_COMMAND,
@@ -493,7 +505,9 @@ function AuthenticatedApp (props) {
                 deviceid: site.stations[props.stationindex].attached_devices[i].deviceid
             }
             sendJsonMessage(cmd)
+            cmds.push(cmd)
         }
+        return(cmds)
     }
 
     async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
@@ -835,33 +849,38 @@ function AuthenticatedApp (props) {
     }
 
     function getControlTabForStation() {
-        if (props.station_type === 2) {
-            return <RenderControlTab2 nodeEnv={nodeEnv}
-                                     apiPort={apiPort}
-                                     theme={bubbles_theme}
-                                     station={site.stations[props.stationindex]}
-                                     state={thestate}
-                                     switch_state={switch_state}
-                                     sensor_readings={sensor_readings}
-                                     setStateFromChild={setSwitchStateFromChild}
-                                     setCurrentStage={setCurrentAutomationStageFromChild}
-                                     display_settings={props.display_settings}
-                                     because={because}
-            />
+        switch( props.station_type ) {
+            case types.station_type.STATION_TYPE_MUSHROOM: {
+                return <RenderControlTab2 nodeEnv={nodeEnv}
+                                          apiPort={apiPort}
+                                          theme={bubbles_theme}
+                                          station={site.stations[props.stationindex]}
+                                          state={thestate}
+                                          switch_state={switch_state}
+                                          sensor_readings={sensor_readings}
+                                          setStateFromChild={setSwitchStateFromChild}
+                                          setCurrentStage={setCurrentAutomationStageFromChild}
+                                          display_settings={props.display_settings}
+                                          because={because}
+                />
 
-        } else {
-            return <RenderControlTab nodeEnv={nodeEnv}
-                                     apiPort={apiPort}
-                                     theme={bubbles_theme}
-                                     station={site.stations[props.stationindex]}
-                                     state={thestate}
-                                     switch_state={switch_state}
-                                     sensor_readings={sensor_readings}
-                                     setStateFromChild={setSwitchStateFromChild}
-                                     setCurrentStage={setCurrentAutomationStageFromChild}
-                                     display_settings={props.display_settings}
-                                     because={because}
-            />
+            }
+            case types.station_type.STATION_TYPE_CANNABIS: {
+                return <RenderControlTab nodeEnv={nodeEnv}
+                                         apiPort={apiPort}
+                                         theme={bubbles_theme}
+                                         station={site.stations[props.stationindex]}
+                                         state={thestate}
+                                         switch_state={switch_state}
+                                         sensor_readings={sensor_readings}
+                                         setStateFromChild={setSwitchStateFromChild}
+                                         setCurrentStage={setCurrentAutomationStageFromChild}
+                                         display_settings={props.display_settings}
+                                         because={because}
+                />
+            }
+            default:
+                return <p>Station type {props.station_type} is invalid. Must be either STATION_TYPE_CANNABIS {types.station_type.STATION_TYPE_CANNABIS} OR STATION_TYPE_MUSHROOM {types.station_type.STATION_TYPE_MUSHROOM}</p>
         }
     }
     let control_tab_div = getControlTabForStation()
@@ -872,16 +891,23 @@ function AuthenticatedApp (props) {
         props.changeStationFromChild(option)
     }
 
+    function setSelectedStageFromChild(option) {
+        props.setSelectedStageFromChild(option)
+    }
+
     console.log("rendering app with station index set to " + props.stationindex)
     return <div className="App">
         <Header tilt={tilt.currently_tilted}
                 siteName={props.site.stations[props.stationindex].site_name}
                 setNodeEnv={setEnvironment}
                 station={site.stations[props.stationindex]} nodeEnv={nodeEnv} readyState={readyState}
-                handleClickSendMessage={handleClickSendMessage}
+                handleWebSocketPing={handleWebSocketPing}
+                handleAPIPing={handleAPIPing}
+                handleActiveMQPing={handleActiveMQPing}
                 logout={props.logout}
                 CropWeek={CropWeek}
                 site={props.site}
+                setSelectedStageFromChild={setSelectedStageFromChild}
                 changeStationFromChild={changeStationFromChild}
                 stationindex={props.stationindex}
                     />

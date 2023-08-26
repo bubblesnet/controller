@@ -132,6 +132,11 @@ const switch_name = {
 
 }
 
+const station_type = {
+    STATION_TYPE_CANNABIS: 1,
+    STATION_TYPE_MUSHROOM: 2,
+}
+
 module.exports = {
     measurement_name,
     measurement_type,
@@ -143,4 +148,5 @@ module.exports = {
     liquid_volume_units,
     ac_device_name,
     switch_name,
+    station_type,
 }

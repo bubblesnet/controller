@@ -25,6 +25,8 @@ import React from "react";
 import {RadioButtonGroup} from "rendition";
 import log from "roarr";
 import {ReadyState} from "react-use-websocket";
+import {Table,TableRow,TableCell,Button} from 'grommet'
+import '../Palette.css'
 
 // import log from "./bubbles_logger"
 
@@ -34,11 +36,12 @@ function RenderEnvironmentPickerFunctional(props) {
 
     let setNodeEnv = (value) => {
         log.trace("EnvironmentPicker set nodeEnv to " + value)
-        props.handleClick( value )
+        props.handleSetEnvironment( value )
     }
-    let webSocketLabel="Ping open WebSocket"
+
+    let webSocketLabel="WebSocket"
     if( props.readyState !== ReadyState.OPEN ) {
-        webSocketLabel = "WebSocket server down"
+        webSocketLabel = "WS down"
     }
 
         return (
@@ -52,9 +55,43 @@ function RenderEnvironmentPickerFunctional(props) {
                 value={props.nodeEnv} onChange={(event) => setNodeEnv(event.target.value)}
             />
             <div className="RenderPingerFunctional" >
-            <button onClick={props.handleClickSendMessage} disabled={props.readyState !== ReadyState.OPEN} >{webSocketLabel}</button>
-            <button onClick={props.handleClickSendMessage} >{"API server"}</button>
-            <button onClick={props.handleClickSendMessage} >{"ActiveMQ"}</button>
+                <Table className="pinger-table">
+                    <tbody>
+                    <TableRow>
+                        <TableCell>
+                            Ping
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                    color={'var(--color-button-border)'}
+                                           disabled={props.readyState !== ReadyState.OPEN}
+                                           size={'small'}
+                                           round={'small'}
+                                            active={true}
+                                           label={webSocketLabel}
+                                           onClick={props.handleWebSocketPing} />
+                        </TableCell>
+                        <TableCell>
+                            <Button color={'var(--color-button-border)'}
+                                           disabled={false}
+                                           size={'small'}
+                                           round={'small'}
+                                            active={true}
+                                           label={'API'}
+                                           onClick={props.handleAPIPing} />
+                        </TableCell>
+                        <TableCell>
+                            <Button color={'var(--color-button-border)'}
+                                           disabled={false}
+                                           size={'small'}
+                                           round={'small'}
+                                            active={true}
+                                           label={'ActiveMQ'}
+                                           onClick={props.handleActiveMQPing} />
+                        </TableCell>
+                    </TableRow>
+                    </tbody>
+                </Table>
             </div>
         </div>)
 

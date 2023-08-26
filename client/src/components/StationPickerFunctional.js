@@ -27,30 +27,28 @@ import RenderStageSelector2 from "./StageTabs/StageSelector2";
 
 function RenderStationPickerFunctional(props) {
 
-    console.log("RenderStationPickerFunctional index = " +props.stationindex )
-    console.log( " station_name="+props.site.stations[props.stationindex].station_name)
+    console.log("RenderStationPickerFunctional index = " + props.stationindex)
+    console.log(" station_name=" + props.site.stations[props.stationindex].station_name)
     let stationNames = []
 
-    function setSelectedStage(val) {
 
-    }
-
-    for( let i = 0; i < props.site.stations.length; i++ ) {
+    for (let i = 0; i < props.site.stations.length; i++) {
         stationNames.push(props.site.stations[i].station_name)
     }
 
-        return (
-        <div >
+    return (
+        <div>
             <Text>Station</Text>
-            <Select options={stationNames} value={props.site.stations[props.stationindex].station_name} onChange={({ option }) => props.changeStationFromChild(option)}/>
+            <Select options={stationNames} value={props.site.stations[props.stationindex].station_name}
+                    onChange={({option}) => props.changeStationFromChild(option)}/>
             <RenderStageSelector2 station={props.site.stations[props.stationindex]}
-                                 display_settings={props.display_settings}
-                                 setSelectedStageFromChild={setSelectedStage}
+                                  display_settings={props.display_settings}
+                                  setSelectedStageFromChild={props.setSelectedStageFromChild}
                                   station_type={props.site.stations[props.stationindex].station_type}
-                                 automation_setting={{stage_name: props.site.stations[props.stationindex].current_stage}}
+                                  automation_setting={{stage_name: props.site.stations[props.stationindex].current_stage}}
             />
 
-            <Text >Crop Week {props.CropWeek} </Text>
+            <Text>Crop Week {props.CropWeek} </Text>
         </div>)
 
 }

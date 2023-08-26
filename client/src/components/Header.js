@@ -65,12 +65,18 @@ function Header (props) {
                </span>
             </header>
             <RenderEnvironmentPickerFunctional readyState={props.readyState} nodeEnv={nodeEnv} apiPort={apiPort}
-                                               handleClick={setEnvironment} handleClickSendMessage={props.handleClickSendMessage} />
+                                               handleSetEnvironment={setEnvironment}
+                                               handleClick={setEnvironment}
+                                               handleWebSocketPing={props.handleWebSocketPing}
+                                               handleAPIPing={props.handleAPIPing}
+                                               handleActiveMQPing={props.handleActiveMQPing}
+            />
             <RenderStationPickerFunctional nodeEnv={nodeEnv} apiPort={apiPort}
                                            changeStationFromChild={props.changeStationFromChild}
                                            site={props.site}
                                            stationindex={props.stationindex}
                                            CropWeek={props.CropWeek}
+                                           setSelectedStageFromChild={props.setSelectedStageFromChild}
             />
         </div>
    );
