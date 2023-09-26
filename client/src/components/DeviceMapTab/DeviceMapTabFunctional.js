@@ -37,8 +37,6 @@ import GoogleFontLoader from "react-google-font-loader";
 import moment from "moment";
 
 import {getContainerNames, getModuleTypes} from '../../api/utils';
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -56,16 +54,16 @@ function RenderDeviceMapTab (props) {
     useEffect(() => {
         const fetchData = async () => {
             let x = await getContainerNames(apiHost, apiPort)
-            log.trace("containers " + JSON.stringify(container_names))
+            console.log("containers " + JSON.stringify(container_names))
             setContainerNames(x.container_names)
             x = await getModuleTypes(apiHost, apiPort)
-            log.trace("modules " + JSON.stringify(module_types))
+            console.log("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
         fetchData();
     }, [nodeEnv])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    log.trace("RenderDeviceMapTab")
+    console.log("RenderDeviceMapTab")
     let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
@@ -105,14 +103,14 @@ function RenderDeviceMapTab (props) {
                     sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
             }
         }
-        log.trace("arr = " + JSON.stringify(arr))
+        console.log("arr = " + JSON.stringify(arr))
         let ret = arr.map(getModulerow)
         return ret
     }
 
     function getDevices() {
 //        console.log("getModules " + JSON.stringify(station))
-//        log.trace("arr = " + JSON.stringify(arr))
+//        console.log("arr = " + JSON.stringify(arr))
         let ret = station.attached_devices.map(getDeviceRow)
         return ret
     }

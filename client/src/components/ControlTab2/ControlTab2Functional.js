@@ -34,7 +34,6 @@ import RenderHumidifier from "./HumidifierFunctional";
 import RenderSwitchPanel from "./SwitchPanelFunctional";
 import {Grommet} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
-import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -72,7 +71,7 @@ function RenderControlTab2(props) {
     function toggleAutomatic() {
         let x = JSON.parse(JSON.stringify(props.switch_state));
         x.automaticControl.on = !props.switch_state.automaticControl.on;
-        log.trace("toggleAutomatic from " + props.switch_state.automaticControl.on + " to " + x.automaticControl.on)
+        console.log("toggleAutomatic from " + props.switch_state.automaticControl.on + " to " + x.automaticControl.on)
         props.setStateFromChild(x, "automaticControl", x.automaticControl.on)
     }
 

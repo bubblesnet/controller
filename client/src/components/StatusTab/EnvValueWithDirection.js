@@ -27,13 +27,11 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderEnvValueWithDirection (props) {
-    log.info("RenderEnvValueWithDirection "+ props.label +" units = " + props.units)
+    console.log("RenderEnvValueWithDirection "+ props.label +" units = " + props.units)
 
     let ret =''
     let label_area= `${props.gridArea}-label`

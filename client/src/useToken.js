@@ -22,8 +22,6 @@
  */
 
 import { useState } from 'react';
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -32,11 +30,11 @@ export default function useToken() {
         try {
             const tokenString = sessionStorage.getItem('token');
             const userToken = JSON.parse(tokenString);
-            log.trace("Returning saved token " + JSON.stringify(userToken))
+            console.log("Returning saved token " + JSON.stringify(userToken))
 
             return userToken
         } catch( err ) {
-            log.trace("auth token err " + err)
+            console.log("auth token err " + err)
             return({auth: false})
         }
     };
@@ -47,7 +45,7 @@ export default function useToken() {
         setToken(userToken);    // Forces a rerender
     };
 
-    log.trace("Returning token " + JSON.stringify(token))
+    console.log("Returning token " + JSON.stringify(token))
     return {
         setToken: saveToken,
         token

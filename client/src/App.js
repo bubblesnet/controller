@@ -39,9 +39,7 @@ import options_pressure_units from './options_pressure_units.json'
 import options_enclosure from './options_enclosure.json'
 import options_language from './options_languages.json'
 
-import log from "roarr";
-
-import * as constants from "constants";
+import * as constants from "./constants";
 
 // import log from "./bubbles_logger"
 
@@ -191,19 +189,19 @@ function App(props) {
 
 
     async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
-            log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+            console.log("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
 //            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
 //            setSite(JSON.parse(JSON.stringify(z)))
 
             for (let i = 0; i < site.stations.length; i++) {
                 for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
-                    log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                    console.log("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
                     if (site.stations[i].attached_devices[j].deviceid === deviceid) {
                         let local_site = JSON.parse(JSON.stringify(site))
                         local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
                         local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
-                        log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
-                        log.info("local_site = " + JSON.stringify(local_site))
+                        console.log("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                        console.log("local_site = " + JSON.stringify(local_site))
                         setSite(JSON.parse(JSON.stringify(local_site)))
                         return
                     }
@@ -237,16 +235,16 @@ function App(props) {
     const [selectedStationIndex, setSelectedStationIndex] = useState(0)
 
 
-    log.info("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
+    console.log("App.js NODE_ENV = " + process.env.NODE_ENV+" REACT_APP_NODE_ENV = " + process.env.REACT_APP_NODE_ENV)
     let servers = util.get_server_ports_for_environment(process.env.REACT_APP_NODE_ENV)
     let needs_setup = false
 
     const { token, setToken } = useToken();
 
     function processLoginResult(loginResult) {
-        log.debug("App: processLoginResult "+JSON.stringify(loginResult))
+        console.log("App: processLoginResult "+JSON.stringify(loginResult))
         if(loginResult.auth === true ) {
-            log.debug("Setting token to " + JSON.stringify(loginResult))
+            console.log("Setting token to " + JSON.stringify(loginResult))
             loginResult.units_options = options_units
             loginResult.pressure_units_options = options_pressure_units
             loginResult.languageOptions = options_language
@@ -264,23 +262,23 @@ function App(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            log.debug("(useEffect) selected stage value fetching")
+            console.log("(useEffect) selected stage value fetching")
             let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
             z.stations[selectedStationIndex].crop = await getCrop(servers.api_server_host, servers.api_server_port, stationid)
-            log.debug("(useEffect) setting site = " + JSON.stringify(z))
+            console.log("(useEffect) setting site = " + JSON.stringify(z))
             setSite(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     // ONLY CALL ON MOUNT - empty array arg causes this
 
-//    log.info("App: Rendering App with token set to " + JSON.stringify(token))
+//    console.log("App: Rendering App with token set to " + JSON.stringify(token))
     if( needs_setup ) {
         return <SetupApp readyState={true}/>
     }
 
 
-//    log.info("App: Rendering App with site set to " + JSON.stringify(site))
+//    console.log("App: Rendering App with site set to " + JSON.stringify(site))
     if( typeof site.stations === 'undefined') {
         return <></>
     }
@@ -291,14 +289,14 @@ function App(props) {
         site.automation_settings = {}
     }
  */
-    log.info("hostname = " + window.location.hostname)
-    log.info(JSON.stringify(site))
+    console.log("hostname = " + window.location.hostname)
+    console.log(JSON.stringify(site))
     let missing_var = ""
     function configured() {
-        log.info("checking ENV " + JSON.stringify(process.env))
+        console.log("checking ENV " + JSON.stringify(process.env))
         for(let i = 0; i < necessary_environment.length; i++ ) {
             if (typeof (necessary_environment[i].value) === 'undefined') {
-                log.info("undefined "+necessary_environment[i].name)
+                console.log("undefined "+necessary_environment[i].name)
                 missing_var = necessary_environment[i].name
                 return false
             }
@@ -307,7 +305,7 @@ function App(props) {
     }
 
     for ( let i = 0; i < site.stations[selectedStationIndex].attached_devices.length; i++ ) {
-        log.debug("picture debugging App attached_devices[" + i + "].latest_picture_filename = " + site.stations[selectedStationIndex].attached_devices[i].latest_picture_filename)
+        console.log("picture debugging App attached_devices[" + i + "].latest_picture_filename = " + site.stations[selectedStationIndex].attached_devices[i].latest_picture_filename)
     }
 
     let ret

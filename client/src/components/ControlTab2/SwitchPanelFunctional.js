@@ -25,8 +25,6 @@ import React from "react";
 import {Table, TableCell, TableRow} from "grommet";
 import RenderDeviceSwitch from "./DeviceSwitchFunctional";
 import Switch from "react-input-switch";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 import RenderStageSelector from "../StageTabs/StageSelector";
 
@@ -61,12 +59,12 @@ function RenderSwitchPanel (props) {
     }
 
     function setSelectedStage(x) {
-        log.trace("setSelectedStage " + JSON.stringify(x))
+        console.log("setSelectedStage " + JSON.stringify(x))
         props.setCurrentStage(x)
     }
 
     function toggleAutomatic(e) {
-        log.trace("toggleAutomatic ")
+        console.log("toggleAutomatic ")
         goodbeep()
         props.switchControl.automaticControl.toggle(e)
     }

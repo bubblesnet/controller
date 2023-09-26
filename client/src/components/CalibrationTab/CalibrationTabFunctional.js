@@ -36,7 +36,6 @@ import {
 import GoogleFontLoader from "react-google-font-loader";
 
 import { getModuleTypes} from '../../api/utils';
-import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -50,13 +49,13 @@ function RenderCalibrationTab (props) {
     useEffect(() => {
         const fetchData = async () => {
             let x = await getModuleTypes(apiHost, apiPort)
-            log.trace("modules " + JSON.stringify(module_types))
+            console.log("modules " + JSON.stringify(module_types))
             setModuleTypes(x.module_types)
         }
         fetchData();
     }, [nodeEnv])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    log.trace("RenderDeviceMapTab")
+    console.log("RenderDeviceMapTab")
     let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getAddress( module ) {
@@ -72,7 +71,7 @@ function RenderCalibrationTab (props) {
 //    }
 
     function getSensorrow( row, index, arr ) {
-        log.info("getSensorrow " + JSON.stringify(row.sensor))
+        console.log("getSensorrow " + JSON.stringify(row.sensor))
         return <TableRow  key={row.sensor.sensorid}>
             <TableCell>{row.device.deviceid}</TableCell>
             <TableCell>{row.module.module_type}</TableCell>
@@ -99,7 +98,7 @@ function RenderCalibrationTab (props) {
         for (let device_index = 0; device_index < station.attached_devices.length; device_index++) {
             for (let module_index = 0; module_index < station.attached_devices[device_index].modules.length; module_index++) {
                 let z = station.attached_devices[device_index].modules[module_index].included_sensors
-                log.info("sensors " + JSON.stringify(z))
+                console.log("sensors " + JSON.stringify(z))
                 for (let sensor_index = 0; sensor_index < z.length; sensor_index++) {
                     arr.push({
                         deviceid: station.attached_devices[device_index],
@@ -110,7 +109,7 @@ function RenderCalibrationTab (props) {
                 }
             }
         }
-        log.trace("arr = " + JSON.stringify(arr))
+        console.log("arr = " + JSON.stringify(arr))
         let ret = arr.map(getSensorrow)
         return ret
     }

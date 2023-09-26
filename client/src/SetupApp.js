@@ -37,15 +37,13 @@ import {grommet} from 'grommet/themes'
 
 import initial_state from './initial_station_state.json'
 import util from "./util";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function SetupApp (props) {
 
     //Public API that will echo messages sent to it back to the client
-    log.trace("AuthenticatedApp rendering with props = " + JSON.stringify(props))
+    console.log("AuthenticatedApp rendering with props = " + JSON.stringify(props))
     const [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     const [bubbles_theme] = useState(deepMerge(grommet, initial_theme));
     const [adminUser, setAdminUser] = useState({})
@@ -64,35 +62,35 @@ function SetupApp (props) {
     },[])  // eslint-disable-line react-hooks/exhaustive-deps
 
     async function getAdminUser() {
-        log.trace("getAdminUser calling out to api for deets")
+        console.log("getAdminUser calling out to api for deets")
 
         return new Promise( async (resolve, reject) => {
-            log.trace(`getAdminUser calling out to http://${servers.api_server_host}:${servers.api_server_port}/users/name/admin`)
+            console.log(`getAdminUser calling out to http://${servers.api_server_host}:${servers.api_server_port}/users/name/admin`)
             const response = fetch(`http://${servers.api_server_host}:${servers.api_server_port}/api/users/name/admin`).then( async function(response) {
                 if (response.ok) {
-                    log.trace("getAdminUser Got user response.ok");
+                    console.log("getAdminUser Got user response.ok");
                     let user = await response.json();
-                    log.trace("getAdminUser Got user " + JSON.stringify(user));
+                    console.log("getAdminUser Got user " + JSON.stringify(user));
                     resolve(user)
                 } else {
-                    log.trace("getAdminUser error " + response.status)
+                    console.log("getAdminUser error " + response.status)
                     reject(response.status)
                 }
             }).catch( function(err) {
-                log.trace(err)
+                console.log(err)
             });
-            log.trace("fetch response " + response)
+            console.log("fetch response " + response)
         })
     }
 
     let setEnvironment = (value) => {
-        log.trace("AuthenticatedApp.setEnvironment(" + value + ")")
+        console.log("AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
-        log.trace("setting environment to " + theNodeEnvironment )
+        console.log("setting environment to " + theNodeEnvironment )
         setNodeEnv(theNodeEnvironment);
     }
 
-    log.trace("SetupApp Rendering App with readyState = " )
+    console.log("SetupApp Rendering App with readyState = " )
     return (
         <div className="App">
                 <Header setNodeEnv={setEnvironment}/>

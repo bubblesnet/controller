@@ -41,8 +41,6 @@ import RenderExternalMetrics from "./ExternalMetricsFunctional";
 import {Grommet} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import RenderPhmeter from "./PhmeterFunctional";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 import sprintf from 'sprintf-js';
 
@@ -79,7 +77,7 @@ function RenderControlTab(props) {
     function toggleAutomatic() {
         let x = JSON.parse(JSON.stringify(props.switch_state));
         x.automaticControl.on = !props.switch_state.automaticControl.on;
-        log.trace("toggleAutomatic from " + props.switch_state.automaticControl.on + " to " + x.automaticControl.on)
+        console.log("toggleAutomatic from " + props.switch_state.automaticControl.on + " to " + x.automaticControl.on)
         props.setStateFromChild(x, "automaticControl", x.automaticControl.on)
     }
 
@@ -170,7 +168,7 @@ function RenderControlTab(props) {
         </div>
 
         let water_level_text = sprintf.sprintf("%.1f",props.sensor_readings.water_level )
-        log.trace("setting water_level_text to " + water_level_text)
+        console.log("setting water_level_text to " + water_level_text)
         wl = <div id="water-level-text-holder">
             {water_level_text} {props.display_settings.tub_volume_units}
         </div>

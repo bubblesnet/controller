@@ -1,1 +1,9 @@
-
+**/.nyc_output/
+**/coverage/
+**/etc/
+**/jsondata/
+**/node_modules/
+**/reports/
+**/docs/
+client/build/
+**/__tests__/

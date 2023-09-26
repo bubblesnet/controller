@@ -25,8 +25,6 @@ import React from "react";
 import Switch from "react-input-switch";
 import {TableRow,TableCell} from "grommet";
 import './controlTab.css'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -41,12 +39,12 @@ function badbeep() {
 }
 function RenderDeviceSwitch (props) {
     function toggle(e) {
-        log.trace("changing = " + props.changing)
+        console.log("changing = " + props.changing)
         if (props.automaticControl === props.off && props.changing === false) {
             props.toggle(e)
             goodbeep();
         } else {
-            log.trace("changing = " + props.changing + " automaticControl = " + props.automaticControl)
+            console.log("changing = " + props.changing + " automaticControl = " + props.automaticControl)
             badbeep();
         }
     }

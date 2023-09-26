@@ -31,14 +31,12 @@ import RenderFormActions from "../FormActions";
 import fontlist from "./fontlist.json"
 
 import GoogleFontLoader from "react-google-font-loader";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderDisplaySettingsTab (props) {
 
-    log.trace("RenderServerSettingsTab with font set to " + props.theme.global.font.family);
+    console.log("RenderServerSettingsTab with font set to " + props.theme.global.font.family);
     let [values, setValues] = useState({units: props.display_settings.units, language: props.display_settings.language, languageOptions: props.display_settings.languageOptions, theme: props.theme, current_font: props.theme.global.font.family}); //
     let [fonts, setFonts] = useState([])
     let [local_theme, setLocalTheme] = useState(JSON.parse(JSON.stringify(props.theme)));
@@ -87,8 +85,8 @@ function RenderDisplaySettingsTab (props) {
         setApplyButtonState(false);
     }
 
-    log.info("RenderDisplaySettingsTab with theme font set to " + local_theme.global.font.family);
-    log.info("RenderDisplaySettingsTab with props.theme.global.font.family set to " + props.theme.global.font.family);
+    console.log("RenderDisplaySettingsTab with theme font set to " + local_theme.global.font.family);
+    console.log("RenderDisplaySettingsTab with props.theme.global.font.family set to " + props.theme.global.font.family);
     let ret =
         <Grommet theme={props.theme}>
             <GoogleFontLoader

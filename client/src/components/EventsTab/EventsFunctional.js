@@ -24,7 +24,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import {getLastNEvents} from "../../api/utils";
-import log from "roarr";
 import {Grommet, Table, TableCell, TableRow} from "grommet";
 import GoogleFontLoader from "react-google-font-loader";
 import RenderFormActions from "../FormActions";
@@ -50,19 +49,19 @@ function RenderOverview (props) {
     },[]);    // eslint-disable-line react-hooks/exhaustive-deps
     */
     useEffect(() => {
-        log.info("useEffect getLastN")
+        console.log("useEffect getLastN")
         const fetchData = async () => {
-            log.trace("fetchData")
+            console.log("fetchData")
 //            let x = await getSite(apiHost, apiPort, 1)
 
             let x = await getLastNEvents(apiHost, apiPort, station.stationid, 100)
-            log.trace("events " + JSON.stringify(x))
+            console.log("events " + JSON.stringify(x))
             setEvents(x)
         }
         fetchData();
     }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
-    log.trace("RenderEventsTab")
+    console.log("RenderEventsTab")
     let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function getEventrow( row ) {
@@ -71,7 +70,7 @@ function RenderOverview (props) {
         let value = row.stringvalue
         if( row.type !== 'measurement') {
             let x = JSON.parse(row.rawjson)
-            log.trace("eventrow rawjson " + JSON.stringify(x))
+            console.log("eventrow rawjson " + JSON.stringify(x))
             name = x.switch_name
             value = (x.on === true) ? "on":"off"
         }
@@ -95,7 +94,7 @@ function RenderOverview (props) {
                     sensors: getSensorsForModule(station.attached_devices[device_index].modules[module_index]), device: station.attached_devices[device_index]})
             }
         }
-        log.trace("arr = " + JSON.stringify(arr))
+        console.log("arr = " + JSON.stringify(arr))
 
  */
         let ret = events.map(getEventrow)

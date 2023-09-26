@@ -23,7 +23,6 @@
 
 import React from "react";
 import {RadioButtonGroup} from "rendition";
-import log from "roarr";
 import {ReadyState} from "react-use-websocket";
 import {Table,TableRow,TableCell,Button} from 'grommet'
 import '../Palette.css'
@@ -35,7 +34,7 @@ import '../Palette.css'
 function RenderEnvironmentPickerFunctional(props) {
 
     let setNodeEnv = (value) => {
-        log.trace("EnvironmentPicker set nodeEnv to " + value)
+        console.log("EnvironmentPicker set nodeEnv to " + value)
         props.handleSetEnvironment( value )
     }
 

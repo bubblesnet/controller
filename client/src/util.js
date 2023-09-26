@@ -25,11 +25,6 @@
  * Normalize a port into a number, string, or false.
  */
 
-// import log from "roarr";
-
-const fs = require('fs')
-// import log from "./bubbles_logger"
-
 function get_server_ports_for_environment(env_mixed) {
 
     let env_lower = env_mixed.toLowerCase()
@@ -108,17 +103,17 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
+/*
 function readJsonFile(filepath) {
 //    log.trace("Reading config from " + filepath)
     const data = fs.readFileSync(filepath, 'utf8');
     // parse JSON string to JSON object
     return(JSON.parse(data));
 }
-
+*/
 
 module.exports = {
     get_server_ports_for_environment,
     normalizePort: normalizePort,
-    readJsonFile:readJsonFile,
     getRandomInt: getRandomInt
 };

@@ -1,4 +1,3 @@
-#FROM balenalib/%%BALENA_MACHINE_NAME%%-node:15-buster-run
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:16.15-buster-run
 
 # Dockerfile boilerplate - certs and timezone
@@ -7,30 +6,22 @@ RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 ENV UDEV=on
 
-# RUN apt-get update
-RUN apt-get update && apt-get install -y apt-transport-https
-RUN install_packages vim postgresql-client inetutils-telnet exfat-fuse exfat-utils
+# RUN apt-get update and install
+RUN apt-get update && apt-get install -y apt-transport-https && install_packages vim postgresql-client inetutils-telnet exfat-fuse exfat-utils
 
 # install migrate tool
-RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-armv7.tar.gz | tar xvz
-RUN chmod +x migrate
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.linux-armv7.tar.gz | tar xvz && chmod +x migrate
 
 # COPY usb drive handling rules and scripts over, but let the startserver script put them in place
 COPY usb.rules /server/usb/usb.rules
 COPY scripts /server/usb/scripts
-RUN chmod +x /server/usb/scripts/*.sh
-
 COPY start_container_specific_server.sh /
-RUN chmod +x /start_container_specific_server.sh
-
 COPY startservers_api.sh /
-RUN chmod +x /startservers_api.sh
-
 COPY startservers_queue.sh /
-RUN chmod +x /startservers_queue.sh
-
 COPY startservers_websocket.sh /
-RUN chmod +x /startservers_websocket.sh
+
+# FIX PERMISSIONS ON SCRIPTS
+RUN chmod +x /server/usb/scripts/*.sh && chmod +x /start_container_specific_server.sh && chmod +x /startservers_api.sh && chmod +x /startservers_queue.sh && chmod +x /startservers_websocket.sh
 
 COPY migrations /go/migrations
 COPY conf/postgresql.conf /go/conf/postgresql.conf

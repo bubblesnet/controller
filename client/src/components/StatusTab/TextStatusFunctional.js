@@ -30,15 +30,13 @@ import RenderInterventionsTextStatus from "./InterventionsTextStatusFunctional";
 import RenderSecurityTextStatus from "./SecurityTextStatusFunctional";
 import RenderEnvironmentTextStatus from "./EnvironmentTextStatusFunctional";
 import RenderADCTextStatus from "./ADCTextStatusFunctional";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderTextStatus (props) {
-    log.trace("RenderTextStatus")
+    console.log("RenderTextStatus")
 
-    log.info("TextStatusFunctional display_settings.co2_units = " + props.display_settings.co2_units)
+    console.log("TextStatusFunctional display_settings.co2_units = " + props.display_settings.co2_units)
     let ret =
         <Grid round={'small'} direction={'vertical'}
               areas={[

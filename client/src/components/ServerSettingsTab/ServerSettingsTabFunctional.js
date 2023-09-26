@@ -37,7 +37,6 @@ import './applicationSettingsTab.css'
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 import util from "../../util";
-import log from "roarr";
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -69,7 +68,7 @@ function RenderServerSettingsTab (props) {
         sendgridSenderEmailAddress: ""
     }
 
-    log.trace("RenderServerSettingsTab")
+    console.log("RenderServerSettingsTab")
     let [displaySettings] = useState({units: 'IMPERIAL', language: 'en-us', languageOptions:['en-us','fr'], theme: props.theme}); //
 
     function testEmail() {

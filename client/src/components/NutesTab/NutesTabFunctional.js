@@ -37,8 +37,6 @@ import {
 import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
-import log from "roarr";
-
 // copyright and license inspection - no issues 4/13/22
 
 function RenderNutesTab (props) {
@@ -47,7 +45,7 @@ function RenderNutesTab (props) {
     const [apply_button_state, setApplyButtonState] = useState(false)
     const [dispensers, setDispensers] = React.useState(props.station.dispensers)
 
-    log.trace("RenderNutesTabFunctional")
+    console.log("RenderNutesTabFunctional")
     let [displaySettings] = useState({
         units: 'IMPERIAL',
         language: 'en-us',
@@ -62,24 +60,24 @@ function RenderNutesTab (props) {
         let amount = 0.0
         for( let i = 0; i < dispensers.length; i++ ) {
             if( dispensers[i].dispenserid === dispenserid ) {
-                log.info("handleDispense found amount " + dispensers[i].dispenseml )
+                console.log("handleDispense found amount " + dispensers[i].dispenseml )
                 amount = dispensers[i].dispenseml
                 break
             }
         }
         let ms = Math.trunc(amount/milliliters_per_millisecond)
-        log.info("handleDispense " + dispenserid + " " + dispenser_name + " for " + ms + " milliseconds")
-        log.info("Dispensing " + amount +"ml by holding valve open for " + ms + " milliseconds")
+        console.log("handleDispense " + dispenserid + " " + dispenser_name + " for " + ms + " milliseconds")
+        console.log("Dispensing " + amount +"ml by holding valve open for " + ms + " milliseconds")
         props.dispense_function(deviceid, dispenser_name, ms)
     }
 
     function setMlPerMs(dispenserid, mlperms) {
-        log.info("Seting mlperms amount to " + mlperms)
+        console.log("Seting mlperms amount to " + mlperms)
         setApplyButtonState(true)
     }
 
     function setDispenseAmount(dispenserid, amount) {
-        log.info("Seting dispense amount to " + amount)
+        console.log("Seting dispense amount to " + amount)
         let local_dispensers = JSON.parse(JSON.stringify(dispensers))
         for( let i = 0; i < local_dispensers.length; i++ ) {
             if( local_dispensers[i].dispenserid === dispenserid ) {

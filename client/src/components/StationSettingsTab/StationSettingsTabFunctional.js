@@ -86,13 +86,11 @@ import RenderFormActions from "../FormActions";
 import GoogleFontLoader from "react-google-font-loader";
 
 // import '../../logimplementation'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderStationSettingsTab (props) {
-    log.trace("RenderStationSettingsTab props display_settings = "+props.display_settings)
+    console.log("RenderStationSettingsTab props display_settings = "+props.display_settings)
     let [local_station, setStation] = useState(props.station);
     let [reset_button_state,setResetButtonState] = useState(false)
     let [defaults_button_state] = useState(true)
@@ -123,7 +121,7 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
     function setTubDepth(s) {
-        log.trace("setTubDepth to "+JSON.stringify(s))
+        console.log("setTubDepth to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
         if (isNaN(the_int)) {
             alert("Tub depth must be an integer number of inches")
@@ -134,7 +132,7 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
     function setTubVolume(s) {
-        log.trace("setTubVolume to "+JSON.stringify(s))
+        console.log("setTubVolume to "+JSON.stringify(s))
         let the_int = parseInt(s,10)
         if (isNaN(the_int)) {
             alert("Tub volume must be an integer number of gallons")
@@ -173,7 +171,7 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
     function setMovementX(s) {
-        log.error("setMovementX to "+JSON.stringify(s))
+        console.log("setMovementX to "+JSON.stringify(s))
         let the_float = parseFloat(s)
         if (isNaN(the_float) || s.length > (''+the_float).length ) {
             alert("Movement must be a float number of inches")
@@ -379,7 +377,7 @@ function RenderStationSettingsTab (props) {
         changeState(x)
     }
 
-    log.trace("RenderStationSettingsTab station_settings rendering with props.station.humidifier set to "+ props.station.humidifier)
+    console.log("RenderStationSettingsTab station_settings rendering with props.station.humidifier set to "+ props.station.humidifier)
     let ret =
         <Grommet theme={props.theme} >
             <GoogleFontLoader

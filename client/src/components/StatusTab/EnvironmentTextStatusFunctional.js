@@ -27,14 +27,12 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import RenderEnvValueWithDirection from './EnvValueWithDirection'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderEnvironmentTextStatus (props) {
 
-    log.trace('RenderStateTextStatus temp='+props.sensor_readings.temp_air_middle)
+    console.log('RenderStateTextStatus temp='+props.sensor_readings.temp_air_middle)
 
     let ret =
         <Grid className={'status-table-holder'}

@@ -52,9 +52,6 @@ import {addStation, saveSetting, getSite, saveAutomationSettings} from './api/ut
 
 import types from "./types"
 
-// import './logimplementation'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 import moment from "moment";
 
@@ -85,7 +82,7 @@ let because = "don't know"
  * @version: X.x
  */
 function AuthenticatedApp (props) {
-//    log.debug("render AuthenticatedApp " + JSON.stringify(props));
+//    console.log("render AuthenticatedApp " + JSON.stringify(props));
     var tilt_sound = new Audio("tilt.mp3");
 
     function play_tilt() {
@@ -268,7 +265,7 @@ function AuthenticatedApp (props) {
 //        alert("Adding station named " + new_station_name )
         setOpen(false);
         let x = await addStation(servers.api_server_host, servers.api_server_port, site.siteid, new_station_name)
-        log.trace(`addStation returns ${x}`)
+        console.log(`addStation returns ${x}`)
     }
 
     const [new_station_name, setNewStationName] = useState("");
@@ -280,7 +277,7 @@ function AuthenticatedApp (props) {
      * Send a "take picture" command to all the devices attached to this controller.
      */
     const takeAPicture = () => {
-        log.debug("button: takeAPicture")
+        console.log("button: takeAPicture")
         for (let i = 0; i < site.stations[props.stationindex].attached_devices.length; i++) {
             let cmd = {
                 command: PICTURE_COMMAND,
@@ -305,9 +302,9 @@ function AuthenticatedApp (props) {
             dispenser_name: dispenser_name,
             milliseconds: intms
         }
-        log.info("Sending dispense message " + JSON.stringify(cmd))
+        console.log("Sending dispense message " + JSON.stringify(cmd))
         sendJsonMessage(cmd)
-        log.info("Sent dispense message " + JSON.stringify(cmd) + "???????")
+        console.log("Sent dispense message " + JSON.stringify(cmd) + "???????")
     }
 
     let various_dates = {
@@ -331,7 +328,7 @@ function AuthenticatedApp (props) {
      * @param message   A "measurement" message from one of the attached devices.
      */
     const processMeasurementMessage = (message) => {
-//        log.trace("processMeasurementMessage "+JSON.stringify(message))
+//        console.log("processMeasurementMessage "+JSON.stringify(message))
         if( message.stationid === site.stations[props.stationindex].stationid ) {
             applyMeasurementToState(message)
         } else {
@@ -342,7 +339,7 @@ function AuthenticatedApp (props) {
     /**
      */
     const applyEventToState = (msg) => {
-//        log.debug("msg: applying event " + JSON.stringify(msg))
+//        console.log("msg: applying event " + JSON.stringify(msg))
         if (msg.sensor_name === 'tamper_sensor') {
             if (tilt.currently_tilted === false) {
                 play_tilt()
@@ -360,21 +357,21 @@ function AuthenticatedApp (props) {
      */
         /// TODO this looks like a dupe of processMeasurement - get rid of one of them
     const applyMeasurementToState = (msg) => {
-//        log.debug("applyMeasurementToState "+JSON.stringify(msg))
+//        console.log("applyMeasurementToState "+JSON.stringify(msg))
             if (typeof msg.value === 'undefined' ) {
-                log.error("msg: BAD measurement message " + JSON.stringify(msg))
+                console.log("msg: BAD measurement message " + JSON.stringify(msg))
             } else {
                 if (msg.measurement_name === types.measurement_name.water_level) {
                     sensor_readings[types.measurement_name.water_level] = sprintf.sprintf("%.1f", msg.value)
                 }
                 if( typeof sensor_readings === 'undefined') {
-                    log.error("WTF")
+                    console.log("WTF")
                 }
                 sensor_readings[msg.measurement_name] = msg.value
                 sensor_readings[msg.measurement_name + "_direction"] = msg.direction
                 sensor_readings[msg.measurement_name + "_units"] = msg.units
                 sensor_readings[msg.measurement_name + "_millis"] = msg.sample_timestamp
-                log.trace("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
+                console.log("msg: applying " + msg.value + " " + sensor_readings[msg.measurement_name + "_direction"] + " to " + msg.measurement_name)
             }
         }
 
@@ -390,53 +387,53 @@ function AuthenticatedApp (props) {
      * @param event The formatted message
      */
     const handleWebSocketMessage = (event) => {
-        log.trace("ws: handling websocket message " + JSON.stringify(event.data))
+        console.log("ws: handling websocket message " + JSON.stringify(event.data))
         let msg = JSON.parse(event.data)
         if (typeof (msg.status) === 'undefined' || msg.status === null) {
             if (typeof (msg.message_type) === 'undefined' || msg.message_type === null) {
-                log.error("ws: received invalid message " + event.data)
+                console.log("ws: received invalid message " + event.data)
             } else {
-                log.trace("ws: received message type " + msg.message_type);
+                console.log("ws: received message type " + msg.message_type);
                 setDeviceLastSeenByDeviceId(msg.deviceid)
                 switch (msg.message_type) {
                     case types.message_type.measurement:
                         because = "mmt " + msg.measurement_name + " " + msg.sample_timestamp
-                        log.trace("ws: received measurement");
+                        console.log("ws: received measurement");
                         applyMeasurementToState(msg)
                         setModuleLastSeenByMeasurementName(msg)
                         break;
                     case types.message_type.dispenser_event:
                         because = "dispenser_evt " + msg.dispenser_name
-                        log.info("ws: received dispenser_event " + JSON.stringify(msg));
+                        console.log("ws: received dispenser_event " + JSON.stringify(msg));
                         toggleDispenserTo(msg.dispenser_name, msg.on)
                         break;
                     case types.message_type.switch_event:
                         because = "switch_evt " + msg.switch_name
-                        log.trace("ws: received switch_event " + JSON.stringify(msg));
+                        console.log("ws: received switch_event " + JSON.stringify(msg));
                         toggleSwitchTo(msg.switch_name, msg.on)
                         break;
                     case types.message_type.event:
                         because = "evt msg " + msg.sample_timestamp
-                        log.trace("ws: received event ");
+                        console.log("ws: received event ");
                         applyEventToState(msg)
                         break;
                     case types.message_type.picture_event:
                         because = "picture evt msg " + msg.sample_timestamp
-                        log.trace("ws: received picture event");
+                        console.log("ws: received picture event");
 //                        shutter_sound.play()
-                        log.info("picture_event " + JSON.stringify(msg))
+                        console.log("picture_event " + JSON.stringify(msg))
                         setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
 //                        props.setLatestPictureFromChild(msg.deviceid,msg.picture_filename, msg.picture_datetime_millis)
                         setLastPicture(last_picture + 1)
                         break;
                     default:
                         because = msg.message_type + " message " + msg.sample_timestamp
-                        log.debug("ws: unknown msg type " + msg.message_type)
+                        console.log("ws: unknown msg type " + msg.message_type)
                         break;
                 }
             }
         } else {
-            log.error("ws: AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
+            console.log("ws: AAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHH   Received valid status message")
         }
     }
 
@@ -453,7 +450,7 @@ function AuthenticatedApp (props) {
         reconnectInterval: 30000,   // Why 30 seconds?  Seems long. Trying 3.
         onOpen: () => {
             getDeviceStatus();
-            log.trace('ws: websocket opened');
+            console.log('ws: websocket opened');
         },
         //Will attempt to reconnect on all close events, such as server shutting down
         shouldReconnect: (closeEvent) => true,
@@ -472,19 +469,19 @@ function AuthenticatedApp (props) {
      */
 
     const handleWebSocketPing = () => {
-        log.trace("ws: handleWebSocketPing")
+        console.log("ws: handleWebSocketPing")
         let cmds = getDeviceStatus()
         alert("Sent to " + servers.websocket_server_host + ":" + servers.websocket_server_port + " websocket messages " + JSON.stringify(cmds))
     }
 
     const handleAPIPing = async () => {
-        log.trace("ws: handleAPIPing")
+        console.log("ws: handleAPIPing")
         let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
         alert("Get site from " + servers.api_server_host + ":" + servers.api_server_port + " returned " + JSON.stringify(z))
     }
 
     const handleActiveMQPing = () => {
-        log.trace("ws: handleActiveMQPing")
+        console.log("ws: handleActiveMQPing")
         alert("ActiveMQ server at " + servers.activemq_server_host + ":" + servers.activemq_server_port + ", no test available yet" )
     }
 
@@ -496,7 +493,7 @@ function AuthenticatedApp (props) {
     //
     //
     function getDeviceStatus() {
-        log.trace("aq: getDeviceStatus()")
+        console.log("aq: getDeviceStatus()")
         let cmds = []
         for( let i = 0; i < site.stations[props.stationindex].attached_devices.length; i++ ) {
             let cmd = {
@@ -511,19 +508,19 @@ function AuthenticatedApp (props) {
     }
 
     async function setLatestPictureFromChild(deviceid,latestpicture_filename, latestpicture_datetimemillis) {
-        log.info("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
+        console.log("RenderCameraTab App setLatestPictureFromChild for deviceid " + deviceid + " to " + latestpicture_filename)
 //            let z = await getSite(servers.api_server_host, servers.api_server_port, 1)
 //            setSite(JSON.parse(JSON.stringify(z)))
 
         for (let i = 0; i < site.stations.length; i++) {
             for (let j = 0; j < site.stations[i].attached_devices.length; j++) {
-                log.info("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
+                console.log("comparing " + site.stations[i].attached_devices[j].deviceid + " to " + deviceid)
                 if (site.stations[i].attached_devices[j].deviceid === deviceid) {
                     let local_site = JSON.parse(JSON.stringify(site))
                     local_site.stations[i].attached_devices[j].latest_picture_filename = latestpicture_filename
                     local_site.stations[i].attached_devices[j].latest_picture_datetimemillis = latestpicture_datetimemillis
-                    log.info("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
-                    log.info("local_site = " + JSON.stringify(local_site))
+                    console.log("RenderCameraTab App setLatestPictureFromChild setting latest_picture_filename for deviceid " + deviceid + " to " + latestpicture_filename)
+                    console.log("local_site = " + JSON.stringify(local_site))
                     setSite(JSON.parse(JSON.stringify(local_site)))
                     return
                 }
@@ -546,7 +543,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function toggleSwitchTo(switch_name, on) {
-        log.trace("button: toggleSwitchTo " + switch_name + " to " + on)
+        console.log("button: toggleSwitchTo " + switch_name + " to " + on)
         if (typeof (switch_name) === 'undefined') {
             return
         }
@@ -570,7 +567,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     async function toggleDispenserTo(dispenser_name, on) {
-        log.info("button: toggleDispenserTo " + dispenser_name + " to " + on)
+        console.log("button: toggleDispenserTo " + dispenser_name + " to " + on)
         if (typeof (dispenser_name) === 'undefined') {
             return
         }
@@ -584,13 +581,13 @@ function AuthenticatedApp (props) {
         }
  /*
         let new_dispenser_state = JSON.parse(JSON.stringify(dispenser_state))
-        log.info("dispenser_state = " + JSON.stringify(dispenser_state))
+        console.log("dispenser_state = " + JSON.stringify(dispenser_state))
 
         if( typeof(new_dispenser_state[dispenser_name] === 'undefined')) {
             new_dispenser_state[dispenser_name] = { on: on, changing: false}
         }
         new_dispenser_state[dispenser_name].on = on
-        log.info("Clearing changing new_dispenser_state[" + dispenser_name + "] to false")
+        console.log("Clearing changing new_dispenser_state[" + dispenser_name + "] to false")
         new_dispenser_state[dispenser_name].changing = false
         setDispenserState(new_dispenser_state)
   */
@@ -667,7 +664,7 @@ function AuthenticatedApp (props) {
     }
 
     function setSelectedAutomationStageFromChild(new_selected_stage) {
-        log.trace("selected stage value AthenticateApp selected_stage from "+selected_stage+" to "+new_selected_stage)
+        console.log("selected stage value AthenticateApp selected_stage from "+selected_stage+" to "+new_selected_stage)
         setSelectedStage(new_selected_stage)
     }
 
@@ -679,7 +676,7 @@ function AuthenticatedApp (props) {
      */
     /// TODO this many API calls obviously not ideal - fix
     function setSelectedStageSettingsFromChild(new_automation_settings) {
-        log.trace("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
+        console.log("setAutomationSettingsFromChild "+JSON.stringify(new_automation_settings))
         saveAutomationSettings(servers.api_server_host, servers.api_server_port, site.userid,
             site.stations[props.stationindex].stationid,
             new_automation_settings.stage_name,
@@ -695,7 +692,7 @@ function AuthenticatedApp (props) {
      */
     /// TODO this many API calls obviously not ideal - fix
     function updateStageFromChild(stagename, new_automation_settings) {
-        log.trace("updateStageFromChild "+JSON.stringify(new_automation_settings))
+        console.log("updateStageFromChild "+JSON.stringify(new_automation_settings))
         let x = JSON.parse(JSON.stringify(site))
         x.stations[props.stationindex].automation_settings = new_automation_settings
         setSite(x)
@@ -710,7 +707,7 @@ function AuthenticatedApp (props) {
      * @param on    True/false on/off
      */
     function setSwitchStateFromChild(x, switch_name, on) {
-        log.trace("setSwitchStateFromChild "+switch_name +","+on)
+        console.log("setSwitchStateFromChild "+switch_name +","+on)
         let new_switch_state = JSON.parse(JSON.stringify(switch_state))
         let sw_name = switch_name
         if (switch_name === types.switch_name.growLight) {
@@ -730,16 +727,16 @@ function AuthenticatedApp (props) {
             switch_name: sw_name,
             on: on
         }
-        log.trace("sendJsonMessage ???? "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+        console.log("sendJsonMessage ???? "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
         for( let i = 0; i < site.stations[props.stationindex].attached_devices.length; i++ ) {
             cmd.deviceid = site.stations[props.stationindex].attached_devices[i].deviceid
-            log.trace("sendJsonMessage "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
+            console.log("sendJsonMessage "+sw_name+" from userid/deviceid "+cmd.userid+"/"+cmd.deviceid)
             sendJsonMessage(cmd)
         }
     }
 
     const applyMapChange = (value) => {
-        log.trace("button: AuthenticatedApp applyMapChange "+JSON.stringify(value));
+        console.log("button: AuthenticatedApp applyMapChange "+JSON.stringify(value));
         /// TODO FINISH!
     }
 
@@ -750,9 +747,9 @@ function AuthenticatedApp (props) {
      */
     const applyFontChange = (value) => {
         let x = JSON.parse(JSON.stringify(bubbles_theme));
-        log.trace("button: AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value)
+        console.log("button: AuthenticatedApp applyFontChange from " + bubbles_theme.global.font.family + " to " + current_font + " value " + value)
         x.global.font.family = current_font;
-        log.trace("button: AuthenticatedApp should rerender to font " + x.global.font.family)
+        console.log("button: AuthenticatedApp should rerender to font " + x.global.font.family)
         setBubblesTheme(x)
     }
 
@@ -761,7 +758,7 @@ function AuthenticatedApp (props) {
      * @param value The font object we need to change to??
      */
     const localFontChange = (value) => {
-        log.trace("button: AuthenticatedApp localFontChange from " + current_font + " to " + value)
+        console.log("button: AuthenticatedApp localFontChange from " + current_font + " to " + value)
         setCurrentFont(value)
     }
 
@@ -771,8 +768,8 @@ function AuthenticatedApp (props) {
     useEffect(() => {
         const fetchData = async () => {
             let z = await getSite(servers.api_server_host, servers.api_server_port, site.siteid)
-//            log.trace("useEffect stationid = " + z.stations[0].stationid)
-//            log.info("useEffect " + JSON.stringify(z))
+//            console.log("useEffect stationid = " + z.stations[0].stationid)
+//            console.log("useEffect " + JSON.stringify(z))
             z.stations[props.stationindex].automation_settings = z.stations[props.stationindex].automation_settings[0] // returned as array from server
 
             setSite(JSON.parse(JSON.stringify(z)))
@@ -788,21 +785,21 @@ function AuthenticatedApp (props) {
      * @param value The value of NODE_ENV
      */
     let setEnvironment = (value) => {
-        log.trace("button: AuthenticatedApp.setEnvironment(" + value + ")")
+        console.log("button: AuthenticatedApp.setEnvironment(" + value + ")")
         const theNodeEnvironment = value;
         servers = util.get_server_ports_for_environment(props.nodeEnv)
-        log.trace("button: setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
+        console.log("button: setting state db to " + theNodeEnvironment + " port to " + servers.api_server_port)
         setSocketUrl('ws://' + servers.websocket_server_host + ':' + servers.websocket_server_port)
         setNodeEnv(theNodeEnvironment);
         setApiPort(servers.api_server_port);
     }
 
-    log.trace("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
+    console.log("AuthenticatedApp Rendering App with props = " + JSON.stringify(props))
     // reset tilt if older than 30 seconds
     if (tilt.currently_tilted) {
         let now = moment().unix()
         if (now - tilt.last_tilt > 30) {
-            log.trace("turning currently_tilted off because 30 seconds have expired")
+            console.log("turning currently_tilted off because 30 seconds have expired")
             setTilt({ currently_tilted: false, last_tilt: 0 })
         }
     }
@@ -813,7 +810,7 @@ function AuthenticatedApp (props) {
     } else {
         if (lastJsonMessage !== null && typeof (lastJsonMessage.message_type) !== 'undefined' && lastJsonMessage.message_type !== null &&
             lastJsonMessage.message_type === types.message_type.measurement) {
-//            log.debug("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
+//            console.log("msg: Last json message was a measurement " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
             processMeasurementMessage(lastJsonMessage)
         } else {
 //            log.warn("msg: Last json message not a measurement! " + (lastJsonMessage ? JSON.stringify(lastJsonMessage) : 'null'))
@@ -834,12 +831,12 @@ function AuthenticatedApp (props) {
     site.site_name = props.site.stations[props.stationindex].site_name
     site.siteid = props.site.stations[props.stationindex].siteid
 
-    log.info("rendering with station = "+JSON.stringify(site.stations[props.stationindex]))
-    log.trace("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
+    console.log("rendering with station = "+JSON.stringify(site.stations[props.stationindex]))
+    console.log("rendering AA with selected_automation_settings="+JSON.stringify(selected_automation_settings))
     for ( let i = 0; i < site.stations[props.stationindex].attached_devices.length; i++ ) {
-        log.info("RenderCameraTab AuthApp attached_devices[" + i + "].latest_picture_filename = " + site.stations[props.stationindex].attached_devices[i].latest_picture_filename)
+        console.log("RenderCameraTab AuthApp attached_devices[" + i + "].latest_picture_filename = " + site.stations[props.stationindex].attached_devices[i].latest_picture_filename)
     }
-    log.info("AuthenticatedApp display_settings.co2_units = " + props.display_settings.co2_units)
+    console.log("AuthenticatedApp display_settings.co2_units = " + props.display_settings.co2_units)
 
     let millis_in_a_week = 1000 * 60 * 60 * 24 *7
     let CropWeek = -1

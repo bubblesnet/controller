@@ -27,14 +27,12 @@ import '../../App.css';
 import './statusTab.css'
 import {Box} from "grommet";
 import sprintf from 'sprintf-js'
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
 function RenderStateTextStatus (props) {
 
-    log.trace("RenderStateTextStatus")
+    console.log("RenderStateTextStatus")
     let plant_height = sprintf.sprintf("%.1f", props.sensor_readings.plant_height)
  let ret =
      <Grid className={'status-table-holder'} round={'small'} direction={'vertical'}

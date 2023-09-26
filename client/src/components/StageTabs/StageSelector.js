@@ -25,8 +25,6 @@ import {Box, Grid, Select} from "grommet";
 import React, {useState} from "react";
 
 import stage_options from "../../stage_options.json"
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -34,7 +32,7 @@ function RenderStageSelector (props) {
 /*
     function setCurrentStageValue(option) {
         let x = local_station;
-        log.trace("current stage value " +x.current_stage + " new stage value " + option)
+        console.log("current stage value " +x.current_stage + " new stage value " + option)
         x.current_stage = option
         props.setStateFromChild(JSON.parse(JSON.stringify(x)))
         setStation(x)
@@ -42,7 +40,7 @@ function RenderStageSelector (props) {
 */
     function setSelectedStageValue(option) {
         let x = local_station;
-        log.trace("selected stage value " +x.current_stage + " new stage value " + option)
+        console.log("selected stage value " +x.current_stage + " new stage value " + option)
         x.current_stage = option
         props.setSelectedStageFromChild(option)
         setStation(x)
@@ -57,7 +55,7 @@ function RenderStageSelector (props) {
         }
     }
 
-    log.trace("rendering with value={"+props.automation_setting.stage_name+"}")
+    console.log("rendering with value={"+props.automation_setting.stage_name+"}")
     let ret = <>
             <Grid
                 justify={'center'}

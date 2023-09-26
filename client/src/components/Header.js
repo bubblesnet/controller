@@ -26,19 +26,18 @@ import React, {useState} from 'react';
 import RenderEnvironmentPickerFunctional from "./EnvironmentPickerFunctional"
 import RenderStationPickerFunctional from "./StationPickerFunctional"
 import RenderTiltFunctional from "./TiltFunctional"
-import log from "roarr";
 import {Button} from "grommet";
 import {get_server_ports_for_environment} from "../util";
 
 // copyright and license inspection - no issues 4/13/22
 
 function Header (props) {
-    log.trace("render Header with props "+JSON.stringify(props) )
+    console.log("render Header with props "+JSON.stringify(props) )
     let [nodeEnv, setNodeEnv] = useState(props.nodeEnv); // The array of SingleBoardComputers
     let [apiPort, setApiPort] = useState();  // The port we should send queries to - depends on dev/test/prod
 
     let setEnvironment = (value) => {
-        log.trace("Header.setEnvironment(" + value + ")")
+        console.log("Header.setEnvironment(" + value + ")")
         var theNodeEnv = value.toLowerCase()
 
         setNodeEnv(theNodeEnv);
@@ -46,8 +45,8 @@ function Header (props) {
         setApiPort(server_ports.api_server_port);
         props.setNodeEnv(value)
     }
-//    log.trace("after setenv")
-//    log.trace("after websocket")
+//    console.log("after setenv")
+//    console.log("after websocket")
     console.log("Header Rendering header with stationindex "+props.stationindex)
     return (
         <div>

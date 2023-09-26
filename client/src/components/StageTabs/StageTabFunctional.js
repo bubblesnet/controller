@@ -37,13 +37,11 @@ import RenderFormActions from '../FormActions'
 import GoogleFontLoader from "react-google-font-loader";
 import {getStage,getAutomationSetting} from "../../api/utils";
 
-import log from "roarr";
-
 // copyright and license inspection - no issues 4/13/22
 
 function RenderStageTab (props) {
 
-    log.trace("RenderStageTab props.automation_setting = " + JSON.stringify(getAutomationSetting(props.automation_settings, props.selected_stage)))
+    console.log("RenderStageTab props.automation_setting = " + JSON.stringify(getAutomationSetting(props.automation_settings, props.selected_stage)))
 
     let [checked, setChecked] = useState(false);
     let [selected_stage, setSelectedStage] = useState(props.selected_stage);
@@ -51,9 +49,9 @@ function RenderStageTab (props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            log.trace("selected StageTab stage value fetching")
+            console.log("selected StageTab stage value fetching")
             let z = await getStage(servers.api_server_host, servers.api_server_port, props.station.stationid, selected_stage)
-            log.trace("setting automation setting after fetch to " + JSON.stringify(z))
+            console.log("setting automation setting after fetch to " + JSON.stringify(z))
             setAutomationSetting(JSON.parse(JSON.stringify(z)))
         }
         fetchData();
@@ -63,7 +61,7 @@ function RenderStageTab (props) {
     function setAutomationSettingFromChild(x) {
         setapplyButtonState(true)
         setresetButtonState(true)
-        log.trace("setAutomationSettingFromChild "+JSON.stringify(x))
+        console.log("setAutomationSettingFromChild "+JSON.stringify(x))
         setAutomationSetting(JSON.parse(JSON.stringify(x)))
     }
 
@@ -74,7 +72,7 @@ function RenderStageTab (props) {
     function applyAction() {
         setapplyButtonState(false)
         setresetButtonState(false)
-        log.trace("StageTab automation_settings " + station.current_stage)
+        console.log("StageTab automation_settings " + station.current_stage)
         if( checked ) {
             props.setStageFromChild(station.current_stage);
             props.setAutomationSettingsFromChild(station.automation_settings)
@@ -83,7 +81,7 @@ function RenderStageTab (props) {
     }
 
 /*    function setCurrent( e ) {
-        log.trace("e.getchecked = " + e.target.checked)
+        console.log("e.getchecked = " + e.target.checked)
         setapplyButtonState(true)
         setresetButtonState(true)
         setChecked(e.target.checked)
@@ -105,7 +103,7 @@ function RenderStageTab (props) {
     let [resetButtonState, setresetButtonState] = useState(false); //
     let [defaultsButtonState] = useState(true ); //
 
-    log.trace("rendering with automation_setting="+JSON.stringify(automation_setting))
+    console.log("rendering with automation_setting="+JSON.stringify(automation_setting))
     let ret =
             <Grommet theme={props.theme}>
                 <GoogleFontLoader

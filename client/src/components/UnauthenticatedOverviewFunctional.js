@@ -27,8 +27,6 @@ import '../App.css';
 import {Button} from "rendition";
 import {Text, Box, TextInput, Markdown} from "grommet";
 import util from "../util";
-import log from "roarr";
-// import log from "./bubbles_logger"
 
 // copyright and license inspection - no issues 4/13/22
 
@@ -43,10 +41,10 @@ Click here to see first-time setup instructions.
     let servers = util.get_server_ports_for_environment(props.nodeEnv)
 
     async function loginUser(credentials) {
-        log.trace("loginUser env=("+props.nodeEnv+") calling out to api on port "+servers.api_server_port+" for token")
+        console.log("loginUser env=("+props.nodeEnv+") calling out to api on port "+servers.api_server_port+" for token")
         let url = 'http://'+servers.api_server_host+':'+servers.api_server_port+'/api/auth/login'
-        log.trace("url = " + url)
-        log.trace("creds = " + JSON.stringify(credentials))
+        console.log("url = " + url)
+        console.log("creds = " + JSON.stringify(credentials))
         return new Promise( async (resolve, reject) => {
             const response = await fetch(url, {
                 method: 'POST',
@@ -57,10 +55,10 @@ Click here to see first-time setup instructions.
             });
             if(response.ok) {
                 let loginstate = await response.json();
-                log.trace("Got loginstate " + JSON.stringify(loginstate));
+                console.log("Got loginstate " + JSON.stringify(loginstate));
                 resolve(loginstate)
             } else {
-                log.trace("error " + response.status)
+                console.log("error " + response.status)
                 reject( response.status )
             }
         })
@@ -74,19 +72,19 @@ Click here to see first-time setup instructions.
         /*
                 e.preventDefault();
         */
-        log.trace("handleSubmit - calling out for token for user "+username)
+        console.log("handleSubmit - calling out for token for user "+username)
         /// TODO this hardwired port number is because api_server_port is showing up undefined here!
         await loginUser( {
             username: username,
             password: password
         })
             .then((loginstate) =>{
-                log.trace("Calling set token with " + loginstate.token)
+                console.log("Calling set token with " + loginstate.token)
                 loginstate.auth=true;
                 props.processLoginResult(loginstate);   // Will re-render grandparent
             })
             .catch((err) => {
-                log.trace("login failed = " + err)
+                console.log("login failed = " + err)
                 /// TODO if processlogin rerenders grandparent, these 2 rerenders are not helpful
                 setFailed(true)
                 setPassword("")
