@@ -3,49 +3,13 @@ volumes:
   resin-data:
 services:
 
-  queue:
-    build: server
-    privileged: true
-    restart: always
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/config'
-      - 'resin-data:/logs_shared'
-
-  websocket:
-    build: server
-    privileged: true
+  wifi-connect:
+    image: bh.cr/balenalabs/wifi-connect-aarch64
     restart: always
     ports:
-      - "5001:5001"
-      - "5002:5002"
-      - "5003:5003"
-      - "5004:5004"
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/config'
-      - 'resin-data:/logs_shared'
-
-  ui:
-    build: client
+      - "81:81"
     privileged: true
-    restart: always
-    ports:
-      - "80:3004"
-      - "81:3001"
-      - "83:3003"
-      - "82:3002"
-      - "443:3045"
-    labels:
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.dbus: '1'
-    volumes:
-      - 'resin-data:/config'
-      - 'resin-data:/logs_shared'
+    network_mode: host
 
   hostname:
     image: bh.cr/g_tomas_migone1/hostname-armv7hf
@@ -54,14 +18,6 @@ services:
       io.balena.features.supervisor-api: 1    # Required to interact with the supervisor
     environment:
       SET_HOSTNAME: bubblesnet-controller
-
-  wifi-connect:
-    image: bh.cr/balenalabs/wifi-connect-aarch64
-    restart: always
-    ports:
-      - "81:81"
-    privileged: true
-    network_mode: host
 
   activemq:
     image: bh.cr/gh_bubblesnet/activemq-5_17-block
@@ -96,4 +52,77 @@ services:
     volumes:
       - 'resin-data:/postgresql_shared'
       - 'resin-data:/data'
+      - 'resin-data:/logs_shared'
+
+  api:
+    build: server
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - activemq
+    ports:
+      - "4001:4001"
+      - "4002:4002"
+      - "4003:4003"
+      - "4004:4004"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+      - 'resin-data:/postgresql_shared'
+      - 'resin-data:/logs_shared'
+
+  queue:
+    build: server
+    privileged: true
+    restart: always
+    depends_on:
+      - database
+      - api
+      - activemq
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+      - 'resin-data:/logs_shared'
+
+  websocket:
+    build: server
+    privileged: true
+    restart: always
+    depends_on:
+      - activemq
+    ports:
+      - "5001:5001"
+      - "5002:5002"
+      - "5003:5003"
+      - "5004:5004"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
+      - 'resin-data:/logs_shared'
+
+  ui:
+    build: client
+    privileged: true
+    restart: always
+    depends_on:
+      - websocket
+      - api
+    ports:
+      - "80:3004"
+      - "81:3001"
+      - "83:3003"
+      - "82:3002"
+      - "443:3045"
+    labels:
+      io.balena.features.kernel-modules: '1'
+      io.balena.features.dbus: '1'
+    volumes:
+      - 'resin-data:/config'
       - 'resin-data:/logs_shared'
