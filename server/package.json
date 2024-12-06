@@ -31,7 +31,7 @@
     "jsonwebtoken": "^7.4.1",
     "moment": "2.8.4",
     "moment-timezone": "*",
-    "mongoose": "^4.8.5",
+    "mongoose": "^5.13.15",
     "morgan": "~1.7.0",
     "mysql": "*",
     "nodejs-websocket": "^1.7.2",
