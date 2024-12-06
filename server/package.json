@@ -28,7 +28,7 @@
     "express-fileupload": "^1.2.1",
     "express-session": "^1.17.1",
     "js-htmlencode": "0.3.0",
-    "jsonwebtoken": "^7.4.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "2.8.4",
     "moment-timezone": "*",
     "mongoose": "^4.8.5",
